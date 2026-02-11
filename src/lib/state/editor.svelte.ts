@@ -27,6 +27,7 @@ export class EditorState {
 	exportScale = $state(10); // Default to 10x for a decent 320px size
 	exportBgColor = $state<string | 'transparent'>('transparent');
 	isMuted = $state(false);
+	isPicking = $state(false);
 	isAppReady = $state(false);
 	isShiftPressed = $state(false);
 	isCtrlPressed = $state(false);
@@ -181,6 +182,12 @@ export class EditorState {
 		if (color !== '#eee8d5') {
 			this.activeColor = color;
 			sfx.playStitch(); // Feedback for picking
+			
+			// Trigger visual feedback
+			this.isPicking = true;
+			setTimeout(() => {
+				this.isPicking = false;
+			}, 1500);
 		}
 	}
 

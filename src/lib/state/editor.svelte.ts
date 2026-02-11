@@ -24,6 +24,7 @@ export class EditorState {
 	showColorPicker = $state(false);
 	showCommandPalette = $state(false);
 	exportScale = $state(10); // Default to 10x for a decent 320px size
+	exportBgColor = $state<string | 'transparent'>('transparent');
 	isMuted = $state(false);
 	isAppReady = $state(false);
 	isShiftPressed = $state(false);

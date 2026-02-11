@@ -11,14 +11,14 @@
 
 	let showExportModal = $state(false);
 
-	async function exportImage(format: 'svg' | 'png', scale: number = 10) {
+	async function exportImage(format: 'svg' | 'png', scale: number = 10, bgColor: string | 'transparent' = 'transparent') {
 		if (format === 'svg') {
-			const svg = ExportEngine.toSVG(editor.gridWidth, editor.gridHeight, editor.pixelData);
+			const svg = ExportEngine.toSVG(editor.gridWidth, editor.gridHeight, editor.pixelData, bgColor);
 			const blob = new Blob([svg], { type: 'image/svg+xml' });
 			const url = URL.createObjectURL(blob);
 			download(url, 'stitch-art.svg');
 		} else {
-			const dataUrl = await ExportEngine.toPNG(editor.gridWidth, editor.gridHeight, editor.pixelData, scale);
+			const dataUrl = await ExportEngine.toPNG(editor.gridWidth, editor.gridHeight, editor.pixelData, scale, bgColor);
 			download(dataUrl, 'stitch-art.png');
 		}
 		showExportModal = false;

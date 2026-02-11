@@ -10,7 +10,7 @@ export class AudioEngine {
 		}
 	}
 
-	private playTone(freq: number, duration: number, type: OscillatorType = 'sine', volume = 0.1) {
+	private playTone(freq: number, duration: number, type: OscillatorType = 'sine', volume = 0.1, rampTo = 0.0001) {
 		this.init();
 		if (!this.ctx) return;
 
@@ -21,7 +21,7 @@ export class AudioEngine {
 		osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
 		
 		gain.gain.setValueAtTime(volume, this.ctx.currentTime);
-		gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + duration);
+		gain.gain.exponentialRampToValueAtTime(rampTo, this.ctx.currentTime + duration);
 
 		osc.connect(gain);
 		gain.connect(this.ctx.destination);
@@ -31,22 +31,22 @@ export class AudioEngine {
 	}
 
 	playMove() {
-		// Short, sharper "tick" for movement
-		this.playTone(600, 0.03, 'sine', 0.15);
+		// Audible wooden tap
+		this.playTone(450, 0.08, 'sine', 0.15);
 	}
 
 	playStitch() {
-		// Mid-frequency "pop" for placing a brick
-		this.playTone(400, 0.1, 'square', 0.03);
-		setTimeout(() => this.playTone(600, 0.05, 'sine', 0.02), 20);
+		// Gentle bell/chime
+		this.playTone(1200, 0.15, 'sine', 0.03);
+		setTimeout(() => this.playTone(1500, 0.1, 'sine', 0.02), 50);
 	}
 
 	playUnstitch() {
-		// Noise-like crunch for destroying a brick
+		// Audible brush/paper rustle
 		this.init();
 		if (!this.ctx) return;
 
-		const duration = 0.1;
+		const duration = 0.25;
 		const bufferSize = this.ctx.sampleRate * duration;
 		const buffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
 		const data = buffer.getChannelData(0);
@@ -58,11 +58,17 @@ export class AudioEngine {
 		const noise = this.ctx.createBufferSource();
 		noise.buffer = buffer;
 
+		const filter = this.ctx.createBiquadFilter();
+		filter.type = 'lowpass';
+		filter.frequency.setValueAtTime(1500, this.ctx.currentTime);
+		filter.frequency.exponentialRampToValueAtTime(400, this.ctx.currentTime + duration);
+
 		const gain = this.ctx.createGain();
-		gain.gain.setValueAtTime(0.05, this.ctx.currentTime);
+		gain.gain.setValueAtTime(0.1, this.ctx.currentTime);
 		gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + duration);
 
-		noise.connect(gain);
+		noise.connect(filter);
+		filter.connect(gain);
 		gain.connect(this.ctx.destination);
 
 		noise.start();

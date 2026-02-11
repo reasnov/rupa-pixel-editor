@@ -7,14 +7,60 @@ export class EditorState {
 	gridHeight = $state(32);
 	pixelData = $state<ColorHex[]>([]);
 	cursorPos = $state({ x: 0, y: 0 });
-	activeColor = $state<ColorHex>('#000000');
+	activeColor = $state<ColorHex>('#859900'); // Grass Green
+	palette = $state<ColorHex[]>([
+		'#859900', // Grass Green
+		'#2aa198', // Soft Teal
+		'#b58900', // Earthy Yellow
+		'#cb4b16', // Burnt Orange
+		'#dc322f', // Soft Red
+		'#d33682', // Magenta
+		'#6c71c4', // Violet
+		'#268bd2', // Blue
+		'#93a1a1', // Stone Gray
+		'#586e75'  // Dark Gray
+	]);
+	zoomLevel = $state(1);
+	showColorPicker = $state(false);
+	showCommandPalette = $state(false);
 	isShiftPressed = $state(false);
 	isCtrlPressed = $state(false);
+
+	// Derived transform for adaptive viewport
+	cameraTransform = $derived.by(() => {
+		if (this.zoomLevel <= 1) {
+			// Mode: Centered Canvas with Margin
+			// No translation needed as flex centering handles the rest
+			return `scale(${this.zoomLevel})`;
+		} else {
+			// Mode: Tracking Needle (Smooth Focus)
+			const x = ((this.cursorPos.x + 0.5) / this.gridWidth) * 100;
+			const y = ((this.cursorPos.y + 0.5) / this.gridHeight) * 100;
+
+			// The transform moves the grid so the cursor stays at the viewport's center
+			return `translate(calc(50% - ${x}%), calc(50% - ${y}%)) scale(${this.zoomLevel})`;
+		}
+	});
 
 	constructor(width = 32, height = 32) {
 		this.gridWidth = width;
 		this.gridHeight = height;
-		this.pixelData = Array(width * height).fill('#ffffff');
+		this.pixelData = Array(width * height).fill('#eee8d5'); // Soft Cream/Linen
+	}
+
+	setZoom(delta: number) {
+		const newZoom = this.zoomLevel + delta;
+		this.zoomLevel = Math.max(0.5, Math.min(5, Number(newZoom.toFixed(1))));
+	}
+
+	resetZoom() {
+		this.zoomLevel = 1;
+	}
+
+	selectPalette(index: number) {
+		if (index >= 0 && index < this.palette.length) {
+			this.activeColor = this.palette[index];
+		}
 	}
 
 	moveCursor(dx: number, dy: number) {
@@ -46,7 +92,7 @@ export class EditorState {
 	unstitch() {
 		const index = this.cursorPos.y * this.gridWidth + this.cursorPos.x;
 		const oldColor = this.pixelData[index];
-		const emptyColor = '#ffffff';
+		const emptyColor = '#eee8d5';
 		if (oldColor !== emptyColor) {
 			history.push({ index, oldColor, newColor: emptyColor });
 			this.pixelData[index] = emptyColor;

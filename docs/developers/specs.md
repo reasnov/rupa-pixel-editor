@@ -1,109 +1,64 @@
 # Technical Specifications: Rupa Pixel Editor
 
 ## 1. System Architecture
-Rupa Pixel Editor follows a **Main-Renderer** architecture via Electron, utilizing Svelte 5 for the UI layer and a TypeScript-based core for business logic.
-
-### 1.1 Process Responsibilities
-*   **Main Process (Electron):** Handles native window management, file system access (I/O), and OS-level menu configurations.
-*   **Renderer Process (Svelte 5):** Handles the drawing grid, keyboard event processing, state management (Runes), and real-time UI updates.
+Rupa follows a **Main-Renderer** architecture, utilizing Svelte 5 for the UI layer and a TypeScript-based core for the "Weaver's Engine."
 
 ---
 
-## 2. Data Structures & State Management
+## 2. Input Controller Specification
 
-### 2.1 Grid Data Model
-The canvas is represented as a flat array or a 2D matrix of pixel objects.
-```typescript
-type ColorHex = string; // e.g., "#FF0000"
-
-interface Pixel {
-    color: ColorHex;
-    alpha: number; // 0 to 1
-}
-
-interface GridState {
-    width: number;
-    height: number;
-    data: ColorHex[]; // Flat array for performance: index = y * width + x
-}
-```
-
-### 2.2 Svelte 5 Runes Integration
-*   **`$state` (Grid):** The `data` array will be a reactive state. Updates to a single index should be fine-grained.
-*   **`$state` (Cursor):** Tracks the `activeCell` coordinates `{ x: number, y: number }`.
-*   **`$derived` (View):** Calculates the rendered pixel size based on the window dimensions and grid resolution.
-*   **`$effect`:** Used for syncing the grid state to the HTML5 Canvas for preview or export.
-
----
-
-## 3. Keyboard Controller Specification
-
-### 3.1 Input Mapping
+### 2.1 The Weaver's Map
 | Key | Action |
 | :--- | :--- |
-| `ArrowUp` | Move Cursor Up |
-| `ArrowDown` | Move Cursor Down |
-| `ArrowLeft` | Move Cursor Left |
-| `ArrowRight` | Move Cursor Right |
-| `Space` | Toggle Color (Stitch) |
-| `Ctrl + Space` / `Backspace` / `Delete` | Clear Pixel (Unstitch) |
-| `Shift` (Hold) | Activate **Stitch-Flow** (Auto-color on move) |
-| `Ctrl + Shift` (Hold) | Activate **Unstitch-Flow** (Auto-delete on move) |
-| `[1-9]` | Select Palette Color |
-| `Ctrl+Z` / `Cmd+Z` | Undo |
-| `Ctrl+Shift+Z` | Redo |
-
-### 3.2 Stitch-Flow Logic
-When the `Shift` modifier is active, any movement command (`moveCursor`) must trigger the `writePixel` function for the new coordinates before the frame renders.
+| `Arrow Keys` | Move the Needle |
+| `Space` | Stitch (Place Color) |
+| `Backspace` / `Delete` | Unstitch (Remove Color) |
+| `Ctrl + Space` | Unstitch (Remove Color) |
+| `Shift` (Hold) | **Stitch-Flow**: Continuous Threading |
+| `Ctrl + Shift` (Hold) | **Unstitch-Flow**: Continuous Unraveling |
+| `[1-0]` | Select Dye (Palette) |
+| `Ctrl + P` | Open the **Dye Basin** (Color Picker) |
+| `Ctrl + E` | **Export Project** |
 
 ---
 
-## 4. SFX Engine (Tactile Feedback)
-To reinforce the "Digital Stitching" experience, the application uses a synthesized audio engine via Web Audio API.
-*   **Move SFX:** Low-frequency sine wave (150Hz) for cursor movement.
-*   **Stitch SFX:** Square wave "clack" (400Hz) to simulate placing a brick.
-*   **Unstitch SFX:** Noise-based "crunch" to simulate destroying a brick.
+## 3. Visual Hierarchy (The Artisan's Layers)
+The application is organized into three distinct visual layers to reinforce the crafting experience.
+
+*   **1. The Canvas:** The 32x32 interactive grid where stitches are placed. It mimics a piece of linen or paper.
+*   **2. The Frame:** A solid, rounded container (The Loom) that holds the Canvas. It provides the visual boundary and centering for the Tracking Loom mechanism.
+*   **3. The Window:** The overall Studio environment, containing the HUD, the background textures, and the Frame.
+
+### 3.1 Cottagecore Visuals
+*   **The Canvas:** A soft background with a linen-like texture and subtle grid.
+*   **The Frame:** A thick, white/wooden rounded frame (`artisan-frame`) with soft shadows.
+*   **The HUD:** Artisan panels with rounded corners and serif typography.
+*   **The Spirit Needle:** A soft, glowing block that floats gently, representing the point of creation.
+*   **Color Story:** Primary colors include #fdf6e3 (Old Paper), #859900 (Sage), and #cb4b16 (Terracotta).
+
+### 3.2 Artisan Audio (Synthesized)
+*   **Movement:** Soft wooden taps (300Hz Sine).
+*   **Stitching:** Gentle bell-like chimes (1200Hz-1500Hz).
+*   **Unstitching:** Soft paper or brush-like rustling (Filtered Noise).
+
+## 4. Viewport & Camera Protocol (The Tracking Loom)
+To maintain focus during intricate work, the viewport follows the Needle (cursor) dynamically.
+
+*   **Cursor-Centric Tracking:** The grid must automatically pan to keep the `activeCell` centered within the viewport.
+*   **Zoom Axis:** Zooming operations (`zoomLevel`) must use the `activeCell` as the focal point, ensuring the user never loses sight of their current stitch.
+*   **Smooth Transition:** Viewport movement should be near-instantaneous but calculated to keep the needle as the "fixed point" of the composition.
+
+## 5. The Pattern Book (Command Palette)
+To fulfill the keyboard-centric promise, a centralized command interface is provided.
+*   **Trigger:** `Ctrl + K` (Catalog) to open the palette.
+*   **Functionality:**
+    *   Fuzzy search for studio actions (e.g., "Export PNG", "Reset Zoom", "Toggle Flow").
+    *   Associated keyboard shortcuts displayed next to each action.
+*   **Navigation:** `ArrowUp`/`Down` to select, `Enter` to execute, `Esc` to close.
 
 ---
 
-## 5. Undo/Redo Mechanism
-A **Command Pattern** approach is used to manage history.
-*   **History Stack:** Two stacks (`undoStack`, `redoStack`) storing `HistoryAction` objects.
-*   **Action Object:**
-    ```typescript
-    interface HistoryAction {
-        index: number;
-        oldColor: string;
-        newColor: string;
-    }
-    ```
-*   **Limit:** Maximum of 500 actions stored in memory.
-
----
-
-## 5. File I/O & Exporting
-
-### 5.1 Native Format (.rupa)
-A JSON-based format containing:
-*   Project metadata (name, author).
-*   Grid dimensions.
-*   Base64 or compressed array of pixel data.
-*   Palette configuration.
-
-### 5.2 Export Engines
-*   **SVG Engine:** Iterates through the grid and generates `<rect>` elements. Identical adjacent colors should ideally be merged into single paths to optimize file size.
-*   **Canvas Engine:** Uses `ctx.putImageData` or `ctx.fillRect` for rapid rasterization to PNG/JPG.
-
----
-
-## 6. Performance Targets
-*   **Input-to-Render Latency:** < 16.6ms (60 FPS).
-*   **Grid Capacity:** Support up to 256x256 pixels without UI degradation.
-*   **Initialization Time:** < 2 seconds from Electron launch to interactive grid.
-
----
-
-## 7. Security Considerations
-*   **Context Isolation:** Enabled in Electron to prevent renderer access to Node.js internals.
-*   **Inter-Process Communication (IPC):** Strict allow-list for `ipcMain` and `ipcRenderer` communication.
-*   **Sanitization:** All imported `.rupa` or palette files must be validated against a schema before processing.
+## 6. Export Engine
+The Export engine converts the digital linen into permanent artifacts.
+*   **SVG (Vector Tapestry):** A mathematically perfect representation of the stitch pattern.
+*   **PNG (Linen Print):** A high-resolution raster export with preserved pixel sharpness.

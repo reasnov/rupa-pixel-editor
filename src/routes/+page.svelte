@@ -298,6 +298,9 @@
 			<button class="artisan-tool-btn" onclick={() => editor.clearCanvas()}>
 				<span>🌿</span> Clear
 			</button>
+			<button class="artisan-tool-btn" onclick={() => editor.toggleMute()}>
+				<span>{editor.isMuted ? '🔇' : '🔊'}</span> {editor.isMuted ? 'Unmute' : 'Mute'}
+			</button>
 		</div>
 
 		<div class="h-8 w-px bg-studio-text/10"></div>

@@ -52,6 +52,7 @@
 		window.dispatchEvent(new CustomEvent('app:close-export'));
 	}
 
+	// Watch for background color changes to update preview
 	$effect(() => {
 		editor.exportBgColor;
 		updatePreview();
@@ -159,14 +160,19 @@
 						</button>
 					{/each}
 
-					<!-- Custom Background Option using our Custom Picker -->
+					<!-- Custom Background Option -->
 					<button
 						class="flex items-center gap-2 rounded-lg border-2 p-1.5 font-serif text-[10px] transition-all italic {!bgPresets.some(
 							(p) => p.value === editor.exportBgColor
 						)
 							? 'border-studio-warm bg-white shadow-sm'
 							: 'border-transparent opacity-60 hover:opacity-100'}"
-						onclick={() => (showBgPicker = true)}
+						onclick={() => {
+							if (editor.exportBgColor === 'transparent') {
+								editor.exportBgColor = '#fdf6e3'; // Set a starting color
+							}
+							showBgPicker = true;
+						}}
 					>
 						<div
 							class="h-3 w-3 rounded-sm border border-black/10 bg-gradient-to-tr from-rose-300 via-sage-300 to-sky-300"
@@ -192,7 +198,7 @@
 				>
 			</button>
 			<button
-				class="flex-1 rounded-2xl bg-studio-warm py-3 text-white shadow-md transition-all font-serif hover:scale-[1.02] italic active:scale-100 flex flex-col items-center"
+				class="flex flex-1 flex-col items-center rounded-2xl bg-studio-warm py-3 text-white shadow-md transition-all font-serif hover:scale-[1.02] italic active:scale-100"
 				onclick={() => onExport('svg', 1, editor.exportBgColor)}
 			>
 				<span class="text-lg">Export SVG</span>
@@ -207,7 +213,7 @@
 {#if showBgPicker}
 	<!-- Nested ColorPicker for Background -->
 	<ColorPicker 
-		value={editor.exportBgColor === 'transparent' ? '#fdf6e3' : editor.exportBgColor} 
+		bind:value={editor.exportBgColor} 
 		onClose={() => showBgPicker = false} 
 		title="Background Dye"
 	/>

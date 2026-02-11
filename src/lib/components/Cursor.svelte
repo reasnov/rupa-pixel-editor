@@ -8,15 +8,15 @@
 		transition:fade={{ duration: 800 }}
 		class="cursor-container absolute inset-0"
 	>
-		<!-- The Artisan Bloom (4-Petal Inverter) -->
+		<!-- The Artisan Bloom (Transparent Inversion Petals) -->
 		<div class="bloom-wrapper">
-			<!-- Only the petals invert the background -->
+			<!-- Petals act as inversion lenses -->
 			<div class="petal p-top"></div>
 			<div class="petal p-bottom"></div>
 			<div class="petal p-left"></div>
 			<div class="petal p-right"></div>
 			
-			<!-- Delicate center dot -->
+			<!-- Delicate center dot lens -->
 			<div class="center-dot"></div>
 		</div>
 
@@ -67,27 +67,31 @@
 
 	.petal {
 		position: absolute;
-		background: white;
-		mix-blend-mode: difference;
+		background: transparent;
+		/* Pure inversion lens without solid color */
+		backdrop-filter: invert(100%);
 		border-radius: 50%;
 		z-index: 10;
 	}
 
-	/* Smaller, more delicate petals */
-	.p-top, .p-bottom { width: 4px; height: 8px; }
-	.p-left, .p-right { width: 8px; height: 4px; }
+	/* Dimensions for the petals */
+	.p-top, .p-bottom { width: 4px; height: 10px; }
+	.p-left, .p-right { width: 100%; height: 4px; } /* Horizontal petals */
+	
+	/* Refined sizing */
+	.p-left, .p-right { width: 10px; height: 4px; }
 
 	/* Positioning within the cell */
-	.p-top { top: 10%; }
-	.p-bottom { bottom: 10%; }
-	.p-left { left: 10%; }
-	.p-right { right: 10%; }
+	.p-top { top: 5%; }
+	.p-bottom { bottom: 5%; }
+	.p-left { left: 5%; }
+	.p-right { right: 5%; }
 
 	.center-dot {
-		width: 2px;
-		height: 2px;
-		background: white;
-		mix-blend-mode: difference;
+		width: 3px;
+		height: 3px;
+		background: transparent;
+		backdrop-filter: invert(100%);
 		border-radius: 50%;
 		z-index: 11;
 	}

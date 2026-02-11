@@ -11,69 +11,139 @@
 		title?: string
 	}>();
 
-	let h = $state(0);
-	let s = $state(100);
-	let l = $state(50);
+		let h = $state(0);
 
-	// Parse current color to HSL
-	function hexToHsl(hex: string) {
-		// Default to Studio Cream if not a valid hex (e.g., 'transparent')
-		if (!hex || !/^#[0-9A-F]{6}$/i.test(hex)) {
-			hex = '#fdf6e3';
-		}
+		let s = $state(100);
 
-		let r = parseInt(hex.slice(1, 3), 16) / 255;
-		let g = parseInt(hex.slice(3, 5), 16) / 255;
-		let b = parseInt(hex.slice(5, 7), 16) / 255;
+		let l = $state(50);
 
-		let max = Math.max(r, g, b), min = Math.min(r, g, b);
-		let h, s, l = (max + min) / 2;
+		let a = $state(100);
 
-		if (max === min) {
-			h = s = 0;
-		} else {
-			let d = max - min;
-			s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
-			switch (max) {
-				case r: h = (g - b) / d + (g < b ? 6 : 0); break;
-				case g: h = (b - r) / d + 2; break;
-				case b: h = (r - g) / d + 4; break;
+	
+
+		// Parse current color to HSLA
+
+		function hexToHsla(hex: string) {
+
+			// Default to Studio Cream if not a valid hex
+
+			if (!hex || !/^#([0-9A-F]{6}|[0-9A-F]{8})$/i.test(hex)) {
+
+				hex = '#fdf6e3ff';
+
 			}
-			h /= 6;
+
+	
+
+			let r = parseInt(hex.slice(1, 3), 16) / 255;
+
+			let g = parseInt(hex.slice(3, 5), 16) / 255;
+
+			let b = parseInt(hex.slice(5, 7), 16) / 255;
+
+			let alpha = hex.length === 9 ? parseInt(hex.slice(7, 9), 16) / 255 : 1;
+
+	
+
+			let max = Math.max(r, g, b), min = Math.min(r, g, b);
+
+			let h, s, l = (max + min) / 2;
+
+	
+
+			if (max === min) {
+
+				h = s = 0;
+
+			} else {
+
+				let d = max - min;
+
+				s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+
+				switch (max) {
+
+					case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+
+					case g: h = (b - r) / d + 2; break;
+
+					case b: h = (r - g) / d + 4; break;
+
+				}
+
+				h /= 6;
+
+			}
+
+			return { h: h * 360, s: s * 100, l: l * 100, a: alpha * 100 };
+
 		}
-		return { h: h * 360, s: s * 100, l: l * 100 };
-	}
 
-	// Initialize HSL from value
-	$effect.pre(() => {
-		const hsl = hexToHsl(value);
-		h = hsl.h;
-		s = hsl.s;
-		l = hsl.l;
-	});
+	
 
-	function hslToHex(h: number, s: number, l: number) {
-		l /= 100;
-		const a = (s * Math.min(l, 1 - l)) / 100;
-		const f = (n: number) => {
-			const k = (n + h / 30) % 12;
-			const color = l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
-			return Math.round(255 * color).toString(16).padStart(2, '0');
-		};
-		return `#${f(0)}${f(8)}${f(4)}`;
-	}
+		// Initialize HSLA from value
 
-	// Sync local HSL back to value
-	$effect(() => {
-		value = hslToHex(h, s, l);
-	});
+		$effect.pre(() => {
 
-	function handleHexInput(e: Event) {
-		const hex = (e.target as HTMLInputElement).value;
-		if (/^#[0-9A-F]{6}$/i.test(hex)) {
-			value = hex;
+			const hsla = hexToHsla(value);
+
+			h = hsla.h;
+
+			s = hsla.s;
+
+			l = hsla.l;
+
+			a = hsla.a;
+
+		});
+
+	
+
+		function hslaToHex(h: number, s: number, l: number, a: number) {
+
+			l /= 100;
+
+			const alpha = Math.round((a / 100) * 255).toString(16).padStart(2, '0');
+
+			const sat = (s * Math.min(l, 1 - l)) / 100;
+
+			const f = (n: number) => {
+
+				const k = (n + h / 30) % 12;
+
+				const color = l - sat * Math.max(Math.min(k - 3, 9 - k, 1), -1);
+
+				return Math.round(255 * color).toString(16).padStart(2, '0');
+
+			};
+
+			return `#${f(0)}${f(8)}${f(4)}${alpha}`;
+
 		}
-	}
+
+	
+
+		// Sync local HSLA back to value
+
+		$effect(() => {
+
+			value = hslaToHex(h, s, l, a);
+
+		});
+
+	
+
+		function handleHexInput(e: Event) {
+
+			const hex = (e.target as HTMLInputElement).value;
+
+			if (/^#([0-9A-F]{6}|[0-9A-F]{8})$/i.test(hex)) {
+
+				value = hex;
+
+			}
+
+		}
 
 	function handleInputKeyDown(e: KeyboardEvent) {
 		if (e.key === 'Enter') {
@@ -134,6 +204,14 @@
 				</div>
 				<input type="range" min="0" max="100" bind:value={l} class="custom-slider" />
 			</div>
+
+			<div class="flex flex-col gap-2">
+				<div class="flex justify-between text-[10px] uppercase font-black opacity-30 tracking-wider">
+					<span>Opacity (Alpha)</span>
+					<span>{Math.round(a)}%</span>
+				</div>
+				<input type="range" min="0" max="100" bind:value={a} class="custom-slider alpha-slider" />
+			</div>
 		</div>
 
 		<div class="flex flex-col gap-3">
@@ -185,5 +263,15 @@
 
 	.hue-slider {
 		background: linear-gradient(to right, #ff0000 0%, #ffff00 17%, #00ff00 33%, #00ffff 50%, #0000ff 67%, #ff00ff 83%, #ff0000 100%);
+	}
+
+	.alpha-slider {
+		background-image: linear-gradient(to right, transparent, #859900),
+			linear-gradient(45deg, #ccc 25%, transparent 25%), 
+			linear-gradient(-45deg, #ccc 25%, transparent 25%), 
+			linear-gradient(45deg, transparent 75%, #ccc 75%), 
+			linear-gradient(-45deg, transparent 75%, #ccc 75%);
+		background-size: 100% 100%, 8px 8px, 8px 8px, 8px 8px, 8px 8px;
+		background-position: 0 0, 0 0, 0 4px, 4px -4px, -4px 0px;
 	}
 </style>

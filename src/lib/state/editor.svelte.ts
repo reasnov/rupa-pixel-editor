@@ -23,6 +23,7 @@ export class EditorState {
 	zoomLevel = $state(1);
 	showColorPicker = $state(false);
 	showCommandPalette = $state(false);
+	showHelp = $state(false);
 	exportScale = $state(10); // Default to 10x for a decent 320px size
 	exportBgColor = $state<string | 'transparent'>('transparent');
 	isMuted = $state(false);

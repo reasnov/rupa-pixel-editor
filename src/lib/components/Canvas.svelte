@@ -50,7 +50,7 @@
 		{@const isActive = editor.cursorPos.x === x && editor.cursorPos.y === y}
 		{@const isEmpty = color === '#eee8d5'}
 		<div
-			class="cell-stitch relative h-full w-full {isActive ? 'z-30' : 'z-10'}"
+			class="cell-stitch relative h-full w-full artisan-checker-small {isActive ? 'z-30' : 'z-10'}"
 			style="background-color: {isEmpty ? 'transparent' : color};"
 		>
 			{#if isActive}

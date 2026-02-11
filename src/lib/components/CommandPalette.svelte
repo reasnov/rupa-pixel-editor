@@ -12,6 +12,12 @@
 
 	const commands: Command[] = [
 		{
+			id: 'open-help',
+			label: 'Help: Open Artisan\'s Guide',
+			shortcut: 'F1',
+			action: () => (editor.showHelp = true)
+		},
+		{
 			id: 'open-export',
 			label: 'Export: Open Export Window',
 			shortcut: shortcuts.getLabel('EXPORT'),

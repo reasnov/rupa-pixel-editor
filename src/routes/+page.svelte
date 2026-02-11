@@ -5,20 +5,31 @@
 	import ColorPicker from '$lib/components/ColorPicker.svelte';
 	import ExportModal from '$lib/components/ExportModal.svelte';
 	import CommandPalette from '$lib/components/CommandPalette.svelte';
+	import HelpModal from '$lib/components/HelpModal.svelte';
 	import SplashScreen from '$lib/components/SplashScreen.svelte';
 	import Canvas from '$lib/components/Canvas.svelte';
 	import { onMount } from 'svelte';
 
 	let showExportModal = $state(false);
 
-	async function exportImage(format: 'svg' | 'png', scale: number = 10, bgColor: string | 'transparent' = 'transparent') {
+	async function exportImage(
+		format: 'svg' | 'png',
+		scale: number = 10,
+		bgColor: string | 'transparent' = 'transparent'
+	) {
 		if (format === 'svg') {
 			const svg = ExportEngine.toSVG(editor.gridWidth, editor.gridHeight, editor.pixelData, bgColor);
 			const blob = new Blob([svg], { type: 'image/svg+xml' });
 			const url = URL.createObjectURL(blob);
 			download(url, 'stitch-art.svg');
 		} else {
-			const dataUrl = await ExportEngine.toPNG(editor.gridWidth, editor.gridHeight, editor.pixelData, scale, bgColor);
+			const dataUrl = await ExportEngine.toPNG(
+				editor.gridWidth,
+				editor.gridHeight,
+				editor.pixelData,
+				scale,
+				bgColor
+			);
 			download(dataUrl, 'stitch-art.png');
 		}
 		showExportModal = false;
@@ -56,9 +67,16 @@
 			editor.startSelection();
 		}
 
+		// Handle F1 specifically for Help
+		if (e.key === 'F1') {
+			e.preventDefault();
+			editor.showHelp = !editor.showHelp;
+			return;
+		}
+
 		// 4. Priority Engine: Find the most specific shortcut match
 		const action = shortcuts.getBestMatch(e);
-		
+
 		if (action) {
 			// Prevent default for matched studio actions
 			if (!['UP', 'DOWN', 'LEFT', 'RIGHT'].includes(action)) {
@@ -66,25 +84,43 @@
 			}
 
 			switch (action) {
-				case 'UP': return editor.moveCursor(0, -1);
-				case 'DOWN': return editor.moveCursor(0, 1);
-				case 'LEFT': return editor.moveCursor(-1, 0);
-				case 'RIGHT': return editor.moveCursor(1, 0);
-				case 'ESCAPE': return editor.handleEscape();
-				case 'COMMAND_PALETTE': return (editor.showCommandPalette = !editor.showCommandPalette);
-				case 'COLOR_PICKER': return (editor.showColorPicker = !editor.showColorPicker);
-				case 'EXPORT': return (showExportModal = true);
-				case 'STITCH': return editor.stitch();
+				case 'UP':
+					return editor.moveCursor(0, -1);
+				case 'DOWN':
+					return editor.moveCursor(0, 1);
+				case 'LEFT':
+					return editor.moveCursor(-1, 0);
+				case 'RIGHT':
+					return editor.moveCursor(1, 0);
+				case 'ESCAPE':
+					return editor.handleEscape();
+				case 'COMMAND_PALETTE':
+					return (editor.showCommandPalette = !editor.showCommandPalette);
+				case 'COLOR_PICKER':
+					return (editor.showColorPicker = !editor.showColorPicker);
+				case 'EXPORT':
+					return (showExportModal = true);
+				case 'STITCH':
+					return editor.stitch();
 				case 'UNSTITCH':
-				case 'UNSTITCH_MOD': return editor.unstitch();
-				case 'EYEDROPPER': return editor.pickColor();
-				case 'CLEAR_LINEN': return editor.clearCanvas();
-				case 'UNDO': return editor.undo();
-				case 'REDO': return editor.redo();
-				case 'ZOOM_IN': return editor.setZoom(0.1);
-				case 'ZOOM_OUT': return editor.setZoom(-0.1);
-				case 'RESET_ZOOM': return editor.resetZoom();
-				case 'TOGGLE_MUTE': return editor.toggleMute();
+				case 'UNSTITCH_MOD':
+					return editor.unstitch();
+				case 'EYEDROPPER':
+					return editor.pickColor();
+				case 'CLEAR_LINEN':
+					return editor.clearCanvas();
+				case 'UNDO':
+					return editor.undo();
+				case 'REDO':
+					return editor.redo();
+				case 'ZOOM_IN':
+					return editor.setZoom(0.1);
+				case 'ZOOM_OUT':
+					return editor.setZoom(-0.1);
+				case 'RESET_ZOOM':
+					return editor.resetZoom();
+				case 'TOGGLE_MUTE':
+					return editor.toggleMute();
 				default:
 					if (action.startsWith('SELECT_')) {
 						const num = parseInt(action.split('_')[1]);
@@ -96,7 +132,7 @@
 
 	function handleKeyUp(e: KeyboardEvent) {
 		const wasBlockMode = editor.isBlockMode;
-		
+
 		if (e.key === 'Shift') editor.isShiftPressed = false;
 		if (e.key === 'Control' || e.key === 'Meta') editor.isCtrlPressed = false;
 		if (e.key === 'Alt') editor.isAltPressed = false;
@@ -132,15 +168,16 @@
 
 <SplashScreen />
 
+{#if editor.showHelp}
+	<HelpModal />
+{/if}
+
 {#if editor.showCommandPalette}
 	<CommandPalette />
 {/if}
 
 {#if editor.showColorPicker}
-	<ColorPicker 
-		bind:value={editor.activeColor} 
-		onClose={() => editor.showColorPicker = false} 
-	/>
+	<ColorPicker bind:value={editor.activeColor} onClose={() => (editor.showColorPicker = false)} />
 {/if}
 
 {#if showExportModal}

@@ -207,7 +207,7 @@
 {#if showBgPicker}
 	<!-- Nested ColorPicker for Background -->
 	<ColorPicker 
-		bind:value={editor.exportBgColor} 
+		value={editor.exportBgColor === 'transparent' ? '#fdf6e3' : editor.exportBgColor} 
 		onClose={() => showBgPicker = false} 
 		title="Background Dye"
 	/>

@@ -13,7 +13,8 @@
 		"format": "prettier --write .",
 		"electron:dev": "electron . --no-sandbox",
 		"electron:start": "npm run build && electron . --no-sandbox",
-		"dev:all": "vite dev & sleep 5 && npm run electron:dev"
+		"dev:all": "vite dev & sleep 5 && npm run electron:dev",
+		"deploy": "npm run build && gh-pages -d build"
 	},
 	"files": [
 		"dist",
@@ -42,6 +43,7 @@
 		"@sveltejs/vite-plugin-svelte": "^6.2.4",
 		"@tailwindcss/vite": "^4.1.18",
 		"electron": "^40.3.0",
+		"gh-pages": "^6.3.0",
 		"prettier": "^3.8.1",
 		"prettier-plugin-svelte": "^3.4.1",
 		"prettier-plugin-tailwindcss": "^0.7.2",

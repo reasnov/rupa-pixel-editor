@@ -34,88 +34,62 @@
 	function handleKeyDown(e: KeyboardEvent) {
 		if (!editor.isAppReady) return;
 
+		// 1. Context Check: Ignore global shortcuts if an input is focused
 		if (
 			e.target instanceof HTMLInputElement ||
 			e.target instanceof HTMLTextAreaElement ||
 			(e.target as HTMLElement).isContentEditable
 		) {
-			if (shortcuts.matches(e, 'ESCAPE')) {
+			if (e.key === 'Escape') {
 				editor.handleEscape();
 			}
 			return;
 		}
 
-		// Update modifier states
+		// 2. State Sync: Always update modifier states for mode detection
 		editor.isShiftPressed = e.shiftKey;
 		editor.isCtrlPressed = e.ctrlKey || e.metaKey;
 		editor.isAltPressed = e.altKey;
 
-		// Start block mode selection
+		// 3. Selection Start: Trigger block mode initialization
 		if (editor.isBlockMode && !editor.selectionStart) {
 			editor.startSelection();
 		}
 
-		if (
-			[
-				'ArrowUp',
-				'ArrowDown',
-				'ArrowLeft',
-				'ArrowRight',
-				' ',
-				'Backspace',
-				'Delete',
-				'+',
-				'-',
-				'=',
-				'0',
-				'e',
-				'Escape'
-			].includes(e.key)
-		) {
-			if (!e.ctrlKey && !e.metaKey && !e.altKey) {
+		// 4. Priority Engine: Find the most specific shortcut match
+		const action = shortcuts.getBestMatch(e);
+		
+		if (action) {
+			// Prevent default for matched studio actions
+			if (!['UP', 'DOWN', 'LEFT', 'RIGHT'].includes(action)) {
 				e.preventDefault();
 			}
-		}
 
-		if (e.key === 'Escape') {
-			editor.handleEscape();
-			return;
-		}
-
-		if (shortcuts.matches(e, 'UP')) return editor.moveCursor(0, -1);
-		if (shortcuts.matches(e, 'DOWN')) return editor.moveCursor(0, 1);
-		if (shortcuts.matches(e, 'LEFT')) return editor.moveCursor(-1, 0);
-		if (shortcuts.matches(e, 'RIGHT')) return editor.moveCursor(1, 0);
-
-		if (shortcuts.matches(e, 'COMMAND_PALETTE')) {
-			e.preventDefault();
-			return (editor.showCommandPalette = !editor.showCommandPalette);
-		}
-		if (shortcuts.matches(e, 'COLOR_PICKER')) {
-			e.preventDefault();
-			return (editor.showColorPicker = !editor.showColorPicker);
-		}
-		if (shortcuts.matches(e, 'EXPORT')) {
-			e.preventDefault();
-			return (showExportModal = true);
-		}
-
-		if (shortcuts.matches(e, 'STITCH')) return editor.stitch();
-		if (shortcuts.matches(e, 'UNSTITCH') || shortcuts.matches(e, 'UNSTITCH_MOD'))
-			return editor.unstitch();
-		if (shortcuts.matches(e, 'EYEDROPPER')) return editor.pickColor();
-		if (shortcuts.matches(e, 'CLEAR_LINEN')) return editor.clearCanvas();
-
-		if (shortcuts.matches(e, 'UNDO')) return editor.undo();
-		if (shortcuts.matches(e, 'REDO')) return editor.redo();
-		if (shortcuts.matches(e, 'ZOOM_IN')) return editor.setZoom(0.1);
-		if (shortcuts.matches(e, 'ZOOM_OUT')) return editor.setZoom(-0.1);
-		if (shortcuts.matches(e, 'RESET_ZOOM')) return editor.resetZoom();
-		if (shortcuts.matches(e, 'TOGGLE_MUTE')) return editor.toggleMute();
-
-		for (let i = 0; i <= 9; i++) {
-			if (shortcuts.matches(e, `SELECT_${i}` as any)) {
-				return editor.selectPalette(i === 0 ? 9 : i - 1);
+			switch (action) {
+				case 'UP': return editor.moveCursor(0, -1);
+				case 'DOWN': return editor.moveCursor(0, 1);
+				case 'LEFT': return editor.moveCursor(-1, 0);
+				case 'RIGHT': return editor.moveCursor(1, 0);
+				case 'ESCAPE': return editor.handleEscape();
+				case 'COMMAND_PALETTE': return (editor.showCommandPalette = !editor.showCommandPalette);
+				case 'COLOR_PICKER': return (editor.showColorPicker = !editor.showColorPicker);
+				case 'EXPORT': return (showExportModal = true);
+				case 'STITCH': return editor.stitch();
+				case 'UNSTITCH':
+				case 'UNSTITCH_MOD': return editor.unstitch();
+				case 'EYEDROPPER': return editor.pickColor();
+				case 'CLEAR_LINEN': return editor.clearCanvas();
+				case 'UNDO': return editor.undo();
+				case 'REDO': return editor.redo();
+				case 'ZOOM_IN': return editor.setZoom(0.1);
+				case 'ZOOM_OUT': return editor.setZoom(-0.1);
+				case 'RESET_ZOOM': return editor.resetZoom();
+				case 'TOGGLE_MUTE': return editor.toggleMute();
+				default:
+					if (action.startsWith('SELECT_')) {
+						const num = parseInt(action.split('_')[1]);
+						return editor.selectPalette(num === 0 ? 9 : num - 1);
+					}
 			}
 		}
 	}
@@ -127,7 +101,6 @@
 		if (e.key === 'Control' || e.key === 'Meta') editor.isCtrlPressed = false;
 		if (e.key === 'Alt') editor.isAltPressed = false;
 
-		// If we were in block mode and released one of the keys, commit!
 		if (wasBlockMode && !editor.isBlockMode) {
 			editor.commitSelection();
 		}
@@ -199,7 +172,7 @@
 		<div class="mx-auto my-1 h-px w-4 bg-studio-text/10"></div>
 
 		<button
-			class="h-7 w-7 rounded-full border-2 border-dashed border-studio-warm/40 bg-gradient-to-tr from-rose-300 via-sage-300 to-sky-300 shadow-sm transition-all hover:scale-110 hover:border-studio-warm"
+			class="via-sage-300 h-7 w-7 rounded-full border-2 border-dashed border-studio-warm/40 bg-gradient-to-tr from-rose-300 to-sky-300 shadow-sm transition-all hover:scale-110 hover:border-studio-warm"
 			onclick={() => (editor.showColorPicker = true)}
 			title="Natural Dye Basin (Ctrl + P)"
 		></button>
@@ -229,16 +202,6 @@
 			<div class="flex w-full flex-col items-end">
 				<span class="mb-1.5 font-serif text-[8px] font-bold uppercase opacity-40">Canvas Dyes</span>
 				<div class="grid grid-cols-3 gap-1.5 rounded-lg border border-white bg-white/30 p-1.5">
-					{#each editor.usedColors as color}
-						<button
-							class="h-4 w-4 rounded border transition-all hover:scale-110 {editor.activeColor ===
-							color
-								? 'border-studio-warm ring-1 ring-studio-warm/30'
-								: 'border-black/5 opacity-60'}"
-							style="background-color: {color};"
-							onclick={() => (editor.activeColor = color)}
-							aria-label="Select used dye"
-						></button>
 					{#each editor.usedColors as color}
 						<button
 							class="h-4 w-4 rounded border transition-all hover:scale-110 {editor.activeColor ===

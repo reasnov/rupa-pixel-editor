@@ -68,16 +68,25 @@
 		{@const x2 = Math.max(editor.selectionStart.x, editor.selectionEnd.x)}
 		{@const y1 = Math.min(editor.selectionStart.y, editor.selectionEnd.y)}
 		{@const y2 = Math.max(editor.selectionStart.y, editor.selectionEnd.y)}
-		{@const width = (x2 - x1 + 1)}
-		{@const height = (y2 - y1 + 1)}
-		<div 
-			class="absolute pointer-events-none border-2 border-dashed border-studio-warm bg-studio-warm/10 z-40"
+		{@const width = x2 - x1 + 1}
+		{@const height = y2 - y1 + 1}
+		<div
+			class="absolute z-40 border-2 border-dashed border-studio-warm bg-studio-warm/10 pointer-events-none transition-all duration-75"
 			style="
 				left: {(x1 / editor.gridWidth) * 100}%; 
 				top: {(y1 / editor.gridHeight) * 100}%; 
 				width: {(width / editor.gridWidth) * 100}%; 
 				height: {(height / editor.gridHeight) * 100}%;
 			"
-		></div>
+		>
+			<!-- Anchor Point (Pen Tool style) -->
+			<div 
+				class="absolute h-2 w-2 bg-studio-warm border border-white shadow-sm -translate-x-1/2 -translate-y-1/2"
+				style="
+					left: {((editor.selectionStart.x - x1 + 0.5) / width) * 100}%;
+					top: {((editor.selectionStart.y - y1 + 0.5) / height) * 100}%;
+				"
+			></div>
+		</div>
 	{/if}
 </div>

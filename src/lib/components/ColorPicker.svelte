@@ -75,18 +75,26 @@
 		}
 	}
 
+	function handleInputKeyDown(e: KeyboardEvent) {
+		if (e.key === 'Enter') {
+			onClose();
+		}
+	}
+
 	function handleOutsideClick(e: MouseEvent) {
 		if ((e.target as HTMLElement).id === 'picker-overlay') {
 			onClose();
 		}
 	}
 
-	// Register Escape listener
-	$effect(() => {
-		editor.pushEscapeAction(onClose);
-		return () => editor.popEscapeAction(onClose);
-	});
+	function handleGlobalKeyDown(e: KeyboardEvent) {
+		if (e.key === 'Enter') {
+			onClose();
+		}
+	}
 </script>
+
+<svelte:window onkeydown={handleGlobalKeyDown} />
 
 <div 
 	id="picker-overlay"
@@ -96,7 +104,7 @@
 	<div class="bg-[#fdf6e3] p-8 rounded-[2.5rem] border-8 border-white shadow-2xl w-80 flex flex-col gap-6 ring-1 ring-black/5">
 		<div class="flex justify-between items-center">
 			<span class="font-serif italic text-2xl text-studio-warm">{title}</span>
-			<button onclick={onClose} class="text-[10px] uppercase font-bold opacity-30 hover:opacity-100 tracking-widest">Close</button>
+			<button onclick={onClose} class="text-[10px] uppercase font-bold opacity-30 hover:opacity-100 tracking-widest">Cancel</button>
 		</div>
 
 		<div class="h-32 rounded-3xl border-4 border-white shadow-inner flex items-center justify-center relative overflow-hidden bg-[#eee8d5]">
@@ -128,15 +136,25 @@
 			</div>
 		</div>
 
-		<div class="relative">
-			<input 
-				type="text" 
-				value={value.toUpperCase()}
-				oninput={handleHexInput}
-				maxlength="7"
-				class="w-full text-center font-mono text-xs opacity-60 bg-white/80 py-2 rounded-xl border border-black/5 focus:outline-none focus:ring-2 focus:ring-studio-warm/20"
-			/>
-			<span class="absolute right-3 top-1/2 -translate-y-1/2 text-[8px] uppercase font-bold opacity-20">Hex</span>
+		<div class="flex flex-col gap-3">
+			<div class="relative">
+				<input 
+					type="text" 
+					value={value.toUpperCase()}
+					oninput={handleHexInput}
+					onkeydown={handleInputKeyDown}
+					maxlength="7"
+					class="w-full text-center font-mono text-xs opacity-60 bg-white/80 py-2 rounded-xl border border-black/5 focus:outline-none focus:ring-2 focus:ring-studio-warm/20"
+				/>
+				<span class="absolute right-3 top-1/2 -translate-y-1/2 text-[8px] uppercase font-bold opacity-20">Hex</span>
+			</div>
+
+			<button 
+				onclick={onClose}
+				class="w-full bg-studio-teal text-white font-serif italic py-3 rounded-2xl shadow-md hover:scale-[1.02] active:scale-100 transition-all flex justify-center items-center gap-2"
+			>
+				<span>✨</span> Apply Color
+			</button>
 		</div>
 	</div>
 </div>

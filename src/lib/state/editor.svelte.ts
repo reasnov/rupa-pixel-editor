@@ -18,13 +18,66 @@ export class EditorState {
 		'#6c71c4', // Violet
 		'#268bd2', // Blue
 		'#93a1a1', // Stone Gray
-		'#586e75'  // Dark Gray
+		'#586e75' // Dark Gray
 	]);
 	zoomLevel = $state(1);
 	showColorPicker = $state(false);
 	showCommandPalette = $state(false);
+	exportScale = $state(10); // Default to 10x for a decent 320px size
 	isShiftPressed = $state(false);
 	isCtrlPressed = $state(false);
+
+	// Universal Escape Stack
+	private escapeStack: (() => void)[] = [];
+
+	pushEscapeAction(fn: () => void) {
+		this.escapeStack.push(fn);
+	}
+
+	popEscapeAction(fn: () => void) {
+		this.escapeStack = this.escapeStack.filter(item => item !== fn);
+	}
+
+	handleEscape() {
+		const lastAction = this.escapeStack.pop();
+		if (lastAction) {
+			lastAction();
+			return true; // Action was handled
+		}
+		return false;
+	}
+
+	// Derived palette of colors currently present on the canvas
+	usedColors = $derived.by(() => {
+		const colors = new Set<string>();
+		this.pixelData.forEach((color) => {
+			if (color !== '#eee8d5') {
+				colors.add(color);
+			}
+		});
+		return Array.from(colors);
+	});
+
+	// Artisan coordinates: (0,0) only for odd grids. Even grids skip zero.
+	displayCoords = $derived.by(() => {
+		const calc = (pos: number, size: number) => {
+			const mid = Math.floor(size / 2);
+			const isEven = size % 2 === 0;
+
+			if (isEven) {
+				// For 32: indices 0..15 -> -16..-1, indices 16..31 -> 1..16
+				return pos < mid ? pos - mid : pos - mid + 1;
+			} else {
+				// For 33: indices 0..32 -> -16..0..16
+				return pos - mid;
+			}
+		};
+
+		return {
+			x: calc(this.cursorPos.x, this.gridWidth),
+			y: calc(this.cursorPos.y, this.gridHeight) * -1 // Invert Y for Cartesian feel (Up is positive)
+		};
+	});
 
 	// Derived transform for adaptive viewport
 	cameraTransform = $derived.by(() => {
@@ -63,10 +116,26 @@ export class EditorState {
 		}
 	}
 
+	clearCanvas() {
+		if (confirm('Are you sure you want to unravel the entire project?')) {
+			this.pixelData = this.pixelData.map(() => '#eee8d5');
+			sfx.playUnstitch();
+		}
+	}
+
+	pickColor() {
+		const index = this.cursorPos.y * this.gridWidth + this.cursorPos.x;
+		const color = this.pixelData[index];
+		if (color !== '#eee8d5') {
+			this.activeColor = color;
+			sfx.playStitch(); // Feedback for picking
+		}
+	}
+
 	moveCursor(dx: number, dy: number) {
 		const newX = Math.max(0, Math.min(this.gridWidth - 1, this.cursorPos.x + dx));
 		const newY = Math.max(0, Math.min(this.gridHeight - 1, this.cursorPos.y + dy));
-		
+
 		if (newX !== this.cursorPos.x || newY !== this.cursorPos.y) {
 			this.cursorPos = { x: newX, y: newY };
 			sfx.playMove();

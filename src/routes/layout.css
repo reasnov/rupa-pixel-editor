@@ -1,166 +1,198 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 @font-face {
-  font-family: 'EB Garamond';
-  src: url('/fonts/EBGaramond.ttf') format('truetype');
-  font-weight: normal;
-  font-style: normal;
+	font-family: 'EB Garamond';
+	src: url('/fonts/EBGaramond.ttf') format('truetype');
+	font-weight: normal;
+	font-style: normal;
 }
 
 @font-face {
-  font-family: 'Lora';
-  src: url('/fonts/Lora.ttf') format('truetype');
-  font-weight: normal;
-  font-style: normal;
+	font-family: 'Lora';
+	src: url('/fonts/Lora.ttf') format('truetype');
+	font-weight: normal;
+	font-style: normal;
 }
 
 @theme {
-  --color-canvas-bg: #fdf6e3;
-  --color-grid-border: #eee8d5;
-  --color-active-cell: #859900;
-  --color-studio-teal: #2aa198;
-  --color-studio-warm: #cb4b16;
-  --color-studio-text: #586e75;
+	--color-canvas-bg: #fdf6e3;
+	--color-grid-border: #eee8d5;
+	--color-active-cell: #859900;
+	--color-studio-teal: #2aa198;
+	--color-studio-warm: #cb4b16;
+	--color-studio-text: #586e75;
 }
 
 :root {
-  background-color: var(--color-canvas-bg);
-  color: var(--color-studio-text);
-  font-family: 'Lora', serif;
+	background-color: var(--color-canvas-bg);
+	color: var(--color-studio-text);
+	font-family: 'Lora', serif;
 }
 
-h1, h2, h3, .font-serif {
-  font-family: 'EB Garamond', serif;
+h1,
+h2,
+h3,
+.font-serif {
+	font-family: 'EB Garamond', serif;
 }
 
 body {
-  margin: 0;
-  padding: 0;
-  overflow: hidden;
-  height: 100vh;
-  width: 100vw;
-  background-color: #fdf6e3;
-  /* Soft paper grain effect */
-  background-image: url("https://www.transparenttextures.com/patterns/natural-paper.png");
+	margin: 0;
+	padding: 0;
+	overflow: hidden;
+	height: 100vh;
+	width: 100vw;
+	background-color: #fdf6e3;
+	/* Soft paper grain effect */
+	background-image: url('https://www.transparenttextures.com/patterns/natural-paper.png');
 }
 
-canvas, .pixel-grid {
-  image-rendering: pixelated;
+canvas,
+.pixel-grid {
+	image-rendering: pixelated;
+}
+
+.artisan-panel {
+	background: rgba(253, 246, 227, 0.95);
+	border: 2px solid #eee8d5;
+	box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+	backdrop-filter: blur(4px);
+}
+
+.side-panel-left {
+	border-left: none;
+	border-radius: 0 24px 24px 0;
+}
+
+.side-panel-right {
+	border-right: none;
+	border-radius: 24px 0 0 24px;
+}
+
+.bottom-panel {
+	border-bottom: none;
+	border-radius: 32px 32px 0 0;
 }
 
 .hud-panel {
-  background: #fdf6e3;
-  border-bottom: 2px solid #eee8d5;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.02);
-  border-radius: 0 0 24px 24px;
+	background: #fdf6e3;
+	border-bottom: 2px solid #eee8d5;
+	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
+	border-radius: 0 0 24px 24px;
 }
 
 /* The Artisan Frame (The Loom) */
 .artisan-frame {
-  background: #eee8d5;
-  border: 16px solid #ffffff;
-  border-radius: 40px;
-  box-shadow: 
-    0 10px 30px rgba(0,0,0,0.05),
-    inset 0 0 20px rgba(0,0,0,0.02);
-  position: relative;
+	background: #eee8d5;
+	border: 16px solid #ffffff;
+	border-radius: 40px;
+	box-shadow:
+		0 10px 30px rgba(0, 0, 0, 0.05),
+		inset 0 0 20px rgba(0, 0, 0, 0.02);
+	position: relative;
 }
 
 .artisan-frame::after {
-  content: '';
-  position: absolute;
-  inset: -8px;
-  border: 2px solid rgba(0,0,0,0.03);
-  border-radius: 44px;
-  pointer-events: none;
+	content: '';
+	position: absolute;
+	inset: -8px;
+	border: 2px solid rgba(0, 0, 0, 0.03);
+	border-radius: 44px;
+	pointer-events: none;
 }
 
 /* Optimized Grid Pattern */
 .stitch-grid-pattern {
-  background-image: 
-    linear-gradient(to right, rgba(88, 110, 117, 0.05) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(88, 110, 117, 0.05) 1px, transparent 1px);
-  background-size: calc(100% / var(--grid-cols)) calc(100% / var(--grid-rows));
-  background-color: #f4eee0;
+	background-image:
+		linear-gradient(to right, rgba(88, 110, 117, 0.05) 1px, transparent 1px),
+		linear-gradient(to bottom, rgba(88, 110, 117, 0.05) 1px, transparent 1px);
+	background-size: calc(100% / var(--grid-cols)) calc(100% / var(--grid-rows));
+	background-color: #f4eee0;
 }
 
 .cell-stitch {
-  border: 0.5px solid rgba(88, 110, 117, 0.03);
+	border: 0.5px solid rgba(88, 110, 117, 0.03);
 }
 
 /* Sharp Inverted Cursor (The Needle) */
 .cursor-spirit {
-  position: absolute;
-  inset: 0;
-  z-index: 100;
-  pointer-events: none;
+	position: absolute;
+	inset: 0;
+	z-index: 100;
+	pointer-events: none;
 }
 
 .cursor-invert {
-  position: absolute;
-  inset: 0;
-  background: white;
-  mix-blend-mode: difference;
-  /* No rounded corners */
+	position: absolute;
+	inset: 0;
+	background: white;
+	mix-blend-mode: difference;
+	/* No rounded corners */
 }
 
 .cursor-border {
-  position: absolute;
-  inset: -1px; /* Slightly larger to wrap the inversion */
-  border: 1px dashed var(--color-studio-warm);
-  pointer-events: none;
-  /* No rounded corners */
+	position: absolute;
+	inset: -1px; /* Slightly larger to wrap the inversion */
+	border: 1px dashed var(--color-studio-warm);
+	pointer-events: none;
+	/* No rounded corners */
 }
 
 @keyframes needle-dance {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.03); }
-  100% { transform: scale(1); }
+	0% {
+		transform: scale(1);
+	}
+	50% {
+		transform: scale(1.03);
+	}
+	100% {
+		transform: scale(1);
+	}
 }
 
 .animate-needle {
-  animation: needle-dance 1s ease-in-out infinite;
+	animation: needle-dance 1s ease-in-out infinite;
 }
 
 .status-tag {
-  background: #eee8d5;
-  padding: 4px 12px;
-  border-radius: 20px;
-  font-size: 10px;
-  color: #93a1a1;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  border: 1px dashed #93a1a1;
+	background: #eee8d5;
+	padding: 4px 12px;
+	border-radius: 20px;
+	font-size: 10px;
+	color: #93a1a1;
+	text-transform: uppercase;
+	letter-spacing: 0.1em;
+	border: 1px dashed #93a1a1;
 }
 
 .artisan-tool-btn {
-  background: white;
-  border: 1px solid #eee8d5;
-  color: var(--color-studio-text);
-  padding: 6px 12px;
-  border-radius: 12px;
-  font-family: 'EB Garamond', serif;
-  font-style: italic;
-  font-size: 13px;
-  transition: all 0.2s ease;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+	background: white;
+	border: 1px solid #eee8d5;
+	color: var(--color-studio-text);
+	padding: 6px 12px;
+	border-radius: 12px;
+	font-family: 'EB Garamond', serif;
+	font-style: italic;
+	font-size: 13px;
+	transition: all 0.2s ease;
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.02);
 }
 
 .artisan-tool-btn:hover {
-  background: var(--color-studio-warm);
-  color: white;
-  border-color: var(--color-studio-warm);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 10px rgba(203, 75, 22, 0.2);
+	background: var(--color-studio-warm);
+	color: white;
+	border-color: var(--color-studio-warm);
+	transform: translateY(-1px);
+	box-shadow: 0 4px 10px rgba(203, 75, 22, 0.2);
 }
 
 .artisan-tool-btn:active {
-  transform: translateY(0);
+	transform: translateY(0);
 }
 
 .rounded-studio {
-  border-radius: 12px;
+	border-radius: 12px;
 }

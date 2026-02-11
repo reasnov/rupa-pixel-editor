@@ -5,7 +5,7 @@ export class ExportEngine {
 	 */
 	static toSVG(width: number, height: number, data: string[]): string {
 		let svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}" shape-rendering="crispEdges">`;
-		
+
 		for (let y = 0; y < height; y++) {
 			for (let x = 0; x < width; x++) {
 				const color = data[y * width + x];
@@ -27,30 +27,40 @@ export class ExportEngine {
 		return svg;
 	}
 
-	/**
-	 * Renders the pixel data to a data URL (PNG) using HTML5 Canvas.
-	 */
-	static async toPNG(width: number, height: number, data: string[], scale = 10): Promise<string> {
-		const canvas = document.createElement('canvas');
-		canvas.width = width * scale;
-		canvas.height = height * scale;
-		const ctx = canvas.getContext('2d');
-
-		if (!ctx) throw new Error('Could not get canvas context');
-
-		// Disable smoothing for sharp pixels
-		ctx.imageSmoothingEnabled = false;
-
-		data.forEach((color, i) => {
-			if (color === '#eee8d5') return; // Skip empty
+		/**
+		 * Renders the pixel data to a data URL (PNG) using HTML5 Canvas.
+		 */
+		static async toPNG(width: number, height: number, data: string[], scale: number): Promise<string> {
+			const canvas = document.createElement('canvas');
+			const finalWidth = Math.max(1, Math.round(width * scale));
+			const finalHeight = Math.max(1, Math.round(height * scale));
 			
-			const x = i % width;
-			const y = Math.floor(i / width);
-			
-			ctx.fillStyle = color;
-			ctx.fillRect(x * scale, y * scale, scale, scale);
-		});
-
-		return canvas.toDataURL('image/png');
-	}
-}
+			canvas.width = finalWidth;
+			canvas.height = finalHeight;
+			const ctx = canvas.getContext('2d');
+	
+			if (!ctx) throw new Error('Could not get canvas context');
+	
+			// Disable smoothing for sharp pixels
+			ctx.imageSmoothingEnabled = false;
+	
+			const cellScale = scale;
+	
+			data.forEach((color, i) => {
+				if (color === '#eee8d5') return; // Skip empty
+				
+				const x = i % width;
+				const y = Math.floor(i / width);
+				
+				ctx.fillStyle = color;
+				// Use Math.floor/ceil to avoid sub-pixel gaps at odd scales
+				ctx.fillRect(
+					Math.floor(x * cellScale), 
+					Math.floor(y * cellScale), 
+					Math.ceil(cellScale), 
+					Math.ceil(cellScale)
+				);
+			});
+	
+			return canvas.toDataURL('image/png');
+		}}

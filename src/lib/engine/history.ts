@@ -39,8 +39,12 @@ export class HistoryManager {
 		return null;
 	}
 
-	canUndo() { return this.undoStack.length > 0; }
-	canRedo() { return this.redoStack.length > 0; }
+	canUndo() {
+		return this.undoStack.length > 0;
+	}
+	canRedo() {
+		return this.redoStack.length > 0;
+	}
 }
 
 export const history = new HistoryManager();

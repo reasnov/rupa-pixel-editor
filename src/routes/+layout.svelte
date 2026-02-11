@@ -4,6 +4,6 @@
 	let { children } = $props();
 </script>
 
-<div class="stitching-bg min-h-screen w-screen flex flex-col bg-canvas-bg selection:bg-none">
+<div class="stitching-bg flex min-h-screen w-screen flex-col bg-canvas-bg selection:bg-none">
 	{@render children()}
 </div>

@@ -10,7 +10,13 @@ export class AudioEngine {
 		}
 	}
 
-	private playTone(freq: number, duration: number, type: OscillatorType = 'sine', volume = 0.1, rampTo = 0.0001) {
+	private playTone(
+		freq: number,
+		duration: number,
+		type: OscillatorType = 'sine',
+		volume = 0.1,
+		rampTo = 0.0001
+	) {
 		this.init();
 		if (!this.ctx) return;
 
@@ -19,7 +25,7 @@ export class AudioEngine {
 
 		osc.type = type;
 		osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
-		
+
 		gain.gain.setValueAtTime(volume, this.ctx.currentTime);
 		gain.gain.exponentialRampToValueAtTime(rampTo, this.ctx.currentTime + duration);
 

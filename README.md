@@ -14,16 +14,16 @@ Built with **Svelte 5** and **Electron**, Rupa eliminates the mouse in favor of 
 
 ## ⌨️ Controls
 
-| Key | Action |
-| :--- | :--- |
-| `Arrow Keys` | Move Active Cell |
-| `Space` | Stitch (Color Pixel) |
-| `Backspace` / `Delete` | Unstitch (Clear Pixel) |
-| `Ctrl + Space` | Unstitch (Clear Pixel) |
-| `Shift` (Hold) | **Stitch-Flow**: Auto-color on move |
-| `Ctrl + Shift` (Hold) | **Unstitch-Flow**: Auto-clear on move |
-| `Ctrl + Z` | Undo |
-| `Ctrl + Shift + Z` / `Ctrl + Y` | Redo |
+| Key                             | Action                                |
+| :------------------------------ | :------------------------------------ |
+| `Arrow Keys`                    | Move Active Cell                      |
+| `Space`                         | Stitch (Color Pixel)                  |
+| `Backspace` / `Delete`          | Unstitch (Clear Pixel)                |
+| `Ctrl + Space`                  | Unstitch (Clear Pixel)                |
+| `Shift` (Hold)                  | **Stitch-Flow**: Auto-color on move   |
+| `Ctrl + Shift` (Hold)           | **Unstitch-Flow**: Auto-clear on move |
+| `Ctrl + Z`                      | Undo                                  |
+| `Ctrl + Shift + Z` / `Ctrl + Y` | Redo                                  |
 
 ## 🚀 Getting Started
 
@@ -35,6 +35,7 @@ Built with **Svelte 5** and **Electron**, Rupa eliminates the mouse in favor of 
 ### Installation
 
 1. Clone the repository:
+
    ```bash
    git clone https://github.com/reasnov/rupa-pixel-editor.git
    cd rupa-pixel-editor
@@ -48,6 +49,7 @@ Built with **Svelte 5** and **Electron**, Rupa eliminates the mouse in favor of 
 ### Running the App
 
 Start the Vite development server and Electron window simultaneously:
+
 ```bash
 npm run dev:all
 ```
@@ -68,4 +70,5 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
 We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
 ---
+
 Created with ❤️ by [reasnov](https://github.com/reasnov)

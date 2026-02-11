@@ -4,7 +4,7 @@
 
 <!-- The Canvas (The Linen) -->
 <div
-	class="stitch-grid-pattern relative shrink-0 origin-center transition-transform duration-500 ease-[cubic-bezier(0.23,1,0.32,1)]"
+	class="stitch-grid-pattern artisan-checker-small relative shrink-0 origin-center transition-transform duration-500 ease-[cubic-bezier(0.23,1,0.32,1)]"
 	style="
 		display: grid;
 		grid-template-columns: repeat({editor.gridWidth}, 1fr); 
@@ -14,6 +14,7 @@
 		--grid-cols: {editor.gridWidth}; 
 		--grid-rows: {editor.gridHeight}; 
 		transform: {editor.cameraTransform};
+		background-color: #eee8d5;
 	"
 >
 	<!-- Center Axis Guides -->
@@ -27,19 +28,13 @@
 		{#each [-24, -16, -8, 8, 16, 24] as offset}
 			{@const pos = 50 + (offset / editor.gridWidth) * 100}
 			{#if pos > 0 && pos < 100}
-				<div
-					class="absolute top-0 bottom-0 w-px -translate-x-1/2 bg-studio-text/10"
-					style="left: {pos}%"
-				></div>
+				<div class="absolute top-0 bottom-0 w-px -translate-x-1/2 bg-studio-text/10" style="left: {pos}%"></div>
 			{/if}
 		{/each}
 		{#each [-24, -16, -8, 8, 16, 24] as offset}
 			{@const pos = 50 + (offset / editor.gridHeight) * 100}
 			{#if pos > 0 && pos < 100}
-				<div
-					class="absolute right-0 left-0 h-px -translate-y-1/2 bg-studio-text/10"
-					style="top: {pos}%"
-				></div>
+				<div class="absolute right-0 left-0 h-px -translate-y-1/2 bg-studio-text/10" style="top: {pos}%"></div>
 			{/if}
 		{/each}
 	</div>
@@ -50,11 +45,11 @@
 		{@const isActive = editor.cursorPos.x === x && editor.cursorPos.y === y}
 		{@const isEmpty = color === '#eee8d5'}
 		<div
-			class="cell-stitch relative h-full w-full artisan-checker-small {isActive ? 'z-30' : 'z-10'}"
+			class="cell-stitch relative h-full w-full {isActive ? 'z-30' : 'z-10'}"
 			style="background-color: {isEmpty ? 'transparent' : color};"
 		>
 			{#if isActive}
-				<div class="cursor-spirit animate-needle absolute inset-0">
+				<div class="absolute inset-0 cursor-spirit animate-needle">
 					<div class="cursor-invert"></div>
 					<div class="cursor-border"></div>
 				</div>
@@ -71,7 +66,7 @@
 		{@const width = x2 - x1 + 1}
 		{@const height = y2 - y1 + 1}
 		<div
-			class="absolute z-40 border-2 border-dashed border-studio-warm bg-studio-warm/10 pointer-events-none transition-all duration-75"
+			class="absolute z-40 border-2 border-dashed border-studio-warm bg-studio-warm/10 pointer-events-none"
 			style="
 				left: {(x1 / editor.gridWidth) * 100}%; 
 				top: {(y1 / editor.gridHeight) * 100}%; 
@@ -79,7 +74,6 @@
 				height: {(height / editor.gridHeight) * 100}%;
 			"
 		>
-			<!-- Anchor Point (Pen Tool style) -->
 			<div 
 				class="absolute h-2 w-2 bg-studio-warm border border-white shadow-sm -translate-x-1/2 -translate-y-1/2"
 				style="

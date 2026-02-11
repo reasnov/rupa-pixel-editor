@@ -161,6 +161,9 @@
 		if (e.key === 'Enter') {
 			onClose();
 		}
+		if (e.key === 'Escape') {
+			onClose();
+		}
 	}
 </script>
 

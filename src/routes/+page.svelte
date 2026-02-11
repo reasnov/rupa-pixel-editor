@@ -53,6 +53,7 @@
 		) {
 			if (e.key === 'Escape') {
 				editor.handleEscape();
+				e.preventDefault();
 			}
 			return;
 		}
@@ -212,7 +213,7 @@
 		<div class="mx-auto my-1 h-px w-4 bg-studio-text/10"></div>
 
 		<button
-			class="via-sage-300 h-7 w-7 rounded-full border-2 border-dashed border-studio-warm/40 bg-gradient-to-tr from-rose-300 to-sky-300 shadow-sm transition-all hover:scale-110 hover:border-studio-warm"
+			class="via-sage-300 h-7 w-7 rounded-full border-2 border-dashed border-studio-warm/40 bg-gradient-to-tr from-rose-300 via-sage-300 to-sky-300 shadow-sm transition-all hover:scale-110 hover:border-studio-warm"
 			onclick={() => (editor.showColorPicker = true)}
 			title="Natural Dye Basin (Ctrl + P)"
 		></button>

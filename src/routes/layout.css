@@ -111,7 +111,6 @@ canvas,
 
 .cell-stitch {
 	border: 0.5px solid rgba(88, 110, 117, 0.03);
-	isolation: isolate;
 }
 
 .artisan-checker-small {
@@ -140,7 +139,7 @@ canvas,
 	inset: 0;
 	background: white;
 	mix-blend-mode: difference;
-	/* No rounded corners */
+	z-index: 10;
 }
 
 .cursor-border {

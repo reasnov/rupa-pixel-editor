@@ -25,7 +25,7 @@
 		{
 			id: 'toggle-mute',
 			label: 'Studio: Toggle Audio Feedback (Mute/Unmute)',
-			shortcut: '',
+			shortcut: 'Ctrl+M',
 			action: () => editor.toggleMute()
 		},
 		{

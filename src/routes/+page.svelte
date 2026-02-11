@@ -30,6 +30,19 @@
 	}
 
 	function handleKeyDown(e: KeyboardEvent) {
+		// Ignore global shortcuts if an input is focused
+		if (
+			e.target instanceof HTMLInputElement ||
+			e.target instanceof HTMLTextAreaElement ||
+			(e.target as HTMLElement).isContentEditable
+		) {
+			// Still allow Escape to work for closing modals even when focused on input
+			if (e.key === 'Escape') {
+				editor.handleEscape();
+			}
+			return;
+		}
+
 		editor.isShiftPressed = e.shiftKey;
 		editor.isCtrlPressed = e.ctrlKey || e.metaKey;
 
@@ -50,7 +63,10 @@
 				'Escape'
 			].includes(e.key)
 		) {
-			e.preventDefault();
+			// Don't prevent default for Ctrl+C/V/X or other important system combos
+			if (!e.ctrlKey && !e.metaKey) {
+				e.preventDefault();
+			}
 		}
 
 		// Handle Escape
@@ -62,6 +78,7 @@
 		// Handle Export
 		if (editor.isCtrlPressed && e.key.toLowerCase() === 'e') {
 			showExportModal = true;
+			e.preventDefault();
 			return;
 		}
 
@@ -74,6 +91,18 @@
 		// Handle Command Palette
 		if (editor.isCtrlPressed && e.key.toLowerCase() === 'k') {
 			editor.showCommandPalette = !editor.showCommandPalette;
+			return;
+		}
+
+		// Handle Mute
+		if (editor.isCtrlPressed && e.key.toLowerCase() === 'm') {
+			editor.toggleMute();
+			return;
+		}
+
+		// Handle Clear Linen
+		if (editor.isCtrlPressed && e.key.toLowerCase() === 'l') {
+			editor.clearCanvas();
 			return;
 		}
 

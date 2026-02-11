@@ -3,39 +3,44 @@
 	import { fade, fly } from 'svelte/transition';
 </script>
 
-<div class="cursor-container absolute inset-0">
-	<!-- The main inverted body -->
-	<div class="cursor-invert"></div>
-	
-	<!-- Fine-line artisan brackets with Focus Animation -->
-	<div class="bracket tl animate-focus-tl"></div>
-	<div class="bracket tr animate-focus-tr"></div>
-	<div class="bracket bl animate-focus-bl"></div>
-	<div class="bracket br animate-focus-br"></div>
-
-	<!-- Picking Feedback (Artisan Pin) -->
-	{#if editor.isPicking}
-		<div 
-			transition:fade={{ duration: 400 }}
-			class="absolute inset-[-4px] border-2 border-white rounded-sm animate-ping opacity-20 z-0"
-			style="background-color: {editor.activeColor};"
-		></div>
+{#if editor.isCursorVisible}
+	<div 
+		transition:fade={{ duration: 1000 }}
+		class="cursor-container absolute inset-0"
+	>
+		<!-- The main inverted body -->
+		<div class="cursor-invert"></div>
 		
-		<div 
-			in:fly={{ y: -10, duration: 400 }}
-			out:fade={{ duration: 400 }}
-			class="absolute -top-10 left-1/2 -translate-x-1/2 flex flex-col items-center z-[110]"
-		>
+		<!-- Fine-line artisan brackets with Focus Animation -->
+		<div class="bracket tl animate-focus-tl"></div>
+		<div class="bracket tr animate-focus-tr"></div>
+		<div class="bracket bl animate-focus-bl"></div>
+		<div class="bracket br animate-focus-br"></div>
+
+		<!-- Picking Feedback (Artisan Pin) -->
+		{#if editor.isPicking}
 			<div 
-				class="relative h-7 w-7 rounded-full rounded-br-none border-4 border-white shadow-xl bg-white ring-1 ring-black/5 overflow-hidden"
-				style="transform: rotate(45deg);"
+				transition:fade={{ duration: 400 }}
+				class="absolute inset-[-4px] border-2 border-white rounded-sm animate-ping opacity-20 z-0"
+				style="background-color: {editor.activeColor};"
+			></div>
+			
+			<div 
+				in:fly={{ y: -10, duration: 400 }}
+				out:fade={{ duration: 400 }}
+				class="absolute -top-10 left-1/2 -translate-x-1/2 flex flex-col items-center z-[110]"
 			>
-				<div class="h-full w-full -rotate-45" style="background-color: {editor.activeColor};"></div>
+				<div 
+					class="relative h-7 w-7 rounded-full rounded-br-none border-4 border-white shadow-xl bg-white ring-1 ring-black/5 overflow-hidden"
+					style="transform: rotate(45deg);"
+				>
+					<div class="h-full w-full -rotate-45" style="background-color: {editor.activeColor};"></div>
+				</div>
+				<div class="w-0.5 h-2 bg-white -mt-0.5 shadow-sm rounded-full opacity-80"></div>
 			</div>
-			<div class="w-0.5 h-2 bg-white -mt-0.5 shadow-sm rounded-full opacity-80"></div>
-		</div>
-	{/if}
-</div>
+		{/if}
+	</div>
+{/if}
 
 <style>
 	.cursor-container {

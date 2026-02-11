@@ -45,6 +45,9 @@
 	function handleKeyDown(e: KeyboardEvent) {
 		if (!editor.isAppReady) return;
 
+		// Reset inactivity timer on any key press
+		editor.resetInactivityTimer();
+
 		// 1. Context Check: Ignore global shortcuts if an input is focused
 		if (
 			e.target instanceof HTMLInputElement ||

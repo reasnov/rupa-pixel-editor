@@ -29,9 +29,14 @@ export class EditorState {
 	isMuted = $state(false);
 	isPicking = $state(false);
 	isAppReady = $state(false);
+	isCursorVisible = $state(true);
 	isShiftPressed = $state(false);
 	isCtrlPressed = $state(false);
 	isAltPressed = $state(false);
+
+	// Inactivity Logic
+	private inactivityTimer: any = null;
+	private readonly INACTIVITY_TIMEOUT = 30000; // 30 seconds
 
 	// Selection/Block mode
 	selectionStart = $state<{ x: number; y: number } | null>(null);
@@ -42,6 +47,21 @@ export class EditorState {
 	// Universal Escape Stack
 	private escapeStack: (() => void)[] = [];
 
+	constructor(width = 32, height = 32) {
+		this.gridWidth = width;
+		this.gridHeight = height;
+		this.pixelData = Array(width * height).fill('#eee8d5'); // Soft Cream/Linen
+		this.resetInactivityTimer();
+	}
+
+	resetInactivityTimer() {
+		this.isCursorVisible = true;
+		if (this.inactivityTimer) clearTimeout(this.inactivityTimer);
+		this.inactivityTimer = setTimeout(() => {
+			this.isCursorVisible = false;
+		}, this.INACTIVITY_TIMEOUT);
+	}
+
 	toggleMute() {
 		this.isMuted = !this.isMuted;
 	}
@@ -49,12 +69,14 @@ export class EditorState {
 	startSelection() {
 		this.selectionStart = { ...this.cursorPos };
 		this.selectionEnd = { ...this.cursorPos };
+		this.resetInactivityTimer();
 	}
 
 	updateSelection() {
 		if (this.selectionStart) {
 			this.selectionEnd = { ...this.cursorPos };
 		}
+		this.resetInactivityTimer();
 	}
 
 	commitSelection() {
@@ -65,8 +87,6 @@ export class EditorState {
 		const y1 = Math.min(this.selectionStart.y, this.selectionEnd.y);
 		const y2 = Math.max(this.selectionStart.y, this.selectionEnd.y);
 
-		// We use a history grouping or individual pushes? 
-		// For simplicity, let's just apply them.
 		for (let y = y1; y <= y2; y++) {
 			for (let x = x1; x <= x2; x++) {
 				const index = y * this.gridWidth + x;
@@ -81,6 +101,7 @@ export class EditorState {
 		sfx.playStitch();
 		this.selectionStart = null;
 		this.selectionEnd = null;
+		this.resetInactivityTimer();
 	}
 
 	pushEscapeAction(fn: () => void) {
@@ -88,14 +109,14 @@ export class EditorState {
 	}
 
 	popEscapeAction(fn: () => void) {
-		this.escapeStack = this.escapeStack.filter(item => item !== fn);
+		this.escapeStack = this.escapeStack.filter((item) => item !== fn);
 	}
 
 	handleEscape() {
 		const lastAction = this.escapeStack.pop();
 		if (lastAction) {
 			lastAction();
-			return true; // Action was handled
+			return true;
 		}
 		return false;
 	}
@@ -118,55 +139,44 @@ export class EditorState {
 			const isEven = size % 2 === 0;
 
 			if (isEven) {
-				// For 32: indices 0..15 -> -16..-1, indices 16..31 -> 1..16
 				return pos < mid ? pos - mid : pos - mid + 1;
 			} else {
-				// For 33: indices 0..32 -> -16..0..16
 				return pos - mid;
 			}
 		};
 
 		return {
 			x: calc(this.cursorPos.x, this.gridWidth),
-			y: calc(this.cursorPos.y, this.gridHeight) * -1 // Invert Y for Cartesian feel (Up is positive)
+			y: calc(this.cursorPos.y, this.gridHeight) * -1
 		};
 	});
 
-	// Derived transform for adaptive viewport
 	cameraTransform = $derived.by(() => {
 		if (this.zoomLevel <= 1) {
-			// Mode: Centered Canvas with Margin
-			// No translation needed as flex centering handles the rest
 			return `scale(${this.zoomLevel})`;
 		} else {
-			// Mode: Tracking Needle (Smooth Focus)
 			const x = ((this.cursorPos.x + 0.5) / this.gridWidth) * 100;
 			const y = ((this.cursorPos.y + 0.5) / this.gridHeight) * 100;
-
-			// The transform moves the grid so the cursor stays at the viewport's center
 			return `translate(calc(50% - ${x}%), calc(50% - ${y}%)) scale(${this.zoomLevel})`;
 		}
 	});
 
-	constructor(width = 32, height = 32) {
-		this.gridWidth = width;
-		this.gridHeight = height;
-		this.pixelData = Array(width * height).fill('#eee8d5'); // Soft Cream/Linen
-	}
-
 	setZoom(delta: number) {
 		const newZoom = this.zoomLevel + delta;
 		this.zoomLevel = Math.max(0.5, Math.min(5, Number(newZoom.toFixed(1))));
+		this.resetInactivityTimer();
 	}
 
 	resetZoom() {
 		this.zoomLevel = 1;
+		this.resetInactivityTimer();
 	}
 
 	selectPalette(index: number) {
 		if (index >= 0 && index < this.palette.length) {
 			this.activeColor = this.palette[index];
 		}
+		this.resetInactivityTimer();
 	}
 
 	clearCanvas() {
@@ -174,6 +184,7 @@ export class EditorState {
 			this.pixelData = this.pixelData.map(() => '#eee8d5');
 			sfx.playUnstitch();
 		}
+		this.resetInactivityTimer();
 	}
 
 	pickColor() {
@@ -181,14 +192,13 @@ export class EditorState {
 		const color = this.pixelData[index];
 		if (color !== '#eee8d5') {
 			this.activeColor = color;
-			sfx.playStitch(); // Feedback for picking
-			
-			// Trigger visual feedback
+			sfx.playStitch();
 			this.isPicking = true;
 			setTimeout(() => {
 				this.isPicking = false;
 			}, 1500);
 		}
+		this.resetInactivityTimer();
 	}
 
 	moveCursor(dx: number, dy: number) {
@@ -207,6 +217,7 @@ export class EditorState {
 				this.stitch();
 			}
 		}
+		this.resetInactivityTimer();
 	}
 
 	stitch() {
@@ -217,6 +228,7 @@ export class EditorState {
 			this.pixelData[index] = this.activeColor;
 			sfx.playStitch();
 		}
+		this.resetInactivityTimer();
 	}
 
 	unstitch() {
@@ -228,14 +240,16 @@ export class EditorState {
 			this.pixelData[index] = emptyColor;
 			sfx.playUnstitch();
 		}
+		this.resetInactivityTimer();
 	}
 
 	undo() {
 		const action = history.undo();
 		if (action) {
 			this.pixelData[action.index] = action.oldColor;
-			sfx.playUnstitch(); // Play a sound to indicate action
+			sfx.playUnstitch();
 		}
+		this.resetInactivityTimer();
 	}
 
 	redo() {
@@ -244,10 +258,12 @@ export class EditorState {
 			this.pixelData[action.index] = action.newColor;
 			sfx.playStitch();
 		}
+		this.resetInactivityTimer();
 	}
 
 	setColor(color: ColorHex) {
 		this.activeColor = color;
+		this.resetInactivityTimer();
 	}
 }
 

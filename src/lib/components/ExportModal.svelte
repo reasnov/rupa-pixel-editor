@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { editor } from '../state/editor.svelte';
 	import { ExportEngine } from '../engine/export';
+	import ColorPicker from './ColorPicker.svelte';
 	import { onMount } from 'svelte';
 
 	let {
@@ -12,7 +13,7 @@
 	let customWidth = $state(editor.gridWidth * editor.exportScale);
 	let isCustom = $state(false);
 	let previewUrl = $state('');
-	let bgPicker: HTMLInputElement;
+	let showBgPicker = $state(false);
 
 	const presets = [0.5, 1, 2, 4, 10, 20];
 	const bgPresets = [
@@ -56,6 +57,12 @@
 		updatePreview();
 	});
 
+	// Register Escape listener for the Export Modal itself
+	$effect(() => {
+		editor.pushEscapeAction(close);
+		return () => editor.popEscapeAction(close);
+	});
+
 	onMount(() => {
 		updatePreview();
 	});
@@ -70,7 +77,7 @@
 		class="flex max-h-[90vh] w-[500px] flex-col gap-6 overflow-y-auto rounded-[2.5rem] border-8 border-white bg-[#fdf6e3] p-8 shadow-2xl ring-1 ring-black/5"
 	>
 		<div class="flex items-center justify-between">
-			<span class="font-serif text-2xl text-studio-warm italic">Export Your Work</span>
+			<span class="font-serif text-2xl text-studio-warm italic">Export Project</span>
 			<button
 				onclick={close}
 				class="text-[10px] font-bold tracking-widest uppercase opacity-30 transition-opacity hover:opacity-100"
@@ -152,14 +159,14 @@
 						</button>
 					{/each}
 
-					<!-- Custom Background Option -->
+					<!-- Custom Background Option using our Custom Picker -->
 					<button
 						class="flex items-center gap-2 rounded-lg border-2 p-1.5 font-serif text-[10px] transition-all italic {!bgPresets.some(
 							(p) => p.value === editor.exportBgColor
 						)
 							? 'border-studio-warm bg-white shadow-sm'
 							: 'border-transparent opacity-60 hover:opacity-100'}"
-						onclick={() => bgPicker.click()}
+						onclick={() => (showBgPicker = true)}
 					>
 						<div
 							class="h-3 w-3 rounded-sm border border-black/10 bg-gradient-to-tr from-rose-300 via-sage-300 to-sky-300"
@@ -169,12 +176,6 @@
 						></div>
 						Custom Dye...
 					</button>
-					<input
-						type="color"
-						bind:this={bgPicker}
-						class="hidden"
-						oninput={(e) => (editor.exportBgColor = e.currentTarget.value)}
-					/>
 				</div>
 			</div>
 		</div>
@@ -191,7 +192,7 @@
 				>
 			</button>
 			<button
-				class="flex flex-1 flex-col items-center rounded-2xl bg-studio-warm py-3 text-white shadow-md transition-all font-serif hover:scale-[1.02] italic active:scale-100"
+				class="flex-1 rounded-2xl bg-studio-warm py-3 text-white shadow-md transition-all font-serif hover:scale-[1.02] italic active:scale-100 flex flex-col items-center"
 				onclick={() => onExport('svg', 1, editor.exportBgColor)}
 			>
 				<span class="text-lg">Export SVG</span>
@@ -202,6 +203,15 @@
 		</div>
 	</div>
 </div>
+
+{#if showBgPicker}
+	<!-- Nested ColorPicker for Background -->
+	<ColorPicker 
+		bind:value={editor.exportBgColor} 
+		onClose={() => showBgPicker = false} 
+		title="Background Dye"
+	/>
+{/if}
 
 <style>
 	.artisan-checker {

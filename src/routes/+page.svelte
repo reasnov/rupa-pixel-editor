@@ -137,7 +137,10 @@
 {/if}
 
 {#if editor.showColorPicker}
-	<ColorPicker />
+	<ColorPicker 
+		bind:value={editor.activeColor} 
+		onClose={() => editor.showColorPicker = false} 
+	/>
 {/if}
 
 {#if showExportModal}

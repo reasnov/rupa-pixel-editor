@@ -1,185 +1,93 @@
 <script lang="ts">
-		import { editor } from '$lib/state/editor.svelte';
-		import { ExportEngine } from '$lib/engine/export';
-		import ColorPicker from '$lib/components/ColorPicker.svelte';
-		import ExportModal from '$lib/components/ExportModal.svelte';
-		import CommandPalette from '$lib/components/CommandPalette.svelte';
-		import Canvas from '$lib/components/Canvas.svelte';
-		import { onMount } from 'svelte';
-	
-		let showExportModal = $state(false);
-	
-		async function exportImage(format: 'svg' | 'png', scale: number = 10) {
-			if (format === 'svg') {
-				const svg = ExportEngine.toSVG(editor.gridWidth, editor.gridHeight, editor.pixelData);
-				const blob = new Blob([svg], { type: 'image/svg+xml' });
-				const url = URL.createObjectURL(blob);
-				download(url, 'stitch-art.svg');
-			} else {
-				const dataUrl = await ExportEngine.toPNG(editor.gridWidth, editor.gridHeight, editor.pixelData, scale);
-				download(dataUrl, 'stitch-art.png');
-			}
-			showExportModal = false;
-		}
-
-	function download(url: string, filename: string) {
-		const a = document.createElement('a');
-		a.href = url;
-		a.download = filename;
-		a.click();
-	}
-
-	function handleKeyDown(e: KeyboardEvent) {
-		// Ignore global shortcuts if an input is focused
-		if (
-			e.target instanceof HTMLInputElement ||
-			e.target instanceof HTMLTextAreaElement ||
-			(e.target as HTMLElement).isContentEditable
-		) {
-			// Still allow Escape to work for closing modals even when focused on input
-			if (e.key === 'Escape') {
-				editor.handleEscape();
-			}
-			return;
-		}
-
-		editor.isShiftPressed = e.shiftKey;
-		editor.isCtrlPressed = e.ctrlKey || e.metaKey;
-
-		if (
-			[
-				'ArrowUp',
-				'ArrowDown',
-				'ArrowLeft',
-				'ArrowRight',
-				' ',
-				'Backspace',
-				'Delete',
-				'+',
-				'-',
-				'=',
-				'0',
-				'e',
-				'Escape'
-			].includes(e.key)
-		) {
-			// Don't prevent default for Ctrl+C/V/X or other important system combos
-			if (!e.ctrlKey && !e.metaKey) {
-				e.preventDefault();
-			}
-		}
-
-		// Handle Escape
-		if (e.key === 'Escape') {
-			editor.handleEscape();
-			return;
-		}
-
-		// Handle Export
-		if (editor.isCtrlPressed && e.key.toLowerCase() === 'e') {
-			showExportModal = true;
-			e.preventDefault();
-			return;
-		}
-
-		// Handle Color Picker
-		if (editor.isCtrlPressed && e.key.toLowerCase() === 'p') {
-			editor.showColorPicker = !editor.showColorPicker;
-			return;
-		}
-
-		// Handle Command Palette
-		if (editor.isCtrlPressed && e.key.toLowerCase() === 'k') {
-			editor.showCommandPalette = !editor.showCommandPalette;
-			return;
-		}
-
-		// Handle Mute
-		if (editor.isCtrlPressed && e.key.toLowerCase() === 'm') {
-			editor.toggleMute();
-			return;
-		}
-
-		// Handle Clear Linen
-		if (editor.isCtrlPressed && e.key.toLowerCase() === 'l') {
-			editor.clearCanvas();
-			return;
-		}
-
-		// Handle Deletion
-		if (e.key === 'Backspace' || e.key === 'Delete') {
-			editor.unstitch();
-			return;
-		}
-
-		// Handle Eyedropper
-		if (e.key.toLowerCase() === 'i' || (e.key === ' ' && e.altKey)) {
-			editor.pickColor();
-			return;
-		}
-
-		// Handle Zoom
-		if (e.key === '+' || e.key === '=') {
-			editor.setZoom(0.1);
-			return;
-		}
-		if (e.key === '-') {
-			editor.setZoom(-0.1);
-			return;
-		}
-		if (e.key === '0' && editor.isCtrlPressed) {
-			editor.resetZoom();
-			return;
-		}
-
-		// Handle Palette Selection (1-9, 0)
-		if (/^[0-9]$/.test(e.key) && !editor.isCtrlPressed) {
-			const index = e.key === '0' ? 9 : parseInt(e.key) - 1;
-			editor.selectPalette(index);
-			return;
-		}
-
-		// Handle Undo/Redo
-		if (editor.isCtrlPressed) {
-			if (e.key.toLowerCase() === 'z') {
-				if (e.shiftKey) {
-					editor.redo();
+			import { editor } from '$lib/state/editor.svelte';
+			import { ExportEngine } from '$lib/engine/export';
+			import { shortcuts } from '$lib/engine/shortcuts';
+			import ColorPicker from '$lib/components/ColorPicker.svelte';
+			import ExportModal from '$lib/components/ExportModal.svelte';
+			import CommandPalette from '$lib/components/CommandPalette.svelte';
+			import Canvas from '$lib/components/Canvas.svelte';
+			import { onMount } from 'svelte';
+		
+			let showExportModal = $state(false);
+		
+			async function exportImage(format: 'svg' | 'png', scale: number = 10) {
+				if (format === 'svg') {
+					const svg = ExportEngine.toSVG(editor.gridWidth, editor.gridHeight, editor.pixelData);
+					const blob = new Blob([svg], { type: 'image/svg+xml' });
+					const url = URL.createObjectURL(blob);
+					download(url, 'stitch-art.svg');
 				} else {
-					editor.undo();
+					const dataUrl = await ExportEngine.toPNG(editor.gridWidth, editor.gridHeight, editor.pixelData, scale);
+					download(dataUrl, 'stitch-art.png');
 				}
-				e.preventDefault();
-				return;
+				showExportModal = false;
 			}
-			if (e.key.toLowerCase() === 'y') {
-				editor.redo();
-				e.preventDefault();
-				return;
+		
+			function download(url: string, filename: string) {
+				const a = document.createElement('a');
+				a.href = url;
+				a.download = filename;
+				a.click();
 			}
-		}
-
-		switch (e.code) {
-			case 'ArrowUp':
-				editor.moveCursor(0, -1);
-				break;
-			case 'ArrowDown':
-				editor.moveCursor(0, 1);
-				break;
-			case 'ArrowLeft':
-				editor.moveCursor(-1, 0);
-				break;
-			case 'ArrowRight':
-				editor.moveCursor(1, 0);
-				break;
-			case 'Space':
-				if (e.ctrlKey || e.metaKey) {
-					editor.unstitch();
-				} else {
-					editor.stitch();
+		
+			function handleKeyDown(e: KeyboardEvent) {
+				// Ignore global shortcuts if an input is focused
+				if (
+					e.target instanceof HTMLInputElement ||
+					e.target instanceof HTMLTextAreaElement ||
+					(e.target as HTMLElement).isContentEditable
+				) {
+					if (shortcuts.matches(e, 'ESCAPE')) {
+						editor.handleEscape();
+					}
+					return;
 				}
-				break;
-		}
-	}
-
+		
+				editor.isShiftPressed = e.shiftKey;
+				editor.isCtrlPressed = e.ctrlKey || e.metaKey;
+		
+				// 1. Navigation
+				if (shortcuts.matches(e, 'UP')) return editor.moveCursor(0, -1);
+				if (shortcuts.matches(e, 'DOWN')) return editor.moveCursor(0, 1);
+				if (shortcuts.matches(e, 'LEFT')) return editor.moveCursor(-1, 0);
+				if (shortcuts.matches(e, 'RIGHT')) return editor.moveCursor(1, 0);
+		
+				// 2. Studio Windows
+				if (shortcuts.matches(e, 'COMMAND_PALETTE')) {
+					e.preventDefault();
+					return (editor.showCommandPalette = !editor.showCommandPalette);
+				}
+				if (shortcuts.matches(e, 'COLOR_PICKER')) {
+					e.preventDefault();
+					return (editor.showColorPicker = !editor.showColorPicker);
+				}
+				if (shortcuts.matches(e, 'EXPORT')) {
+					e.preventDefault();
+					return (showExportModal = true);
+				}
+				if (shortcuts.matches(e, 'ESCAPE')) return editor.handleEscape();
+		
+				// 3. Canvas Actions
+				if (shortcuts.matches(e, 'STITCH')) return editor.stitch();
+				if (shortcuts.matches(e, 'UNSTITCH') || shortcuts.matches(e, 'UNSTITCH_MOD')) return editor.unstitch();
+				if (shortcuts.matches(e, 'EYEDROPPER')) return editor.pickColor();
+				if (shortcuts.matches(e, 'CLEAR_LINEN')) return editor.clearCanvas();
+		
+				// 4. View & Studio State
+				if (shortcuts.matches(e, 'UNDO')) return editor.undo();
+				if (shortcuts.matches(e, 'REDO')) return editor.redo();
+				if (shortcuts.matches(e, 'ZOOM_IN')) return editor.setZoom(0.1);
+				if (shortcuts.matches(e, 'ZOOM_OUT')) return editor.setZoom(-0.1);
+				if (shortcuts.matches(e, 'RESET_ZOOM')) return editor.resetZoom();
+				if (shortcuts.matches(e, 'TOGGLE_MUTE')) return editor.toggleMute();
+		
+				// 5. Palette Selection
+				for (let i = 0; i <= 9; i++) {
+					if (shortcuts.matches(e, `SELECT_${i}` as any)) {
+						return editor.selectPalette(i === 0 ? 9 : i - 1);
+					}
+				}
+			}
 	function handleKeyUp(e: KeyboardEvent) {
 		if (e.key === 'Shift') editor.isShiftPressed = false;
 		if (e.key === 'Control' || e.key === 'Meta') editor.isCtrlPressed = false;

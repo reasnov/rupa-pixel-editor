@@ -1,0 +1,43 @@
+{
+	"navigation": {
+		"UP": ["ArrowUp"],
+		"DOWN": ["ArrowDown"],
+		"LEFT": ["ArrowLeft"],
+		"RIGHT": ["ArrowRight"]
+	},
+	"canvas": {
+		"STITCH": [" "],
+		"UNSTITCH": ["Backspace", "Delete"],
+		"UNSTITCH_MOD": ["Ctrl+ "],
+		"EYEDROPPER": ["i", "Alt+ "]
+	},
+	"history": {
+		"UNDO": ["Ctrl+z"],
+		"REDO": ["Ctrl+Shift+z", "Ctrl+y"]
+	},
+	"view": {
+		"ZOOM_IN": ["+", "="],
+		"ZOOM_OUT": ["-"],
+		"RESET_ZOOM": ["Ctrl+0"]
+	},
+	"studio": {
+		"COMMAND_PALETTE": ["Ctrl+k"],
+		"EXPORT": ["Ctrl+e"],
+		"COLOR_PICKER": ["Ctrl+p"],
+		"CLEAR_LINEN": ["Ctrl+l"],
+		"TOGGLE_MUTE": ["Ctrl+m"],
+		"ESCAPE": ["Escape"]
+	},
+	"palette": {
+		"SELECT_1": ["1"],
+		"SELECT_2": ["2"],
+		"SELECT_3": ["3"],
+		"SELECT_4": ["4"],
+		"SELECT_5": ["5"],
+		"SELECT_6": ["6"],
+		"SELECT_7": ["7"],
+		"SELECT_8": ["8"],
+		"SELECT_9": ["9"],
+		"SELECT_0": ["0"]
+	}
+}

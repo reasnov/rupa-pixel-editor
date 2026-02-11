@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { editor } from '../state/editor.svelte';
+	import { shortcuts } from '../engine/shortcuts';
 	import { onMount } from 'svelte';
 
 	interface Command {
@@ -13,49 +14,49 @@
 		{
 			id: 'open-export',
 			label: 'Export: Open Export Window',
-			shortcut: 'Ctrl+E',
+			shortcut: shortcuts.getLabel('EXPORT'),
 			action: () => {}
 		},
 		{
 			id: 'open-dye-basin',
 			label: 'Color: Open Color Wheel (Dye Basin)',
-			shortcut: 'Ctrl+P',
+			shortcut: shortcuts.getLabel('COLOR_PICKER'),
 			action: () => (editor.showColorPicker = true)
 		},
 		{
 			id: 'toggle-mute',
 			label: 'Studio: Toggle Audio Feedback (Mute/Unmute)',
-			shortcut: 'Ctrl+M',
+			shortcut: shortcuts.getLabel('TOGGLE_MUTE'),
 			action: () => editor.toggleMute()
 		},
 		{
 			id: 'pick-dye',
 			label: 'Color: Eyedropper (Pick Dye from Canvas)',
-			shortcut: 'I',
+			shortcut: shortcuts.getLabel('EYEDROPPER'),
 			action: () => editor.pickColor()
 		},
 		{
 			id: 'reset-zoom',
 			label: 'View: Reset Loom Zoom',
-			shortcut: 'Ctrl+0',
+			shortcut: shortcuts.getLabel('RESET_ZOOM'),
 			action: () => editor.resetZoom()
 		},
 		{
 			id: 'undo',
 			label: 'Edit: Undo Last Stitch',
-			shortcut: 'Ctrl+Z',
+			shortcut: shortcuts.getLabel('UNDO'),
 			action: () => editor.undo()
 		},
 		{
 			id: 'redo',
 			label: 'Edit: Redo Last Stitch',
-			shortcut: 'Ctrl+Y',
+			shortcut: shortcuts.getLabel('REDO'),
 			action: () => editor.redo()
 		},
 		{
 			id: 'clear-linen',
 			label: 'Project: Clear the Linen (Full Reset)',
-			shortcut: 'Ctrl+L',
+			shortcut: shortcuts.getLabel('CLEAR_LINEN'),
 			action: () => editor.clearCanvas()
 		}
 	];

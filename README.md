@@ -1,65 +1,71 @@
-# Svelte library
+# Rupa Pixel Editor
 
-Everything you need to build a Svelte library, powered by [`sv`](https://npmjs.com/package/sv).
+**Rupa Pixel Editor** is a professional-grade desktop application for creating pixel art through a keyboard-only interface. Inspired by the philosophy of "Rupa" (form) and the traditional art of "Sulam" (Stitching), it offers a methodical, precise, and meditative drawing experience.
 
-Read more about creating a library [in the docs](https://svelte.dev/docs/kit/packaging).
+Built with **Svelte 5** and **Electron**, Rupa eliminates the mouse in favor of absolute keyboard precision.
 
-## Creating a project
+## ✨ Key Features
 
-If you're seeing this, you've probably already done this step. Congrats!
+- **Keyboard-Centric Workflow**: Navigate the grid using arrow keys with zero-latency response.
+- **Digital Stitching**: Use the **Stitch-Flow** mode (Hold `Shift`) to "pull the thread" and color paths as you move.
+- **Retro Audio Feedback**: Real-time synthesized SFX for movement and drawing, reinforcing the tactile experience.
+- **Infinite History**: Robust Undo/Redo system using the Command Pattern.
+- **Offline-First**: 100% local processing; your art never leaves your machine.
 
-```sh
-# create a new project in the current directory
-npx sv create
+## ⌨️ Controls
 
-# create a new project in my-app
-npx sv create my-app
+| Key | Action |
+| :--- | :--- |
+| `Arrow Keys` | Move Active Cell |
+| `Space` | Stitch (Color Pixel) |
+| `Backspace` / `Delete` | Unstitch (Clear Pixel) |
+| `Ctrl + Space` | Unstitch (Clear Pixel) |
+| `Shift` (Hold) | **Stitch-Flow**: Auto-color on move |
+| `Ctrl + Shift` (Hold) | **Unstitch-Flow**: Auto-clear on move |
+| `Ctrl + Z` | Undo |
+| `Ctrl + Shift + Z` / `Ctrl + Y` | Redo |
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- [Node.js](https://nodejs.org/) (v18 or higher)
+- [npm](https://www.npmjs.com/)
+
+### Installation
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/reasnov/rupa-pixel-editor.git
+   cd rupa-pixel-editor
+   ```
+
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+
+### Running the App
+
+Start the Vite development server and Electron window simultaneously:
+```bash
+npm run dev:all
 ```
 
-To recreate this project with the same configuration:
+## 🛠 Tech Stack
 
-```sh
-# recreate this project
-bun x sv create --template library --types ts --add prettier tailwindcss="plugins:none" mcp="ide:gemini,vscode+setup:remote" --install bun rupa-pixel-editor
-```
+- **Framework**: [Svelte 5](https://svelte.dev/) (Runes)
+- **Desktop**: [Electron](https://www.electronjs.org/)
+- **Styling**: [Tailwind CSS 4.0](https://tailwindcss.com/)
+- **Language**: [TypeScript](https://www.typescriptlang.org/)
 
-## Developing
+## 📜 License
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
 
-```sh
-npm run dev
+## 🤝 Contributing
 
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
+We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
-Everything inside `src/lib` is part of your library, everything inside `src/routes` can be used as a showcase or preview app.
-
-## Building
-
-To build your library:
-
-```sh
-npm pack
-```
-
-To create a production version of your showcase app:
-
-```sh
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
-
-## Publishing
-
-Go into the `package.json` and give your package the desired name through the `"name"` option. Also consider adding a `"license"` field and point it to a `LICENSE` file which you can create from a template (one popular option is the [MIT license](https://opensource.org/license/mit/)).
-
-To publish your library to [npm](https://www.npmjs.com):
-
-```sh
-npm publish
-```
+---
+Created with ❤️ by [reasnov](https://github.com/reasnov)

@@ -28,12 +28,56 @@ export class EditorState {
 	isAppReady = $state(false);
 	isShiftPressed = $state(false);
 	isCtrlPressed = $state(false);
+	isAltPressed = $state(false);
+
+	// Selection/Block mode
+	selectionStart = $state<{ x: number; y: number } | null>(null);
+	selectionEnd = $state<{ x: number; y: number } | null>(null);
+
+	isBlockMode = $derived(this.isShiftPressed && this.isAltPressed);
 
 	// Universal Escape Stack
 	private escapeStack: (() => void)[] = [];
 
 	toggleMute() {
 		this.isMuted = !this.isMuted;
+	}
+
+	startSelection() {
+		this.selectionStart = { ...this.cursorPos };
+		this.selectionEnd = { ...this.cursorPos };
+	}
+
+	updateSelection() {
+		if (this.selectionStart) {
+			this.selectionEnd = { ...this.cursorPos };
+		}
+	}
+
+	commitSelection() {
+		if (!this.selectionStart || !this.selectionEnd) return;
+
+		const x1 = Math.min(this.selectionStart.x, this.selectionEnd.x);
+		const x2 = Math.max(this.selectionStart.x, this.selectionEnd.x);
+		const y1 = Math.min(this.selectionStart.y, this.selectionEnd.y);
+		const y2 = Math.max(this.selectionStart.y, this.selectionEnd.y);
+
+		// We use a history grouping or individual pushes? 
+		// For simplicity, let's just apply them.
+		for (let y = y1; y <= y2; y++) {
+			for (let x = x1; x <= x2; x++) {
+				const index = y * this.gridWidth + x;
+				const oldColor = this.pixelData[index];
+				if (oldColor !== this.activeColor) {
+					history.push({ index, oldColor, newColor: this.activeColor });
+					this.pixelData[index] = this.activeColor;
+				}
+			}
+		}
+
+		sfx.playStitch();
+		this.selectionStart = null;
+		this.selectionEnd = null;
 	}
 
 	pushEscapeAction(fn: () => void) {
@@ -146,7 +190,9 @@ export class EditorState {
 			this.cursorPos = { x: newX, y: newY };
 			sfx.playMove();
 
-			if (this.isShiftPressed && this.isCtrlPressed) {
+			if (this.isBlockMode) {
+				this.updateSelection();
+			} else if (this.isShiftPressed && this.isCtrlPressed) {
 				this.unstitch();
 			} else if (this.isShiftPressed) {
 				this.stitch();

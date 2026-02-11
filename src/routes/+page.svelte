@@ -32,10 +32,8 @@
 	}
 
 	function handleKeyDown(e: KeyboardEvent) {
-		// Do nothing if app is not ready
 		if (!editor.isAppReady) return;
 
-		// Ignore global shortcuts if an input is focused
 		if (
 			e.target instanceof HTMLInputElement ||
 			e.target instanceof HTMLTextAreaElement ||
@@ -47,16 +45,48 @@
 			return;
 		}
 
+		// Update modifier states
 		editor.isShiftPressed = e.shiftKey;
 		editor.isCtrlPressed = e.ctrlKey || e.metaKey;
+		editor.isAltPressed = e.altKey;
 
-		// 1. Navigation
+		// Start block mode selection
+		if (editor.isBlockMode && !editor.selectionStart) {
+			editor.startSelection();
+		}
+
+		if (
+			[
+				'ArrowUp',
+				'ArrowDown',
+				'ArrowLeft',
+				'ArrowRight',
+				' ',
+				'Backspace',
+				'Delete',
+				'+',
+				'-',
+				'=',
+				'0',
+				'e',
+				'Escape'
+			].includes(e.key)
+		) {
+			if (!e.ctrlKey && !e.metaKey && !e.altKey) {
+				e.preventDefault();
+			}
+		}
+
+		if (e.key === 'Escape') {
+			editor.handleEscape();
+			return;
+		}
+
 		if (shortcuts.matches(e, 'UP')) return editor.moveCursor(0, -1);
 		if (shortcuts.matches(e, 'DOWN')) return editor.moveCursor(0, 1);
 		if (shortcuts.matches(e, 'LEFT')) return editor.moveCursor(-1, 0);
 		if (shortcuts.matches(e, 'RIGHT')) return editor.moveCursor(1, 0);
 
-		// 2. Studio Windows
 		if (shortcuts.matches(e, 'COMMAND_PALETTE')) {
 			e.preventDefault();
 			return (editor.showCommandPalette = !editor.showCommandPalette);
@@ -69,16 +99,13 @@
 			e.preventDefault();
 			return (showExportModal = true);
 		}
-		if (shortcuts.matches(e, 'ESCAPE')) return editor.handleEscape();
 
-		// 3. Canvas Actions
 		if (shortcuts.matches(e, 'STITCH')) return editor.stitch();
 		if (shortcuts.matches(e, 'UNSTITCH') || shortcuts.matches(e, 'UNSTITCH_MOD'))
 			return editor.unstitch();
 		if (shortcuts.matches(e, 'EYEDROPPER')) return editor.pickColor();
 		if (shortcuts.matches(e, 'CLEAR_LINEN')) return editor.clearCanvas();
 
-		// 4. View & Studio State
 		if (shortcuts.matches(e, 'UNDO')) return editor.undo();
 		if (shortcuts.matches(e, 'REDO')) return editor.redo();
 		if (shortcuts.matches(e, 'ZOOM_IN')) return editor.setZoom(0.1);
@@ -86,7 +113,6 @@
 		if (shortcuts.matches(e, 'RESET_ZOOM')) return editor.resetZoom();
 		if (shortcuts.matches(e, 'TOGGLE_MUTE')) return editor.toggleMute();
 
-		// 5. Palette Selection
 		for (let i = 0; i <= 9; i++) {
 			if (shortcuts.matches(e, `SELECT_${i}` as any)) {
 				return editor.selectPalette(i === 0 ? 9 : i - 1);
@@ -95,8 +121,16 @@
 	}
 
 	function handleKeyUp(e: KeyboardEvent) {
+		const wasBlockMode = editor.isBlockMode;
+		
 		if (e.key === 'Shift') editor.isShiftPressed = false;
 		if (e.key === 'Control' || e.key === 'Meta') editor.isCtrlPressed = false;
+		if (e.key === 'Alt') editor.isAltPressed = false;
+
+		// If we were in block mode and released one of the keys, commit!
+		if (wasBlockMode && !editor.isBlockMode) {
+			editor.commitSelection();
+		}
 	}
 
 	onMount(() => {
@@ -205,6 +239,16 @@
 							onclick={() => (editor.activeColor = color)}
 							aria-label="Select used dye"
 						></button>
+					{#each editor.usedColors as color}
+						<button
+							class="h-4 w-4 rounded border transition-all hover:scale-110 {editor.activeColor ===
+							color
+								? 'border-studio-warm ring-1 ring-studio-warm/30'
+								: 'border-black/5 opacity-60'}"
+							style="background-color: {color};"
+							onclick={() => (editor.activeColor = color)}
+							aria-label="Select used dye"
+						></button>
 					{/each}
 				</div>
 			</div>
@@ -258,7 +302,11 @@
 				<div
 					class="status-tag animate-pulse border-studio-teal/20 bg-studio-teal/10 text-studio-teal shadow-sm"
 				>
-					{editor.isCtrlPressed ? '✨ Unravelling' : '🧵 Threading'}
+					{#if editor.isBlockMode}
+						✨ Block Looming
+					{:else}
+						{editor.isCtrlPressed ? '✨ Unravelling' : '🧵 Threading'}
+					{/if}
 				</div>
 			{:else}
 				<div class="status-tag font-serif italic opacity-60">Studio Ready</div>

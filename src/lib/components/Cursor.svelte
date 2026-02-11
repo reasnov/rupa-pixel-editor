@@ -26,12 +26,17 @@
 			out:fade={{ duration: 400 }}
 			class="absolute -top-10 left-1/2 -translate-x-1/2 flex flex-col items-center z-[110]"
 		>
-			<!-- The Pin Shape -->
-			<div class="relative h-7 w-7 rounded-full rounded-bl-none rotate-45 border-4 border-white shadow-xl bg-white ring-1 ring-black/5 overflow-hidden">
+			<!-- The Pin Head (Teardrop shape pointing straight down) -->
+			<div 
+				class="relative h-7 w-7 rounded-full rounded-br-none border-4 border-white shadow-xl bg-white ring-1 ring-black/5 overflow-hidden"
+				style="transform: rotate(45deg);"
+			>
+				<!-- Color Fill (Rotated back to stay neutral) -->
 				<div class="h-full w-full -rotate-45" style="background-color: {editor.activeColor};"></div>
 			</div>
-			<!-- Pin Stem (Tip) -->
-			<div class="w-1 h-2 bg-white -mt-1 shadow-sm rounded-full"></div>
+			
+			<!-- Small connector to the needle -->
+			<div class="w-0.5 h-2 bg-white -mt-0.5 shadow-sm rounded-full opacity-80"></div>
 		</div>
 	{/if}
 </div>

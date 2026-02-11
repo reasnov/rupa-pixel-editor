@@ -24,11 +24,16 @@ export class EditorState {
 	showColorPicker = $state(false);
 	showCommandPalette = $state(false);
 	exportScale = $state(10); // Default to 10x for a decent 320px size
+	isMuted = $state(false);
 	isShiftPressed = $state(false);
 	isCtrlPressed = $state(false);
 
 	// Universal Escape Stack
 	private escapeStack: (() => void)[] = [];
+
+	toggleMute() {
+		this.isMuted = !this.isMuted;
+	}
 
 	pushEscapeAction(fn: () => void) {
 		this.escapeStack.push(fn);

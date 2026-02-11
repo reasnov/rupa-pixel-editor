@@ -1,3 +1,5 @@
+import { editor } from '../state/editor.svelte';
+
 export class AudioEngine {
 	private ctx: AudioContext | null = null;
 
@@ -18,7 +20,7 @@ export class AudioEngine {
 		rampTo = 0.0001
 	) {
 		this.init();
-		if (!this.ctx) return;
+		if (!this.ctx || editor.isMuted) return;
 
 		const osc = this.ctx.createOscillator();
 		const gain = this.ctx.createGain();
@@ -50,7 +52,7 @@ export class AudioEngine {
 	playUnstitch() {
 		// Audible brush/paper rustle
 		this.init();
-		if (!this.ctx) return;
+		if (!this.ctx || editor.isMuted) return;
 
 		const duration = 0.25;
 		const bufferSize = this.ctx.sampleRate * duration;

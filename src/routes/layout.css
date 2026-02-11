@@ -126,46 +126,6 @@ canvas,
 		-2px 0px;
 }
 
-/* Sharp Inverted Cursor (The Needle) */
-.cursor-spirit {
-	position: absolute;
-	inset: 0;
-	z-index: 100;
-	pointer-events: none;
-}
-
-.cursor-invert {
-	position: absolute;
-	inset: 0;
-	background: white;
-	mix-blend-mode: difference;
-	z-index: 10;
-}
-
-.cursor-border {
-	position: absolute;
-	inset: -1px; /* Slightly larger to wrap the inversion */
-	border: 1px dashed var(--color-studio-warm);
-	pointer-events: none;
-	/* No rounded corners */
-}
-
-@keyframes needle-dance {
-	0% {
-		transform: scale(1);
-	}
-	50% {
-		transform: scale(1.03);
-	}
-	100% {
-		transform: scale(1);
-	}
-}
-
-.animate-needle {
-	animation: needle-dance 1s ease-in-out infinite;
-}
-
 .status-tag {
 	background: #eee8d5;
 	padding: 4px 12px;

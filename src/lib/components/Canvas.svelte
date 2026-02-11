@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { editor } from '../state/editor.svelte';
+	import Cursor from './Cursor.svelte';
 </script>
 
 <!-- The Canvas (The Linen) -->
@@ -49,10 +50,7 @@
 			style="background-color: {isEmpty ? 'transparent' : color};"
 		>
 			{#if isActive}
-				<div class="absolute inset-0 cursor-spirit animate-needle">
-					<div class="cursor-invert"></div>
-					<div class="cursor-border"></div>
-				</div>
+				<Cursor />
 			{/if}
 		</div>
 	{/each}

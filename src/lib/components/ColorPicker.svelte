@@ -11,139 +11,66 @@
 		title?: string
 	}>();
 
-		let h = $state(0);
+	let h = $state(0);
+	let s = $state(100);
+	let l = $state(50);
+	let a = $state(100);
 
-		let s = $state(100);
-
-		let l = $state(50);
-
-		let a = $state(100);
-
-	
-
-		// Parse current color to HSLA
-
-		function hexToHsla(hex: string) {
-
-			// Default to Studio Cream if not a valid hex
-
-			if (!hex || !/^#([0-9A-F]{6}|[0-9A-F]{8})$/i.test(hex)) {
-
-				hex = '#fdf6e3ff';
-
-			}
-
-	
-
-			let r = parseInt(hex.slice(1, 3), 16) / 255;
-
-			let g = parseInt(hex.slice(3, 5), 16) / 255;
-
-			let b = parseInt(hex.slice(5, 7), 16) / 255;
-
-			let alpha = hex.length === 9 ? parseInt(hex.slice(7, 9), 16) / 255 : 1;
-
-	
-
-			let max = Math.max(r, g, b), min = Math.min(r, g, b);
-
-			let h, s, l = (max + min) / 2;
-
-	
-
-			if (max === min) {
-
-				h = s = 0;
-
-			} else {
-
-				let d = max - min;
-
-				s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
-
-				switch (max) {
-
-					case r: h = (g - b) / d + (g < b ? 6 : 0); break;
-
-					case g: h = (b - r) / d + 2; break;
-
-					case b: h = (r - g) / d + 4; break;
-
-				}
-
-				h /= 6;
-
-			}
-
-			return { h: h * 360, s: s * 100, l: l * 100, a: alpha * 100 };
-
+	function hexToHsla(hex: string) {
+		if (!hex || !/^#([0-9A-F]{6}|[0-9A-F]{8})$/i.test(hex)) {
+			hex = '#fdf6e3ff';
 		}
-
-	
-
-		// Initialize HSLA from value
-
-		$effect.pre(() => {
-
-			const hsla = hexToHsla(value);
-
-			h = hsla.h;
-
-			s = hsla.s;
-
-			l = hsla.l;
-
-			a = hsla.a;
-
-		});
-
-	
-
-		function hslaToHex(h: number, s: number, l: number, a: number) {
-
-			l /= 100;
-
-			const alpha = Math.round((a / 100) * 255).toString(16).padStart(2, '0');
-
-			const sat = (s * Math.min(l, 1 - l)) / 100;
-
-			const f = (n: number) => {
-
-				const k = (n + h / 30) % 12;
-
-				const color = l - sat * Math.max(Math.min(k - 3, 9 - k, 1), -1);
-
-				return Math.round(255 * color).toString(16).padStart(2, '0');
-
-			};
-
-			return `#${f(0)}${f(8)}${f(4)}${alpha}`;
-
-		}
-
-	
-
-		// Sync local HSLA back to value
-
-		$effect(() => {
-
-			value = hslaToHex(h, s, l, a);
-
-		});
-
-	
-
-		function handleHexInput(e: Event) {
-
-			const hex = (e.target as HTMLInputElement).value;
-
-			if (/^#([0-9A-F]{6}|[0-9A-F]{8})$/i.test(hex)) {
-
-				value = hex;
-
+		let r = parseInt(hex.slice(1, 3), 16) / 255;
+		let g = parseInt(hex.slice(3, 5), 16) / 255;
+		let b = parseInt(hex.slice(5, 7), 16) / 255;
+		let alpha = hex.length === 9 ? parseInt(hex.slice(7, 9), 16) / 255 : 1;
+		let max = Math.max(r, g, b), min = Math.min(r, g, b);
+		let h, s, l = (max + min) / 2;
+		if (max === min) {
+			h = s = 0;
+		} else {
+			let d = max - min;
+			s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+			switch (max) {
+				case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+				case g: h = (b - r) / d + 2; break;
+				case b: h = (r - g) / d + 4; break;
 			}
-
+			h /= 6;
 		}
+		return { h: h * 360, s: s * 100, l: l * 100, a: alpha * 100 };
+	}
+
+	$effect.pre(() => {
+		const hsla = hexToHsla(value);
+		h = hsla.h;
+		s = hsla.s;
+		l = hsla.l;
+		a = hsla.a;
+	});
+
+	function hslaToHex(h: number, s: number, l: number, a: number) {
+		l /= 100;
+		const alpha = Math.round((a / 100) * 255).toString(16).padStart(2, '0');
+		const sat = (s * Math.min(l, 1 - l)) / 100;
+		const f = (n: number) => {
+			const k = (n + h / 30) % 12;
+			const color = l - sat * Math.max(Math.min(k - 3, 9 - k, 1), -1);
+			return Math.round(255 * color).toString(16).padStart(2, '0');
+		};
+		return `#${f(0)}${f(8)}${f(4)}${alpha}`;
+	}
+
+	$effect(() => {
+		value = hslaToHex(h, s, l, a);
+	});
+
+	function handleHexInput(e: Event) {
+		const hex = (e.target as HTMLInputElement).value;
+		if (/^#([0-9A-F]{6}|[0-9A-F]{8})$/i.test(hex)) {
+			value = hex;
+		}
+	}
 
 	function handleInputKeyDown(e: KeyboardEvent) {
 		if (e.key === 'Enter') {
@@ -157,17 +84,12 @@
 		}
 	}
 
-	function handleGlobalKeyDown(e: KeyboardEvent) {
-		if (e.key === 'Enter') {
-			onClose();
-		}
-		if (e.key === 'Escape') {
-			onClose();
-		}
-	}
+	// Register with Universal Escape Manager
+	$effect(() => {
+		editor.pushEscapeAction(onClose);
+		return () => editor.popEscapeAction(onClose);
+	});
 </script>
-
-<svelte:window onkeydown={handleGlobalKeyDown} />
 
 <div 
 	id="picker-overlay"
@@ -207,7 +129,6 @@
 				</div>
 				<input type="range" min="0" max="100" bind:value={l} class="custom-slider" />
 			</div>
-
 			<div class="flex flex-col gap-2">
 				<div class="flex justify-between text-[10px] uppercase font-black opacity-30 tracking-wider">
 					<span>Opacity (Alpha)</span>
@@ -224,7 +145,7 @@
 					value={value.toUpperCase()}
 					oninput={handleHexInput}
 					onkeydown={handleInputKeyDown}
-					maxlength="7"
+					maxlength="9"
 					class="w-full text-center font-mono text-xs opacity-60 bg-white/80 py-2 rounded-xl border border-black/5 focus:outline-none focus:ring-2 focus:ring-studio-warm/20"
 				/>
 				<span class="absolute right-3 top-1/2 -translate-y-1/2 text-[8px] uppercase font-bold opacity-20">Hex</span>

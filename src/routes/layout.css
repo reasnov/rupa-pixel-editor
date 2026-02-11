@@ -1,0 +1,50 @@
+@import "tailwindcss";
+
+@theme {
+  --color-canvas-bg: #1a1a1a;
+  --color-grid-border: #333333;
+  --color-active-cell: #ffffff;
+  --background-retro-gradient: linear-gradient(45deg, #ff00ff, #00ffff, #ff00ff);
+}
+
+@keyframes retro-border-pulse {
+  0% { opacity: 0.6; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.05); }
+  100% { opacity: 0.6; transform: scale(1); }
+}
+
+.cursor-retro {
+  background: var(--background-retro-gradient);
+  background-size: 200% 200%;
+  animation: retro-border-pulse 1s ease-in-out infinite, move-gradient 2s linear infinite;
+}
+
+@keyframes move-gradient {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+:root {
+  background-color: var(--color-canvas-bg);
+  color: #ffffff;
+  font-family: 'Inter', system-ui, sans-serif;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  height: 100vh;
+  width: 100vw;
+}
+
+canvas, .pixel-grid {
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+.stitching-bg {
+  background-image: radial-gradient(#333333 1px, transparent 1px);
+  background-size: 20px 20px;
+}

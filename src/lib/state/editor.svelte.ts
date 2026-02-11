@@ -155,9 +155,14 @@ export class EditorState {
 		if (this.zoomLevel <= 1) {
 			return `scale(${this.zoomLevel})`;
 		} else {
-			const x = ((this.cursorPos.x + 0.5) / this.gridWidth) * 100;
-			const y = ((this.cursorPos.y + 0.5) / this.gridHeight) * 100;
-			return `translate(calc(50% - ${x}%), calc(50% - ${y}%)) scale(${this.zoomLevel})`;
+			// Precise tracking: calculate offset to bring needle to (50%, 50%)
+			const xPos = ((this.cursorPos.x + 0.5) / this.gridWidth) * 100;
+			const yPos = ((this.cursorPos.y + 0.5) / this.gridHeight) * 100;
+			
+			const tx = 50 - xPos;
+			const ty = 50 - yPos;
+			
+			return `translate(${tx}%, ${ty}%) scale(${this.zoomLevel})`;
 		}
 	});
 

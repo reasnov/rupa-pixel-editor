@@ -8,18 +8,16 @@
 		transition:fade={{ duration: 800 }}
 		class="cursor-container absolute inset-0"
 	>
-		<!-- The Inverted Target (Crosshair) -->
-		<div class="target-crosshair">
-			<!-- Horizontal Line -->
-			<div class="line horizontal"></div>
-			<!-- Vertical Line -->
-			<div class="line vertical"></div>
+		<!-- The Artisan Bloom (4-Petal Inverter) -->
+		<div class="bloom-wrapper">
+			<!-- Only the petals invert the background -->
+			<div class="petal p-top"></div>
+			<div class="petal p-bottom"></div>
+			<div class="petal p-left"></div>
+			<div class="petal p-right"></div>
 			
-			<!-- Small Target Arrows (Brackets) -->
-			<div class="arrow top"></div>
-			<div class="arrow bottom"></div>
-			<div class="arrow left"></div>
-			<div class="arrow right"></div>
+			<!-- Delicate center dot -->
+			<div class="center-dot"></div>
 		</div>
 
 		<!-- Picking Feedback (Artisan Pin) -->
@@ -58,51 +56,39 @@
 		justify-content: center;
 	}
 
-	.target-crosshair {
-		position: absolute;
-		inset: -4px; /* Spread slightly outside for awareness */
+	.bloom-wrapper {
+		position: relative;
+		width: 100%;
+		height: 100%;
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		backdrop-filter: invert(100%);
 	}
 
-	.line {
+	.petal {
 		position: absolute;
-		background: white; /* Basis for inversion */
-		opacity: 0.5;
+		background: white;
+		mix-blend-mode: difference;
+		border-radius: 50%;
+		z-index: 10;
 	}
 
-	.horizontal { width: 100%; height: 1px; }
-	.vertical { width: 1px; height: 100%; }
+	/* Smaller, more delicate petals */
+	.p-top, .p-bottom { width: 4px; height: 8px; }
+	.p-left, .p-right { width: 8px; height: 4px; }
 
-	.arrow {
-		position: absolute;
-		width: 0;
-		height: 0;
-		border-style: solid;
-		opacity: 0.8;
-	}
+	/* Positioning within the cell */
+	.p-top { top: 10%; }
+	.p-bottom { bottom: 10%; }
+	.p-left { left: 10%; }
+	.p-right { right: 10%; }
 
-	/* Micro-arrows pointing to the center */
-	.top { 
-		top: 0; 
-		border-width: 4px 3px 0 3px; 
-		border-color: white transparent transparent transparent; 
-	}
-	.bottom { 
-		bottom: 0; 
-		border-width: 0 3px 4px 3px; 
-		border-color: transparent transparent white transparent; 
-	}
-	.left { 
-		left: 0; 
-		border-width: 3px 0 3px 4px; 
-		border-color: transparent transparent transparent white; 
-	}
-	.right { 
-		right: 0; 
-		border-width: 3px 4px 3px 0; 
-		border-color: transparent white transparent transparent;
+	.center-dot {
+		width: 2px;
+		height: 2px;
+		background: white;
+		mix-blend-mode: difference;
+		border-radius: 50%;
+		z-index: 11;
 	}
 </style>

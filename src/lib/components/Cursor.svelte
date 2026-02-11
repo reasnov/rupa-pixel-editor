@@ -13,25 +13,25 @@
 	<div class="bracket bl"></div>
 	<div class="bracket br"></div>
 
-	<!-- Picking Feedback (Dye Bloom) -->
+	<!-- Picking Feedback (Artisan Pin) -->
 	{#if editor.isPicking}
 		<div 
 			transition:fade={{ duration: 400 }}
-			class="absolute inset-[-8px] border-4 border-white rounded-lg animate-ping opacity-20 z-0"
+			class="absolute inset-[-4px] border-2 border-white rounded-sm animate-ping opacity-20 z-0"
 			style="background-color: {editor.activeColor};"
 		></div>
 		
 		<div 
-			in:fly={{ y: -20, duration: 500 }}
-			out:fade={{ duration: 500 }}
-			class="absolute -top-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 z-[110]"
+			in:fly={{ y: -10, duration: 400 }}
+			out:fade={{ duration: 400 }}
+			class="absolute -top-10 left-1/2 -translate-x-1/2 flex flex-col items-center z-[110]"
 		>
-			<div class="h-8 w-8 rounded-full border-4 border-white shadow-xl p-0.5 bg-white ring-1 ring-black/5">
-				<div class="h-full w-full rounded-full" style="background-color: {editor.activeColor};"></div>
+			<!-- The Pin Shape -->
+			<div class="relative h-7 w-7 rounded-full rounded-bl-none rotate-45 border-4 border-white shadow-xl bg-white ring-1 ring-black/5 overflow-hidden">
+				<div class="h-full w-full -rotate-45" style="background-color: {editor.activeColor};"></div>
 			</div>
-			<span class="font-mono text-[8px] bg-[#fdf6e3] px-2 py-0.5 rounded-full border border-white shadow-sm text-studio-text whitespace-nowrap uppercase tracking-tighter">
-				{editor.activeColor}
-			</span >
+			<!-- Pin Stem (Tip) -->
+			<div class="w-1 h-2 bg-white -mt-1 shadow-sm rounded-full"></div>
 		</div>
 	{/if}
 </div>

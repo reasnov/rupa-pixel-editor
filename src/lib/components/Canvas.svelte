@@ -5,7 +5,7 @@
 
 <!-- The Canvas (The Linen) -->
 <div
-	class="stitch-grid-pattern artisan-checker-small relative shrink-0 origin-center transition-transform duration-500 ease-[cubic-bezier(0.23,1,0.32,1)]"
+	class="stitch-grid-pattern artisan-checker-small relative shrink-0 origin-center transition-transform duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] shadow-sm"
 	style="
 		display: grid;
 		grid-template-columns: repeat({editor.gridWidth}, 1fr); 
@@ -45,9 +45,10 @@
 		{@const y = Math.floor(i / editor.gridWidth)}
 		{@const isActive = editor.cursorPos.x === x && editor.cursorPos.y === y}
 		{@const isEmpty = color === '#eee8d5'}
+		
 		<div
 			class="cell-stitch relative h-full w-full {isActive ? 'z-30' : 'z-10'}"
-			style="background-color: {isEmpty ? 'transparent' : color};"
+			style="background-color: {isEmpty ? 'rgba(238, 232, 213, 0.01)' : color};"
 		>
 			{#if isActive}
 				<Cursor />

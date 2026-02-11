@@ -25,6 +25,7 @@ export class EditorState {
 	showCommandPalette = $state(false);
 	exportScale = $state(10); // Default to 10x for a decent 320px size
 	isMuted = $state(false);
+	isAppReady = $state(false);
 	isShiftPressed = $state(false);
 	isCtrlPressed = $state(false);
 

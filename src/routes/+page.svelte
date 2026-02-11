@@ -1,119 +1,129 @@
 <script lang="ts">
-			import { editor } from '$lib/state/editor.svelte';
-			import { ExportEngine } from '$lib/engine/export';
-			import { shortcuts } from '$lib/engine/shortcuts';
-			import ColorPicker from '$lib/components/ColorPicker.svelte';
-			import ExportModal from '$lib/components/ExportModal.svelte';
-			import CommandPalette from '$lib/components/CommandPalette.svelte';
-			import Canvas from '$lib/components/Canvas.svelte';
-			import { onMount } from 'svelte';
-		
-			let showExportModal = $state(false);
-		
-			async function exportImage(format: 'svg' | 'png', scale: number = 10) {
-				if (format === 'svg') {
-					const svg = ExportEngine.toSVG(editor.gridWidth, editor.gridHeight, editor.pixelData);
-					const blob = new Blob([svg], { type: 'image/svg+xml' });
-					const url = URL.createObjectURL(blob);
-					download(url, 'stitch-art.svg');
-				} else {
-					const dataUrl = await ExportEngine.toPNG(editor.gridWidth, editor.gridHeight, editor.pixelData, scale);
-					download(dataUrl, 'stitch-art.png');
-				}
-				showExportModal = false;
+	import { editor } from '$lib/state/editor.svelte';
+	import { ExportEngine } from '$lib/engine/export';
+	import { shortcuts } from '$lib/engine/shortcuts';
+	import ColorPicker from '$lib/components/ColorPicker.svelte';
+	import ExportModal from '$lib/components/ExportModal.svelte';
+	import CommandPalette from '$lib/components/CommandPalette.svelte';
+	import SplashScreen from '$lib/components/SplashScreen.svelte';
+	import Canvas from '$lib/components/Canvas.svelte';
+	import { onMount } from 'svelte';
+
+	let showExportModal = $state(false);
+
+	async function exportImage(format: 'svg' | 'png', scale: number = 10) {
+		if (format === 'svg') {
+			const svg = ExportEngine.toSVG(editor.gridWidth, editor.gridHeight, editor.pixelData);
+			const blob = new Blob([svg], { type: 'image/svg+xml' });
+			const url = URL.createObjectURL(blob);
+			download(url, 'stitch-art.svg');
+		} else {
+			const dataUrl = await ExportEngine.toPNG(editor.gridWidth, editor.gridHeight, editor.pixelData, scale);
+			download(dataUrl, 'stitch-art.png');
+		}
+		showExportModal = false;
+	}
+
+	function download(url: string, filename: string) {
+		const a = document.createElement('a');
+		a.href = url;
+		a.download = filename;
+		a.click();
+	}
+
+	function handleKeyDown(e: KeyboardEvent) {
+		// Do nothing if app is not ready
+		if (!editor.isAppReady) return;
+
+		// Ignore global shortcuts if an input is focused
+		if (
+			e.target instanceof HTMLInputElement ||
+			e.target instanceof HTMLTextAreaElement ||
+			(e.target as HTMLElement).isContentEditable
+		) {
+			if (shortcuts.matches(e, 'ESCAPE')) {
+				editor.handleEscape();
 			}
-		
-			function download(url: string, filename: string) {
-				const a = document.createElement('a');
-				a.href = url;
-				a.download = filename;
-				a.click();
+			return;
+		}
+
+		editor.isShiftPressed = e.shiftKey;
+		editor.isCtrlPressed = e.ctrlKey || e.metaKey;
+
+		// 1. Navigation
+		if (shortcuts.matches(e, 'UP')) return editor.moveCursor(0, -1);
+		if (shortcuts.matches(e, 'DOWN')) return editor.moveCursor(0, 1);
+		if (shortcuts.matches(e, 'LEFT')) return editor.moveCursor(-1, 0);
+		if (shortcuts.matches(e, 'RIGHT')) return editor.moveCursor(1, 0);
+
+		// 2. Studio Windows
+		if (shortcuts.matches(e, 'COMMAND_PALETTE')) {
+			e.preventDefault();
+			return (editor.showCommandPalette = !editor.showCommandPalette);
+		}
+		if (shortcuts.matches(e, 'COLOR_PICKER')) {
+			e.preventDefault();
+			return (editor.showColorPicker = !editor.showColorPicker);
+		}
+		if (shortcuts.matches(e, 'EXPORT')) {
+			e.preventDefault();
+			return (showExportModal = true);
+		}
+		if (shortcuts.matches(e, 'ESCAPE')) return editor.handleEscape();
+
+		// 3. Canvas Actions
+		if (shortcuts.matches(e, 'STITCH')) return editor.stitch();
+		if (shortcuts.matches(e, 'UNSTITCH') || shortcuts.matches(e, 'UNSTITCH_MOD'))
+			return editor.unstitch();
+		if (shortcuts.matches(e, 'EYEDROPPER')) return editor.pickColor();
+		if (shortcuts.matches(e, 'CLEAR_LINEN')) return editor.clearCanvas();
+
+		// 4. View & Studio State
+		if (shortcuts.matches(e, 'UNDO')) return editor.undo();
+		if (shortcuts.matches(e, 'REDO')) return editor.redo();
+		if (shortcuts.matches(e, 'ZOOM_IN')) return editor.setZoom(0.1);
+		if (shortcuts.matches(e, 'ZOOM_OUT')) return editor.setZoom(-0.1);
+		if (shortcuts.matches(e, 'RESET_ZOOM')) return editor.resetZoom();
+		if (shortcuts.matches(e, 'TOGGLE_MUTE')) return editor.toggleMute();
+
+		// 5. Palette Selection
+		for (let i = 0; i <= 9; i++) {
+			if (shortcuts.matches(e, `SELECT_${i}` as any)) {
+				return editor.selectPalette(i === 0 ? 9 : i - 1);
 			}
-		
-			function handleKeyDown(e: KeyboardEvent) {
-				// Ignore global shortcuts if an input is focused
-				if (
-					e.target instanceof HTMLInputElement ||
-					e.target instanceof HTMLTextAreaElement ||
-					(e.target as HTMLElement).isContentEditable
-				) {
-					if (shortcuts.matches(e, 'ESCAPE')) {
-						editor.handleEscape();
-					}
-					return;
-				}
-		
-				editor.isShiftPressed = e.shiftKey;
-				editor.isCtrlPressed = e.ctrlKey || e.metaKey;
-		
-				// 1. Navigation
-				if (shortcuts.matches(e, 'UP')) return editor.moveCursor(0, -1);
-				if (shortcuts.matches(e, 'DOWN')) return editor.moveCursor(0, 1);
-				if (shortcuts.matches(e, 'LEFT')) return editor.moveCursor(-1, 0);
-				if (shortcuts.matches(e, 'RIGHT')) return editor.moveCursor(1, 0);
-		
-				// 2. Studio Windows
-				if (shortcuts.matches(e, 'COMMAND_PALETTE')) {
-					e.preventDefault();
-					return (editor.showCommandPalette = !editor.showCommandPalette);
-				}
-				if (shortcuts.matches(e, 'COLOR_PICKER')) {
-					e.preventDefault();
-					return (editor.showColorPicker = !editor.showColorPicker);
-				}
-				if (shortcuts.matches(e, 'EXPORT')) {
-					e.preventDefault();
-					return (showExportModal = true);
-				}
-				if (shortcuts.matches(e, 'ESCAPE')) return editor.handleEscape();
-		
-				// 3. Canvas Actions
-				if (shortcuts.matches(e, 'STITCH')) return editor.stitch();
-				if (shortcuts.matches(e, 'UNSTITCH') || shortcuts.matches(e, 'UNSTITCH_MOD')) return editor.unstitch();
-				if (shortcuts.matches(e, 'EYEDROPPER')) return editor.pickColor();
-				if (shortcuts.matches(e, 'CLEAR_LINEN')) return editor.clearCanvas();
-		
-				// 4. View & Studio State
-				if (shortcuts.matches(e, 'UNDO')) return editor.undo();
-				if (shortcuts.matches(e, 'REDO')) return editor.redo();
-				if (shortcuts.matches(e, 'ZOOM_IN')) return editor.setZoom(0.1);
-				if (shortcuts.matches(e, 'ZOOM_OUT')) return editor.setZoom(-0.1);
-				if (shortcuts.matches(e, 'RESET_ZOOM')) return editor.resetZoom();
-				if (shortcuts.matches(e, 'TOGGLE_MUTE')) return editor.toggleMute();
-		
-				// 5. Palette Selection
-				for (let i = 0; i <= 9; i++) {
-					if (shortcuts.matches(e, `SELECT_${i}` as any)) {
-						return editor.selectPalette(i === 0 ? 9 : i - 1);
-					}
-				}
-			}
+		}
+	}
+
 	function handleKeyUp(e: KeyboardEvent) {
 		if (e.key === 'Shift') editor.isShiftPressed = false;
 		if (e.key === 'Control' || e.key === 'Meta') editor.isCtrlPressed = false;
 	}
 
-		onMount(() => {
-					const handleCommand = (e: any) => {
-						if (e.detail === 'open-export') showExportModal = true;
-						if (e.detail === 'export-svg') exportImage('svg');
-					};	
-			const handleCloseExport = () => {
-				showExportModal = false;
-			};
-	
-			window.addEventListener('keydown', handleKeyDown);
-			window.addEventListener('keyup', handleKeyUp);
-			window.addEventListener('app:execute-command', handleCommand);
-			window.addEventListener('app:close-export', handleCloseExport);
-			
-			return () => {
-				window.removeEventListener('keydown', handleKeyDown);
-				window.removeEventListener('keyup', handleKeyUp);
-				window.removeEventListener('app:execute-command', handleCommand);
-				window.removeEventListener('app:close-export', handleCloseExport);
-			};
-		});</script>
+	onMount(() => {
+		const handleCommand = (e: any) => {
+			if (e.detail === 'open-export') showExportModal = true;
+			if (e.detail === 'export-svg') exportImage('svg');
+		};
+
+		const handleCloseExport = () => {
+			showExportModal = false;
+		};
+
+		window.addEventListener('keydown', handleKeyDown);
+		window.addEventListener('keyup', handleKeyUp);
+		window.addEventListener('app:execute-command', handleCommand);
+		window.addEventListener('app:close-export', handleCloseExport);
+
+		return () => {
+			window.removeEventListener('keydown', handleKeyDown);
+			window.removeEventListener('keyup', handleKeyUp);
+			window.removeEventListener('app:execute-command', handleCommand);
+			window.removeEventListener('app:close-export', handleCloseExport);
+		};
+	});
+</script>
+
+<SplashScreen />
 
 {#if editor.showCommandPalette}
 	<CommandPalette />
@@ -155,9 +165,9 @@
 		<div class="mx-auto my-1 h-px w-4 bg-studio-text/10"></div>
 
 		<button
-			class="via-sage-300 h-7 w-7 rounded-full border-2 border-dashed border-studio-warm/40 bg-gradient-to-tr from-rose-300 to-sky-300 shadow-sm transition-all hover:scale-110 hover:border-studio-warm"
+			class="h-7 w-7 rounded-full border-2 border-dashed border-studio-warm/40 bg-gradient-to-tr from-rose-300 via-sage-300 to-sky-300 shadow-sm transition-all hover:scale-110 hover:border-studio-warm"
 			onclick={() => (editor.showColorPicker = true)}
-			title="Custom Color (Ctrl + P)"
+			title="Natural Dye Basin (Ctrl + P)"
 		></button>
 	</div>
 </div>

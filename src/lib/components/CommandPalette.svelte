@@ -64,10 +64,27 @@
 	let searchQuery = $state('');
 	let selectedIndex = $state(0);
 	let inputElement: HTMLInputElement;
+	let listContainer: HTMLDivElement;
 
 	let filteredCommands = $derived(
 		commands.filter((cmd) => cmd.label.toLowerCase().includes(searchQuery.toLowerCase()))
 	);
+
+	// Reset index when search changes
+	$effect(() => {
+		searchQuery;
+		selectedIndex = 0;
+	});
+
+	// Auto-scroll selected item into view
+	$effect(() => {
+		if (listContainer && selectedIndex >= 0) {
+			const selectedEl = listContainer.children[selectedIndex] as HTMLElement;
+			if (selectedEl) {
+				selectedEl.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+			}
+		}
+	});
 
 	function executeCommand(cmd: Command) {
 		cmd.action();
@@ -130,7 +147,7 @@
 		</div>
 
 		<!-- Command List -->
-		<div class="max-h-[400px] overflow-y-auto p-2">
+		<div class="max-h-[400px] overflow-y-auto p-2" bind:this={listContainer}>
 			{#if filteredCommands.length === 0}
 				<div class="p-8 text-center font-serif text-xs italic opacity-30">
 					No such pattern found in the studio...

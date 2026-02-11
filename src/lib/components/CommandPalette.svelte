@@ -23,6 +23,18 @@
 			action: () => (editor.showColorPicker = true)
 		},
 		{
+			id: 'toggle-mute',
+			label: 'Studio: Toggle Audio Feedback (Mute/Unmute)',
+			shortcut: '',
+			action: () => editor.toggleMute()
+		},
+		{
+			id: 'pick-dye',
+			label: 'Color: Eyedropper (Pick Dye from Canvas)',
+			shortcut: 'I',
+			action: () => editor.pickColor()
+		},
+		{
 			id: 'reset-zoom',
 			label: 'View: Reset Loom Zoom',
 			shortcut: 'Ctrl+0',

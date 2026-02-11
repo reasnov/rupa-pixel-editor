@@ -36,7 +36,7 @@ export class EditorState {
 
 	// Inactivity Logic
 	private inactivityTimer: any = null;
-	private readonly INACTIVITY_TIMEOUT = 30000; // 30 seconds
+	private readonly INACTIVITY_TIMEOUT = 20000; // 20 seconds
 
 	// Selection/Block mode
 	selectionStart = $state<{ x: number; y: number } | null>(null);

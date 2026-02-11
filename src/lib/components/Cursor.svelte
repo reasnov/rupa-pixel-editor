@@ -5,17 +5,22 @@
 
 {#if editor.isCursorVisible}
 	<div 
-		transition:fade={{ duration: 1000 }}
+		transition:fade={{ duration: 800 }}
 		class="cursor-container absolute inset-0"
 	>
-		<!-- The main inverted body -->
-		<div class="cursor-invert"></div>
-		
-		<!-- Fine-line artisan brackets with Focus Animation -->
-		<div class="bracket tl animate-focus-tl"></div>
-		<div class="bracket tr animate-focus-tr"></div>
-		<div class="bracket bl animate-focus-bl"></div>
-		<div class="bracket br animate-focus-br"></div>
+		<!-- The Inverted Target (Crosshair) -->
+		<div class="target-crosshair">
+			<!-- Horizontal Line -->
+			<div class="line horizontal"></div>
+			<!-- Vertical Line -->
+			<div class="line vertical"></div>
+			
+			<!-- Small Target Arrows (Brackets) -->
+			<div class="arrow top"></div>
+			<div class="arrow bottom"></div>
+			<div class="arrow left"></div>
+			<div class="arrow right"></div>
+		</div>
 
 		<!-- Picking Feedback (Artisan Pin) -->
 		{#if editor.isPicking}
@@ -53,35 +58,51 @@
 		justify-content: center;
 	}
 
-	.cursor-invert {
+	.target-crosshair {
 		position: absolute;
-		inset: 0;
+		inset: -4px; /* Spread slightly outside for awareness */
+		display: flex;
+		align-items: center;
+		justify-content: center;
 		backdrop-filter: invert(100%);
-		background: rgba(255, 255, 255, 0.05);
 	}
 
-	.bracket {
+	.line {
 		position: absolute;
-		width: 4px;
-		height: 4px;
-		border-color: var(--color-studio-warm);
-		opacity: 0.8;
-		transition: transform 0.2s ease;
+		background: white; /* Basis for inversion */
+		opacity: 0.5;
 	}
 
-	.tl { top: 0; left: 0; border-top: 1.5px solid; border-left: 1.5px solid; }
-	.tr { top: 0; right: 0; border-top: 1.5px solid; border-right: 1.5px solid; }
-	.bl { bottom: 0; left: 0; border-bottom: 1.5px solid; border-left: 1.5px solid; }
-	.br { bottom: 0; right: 0; border-bottom: 1.5px solid; border-right: 1.5px solid; }
+	.horizontal { width: 100%; height: 1px; }
+	.vertical { width: 1px; height: 100%; }
 
-	/* Subtle "Breathing" Focus Animation */
-	@keyframes focus-tl { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(-2px, -2px); } }
-	@keyframes focus-tr { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(2px, -2px); } }
-	@keyframes focus-bl { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(-2px, 2px); } }
-	@keyframes focus-br { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(2px, 2px); } }
+	.arrow {
+		position: absolute;
+		width: 0;
+		height: 0;
+		border-style: solid;
+		opacity: 0.8;
+	}
 
-	.animate-focus-tl { animation: focus-tl 2s ease-in-out infinite; }
-	.animate-focus-tr { animation: focus-tr 2s ease-in-out infinite; }
-	.animate-focus-bl { animation: focus-bl 2s ease-in-out infinite; }
-	.animate-focus-br { animation: focus-br 2s ease-in-out infinite; }
+	/* Micro-arrows pointing to the center */
+	.top { 
+		top: 0; 
+		border-width: 4px 3px 0 3px; 
+		border-color: white transparent transparent transparent; 
+	}
+	.bottom { 
+		bottom: 0; 
+		border-width: 0 3px 4px 3px; 
+		border-color: transparent transparent white transparent; 
+	}
+	.left { 
+		left: 0; 
+		border-width: 3px 0 3px 4px; 
+		border-color: transparent transparent transparent white; 
+	}
+	.right { 
+		right: 0; 
+		border-width: 3px 4px 3px 0; 
+		border-color: transparent white transparent transparent;
+	}
 </style>

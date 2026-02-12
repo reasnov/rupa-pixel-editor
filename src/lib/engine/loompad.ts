@@ -1,8 +1,5 @@
 import shortcutsData from '../config/shortcuts.json';
 
-/**
- * LoomPad Action: Semantic identifier for what the user wants to achieve.
- */
 export type LoomIntent = 
     | 'MOVE_UP' | 'MOVE_DOWN' | 'MOVE_LEFT' | 'MOVE_RIGHT'
     | 'STITCH' | 'UNSTITCH' | 'PICK_DYE'
@@ -19,25 +16,19 @@ export type LoomIntent =
 interface LoomPattern {
     intent: LoomIntent;
     key: string;
-    ctrl?: boolean;
-    shift?: boolean;
-    alt?: boolean;
-    meta?: boolean;
+    ctrl: boolean;
+    shift: boolean;
+    alt: boolean;
 }
 
 export class LoomPadEngine {
     private patterns: LoomPattern[] = [];
-    private activeKeys = new Set<string>();
 
     constructor() {
         this.loadPatterns();
     }
 
-    /**
-     * Map the legacy shortcuts.json to LoomPad Patterns
-     */
     private loadPatterns() {
-        // This maps our current JSON structure to the advanced Pattern engine
         const mapping: Record<string, LoomIntent> = {
             'UP': 'MOVE_UP', 'DOWN': 'MOVE_DOWN', 'LEFT': 'MOVE_LEFT', 'RIGHT': 'MOVE_RIGHT',
             'STITCH': 'STITCH', 'UNSTITCH': 'UNSTITCH', 'EYEDROPPER': 'PICK_DYE',
@@ -62,9 +53,7 @@ export class LoomPadEngine {
                     const parts = keyCombo.toLowerCase().split('+');
                     let key = parts[parts.length - 1];
                     
-                    // Normalize modifier keys to their e.key values
-                    if (key === 'ctrl') key = 'control';
-                    if (key === 'meta') key = 'meta';
+                    if (key === 'ctrl' || key === 'control') key = 'control';
                     if (key === 'shift') key = 'shift';
                     if (key === 'alt') key = 'alt';
 
@@ -73,56 +62,49 @@ export class LoomPadEngine {
                         key: key === ' ' ? ' ' : key,
                         ctrl: parts.includes('ctrl') || parts.includes('control'),
                         shift: parts.includes('shift'),
-                        alt: parts.includes('alt'),
-                        meta: parts.includes('meta') || parts.includes('cmd')
+                        alt: parts.includes('alt')
                     });
                 });
             });
         });
 
-        // Sort patterns by complexity (more modifiers = higher priority)
+        // CRITICAL: Sort by modifier complexity descending
         this.patterns.sort((a, b) => {
-            const getScore = (p: LoomPattern) => (p.ctrl ? 1 : 0) + (p.shift ? 1 : 0) + (p.alt ? 1 : 0);
-            return getScore(b) - getScore(a);
+            const score = (p: LoomPattern) => (p.ctrl ? 1 : 0) + (p.shift ? 1 : 0) + (p.alt ? 1 : 0);
+            return score(b) - score(a);
         });
     }
 
-    /**
-     * Process a keyboard event and return the matching Intent.
-     */
     getIntent(e: KeyboardEvent, type: 'down' | 'up'): LoomIntent | null {
         const key = e.key.toLowerCase();
-        
-        if (type === 'down') this.activeKeys.add(key);
-        else this.activeKeys.delete(key);
+        const isCtrl = e.ctrlKey || e.metaKey;
+        const isShift = e.shiftKey;
+        const isAlt = e.altKey;
 
-        // Normalize modifiers, but IF the key itself is a modifier, 
-        // we treat its contribution to the state as 'false' for matching purposes
-        // to allow it to match its own pattern.
-        const isCtrl = (e.ctrlKey || e.metaKey) && key !== 'control' && key !== 'meta';
-        const isShift = e.shiftKey && key !== 'shift';
-        const isAlt = e.altKey && key !== 'alt';
-
-        // Navigation check (special handling to allow flow states)
-        const navKeys = ['arrowup', 'arrowdown', 'arrowleft', 'arrowright'];
-        const isNav = navKeys.includes(key);
+        // Navigation is a unique physical intent
+        if (['arrowup', 'arrowdown', 'arrowleft', 'arrowright'].includes(key)) {
+            if (key === 'arrowup') return 'MOVE_UP';
+            if (key === 'arrowdown') return 'MOVE_DOWN';
+            if (key === 'arrowleft') return 'MOVE_LEFT';
+            if (key === 'arrowright') return 'MOVE_RIGHT';
+        }
 
         for (const pattern of this.patterns) {
-            // Precise matching for regular actions
-            const keyMatch = key === pattern.key || e.code.toLowerCase() === `key${pattern.key}`;
+            const keyMatch = key === pattern.key;
             
-            // If it's navigation, we only match the key, modifiers are handled by the consumer
-            if (isNav && ['MOVE_UP', 'MOVE_DOWN', 'MOVE_LEFT', 'MOVE_RIGHT'].includes(pattern.intent)) {
-                if (key === pattern.key) return pattern.intent;
+            // For MODIFIERS patterns (FLOW intents)
+            if (['control', 'shift', 'alt'].includes(key)) {
+                if (key === pattern.key) {
+                    // Strict Check: If we match Ctrl+Shift, we MUST have both active
+                    // If we match just Shift, we MUST NOT have Ctrl active (to avoid collision)
+                    const chordMatch = (isCtrl === pattern.ctrl) && (isShift === pattern.shift) && (isAlt === pattern.alt);
+                    if (chordMatch) return pattern.intent;
+                }
                 continue;
             }
 
-            if (
-                keyMatch &&
-                isCtrl === !!pattern.ctrl &&
-                isShift === !!pattern.shift &&
-                isAlt === !!pattern.alt
-            ) {
+            // For REGULAR ACTION patterns (Chords like Ctrl+S)
+            if (keyMatch && isCtrl === pattern.ctrl && isShift === pattern.shift && isAlt === pattern.alt) {
                 return pattern.intent;
             }
         }
@@ -130,9 +112,6 @@ export class LoomPadEngine {
         return null;
     }
 
-    /**
-     * Helper to get visual label for an intent
-     */
     getLabel(intent: LoomIntent): string {
         const p = this.patterns.find(p => p.intent === intent);
         if (!p) return '';

@@ -3,23 +3,25 @@ import { loompad, type LoomIntent } from './loompad';
 import { stance } from './stance.svelte';
 import { shuttle } from './shuttle';
 
-/**
- * The Loom: The Master Orchestrator.
- * It weaves together Input (LoomPad), Stance (State), and Action (Shuttle).
- */
 export class TheLoom {
     
     handleInput(e: KeyboardEvent, type: 'down' | 'up') {
         if (!atelier.isAppReady) return;
-        atelier.resetInactivityTimer();
+        
+        // 1. Precise Protection Shield
+        const target = e.target as HTMLElement;
+        const isWriting = target instanceof HTMLInputElement || 
+                          target instanceof HTMLTextAreaElement || 
+                          target.isContentEditable;
 
-        // 1. Protection Shield (Inputs)
-        if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement || (e.target as HTMLElement).isContentEditable) {
-            if (e.key === 'Escape') atelier.handleEscape();
+        if (isWriting) {
+            if (type === 'down' && e.key === 'Escape') atelier.handleEscape();
             return;
         }
 
-        // 2. Identify Intent via LoomPad
+        atelier.resetInactivityTimer();
+
+        // 2. Identify Intent
         const intent = loompad.getIntent(e, type);
         const key = e.key.toLowerCase();
 
@@ -33,30 +35,34 @@ export class TheLoom {
     private processKeyDown(intent: LoomIntent | null, e: KeyboardEvent) {
         if (!intent) return;
 
-        // Prevent browser defaults for matched intents (except navigation)
-        if (!intent.startsWith('MOVE_')) e.preventDefault();
+        // Prevent browser defaults for matched intents
+        // CRITICAL: NEVER prevent default on pure modifiers or navigation
+        const isModifier = ['control', 'shift', 'alt', 'meta'].includes(e.key.toLowerCase());
+        const isNav = intent.startsWith('MOVE_');
+        
+        if (!isModifier && !isNav) {
+            e.preventDefault();
+        }
 
         switch (intent) {
-            // --- Navigation Intents ---
             case 'MOVE_UP':    return this.executeMove(0, -1);
             case 'MOVE_DOWN':  return this.executeMove(0, 1);
             case 'MOVE_LEFT':  return this.executeMove(-1, 0);
             case 'MOVE_RIGHT': return this.executeMove(1, 0);
 
-            // --- Sustained Flow States (Flags) ---
-            case 'FLOW_SELECT':
-                atelier.isFlowSelect = true;
-                if (!atelier.selectionStart) shuttle.startSelection();
-                return;
-            
-            case 'FLOW_STITCH':
-                return (atelier.isFlowStitch = true);
-            
-            case 'FLOW_UNSTITCH':
+            case 'FLOW_STITCH':   return (atelier.isFlowStitch = true);
+            case 'FLOW_UNSTITCH': 
                 atelier.isFlowUnstitch = true;
-                return (atelier.isFlowSelect = false); // Priority
+                atelier.isFlowSelect = false; // Priority: Erasing overrides Selecting
+                return;
+            case 'FLOW_SELECT':
+                // Only start selecting if we are NOT currently unravelling
+                if (!atelier.isFlowUnstitch) {
+                    atelier.isFlowSelect = true;
+                    if (!atelier.selectionStart) shuttle.startSelection();
+                }
+                return;
 
-            // --- Momentary Action Intents ---
             case 'STITCH':
                 if (stance.current.type === 'LOOMING') return shuttle.commitSelection();
                 return shuttle.stitch();
@@ -76,7 +82,6 @@ export class TheLoom {
             
             case 'ESCAPE': return atelier.handleEscape();
             
-            // --- UI & View Intents ---
             case 'OPEN_PALETTE': return (atelier.showPatternCatalog = !atelier.showPatternCatalog);
             case 'OPEN_DYES':    return (atelier.showDyeBasin = !atelier.showDyeBasin);
             case 'OPEN_EXPORT':  return (atelier.showArtifactCrate = true);
@@ -100,24 +105,24 @@ export class TheLoom {
     private processKeyUp(intent: LoomIntent | null, key: string) {
         if (intent === 'FLOW_STITCH' || key === 'control' || key === 'meta') {
             atelier.isFlowStitch = false;
-        } 
-        
-        if (intent === 'FLOW_UNSTITCH' || key === 'alt') {
-            atelier.isFlowUnstitch = false;
+            atelier.isFlowUnstitch = false; // Break chord
         } 
         
         if (intent === 'FLOW_SELECT' || key === 'shift') {
             atelier.isFlowSelect = false;
+            atelier.isFlowUnstitch = false; // Break chord
             atelier.selectionStart = null;
             atelier.selectionEnd = null;
         }
+
+        if (key === 'alt') {
+            // Keep state clean even if alt is not a flow trigger yet
+        }
     }
 
-    /**
-     * Executes needle movement and handles the consequences based on current flows.
-     */
     private executeMove(dx: number, dy: number) {
         if (shuttle.moveNeedle(dx, dy)) {
+            // Check flags directly from AtelierState
             if (atelier.isFlowSelect) shuttle.updateSelection();
             if (atelier.isFlowStitch) shuttle.stitch();
             if (atelier.isFlowUnstitch) shuttle.unstitch();

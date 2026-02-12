@@ -33,6 +33,7 @@ _Historical and future development roadmaps._
 - [03: Persistence & Linen Manipulation](./developers/blueprints/03-persistence-and-manipulation.md)
 - [04: The LoomPad Engine](./developers/blueprints/04-loompad-engine.md)
 - [05: The Artisan's Stance](./developers/blueprints/05-artisan-stance.md)
+- [06: The Master's Folio](./developers/blueprints/06-masters-folio.md)
 
 ### 7. [Release Notes](./pubs/releases/v0.3.0.md)
 *Latest milestone highlights and changes.*

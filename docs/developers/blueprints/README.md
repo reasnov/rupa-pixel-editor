@@ -24,6 +24,10 @@ _The nervous system: Intent-based input, chord parsing, and context sovereignty.
 
 _Behavioral orchestration: Managing modes (Threading, Looming, Unravelling) and synchronization._
 
+### [06: The Master's Folio](./06-masters-folio.md)
+
+_Multi-frame and multi-layer orchestration: Managing complex projects and hierarchical data._
+
 ---
 
 _Note: Blueprints are finalized once implemented but remain here as architectural reference._

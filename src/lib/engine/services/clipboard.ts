@@ -1,6 +1,7 @@
+import { type ColorHex } from '../../types/index.js';
 import { atelier } from '../../state/atelier.svelte.js';
-import { sfx } from '../audio.js';
-import { history } from '../history.js';
+import { sfx } from '../../engine/audio.js';
+import { history } from '../../engine/history.js';
 
 export class ClipboardService {
 	copy() {
@@ -10,7 +11,7 @@ export class ClipboardService {
 		const { x1, x2, y1, y2 } = bounds;
 		const w = x2 - x1 + 1;
 		const h = y2 - y1 + 1;
-		const data = [];
+		const data: (ColorHex | null)[] = [];
 
 		for (let y = y1; y <= y2; y++) {
 			for (let x = x1; x <= x2; x++) {
@@ -34,7 +35,7 @@ export class ClipboardService {
 				const index = atelier.linen.getIndex(x, y);
 				const oldColor = atelier.linen.stitches[index];
 				if (oldColor !== null) {
-					history.push({ index, oldColor, newColor: null as any });
+					history.push({ index, oldColor, newColor: null });
 					atelier.linen.setColor(x, y, null);
 				}
 			}

@@ -4,6 +4,8 @@ import { ManipulationService } from './services/manipulation.js';
 import { ClipboardService } from './services/clipboard.js';
 import { PersistenceService } from './services/persistence.js';
 import { atelier } from '../state/atelier.svelte.js';
+import { history } from './history.js';
+import { sfx } from './audio.js';
 
 /**
  * ShuttleEngine: The unified service coordinator for atelier operations.

@@ -1,29 +1,59 @@
 import { type ColorHex } from '../types/index.js';
+import type { ProjectState } from './project.svelte.js';
 
 /**
- * LinenState: Manages the digital fabric (grid).
- * Stitches are stored as ColorHex strings or null if the cell is empty.
+ * LinenState (Adapter):
+ * Formerly the source of truth for the grid, this class now acts as a
+ * compatibility proxy (adapter) to the active Frame and Veil in the ProjectState.
+ * This ensures the rest of the application (Renderer, Engine) continues to work
+ * while we transition to the Multi-Layer architecture.
  */
 export class LinenState {
-	width = $state(32);
-	height = $state(32);
-	// Use null to represent an empty cell (no stitch)
-	stitches = $state<(ColorHex | null)[]>([]);
+	private project: ProjectState;
 
-	constructor(width = 32, height = 32) {
-		this.width = width;
-		this.height = height;
-		this.stitches = Array(width * height).fill(null);
+	constructor(project: ProjectState) {
+		this.project = project;
 	}
 
+	// --- Proxies to Active Frame ---
+
+	get width() {
+		return this.project.activeFrame.width;
+	}
+	set width(v: number) {
+		this.project.activeFrame.width = v;
+	}
+
+	get height() {
+		return this.project.activeFrame.height;
+	}
+	set height(v: number) {
+		this.project.activeFrame.height = v;
+	}
+
+	// --- Proxies to Active Veil (The actual pixel data) ---
+
+	get stitches() {
+		return this.project.activeFrame.activeVeil.stitches;
+	}
+	
+	set stitches(v: (ColorHex | null)[]) {
+		// When legacy code tries to replace the whole array, update the active layer
+		this.project.activeFrame.activeVeil.stitches = v;
+	}
+
+	// --- Methods ---
+
 	reset(width: number, height: number, stitches: (ColorHex | null)[]) {
+		// Update Frame Dimensions
 		this.width = width;
 		this.height = height;
+		// Update Active Veil Data
 		this.stitches = stitches;
 	}
 
 	clear() {
-		this.stitches = this.stitches.map(() => null);
+		this.project.activeFrame.activeVeil.clear();
 	}
 
 	getIndex(x: number, y: number): number {

@@ -1,7 +1,7 @@
 export interface HistoryAction {
 	index: number;
-	oldColor: string;
-	newColor: string;
+	oldColor: string | null;
+	newColor: string | null;
 }
 
 export type HistoryEntry = HistoryAction | HistoryAction[];

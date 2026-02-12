@@ -15,12 +15,12 @@ import { shuttle } from '../engine/shuttle.js';
 export class AtelierState {
 	readonly version = __APP_VERSION__;
 
-	// Sub-states
-	linen = new LinenState();
+	// Sub-states (Initialization Order Matters!)
+	project = new ProjectState(); // Folio must exist first
+	linen = new LinenState(this.project); // Linen is now a proxy to the active Frame/Veil
 	needle = new NeedleState();
 	paletteState = new PaletteState();
 	studio = new StudioState();
-	project = new ProjectState();
 	selection = new SelectionState();
 
 	// --- Legacy Compatibility Proxies (Read-only or Passthrough) ---

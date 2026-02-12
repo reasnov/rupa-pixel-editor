@@ -22,7 +22,7 @@ export class StitchService {
 		const oldColor = atelier.linen.stitches[index];
 
 		if (oldColor !== null) {
-			history.push({ index, oldColor, newColor: null as any });
+			history.push({ index, oldColor, newColor: null });
 			atelier.linen.setColor(x, y, null);
 			sfx.playUnstitch();
 		}

@@ -23,7 +23,7 @@ export class StanceEngine {
             };
         }
 
-        if (atelier.isSelecting) {
+        if (atelier.isFlowSelect) {
             return {
                 type: 'LOOMING',
                 label: 'Block Looming',
@@ -33,17 +33,17 @@ export class StanceEngine {
             };
         }
 
-        if (atelier.isAltPressed) {
+        if (atelier.isFlowUnstitch) {
             return {
                 type: 'UNRAVELLING',
                 label: 'Unravelling',
                 icon: '🧶',
-                color: 'var(--color-studio-warm)',
+                color: 'var(--color-brand)',
                 isPulse: true
             };
         }
 
-        if (atelier.isCtrlPressed) {
+        if (atelier.isFlowStitch) {
             return {
                 type: 'THREADING',
                 label: 'Threading',

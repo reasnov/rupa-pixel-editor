@@ -453,6 +453,17 @@ export class AtelierState {
 
 	// --- Derived Projections ---
 
+	// Derived palette of colors currently present on the canvas
+	usedColors = $derived.by(() => {
+		const colors = new Set<string>();
+		this.stitches.forEach((color) => {
+			if (color !== '#eee8d5') {
+				colors.add(color);
+			}
+		});
+		return Array.from(colors);
+	});
+
 	displayCoords = $derived.by(() => {
 		const calc = (pos: number, size: number) => {
 			const mid = Math.floor(size / 2);

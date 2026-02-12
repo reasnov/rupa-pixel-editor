@@ -481,11 +481,19 @@ export class AtelierState {
 	});
 
 	cameraTransform = $derived.by(() => {
-		const xPos = ((this.needlePos.x + 0.5) / this.linenWidth) * 100;
-		const yPos = ((this.needlePos.y + 0.5) / this.linenHeight) * 100;
-		const tx = 50 - xPos;
-		const ty = 50 - yPos;
-		return `translate(${tx}%, ${ty}%) scale(${this.zoomLevel})`;
+		if (this.zoomLevel <= 1) {
+			// Overview Mode: Keep the linen perfectly centered
+			return `scale(${this.zoomLevel})`;
+		} else {
+			// Detail Mode: Track the needle as the focal point
+			const xPos = ((this.needlePos.x + 0.5) / this.linenWidth) * 100;
+			const yPos = ((this.needlePos.y + 0.5) / this.linenHeight) * 100;
+
+			const tx = 50 - xPos;
+			const ty = 50 - yPos;
+
+			return `translate(${tx}%, ${ty}%) scale(${this.zoomLevel})`;
+		}
 	});
 }
 

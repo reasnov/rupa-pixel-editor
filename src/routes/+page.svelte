@@ -111,11 +111,17 @@
 
 	function handleKeyUp(e: KeyboardEvent) {
 		const intent = loompad.getIntent(e, 'up');
-		if (intent === 'FLOW_STITCH') {
+		const key = e.key.toLowerCase();
+
+		if (intent === 'FLOW_STITCH' || key === 'control' || key === 'meta') {
 			atelier.isCtrlPressed = false;
-		} else if (intent === 'FLOW_UNSTITCH') {
+		} 
+		
+		if (intent === 'FLOW_UNSTITCH' || key === 'alt') {
 			atelier.isAltPressed = false;
-		} else if (intent === 'FLOW_SELECT') {
+		} 
+		
+		if (intent === 'FLOW_SELECT' || key === 'shift') {
 			atelier.isShiftPressed = false;
 			atelier.isSelecting = false;
 			atelier.selectionStart = null;

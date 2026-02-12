@@ -29,6 +29,7 @@
 <style>
 	.custom-slider {
 		-webkit-appearance: none;
+		appearance: none;
 		width: 100%;
 		height: 10px;
 		background: #eee8d5;

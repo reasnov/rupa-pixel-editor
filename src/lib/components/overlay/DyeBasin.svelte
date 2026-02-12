@@ -104,6 +104,8 @@
 	transition:fade={{ duration: 150 }}
 	class="fixed inset-0 z-[1100] flex items-center justify-center bg-black/20 backdrop-blur-sm"
 	onmousedown={(e) => e.target === e.currentTarget && onClose()}
+	role="button"
+	tabindex="-1"
 >
 	<div
 		in:scale={{ duration: 200, start: 0.95 }}

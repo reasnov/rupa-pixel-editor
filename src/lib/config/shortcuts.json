@@ -52,7 +52,7 @@
 	},
 	"modifiers": {
 		"FLOW_STITCH": ["Control"],
-		"FLOW_UNSTITCH": ["Alt"],
+		"FLOW_UNSTITCH": ["Ctrl+Shift"],
 		"FLOW_SELECT": ["Shift"]
 	}
 }

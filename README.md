@@ -32,7 +32,7 @@ Built with **Svelte 5** and **Electron**, Rupa eliminates the mouse in favor of 
 | `Backspace` / `Delete`          | Unstitch (Clear Pixel)                |
 | `Ctrl + Space`                  | Unstitch (Clear Pixel)                |
 | `Ctrl` (Hold)                   | **Stitch-Flow**: Auto-color on move   |
-| `Alt` (Hold)                    | **Unstitch-Flow**: Auto-clear on move |
+| `Ctrl + Shift` (Hold)           | **Unstitch-Flow**: Auto-clear on move |
 | `Shift` (Hold)                  | **Block Selection**: Select area      |
 | `I` / `Alt + Space`             | Eyedropper (Pick color)               |
 | `C`                             | Open Color Picker                     |

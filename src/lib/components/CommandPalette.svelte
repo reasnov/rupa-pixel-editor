@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { editor } from '../state/editor.svelte';
-	import { shortcuts } from '../engine/shortcuts';
+	import { loompad } from '../engine/loompad';
 	import { onMount } from 'svelte';
 
 	interface Command {
@@ -20,97 +20,97 @@
 		{
 			id: 'open-export',
 			label: 'Export: Open Export Window',
-			shortcut: shortcuts.getLabel('EXPORT'),
+			shortcut: loompad.getLabel('OPEN_EXPORT'),
 			action: () => {}
 		},
 		{
 			id: 'save-project',
 			label: 'File: Save Artisan Project (.rupa)',
-			shortcut: shortcuts.getLabel('SAVE'),
+			shortcut: loompad.getLabel('SAVE'),
 			action: () => editor.saveProject()
 		},
 		{
 			id: 'open-project',
 			label: 'File: Open Artisan Project (.rupa)',
-			shortcut: shortcuts.getLabel('OPEN'),
+			shortcut: loompad.getLabel('OPEN'),
 			action: () => editor.loadProject()
 		},
 		{
 			id: 'open-dye-basin',
 			label: 'Color: Open Color Wheel (Dye Basin)',
-			shortcut: shortcuts.getLabel('COLOR_PICKER'),
+			shortcut: loompad.getLabel('OPEN_DYES'),
 			action: () => (editor.showColorPicker = true)
 		},
 		{
 			id: 'toggle-mute',
 			label: 'Studio: Toggle Audio Feedback (Mute/Unmute)',
-			shortcut: shortcuts.getLabel('TOGGLE_MUTE'),
+			shortcut: loompad.getLabel('TOGGLE_MUTE'),
 			action: () => editor.toggleMute()
 		},
 		{
 			id: 'pick-dye',
 			label: 'Color: Eyedropper (Pick Dye from Canvas)',
-			shortcut: shortcuts.getLabel('EYEDROPPER'),
+			shortcut: loompad.getLabel('PICK_DYE'),
 			action: () => editor.pickColor()
 		},
 		{
 			id: 'reset-zoom',
 			label: 'View: Reset Loom Zoom',
-			shortcut: shortcuts.getLabel('RESET_ZOOM'),
+			shortcut: loompad.getLabel('RESET_ZOOM'),
 			action: () => editor.resetZoom()
 		},
 		{
 			id: 'undo',
 			label: 'Edit: Undo Last Stitch',
-			shortcut: shortcuts.getLabel('UNDO'),
+			shortcut: loompad.getLabel('UNDO'),
 			action: () => editor.undo()
 		},
 		{
 			id: 'redo',
 			label: 'Edit: Redo Last Stitch',
-			shortcut: shortcuts.getLabel('REDO'),
+			shortcut: loompad.getLabel('REDO'),
 			action: () => editor.redo()
 		},
 		{
 			id: 'clear-linen',
 			label: 'Project: Clear the Linen (Full Reset)',
-			shortcut: shortcuts.getLabel('CLEAR_LINEN'),
+			shortcut: loompad.getLabel('CLEAR_LINEN'),
 			action: () => editor.clearCanvas()
 		},
 		{
 			id: 'copy-pattern',
 			label: 'Selection: Copy Pattern to Clipboard',
-			shortcut: shortcuts.getLabel('COPY'),
+			shortcut: loompad.getLabel('COPY'),
 			action: () => editor.copySelection()
 		},
 		{
 			id: 'cut-pattern',
 			label: 'Selection: Cut Pattern (Move source to clipboard)',
-			shortcut: shortcuts.getLabel('CUT'),
+			shortcut: loompad.getLabel('CUT'),
 			action: () => editor.cutSelection()
 		},
 		{
 			id: 'paste-pattern',
 			label: 'Selection: Paste Pattern from Clipboard',
-			shortcut: shortcuts.getLabel('PASTE'),
+			shortcut: loompad.getLabel('PASTE'),
 			action: () => editor.pasteSelection()
 		},
 		{
 			id: 'flip-h',
 			label: 'Transform: Flip Linen Horizontally',
-			shortcut: shortcuts.getLabel('FLIP_H'),
+			shortcut: loompad.getLabel('FLIP_H'),
 			action: () => editor.flipLinen('horizontal')
 		},
 		{
 			id: 'flip-v',
 			label: 'Transform: Flip Linen Vertically',
-			shortcut: shortcuts.getLabel('FLIP_V'),
+			shortcut: loompad.getLabel('FLIP_V'),
 			action: () => editor.flipLinen('vertical')
 		},
 		{
 			id: 'rotate-linen',
 			label: 'Transform: Rotate Linen 90° Clockwise',
-			shortcut: shortcuts.getLabel('ROTATE'),
+			shortcut: loompad.getLabel('ROTATE'),
 			action: () => editor.rotateLinen()
 		}
 	];

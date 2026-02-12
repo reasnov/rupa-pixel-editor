@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { editor } from '$lib/state/editor.svelte';
 	import { ExportEngine } from '$lib/engine/export';
-	import { shortcuts } from '$lib/engine/shortcuts';
+	import { loompad } from '$lib/engine/loompad';
 	import ColorPicker from '$lib/components/ColorPicker.svelte';
 	import ExportModal from '$lib/components/ExportModal.svelte';
 	import CommandPalette from '$lib/components/CommandPalette.svelte';
@@ -66,67 +66,52 @@
 			return;
 		}
 
-		// 2. State Sync: Use semantic actions for mode detection
-		const modAction = shortcuts.getBestMatch(e);
-		
-		if (modAction === 'FLOW_SELECT') {
-			editor.isShiftPressed = true;
-			if (!editor.isSelecting) {
-				editor.isSelecting = true;
-				editor.startSelection();
-			}
-		} else if (modAction === 'FLOW_STITCH') {
-			editor.isCtrlPressed = true;
-		} else if (modAction === 'FLOW_UNSTITCH') {
-			editor.isAltPressed = true;
-		}
+		// 2. Weaver's Intent: Use LoomPad to unravel the user's intent
+		const intent = loompad.getIntent(e, 'down');
 
-		// Handle F1 specifically for Help
-		if (e.key === 'F1') {
-			e.preventDefault();
-			editor.showHelp = !editor.showHelp;
-			return;
-		}
-
-		// 4. Priority Engine: Find the most specific shortcut match
-		const action = shortcuts.getBestMatch(e);
-
-		if (action) {
-			// Prevent default for matched studio actions
-			if (!['UP', 'DOWN', 'LEFT', 'RIGHT'].includes(action)) {
+		if (intent) {
+			// Prevent system defaults for matched studio intents
+			if (!intent.startsWith('MOVE_')) {
 				e.preventDefault();
 			}
 
-			switch (action) {
-				case 'UP':
+			switch (intent) {
+				case 'MOVE_UP':
 					return editor.moveCursor(0, -1);
-				case 'DOWN':
+				case 'MOVE_DOWN':
 					return editor.moveCursor(0, 1);
-				case 'LEFT':
+				case 'MOVE_LEFT':
 					return editor.moveCursor(-1, 0);
-				case 'RIGHT':
+				case 'MOVE_RIGHT':
 					return editor.moveCursor(1, 0);
+				case 'FLOW_STITCH':
+					return (editor.isCtrlPressed = true);
+				case 'FLOW_UNSTITCH':
+					editor.isAltPressed = true;
+					return (editor.isSelecting = false);
+				case 'FLOW_SELECT':
+					editor.isShiftPressed = true;
+					if (!editor.isSelecting) {
+						editor.isSelecting = true;
+						editor.startSelection();
+					}
+					return;
 				case 'ESCAPE':
 					return editor.handleEscape();
-				case 'COMMAND_PALETTE':
+				case 'OPEN_PALETTE':
 					return (editor.showCommandPalette = !editor.showCommandPalette);
-				case 'COLOR_PICKER':
+				case 'OPEN_DYES':
 					return (editor.showColorPicker = !editor.showColorPicker);
-				case 'EXPORT':
+				case 'OPEN_EXPORT':
 					return (showExportModal = true);
-				case 'SAVE':
-					return editor.saveProject();
-				case 'OPEN':
-					return editor.loadProject();
 				case 'STITCH':
 					if (editor.isSelecting) {
 						return editor.commitSelection();
 					}
 					return editor.stitch();
 				case 'UNSTITCH':
-				case 'UNSTITCH_MOD':
 					return editor.unstitch();
-				case 'EYEDROPPER':
+				case 'PICK_DYE':
 					return editor.pickColor();
 				case 'COPY':
 					return editor.copySelection();
@@ -155,8 +140,8 @@
 				case 'TOGGLE_MUTE':
 					return editor.toggleMute();
 				default:
-					if (action.startsWith('SELECT_')) {
-						const num = parseInt(action.split('_')[1]);
+					if (intent.startsWith('SELECT_DYE_')) {
+						const num = parseInt(intent.split('_')[2]);
 						return editor.selectPalette(num === 0 ? 9 : num - 1);
 					}
 			}
@@ -164,13 +149,13 @@
 	}
 
 	function handleKeyUp(e: KeyboardEvent) {
-		const action = shortcuts.getBestMatch(e);
+		const intent = loompad.getIntent(e, 'up');
 
-		if (action === 'FLOW_STITCH') {
+		if (intent === 'FLOW_STITCH') {
 			editor.isCtrlPressed = false;
-		} else if (action === 'FLOW_UNSTITCH') {
+		} else if (intent === 'FLOW_UNSTITCH') {
 			editor.isAltPressed = false;
-		} else if (action === 'FLOW_SELECT') {
+		} else if (intent === 'FLOW_SELECT') {
 			editor.isShiftPressed = false;
 			editor.isSelecting = false;
 			editor.selectionStart = null;

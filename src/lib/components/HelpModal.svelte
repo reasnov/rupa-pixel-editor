@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { editor } from '../state/editor.svelte';
-	import { shortcuts } from '../engine/shortcuts';
+	import { loompad } from '../engine/loompad';
 	import { onMount } from 'svelte';
 
 	function close() {
@@ -19,7 +19,7 @@
 			items: [
 				{ label: 'Move the Needle', keys: 'Arrow Keys' },
 				{ label: 'Loom Zoom In/Out', keys: '+ / -' },
-				{ label: 'Reset View', keys: 'Ctrl + 0' }
+				{ label: 'Reset View', keys: loompad.getLabel('RESET_ZOOM') }
 			]
 		},
 		{
@@ -27,20 +27,20 @@
 			items: [
 				{ label: 'Place Stitch', keys: 'Space' },
 				{ label: 'Unstitch (Erase)', keys: 'Backspace / Del' },
-				{ label: 'Threading (Flow Mode)', keys: 'Hold Ctrl + Arrows' },
-				{ label: 'Unravelling (Erase Flow)', keys: 'Hold Alt + Arrows' },
-				{ label: 'Block Looming (2D Selection)', keys: 'Hold Shift + Arrows' }
+				{ label: 'Threading (Flow Mode)', keys: `Hold ${loompad.getLabel('FLOW_STITCH')} + Arrows` },
+				{ label: 'Unravelling (Erase Flow)', keys: `Hold ${loompad.getLabel('FLOW_UNSTITCH')} + Arrows` },
+				{ label: 'Block Looming (2D Selection)', keys: `Hold ${loompad.getLabel('FLOW_SELECT')} + Arrows` }
 			]
 		},
 		{
 			category: 'Studio Tools',
 			items: [
-				{ label: 'Pattern Book (Catalog)', keys: 'Ctrl + K' },
-				{ label: 'Natural Dye Basin (Color)', keys: 'Ctrl + P' },
-				{ label: 'Pick Dye (Eyedropper)', keys: 'I or Alt + Space' },
-				{ label: 'Finish & Export', keys: 'Ctrl + E' },
-				{ label: 'Undo / Redo', keys: 'Ctrl + Z / Ctrl + Y' },
-				{ label: 'Toggle Studio Sounds', keys: 'Ctrl + M' }
+				{ label: 'Pattern Book (Catalog)', keys: loompad.getLabel('OPEN_PALETTE') },
+				{ label: 'Natural Dye Basin (Color)', keys: loompad.getLabel('OPEN_DYES') },
+				{ label: 'Pick Dye (Eyedropper)', keys: loompad.getLabel('PICK_DYE') },
+				{ label: 'Finish & Export', keys: loompad.getLabel('OPEN_EXPORT') },
+				{ label: 'Undo / Redo', keys: `${loompad.getLabel('UNDO')} / ${loompad.getLabel('REDO')}` },
+				{ label: 'Toggle Studio Sounds', keys: loompad.getLabel('TOGGLE_MUTE') }
 			]
 		}
 	];

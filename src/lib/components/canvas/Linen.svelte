@@ -1,20 +1,20 @@
 <script lang="ts">
-	import { editor } from '../state/editor.svelte';
-	import Cursor from './Cursor.svelte';
+	import { atelier } from '../../state/atelier.svelte';
+	import Needle from './Needle.svelte';
 </script>
 
-<!-- The Canvas (The Linen) -->
+<!-- The Linen (The Canvas) -->
 <div
 	class="stitch-grid-pattern artisan-checker-small relative shrink-0 origin-center shadow-sm transition-transform duration-500 ease-[cubic-bezier(0.23,1,0.32,1)]"
 	style="
 		display: grid;
-		grid-template-columns: repeat({editor.gridWidth}, 1fr); 
-		grid-template-rows: repeat({editor.gridHeight}, 1fr);
+		grid-template-columns: repeat({atelier.linenWidth}, 1fr); 
+		grid-template-rows: repeat({atelier.linenHeight}, 1fr);
 		width: min(75vh, 75vw); 
 		height: min(75vh, 75vw);
-		--grid-cols: {editor.gridWidth}; 
-		--grid-rows: {editor.gridHeight}; 
-		transform: {editor.cameraTransform};
+		--grid-cols: {atelier.linenWidth}; 
+		--grid-rows: {atelier.linenHeight}; 
+		transform: {atelier.cameraTransform};
 		background-color: #eee8d5;
 	"
 >
@@ -27,7 +27,7 @@
 
 		<!-- 8-Bit Rhythmic Guides -->
 		{#each [-24, -16, -8, 8, 16, 24] as offset}
-			{@const pos = 50 + (offset / editor.gridWidth) * 100}
+			{@const pos = 50 + (offset / atelier.linenWidth) * 100}
 			{#if pos > 0 && pos < 100}
 				<div
 					class="absolute top-0 bottom-0 w-px -translate-x-1/2 bg-studio-text/10"
@@ -36,7 +36,7 @@
 			{/if}
 		{/each}
 		{#each [-24, -16, -8, 8, 16, 24] as offset}
-			{@const pos = 50 + (offset / editor.gridHeight) * 100}
+			{@const pos = 50 + (offset / atelier.linenHeight) * 100}
 			{#if pos > 0 && pos < 100}
 				<div
 					class="absolute right-0 left-0 h-px -translate-y-1/2 bg-studio-text/10"
@@ -46,10 +46,10 @@
 		{/each}
 	</div>
 
-	{#each editor.pixelData as color, i (i)}
-		{@const x = i % editor.gridWidth}
-		{@const y = Math.floor(i / editor.gridWidth)}
-		{@const isActive = editor.cursorPos.x === x && editor.cursorPos.y === y}
+	{#each atelier.stitches as color, i (i)}
+		{@const x = i % atelier.linenWidth}
+		{@const y = Math.floor(i / atelier.linenWidth)}
+		{@const isActive = atelier.needlePos.x === x && atelier.needlePos.y === y}
 		{@const isEmpty = color === '#eee8d5'}
 
 		<div
@@ -57,33 +57,33 @@
 			style="background-color: {isEmpty ? 'rgba(238, 232, 213, 0.01)' : color};"
 		>
 			{#if isActive}
-				<Cursor />
+				<Needle />
 			{/if}
 		</div>
 	{/each}
 
 	<!-- Block Selection Overlay -->
-	{#if editor.isBlockMode && editor.selectionStart && editor.selectionEnd}
-		{@const x1 = Math.min(editor.selectionStart.x, editor.selectionEnd.x)}
-		{@const x2 = Math.max(editor.selectionStart.x, editor.selectionEnd.x)}
-		{@const y1 = Math.min(editor.selectionStart.y, editor.selectionEnd.y)}
-		{@const y2 = Math.max(editor.selectionStart.y, editor.selectionEnd.y)}
+	{#if atelier.isSelecting && atelier.selectionStart && atelier.needlePos}
+		{@const x1 = Math.min(atelier.selectionStart.x, atelier.needlePos.x)}
+		{@const x2 = Math.max(atelier.selectionStart.x, atelier.needlePos.x)}
+		{@const y1 = Math.min(atelier.selectionStart.y, atelier.needlePos.y)}
+		{@const y2 = Math.max(atelier.selectionStart.y, atelier.needlePos.y)}
 		{@const width = x2 - x1 + 1}
 		{@const height = y2 - y1 + 1}
 		<div
 			class="pointer-events-none absolute z-40 border-2 border-dashed border-brand bg-brand/10"
 			style="
-				left: {(x1 / editor.gridWidth) * 100}%; 
-				top: {(y1 / editor.gridHeight) * 100}%; 
-				width: {(width / editor.gridWidth) * 100}%; 
-				height: {(height / editor.gridHeight) * 100}%;
+				left: {(x1 / atelier.linenWidth) * 100}%; 
+				top: {(y1 / atelier.linenHeight) * 100}%; 
+				width: {(width / atelier.linenWidth) * 100}%; 
+				height: {(height / atelier.linenHeight) * 100}%;
 			"
 		>
 			<div
 				class="absolute h-2 w-2 -translate-x-1/2 -translate-y-1/2 border border-white bg-brand shadow-sm"
 				style="
-					left: {((editor.selectionStart.x - x1 + 0.5) / width) * 100}%;
-					top: {((editor.selectionStart.y - y1 + 0.5) / height) * 100}%;
+					left: {((atelier.selectionStart.x - x1 + 0.5) / width) * 100}%;
+					top: {((atelier.selectionStart.y - y1 + 0.5) / height) * 100}%;
 				"
 			></div>
 		</div>

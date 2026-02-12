@@ -3,13 +3,14 @@
 		"UP": ["ArrowUp"],
 		"DOWN": ["ArrowDown"],
 		"LEFT": ["ArrowLeft"],
-		"RIGHT": ["ArrowRight"]
+		"RIGHT": ["ArrowRight"],
+		"GOTO": ["g"]
 	},
 	"canvas": {
-		"STITCH": [" "],
+		"STITCH": ["Space", "Shift+Space"],
 		"UNSTITCH": ["Backspace", "Delete"],
-		"UNSTITCH_MOD": ["Ctrl+ "],
-		"EYEDROPPER": ["i", "Alt+ "]
+		"UNSTITCH_MOD": ["Ctrl+Space"],
+		"EYEDROPPER": ["i", "Alt+Space"]
 	},
 	"history": {
 		"UNDO": ["Ctrl+z"],
@@ -33,6 +34,7 @@
 		"EXPORT": ["Ctrl+e"],
 		"SAVE": ["Ctrl+s"],
 		"OPEN": ["Ctrl+o"],
+		"SETTINGS": ["Ctrl+,"],
 		"COLOR_PICKER": ["Ctrl+p"],
 		"CLEAR_LINEN": ["Ctrl+l"],
 		"TOGGLE_MUTE": ["Ctrl+m"],

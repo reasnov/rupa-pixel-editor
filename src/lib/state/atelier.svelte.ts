@@ -1,161 +1,188 @@
-import { type ColorHex } from '../types/index';
-import { sfx } from '../engine/audio';
-import { history } from '../engine/history';
+import { LinenState } from './linen.svelte.js';
+import { NeedleState } from './needle.svelte.js';
+import { PaletteState } from './palette.svelte.js';
+import { StudioState } from './studio.svelte.js';
+import { ProjectState } from './project.svelte.js';
+import { SelectionState } from './selection.svelte.js';
+import { history } from '../engine/history.js';
+import { sfx } from '../engine/audio.js';
+import { shuttle } from '../engine/shuttle.js';
 
 /**
- * The AtelierState: The central heart of the artisan's studio.
- * A pure reactive data container representing the current project state.
+ * The AtelierState: The root orchestrator of the artisan's studio.
+ * It delegates concerns to specialized sub-states.
  */
 export class AtelierState {
-	readonly version = __APP_VERSION__;
-	projectName = $state('Untitled Stitch');
-	currentFilePath = $state<string | null>(null);
-	lastSaved = $state<Date | null>(null);
-	clipboard = $state<{ width: number; height: number; data: ColorHex[] } | null>(null);
+    readonly version = __APP_VERSION__;
 
-	// --- The Linen (Grid) ---
-	linenWidth = $state(32);
-	linenHeight = $state(32);
-	stitches = $state<ColorHex[]>([]);
-	
-	// --- The Needle (Cursor) ---
-	needlePos = $state({ x: 0, y: 0 });
-	activeDye = $state<ColorHex>('#859900');
-	
-	palette = $state<ColorHex[]>([
-		'#073642', '#586e75', '#859900', '#2aa198', '#268bd2', 
-		'#6c71c4', '#d33682', '#dc322f', '#cb4b16', '#b58900'
-	]);
+    // Sub-states
+    linen = new LinenState();
+    needle = new NeedleState();
+    paletteState = new PaletteState();
+    studio = new StudioState();
+    project = new ProjectState();
+    selection = new SelectionState();
 
-	zoomLevel = $state(1);
-	
-	// --- Studio Flags ---
-	showDyeBasin = $state(false);
-	showPatternCatalog = $state(false);
-	showArtisanGuide = $state(false);
-	showArtifactCrate = $state(false);
-	
-	exportScale = $state(10);
-	exportBgColor = $state<string | 'transparent'>('transparent');
-	isMuted = $state(false);
-	isPicking = $state(false);
-	isAppReady = $state(false);
-	isNeedleVisible = $state(true);
-	
-	// Internal Flow States (LoomPad feedback)
-	isFlowStitch = $state(false);
-	isFlowUnstitch = $state(false);
-	isFlowSelect = $state(false);
+    // --- Legacy Compatibility Proxies (Read-only or Passthrough) ---
+    
+    get stitches() { return this.linen.stitches; }
+    set stitches(v) { this.linen.stitches = v; }
+    
+    get linenWidth() { return this.linen.width; }
+    set linenWidth(v) { this.linen.width = v; }
+    
+    get linenHeight() { return this.linen.height; }
+    set linenHeight(v) { this.linen.height = v; }
 
-	// Inactivity Logic
-	private inactivityTimer: any = null;
-	private readonly INACTIVITY_TIMEOUT = 20000;
+    get needlePos() { return this.needle.pos; }
+    set needlePos(v) { this.needle.pos = v; }
 
-	// Selection/Block mode
-	selectionStart = $state<{ x: number; y: number } | null>(null);
-	selectionEnd = $state<{ x: number; y: number } | null>(null);
+    get activeDye() { return this.paletteState.activeDye; }
+    set activeDye(v) { this.paletteState.activeDye = v; }
 
-	// Universal Escape Stack
-	private escapeStack: (() => void)[] = [];
+    get palette() { return this.paletteState.swatches; }
+    set palette(v) { this.paletteState.swatches = v; }
 
-	constructor(width = 32, height = 32) {
-		this.linenWidth = width;
-		this.linenHeight = height;
-		this.stitches = Array(width * height).fill('#eee8d5');
-		this.resetInactivityTimer();
-	}
+    get zoomLevel() { return this.studio.zoomLevel; }
+    set zoomLevel(v) { this.studio.zoomLevel = v; }
 
-	// --- Core State Management ---
+    get isMuted() { return this.studio.isMuted; }
+    set isMuted(v) { this.studio.isMuted = v; }
 
-	resetInactivityTimer() {
-		this.isNeedleVisible = true;
-		if (this.inactivityTimer) clearTimeout(this.inactivityTimer);
-		this.inactivityTimer = setTimeout(() => {
-			this.isNeedleVisible = false;
-		}, this.INACTIVITY_TIMEOUT);
-	}
+    get isPicking() { return this.studio.isPicking; }
+    set isPicking(v) { this.studio.isPicking = v; }
 
-	toggleMute() {
-		this.isMuted = !this.isMuted;
-	}
+    get isAppReady() { return this.studio.isAppReady; }
+    set isAppReady(v) { this.studio.isAppReady = v; }
 
-	setZoom(delta: number) {
-		const newZoom = this.zoomLevel + delta;
-		this.zoomLevel = Math.max(0.5, Math.min(5, Number(newZoom.toFixed(1))));
-		this.resetInactivityTimer();
-	}
+    get isNeedleVisible() { return this.needle.isVisible; }
+    set isNeedleVisible(v) { this.needle.isVisible = v; }
 
-	resetZoom() {
-		this.zoomLevel = 1;
-		this.resetInactivityTimer();
-	}
+    get projectName() { return this.project.name; }
+    set projectName(v) { this.project.name = v; }
 
-	selectPalette(index: number) {
-		if (index >= 0 && index < this.palette.length) {
-			this.activeDye = this.palette[index];
-		}
-		this.resetInactivityTimer();
-	}
+    get currentFilePath() { return this.project.currentFilePath; }
+    set currentFilePath(v) { this.project.currentFilePath = v; }
 
-	pushEscapeAction(fn: () => void) {
-		this.escapeStack.push(fn);
-	}
+    get lastSaved() { return this.project.lastSaved; }
+    set lastSaved(v) { this.project.lastSaved = v; }
 
-	popEscapeAction(fn: () => void) {
-		this.escapeStack = this.escapeStack.filter((item) => item !== fn);
-	}
+    get clipboard() { return this.project.clipboard; }
+    set clipboard(v) { this.project.clipboard = v; }
 
-	handleEscape() {
-		const lastAction = this.escapeStack.pop();
-		if (lastAction) {
-			lastAction();
-			return true;
-		}
-		return false;
-	}
+    get showDyeBasin() { return this.studio.showDyeBasin; }
+    set showDyeBasin(v) { this.studio.showDyeBasin = v; }
 
-	undo() {
-		const action = history.undo();
-		if (action) {
-			this.stitches[action.index] = action.oldColor;
-			sfx.playUnstitch();
-		}
-		this.resetInactivityTimer();
-	}
+    get showPatternCatalog() { return this.studio.showPatternCatalog; }
+    set showPatternCatalog(v) { this.studio.showPatternCatalog = v; }
 
-	redo() {
-		const action = history.redo();
-		if (action) {
-			this.stitches[action.index] = action.newColor;
-			sfx.playStitch();
-		}
-		this.resetInactivityTimer();
-	}
+    get showArtisanGuide() { return this.studio.showArtisanGuide; }
+    set showArtisanGuide(v) { this.studio.showArtisanGuide = v; }
 
-	// --- Derived Projections ---
+    get showArtifactCrate() { return this.studio.showArtifactCrate; }
+    set showArtifactCrate(v) { this.studio.showArtifactCrate = v; }
 
-	usedColors = $derived.by(() => {
-		const colors = new Set<string>();
-		this.stitches.forEach((color) => {
-			if (color !== '#eee8d5') colors.add(color);
-		});
-		return Array.from(colors);
-	});
+    get showLinenSettings() { return this.studio.showLinenSettings; }
+    set showLinenSettings(v) { this.studio.showLinenSettings = v; }
 
-	displayCoords = $derived.by(() => {
-		const calc = (pos: number, size: number) => {
-			const mid = Math.floor(size / 2);
-			return size % 2 === 0 ? (pos < mid ? pos - mid : pos - mid + 1) : pos - mid;
-		};
-		return { x: calc(this.needlePos.x, this.linenWidth), y: -calc(this.needlePos.y, this.linenHeight) };
-	});
+    get showArchivePattern() { return this.studio.showArchivePattern; }
+    set showArchivePattern(v) { this.studio.showArchivePattern = v; }
 
-	cameraTransform = $derived.by(() => {
-		if (this.zoomLevel <= 1) return `scale(${this.zoomLevel})`;
-		const xPos = ((this.needlePos.x + 0.5) / this.linenWidth) * 100;
-		const yPos = ((this.needlePos.y + 0.5) / this.linenHeight) * 100;
-		return `translate(${50 - xPos}%, ${50 - yPos}%) scale(${this.zoomLevel})`;
-	});
+    get showGoTo() { return this.studio.showGoTo; }
+    set showGoTo(v) { this.studio.showGoTo = v; }
+
+    get exportScale() { return this.studio.exportScale; }
+    set exportScale(v) { this.studio.exportScale = v; }
+
+    get exportBgColor() { return this.studio.exportBgColor; }
+    set exportBgColor(v) { this.studio.exportBgColor = v; }
+
+    get selectionStart() { return this.selection.start; }
+    set selectionStart(v) { this.selection.start = v; }
+
+    get selectionEnd() { return this.selection.end; }
+    set selectionEnd(v) { this.selection.end = v; }
+
+    // --- Derived Projections ---
+
+    usedColors = $derived.by(() => {
+        const colors = new Set<string>();
+        this.linen.stitches.forEach((color) => {
+            if (color !== null) colors.add(color);
+        });
+        return Array.from(colors);
+    });
+
+    displayCoords = $derived.by(() => {
+        const calc = (pos: number, size: number) => {
+            const mid = Math.floor(size / 2);
+            return size % 2 === 0 ? (pos < mid ? pos - mid : pos - mid + 1) : pos - mid;
+        };
+        return { 
+            x: calc(this.needle.pos.x, this.linen.width), 
+            y: -calc(this.needle.pos.y, this.linen.height) 
+        };
+    });
+
+    cameraTransform = $derived.by(() => {
+        if (this.studio.zoomLevel <= 1) return `scale(${this.studio.zoomLevel})`;
+        const xPos = ((this.needle.pos.x + 0.5) / this.linen.width) * 100;
+        const yPos = ((this.needle.pos.y + 0.5) / this.linen.height) * 100;
+        return `translate(${50 - xPos}%, ${50 - yPos}%) scale(${this.studio.zoomLevel})`;
+    });
+
+    // --- Passthrough Methods ---
+
+    resetInactivityTimer() { this.needle.resetInactivityTimer(); }
+    toggleMute() { this.studio.toggleMute(); }
+    setZoom(delta: number) { this.studio.setZoom(delta); }
+    resetZoom() { this.studio.resetZoom(); }
+    selectPalette(index: number) { this.paletteState.select(index); }
+    pushEscapeAction(fn: () => void) { this.studio.pushEscapeAction(fn); }
+    popEscapeAction(fn: () => void) { this.studio.popEscapeAction(fn); }
+    handleEscape() { return this.studio.handleEscape(); }
+
+    undo() {
+        const entry = history.undo();
+        if (entry) {
+            if (Array.isArray(entry)) {
+                // Revert in reverse order
+                for (let i = entry.length - 1; i >= 0; i--) {
+                    const action = entry[i];
+                    this.linen.stitches[action.index] = action.oldColor;
+                }
+            } else {
+                this.linen.stitches[entry.index] = entry.oldColor;
+            }
+            sfx.playUnstitch();
+        }
+        this.needle.resetInactivityTimer();
+    }
+
+    redo() {
+        const entry = history.redo();
+        if (entry) {
+            if (Array.isArray(entry)) {
+                for (const action of entry) {
+                    this.linen.stitches[action.index] = action.newColor;
+                }
+            } else {
+                this.linen.stitches[entry.index] = entry.newColor;
+            }
+            sfx.playStitch();
+        }
+        this.needle.resetInactivityTimer();
+    }
+
+    // New delegates for components using atelier instance directly
+    clearLinen() { shuttle.clearLinen(); }
+    pickDye() { shuttle.pickDye(); }
+    loadProject() { shuttle.load(); }
+    copySelection() { shuttle.copy(); }
+    cutSelection() { shuttle.cut(); }
+    pasteSelection() { shuttle.paste(); }
+    flipLinen(axis: 'horizontal' | 'vertical') { shuttle.flipLinen(axis); }
+    rotateLinen() { shuttle.rotateLinen(); }
 }
 
 export const atelier = new AtelierState();

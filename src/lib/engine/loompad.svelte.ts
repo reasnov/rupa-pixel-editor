@@ -1,9 +1,10 @@
-import shortcutsData from '../config/shortcuts.json';
+import shortcutsData from '../config/shortcuts.json' with { type: 'json' };
 
 export type LoomIntent = 
-    | 'MOVE_UP' | 'MOVE_DOWN' | 'MOVE_LEFT' | 'MOVE_RIGHT'
+    | 'MOVE_UP' | 'MOVE_DOWN' | 'MOVE_LEFT' | 'MOVE_RIGHT' | 'GOTO'
     | 'STITCH' | 'UNSTITCH' | 'PICK_DYE'
     | 'SAVE' | 'OPEN'
+    | 'OPEN_SETTINGS' | 'OPEN_ARCHIVE'
     | 'FLOW_STITCH' | 'FLOW_UNSTITCH' | 'FLOW_SELECT'
     | 'UNDO' | 'REDO' | 'ZOOM_IN' | 'ZOOM_OUT' | 'RESET_ZOOM'
     | 'OPEN_PALETTE' | 'OPEN_DYES' | 'OPEN_EXPORT' | 'OPEN_HELP'
@@ -39,8 +40,9 @@ export class LoomPadEngine {
     private loadPatterns() {
         const mapping: Record<string, LoomIntent> = {
             'UP': 'MOVE_UP', 'DOWN': 'MOVE_DOWN', 'LEFT': 'MOVE_LEFT', 'RIGHT': 'MOVE_RIGHT',
+            'GOTO': 'GOTO',
             'STITCH': 'STITCH', 'UNSTITCH': 'UNSTITCH', 'EYEDROPPER': 'PICK_DYE',
-            'SAVE': 'SAVE', 'OPEN': 'OPEN',
+            'SAVE': 'OPEN_ARCHIVE', 'OPEN': 'OPEN', 'SETTINGS': 'OPEN_SETTINGS',
             'FLOW_STITCH': 'FLOW_STITCH', 'FLOW_UNSTITCH': 'FLOW_UNSTITCH', 'FLOW_SELECT': 'FLOW_SELECT',
             'UNDO': 'UNDO', 'REDO': 'REDO', 'ZOOM_IN': 'ZOOM_IN', 'ZOOM_OUT': 'ZOOM_OUT', 'RESET_ZOOM': 'RESET_ZOOM',
             'COMMAND_PALETTE': 'OPEN_PALETTE', 'COLOR_PICKER': 'OPEN_DYES', 'EXPORT': 'OPEN_EXPORT',
@@ -58,11 +60,12 @@ export class LoomPadEngine {
                 if (!intent) return;
                 (keys as string[]).forEach(keyCombo => {
                     const parts = keyCombo.toLowerCase().split('+');
-                    let key = parts[parts.length - 1];
+                    let key = parts[parts.length - 1].trim();
+                    if (key === 'space') key = ' ';
                     if (key === 'ctrl' || key === 'control') key = 'control';
                     this.patterns.push({
                         intent,
-                        key: key === ' ' ? ' ' : key,
+                        key,
                         ctrl: parts.includes('ctrl') || parts.includes('control'),
                         shift: parts.includes('shift'),
                         alt: parts.includes('alt')

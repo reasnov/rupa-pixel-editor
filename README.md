@@ -1,4 +1,4 @@
-# Rupa Pixel Editor
+# Rupa Pixel Editor (Atelier)
 
 <p align="center">
   <img src="static/rupa-logo.png" alt="Rupa Logo" width="400">
@@ -6,9 +6,25 @@
 
 **Rupa Pixel Editor** is a professional-grade desktop application for creating pixel art through a keyboard-centric interface. Inspired by the philosophy of "Rupa" (form) and the traditional art of "Sulam" (Stitching), it offers a methodical, precise, and meditative drawing experience.
 
-Built with **Svelte 5** and **Electron**, Rupa eliminates the mouse in favor of absolute keyboard precision.
+Built with **Svelte 5** and **Electron**, Rupa treats the digital grid as a piece of fine **Linen** and the cursor as a **Needle**, turning every interaction into a meaningful stitch.
 
-**Live Demo**: <a href="https://reasnov.github.io/rupa-pixel-editor"><strong>✨ Try the Live Demo</strong></a>
+**Live Demo**: [**✨ Try the Live Demo**](https://reasnov.github.io/rupa-pixel-editor)
+
+---
+
+## 📖 Documentation
+
+The project documentation has been restructured for clarity and depth. Please refer to the following guides:
+
+- **[The Artisan's Vision](./docs/wiki/overview.md)**: Explore the core philosophy and "Cottagecore" aesthetic.
+- **[User Guide](./docs/USER_GUIDE.md)**: A complete manual for navigating the Atelier and mastering the Needle.
+- **[Terminology](./docs/wiki/terminology.md)**: Learn the language of craft used throughout the studio.
+- **[Technical Architecture](./docs/developers/architecture.md)**: In-depth look at Svelte 5 Runes, Electron integration, and the LoomPad engine.
+- **[Technical Specifications](./docs/developers/specs.md)**: Detailed grid mechanics, intent schemas, and design standards.
+- **[Project History](./docs/HISTORY.md)**: Changelogs and release milestones.
+- **[Security Policy](./SECURITY.md)**: Guidelines for reporting vulnerabilities.
+
+---
 
 ## ✨ Key Features
 
@@ -23,69 +39,52 @@ Built with **Svelte 5** and **Electron**, Rupa eliminates the mouse in favor of 
 
 ![The Artisan's Workshop](static/screenshots/screenshot-1.png)
 
-## ⌨️ Controls
+## ⌨️ Quick Controls
 
-| Key                             | Action                                |
-| :------------------------------ | :------------------------------------ |
-| `Arrow Keys`                    | Move Active Cell                      |
-| `Space`                         | Stitch (Color Pixel)                  |
-| `Backspace` / `Delete`          | Unstitch (Clear Pixel)                |
-| `Ctrl + Space`                  | Unstitch (Clear Pixel)                |
-| `Ctrl` (Hold)                   | **Stitch-Flow**: Auto-color on move   |
-| `Ctrl + Shift` (Hold)           | **Unstitch-Flow**: Auto-clear on move |
-| `Shift` (Hold)                  | **Block Selection**: Select area      |
-| `I` / `Alt + Space`             | Eyedropper (Pick color)               |
-| `C`                             | Open Color Picker                     |
-| `P` / `K`                       | Open Command Palette                  |
-| `E` / `Ctrl + S`                | Export Artwork                        |
-| `Ctrl + Z`                      | Undo                                  |
-| `Ctrl + Shift + Z` / `Ctrl + Y` | Redo                                  |
-| `?` / `F1`                      | Show Help                             |
-| `Esc`                           | Dismiss UI / Clear Selection          |
+| Key | Action |
+| :--- | :--- |
+| `Arrow Keys` | Move Active Cell |
+| `Space` | Stitch (Color Pixel) |
+| `Backspace` | Unstitch (Clear Pixel) |
+| `Ctrl` (Hold) | **Stitch-Flow**: Auto-color on move |
+| `Shift` (Hold) | **Block Selection**: Select area |
+| `[1-9, 0]` | Select Dye from Palette |
+| `P` / `K` | Open Pattern Catalog (Command Palette) |
+| `?` / `F1` | Show Help |
+
+*For the full list of controls, see the **[User Guide](./docs/USER_GUIDE.md)**.*
 
 ## 🚀 Getting Started
 
 ### Prerequisites
-
 - [Node.js](https://nodejs.org/) (v18 or higher)
 - [npm](https://www.npmjs.com/)
 
 ### Installation
-
 1. Clone the repository:
-
    ```bash
    git clone https://github.com/reasnov/rupa-pixel-editor.git
    cd rupa-pixel-editor
    ```
-
 2. Install dependencies:
    ```bash
    npm install
    ```
 
 ### Running the App
-
 Start the Vite development server and Electron window simultaneously:
-
 ```bash
 npm run dev:all
 ```
 
 ## 🛠 Tech Stack
-
 - **Framework**: [Svelte 5](https://svelte.dev/) (Runes)
 - **Desktop**: [Electron](https://www.electronjs.org/)
 - **Styling**: [Tailwind CSS 4.0](https://tailwindcss.com/)
 - **Language**: [TypeScript](https://www.typescriptlang.org/)
 
 ## 📜 License
-
 This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
-
-## 🤝 Contributing
-
-We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
 ---
 

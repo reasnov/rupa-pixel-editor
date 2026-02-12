@@ -77,35 +77,36 @@ canvas,
 	border: 2px solid #eee8d5;
 	box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
 	backdrop-filter: blur(4px);
+	border-radius: 16px;
 }
 
 .side-panel-left {
 	border-left: none;
-	border-radius: 0 24px 24px 0;
+	border-radius: 0 16px 16px 0;
 }
 
 .side-panel-right {
 	border-right: none;
-	border-radius: 24px 0 0 24px;
+	border-radius: 16px 0 0 16px;
 }
 
 .bottom-panel {
 	border-bottom: none;
-	border-radius: 32px 32px 0 0;
+	border-radius: 20px 20px 0 0;
 }
 
 .hud-panel {
 	background: #fdf6e3;
 	border-bottom: 2px solid #eee8d5;
 	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
-	border-radius: 0 0 24px 24px;
+	border-radius: 0 0 16px 16px;
 }
 
 /* The Artisan Frame (The Loom) */
 .artisan-frame {
 	background: #eee8d5;
 	border: 16px solid #ffffff;
-	border-radius: 40px;
+	border-radius: 60px;
 	box-shadow:
 		0 10px 30px rgba(0, 0, 0, 0.05),
 		inset 0 0 20px rgba(0, 0, 0, 0.02);
@@ -117,7 +118,7 @@ canvas,
 	position: absolute;
 	inset: -8px;
 	border: 2px solid rgba(0, 0, 0, 0.03);
-	border-radius: 44px;
+	border-radius: 64px;
 	pointer-events: none;
 }
 
@@ -164,7 +165,7 @@ canvas,
 	border: 1px solid #eee8d5;
 	color: var(--color-studio-text);
 	padding: 6px 12px;
-	border-radius: 12px;
+	border-radius: 20px;
 	font-family: 'EB Garamond', serif;
 	font-style: italic;
 	font-size: 13px;
@@ -188,5 +189,39 @@ canvas,
 }
 
 .rounded-studio {
-	border-radius: 12px;
+	border-radius: 24px;
+}
+
+.artisan-primary-btn {
+	background: var(--color-brand);
+	color: white;
+	padding: 12px 24px;
+	border-radius: 24px;
+	font-family: 'Tiny5', system-ui;
+	text-transform: uppercase;
+	letter-spacing: 0.1em;
+	transition: all 0.2s ease;
+	border: 4px solid rgba(255, 255, 255, 0.2);
+	box-shadow: 0 4px 15px rgba(211, 54, 130, 0.3);
+}
+
+.artisan-primary-btn:hover {
+	transform: scale(1.02);
+	box-shadow: 0 6px 20px rgba(211, 54, 130, 0.4);
+}
+
+.artisan-secondary-btn {
+	background: white;
+	color: var(--color-studio-text);
+	padding: 12px 24px;
+	border-radius: 24px;
+	font-family: 'EB Garamond', serif;
+	font-style: italic;
+	transition: all 0.2s ease;
+	border: 1px solid #eee8d5;
+}
+
+.artisan-secondary-btn:hover {
+	background: #fdf6e3;
+	border-color: var(--color-brand);
 }

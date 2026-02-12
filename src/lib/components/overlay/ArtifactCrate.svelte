@@ -1,151 +1,89 @@
 <script lang="ts">
-	import { atelier } from '../../state/atelier.svelte';
-	import { ExportEngine } from '../../engine/export';
-	import DyeBasin from './DyeBasin.svelte';
-	import { onMount } from 'svelte';
+	import { atelier } from '../../state/atelier.svelte.js';
+	import { ExportEngine } from '../../engine/export.js';
+	import Modal from '../ui/Modal.svelte';
 
-	let { onExport } = $props<{
-		onExport: (format: 'png' | 'svg', scale: number, bgColor: string | 'transparent') => void;
+	let { onExport, onClose = () => (atelier.showArtifactCrate = false) } = $props<{ 
+		onExport: (format: 'svg' | 'png', scale: number, bgColor: string) => void;
+		onClose?: () => void;
 	}>();
 
-	let customWidth = $state(atelier.linenWidth * atelier.exportScale);
-	let isCustom = $state(false);
-	let previewUrl = $state('');
-	let showBgPicker = $state(false);
-
-	const presets = [0.5, 1, 2, 4, 10, 20];
-	const bgPresets = [
-		{ label: 'Transparent', value: 'transparent' },
-		{ label: 'Studio Cream', value: '#fdf6e3' },
-		{ label: 'White', value: '#ffffff' },
-		{ label: 'Black', value: '#000000' }
-	];
-
-	async function updatePreview() {
-		previewUrl = await ExportEngine.toPNG(
-			atelier.linenWidth,
-			atelier.linenHeight,
-			atelier.stitches,
-			5,
-			atelier.exportBgColor
-		);
-	}
-
-	function handlePresetClick(s: number) {
-		atelier.exportScale = s;
-		customWidth = atelier.linenWidth * s;
-		isCustom = false;
-	}
-
-	function handleCustomInput(e: Event) {
-		const val = parseInt((e.target as HTMLInputElement).value);
-		if (!isNaN(val) && val > 0) {
-			customWidth = val;
-			atelier.exportScale = val / atelier.linenWidth;
-			isCustom = true;
-		}
-	}
-
-	function close() {
-		atelier.showArtifactCrate = false;
-	}
-
-	$effect(() => {
-		atelier.exportBgColor;
-		updatePreview();
-	});
-
-	$effect(() => {
-		atelier.pushEscapeAction(close);
-		return () => atelier.popEscapeAction(close);
-	});
-
-	onMount(() => {
-		updatePreview();
-	});
+	let format = $state<'svg' | 'png'>('png');
 </script>
 
-<div
-	class="fixed inset-0 z-[1000] flex items-center justify-center bg-black/20 backdrop-blur-sm"
-	onmousedown={(e) => (e.target as HTMLElement).id === 'artifact-overlay' && close()}
-	id="artifact-overlay"
->
-	<div class="flex max-h-[90vh] w-[500px] flex-col gap-6 overflow-y-auto rounded-[2.5rem] border-8 border-white bg-[#fdf6e3] p-8 shadow-2xl ring-1 ring-black/5">
-		<div class="flex items-center justify-between">
-			<span class="font-serif text-2xl text-brand italic">Artifact Crate</span>
-			<button onclick={close} class="text-[10px] font-bold tracking-widest uppercase opacity-30 transition-opacity hover:opacity-100">Cancel</button>
-		</div>
-
-		<div class="flex flex-col gap-3">
-			<span class="text-[10px] font-black tracking-wider uppercase opacity-30">Linen Preview</span>
-			<div class="artisan-checker relative flex h-48 items-center justify-center overflow-hidden rounded-2xl border-4 border-white bg-[#eee8d5] shadow-inner">
-				{#if previewUrl}
-					<img src={previewUrl} alt="Preview" class="max-h-full max-w-full shadow-lg" style="image-rendering: pixelated;" />
-				{/if}
-			</div>
-		</div>
-
-		<div class="grid grid-cols-2 gap-6">
-			<div class="flex flex-col gap-3">
-				<span class="text-[10px] font-black tracking-wider uppercase opacity-30">Scaling</span>
-				<div class="flex flex-wrap gap-2">
-					{#each presets as s}
-						<button
-							class="rounded-full border-2 px-2.5 py-1 font-mono text-[10px] transition-all {!isCustom && atelier.exportScale === s ? 'border-brand bg-brand text-white' : 'border-black/5 bg-white opacity-60 hover:opacity-100'}"
-							onclick={() => handlePresetClick(s)}
-						>{s}x</button>
-					{/each}
+<Modal title="Artifact Crate" subtitle="Prepare Artifacts for Export" icon="🧺" {onClose}>
+	<div class="flex flex-col gap-8">
+		<!-- Format Selection -->
+		<div class="grid grid-cols-2 gap-4">
+			<button 
+				class="flex flex-col items-center gap-3 rounded-3xl border-2 p-8 transition-all {format === 'png' ? 'border-brand bg-brand/5' : 'border-black/5 bg-white/40 opacity-40 hover:opacity-100'}"
+				onclick={() => format = 'png'}
+			>
+				<span class="text-4xl">🖼️</span>
+				<div class="text-center">
+					<h3 class="font-serif text-sm font-bold uppercase tracking-tight">Raster PNG</h3>
+					<span class="font-serif text-[9px] font-bold uppercase tracking-widest opacity-40">Pixel Perfect</span>
 				</div>
-				<div class="relative mt-1">
-					<input type="number" value={Math.round(customWidth)} oninput={handleCustomInput} class="w-full rounded-xl border-2 border-black/5 bg-white/50 px-3 py-1.5 font-mono text-xs transition-colors outline-none focus:border-brand/30" />
-					<span class="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-[8px] font-bold text-studio-text italic opacity-20">px</span>
-				</div>
-			</div>
-
-			<div class="flex flex-col gap-3">
-				<span class="text-[10px] font-black tracking-wider uppercase opacity-30">Background Dye</span>
-				<div class="flex flex-col gap-2">
-					{#each bgPresets as opt}
-						<button
-							class="flex items-center gap-2 rounded-lg border-2 p-1.5 font-serif text-[10px] italic transition-all {atelier.exportBgColor === opt.value ? 'border-brand bg-white shadow-sm' : 'border-transparent opacity-60 hover:opacity-100'}"
-							onclick={() => (atelier.exportBgColor = opt.value)}
-						>
-							<div class="h-3 w-3 rounded-sm border border-black/10 {opt.value === 'transparent' ? 'artisan-checker' : ''}" style="background-color: {opt.value === 'transparent' ? 'transparent' : opt.value};"></div>
-							{opt.label}
-						</button>
-					{/each}
-					<button
-						class="flex items-center gap-2 rounded-lg border-2 p-1.5 font-serif text-[10px] italic transition-all {!bgPresets.some(p => p.value === atelier.exportBgColor) ? 'border-brand bg-white shadow-sm' : 'border-transparent opacity-60 hover:opacity-100'}"
-						onclick={() => { if (atelier.exportBgColor === 'transparent') atelier.exportBgColor = '#fdf6e3'; showBgPicker = true; }}
-					>
-						<div class="via-sage-300 h-3 w-3 rounded-sm border border-black/10 bg-gradient-to-tr from-rose-300 to-sky-300" style="background-color: {!bgPresets.some(p => p.value === atelier.exportBgColor) ? atelier.exportBgColor : ''}"></div>
-						Custom Dye...
-					</button>
-				</div>
-			</div>
-		</div>
-
-		<div class="mt-2 flex gap-3">
-			<button class="flex flex-1 flex-col items-center rounded-2xl bg-studio-teal py-3 font-serif text-white italic shadow-md transition-all hover:scale-[1.02] active:scale-100" onclick={() => onExport('png', atelier.exportScale, atelier.exportBgColor)}>
-				<span class="text-lg">Export PNG</span>
-				<span class="mt-1 text-[8px] font-bold tracking-widest uppercase opacity-60">Raster Print</span>
 			</button>
-			<button class="flex flex-1 flex-col items-center rounded-2xl bg-brand py-3 font-serif text-white italic shadow-md transition-all hover:scale-[1.02] active:scale-100" onclick={() => onExport('svg', 1, atelier.exportBgColor)}>
-				<span class="text-lg">Export SVG</span>
-				<span class="mt-1 text-[8px] font-bold tracking-widest uppercase opacity-60">Vector Tapestry</span>
+			<button 
+				class="flex flex-col items-center gap-3 rounded-3xl border-2 p-8 transition-all {format === 'svg' ? 'border-brand bg-brand/5' : 'border-black/5 bg-white/40 opacity-40 hover:opacity-100'}"
+				onclick={() => format = 'svg'}
+			>
+				<span class="text-4xl">📐</span>
+				<div class="text-center">
+					<h3 class="font-serif text-sm font-bold uppercase tracking-tight">Vector SVG</h3>
+					<span class="font-serif text-[9px] font-bold uppercase tracking-widest opacity-40">Infinite Scale</span>
+				</div>
 			</button>
 		</div>
+
+		<!-- Settings -->
+		<div class="flex flex-col gap-6 rounded-3xl border border-black/5 bg-white/40 p-8">
+			<div class="flex items-center justify-between">
+				<div class="flex flex-col gap-1">
+					<span class="font-serif text-sm font-bold uppercase tracking-tight opacity-60">Artifact Scale</span>
+					<span class="font-serif text-[10px] opacity-40">Multiplier for raster output size</span>
+				</div>
+				<input 
+					type="number" 
+					bind:value={atelier.studio.exportScale} 
+					min="1" 
+					max="100"
+					class="w-24 rounded-xl border border-black/10 bg-white px-4 py-2 font-mono text-lg focus:outline-none"
+				/>
+			</div>
+
+			<div class="flex items-center justify-between">
+				<div class="flex flex-col gap-1">
+					<span class="font-serif text-sm font-bold uppercase tracking-tight opacity-60">Background</span>
+					<span class="font-serif text-[10px] opacity-40">Fill empty stitches with color</span>
+				</div>
+				<div class="flex gap-2">
+					<button 
+						class="h-10 w-10 rounded-full border-2 {atelier.studio.exportBgColor === 'transparent' ? 'border-brand' : 'border-black/5'}"
+						style="background: repeating-conic-gradient(#eee8d5 0% 25%, #fff 0% 50%) 50% / 10px 10px;"
+						onclick={() => atelier.studio.exportBgColor = 'transparent'}
+						title="Transparent"
+					></button>
+					<button 
+						class="h-10 w-10 rounded-full border-2 {atelier.studio.exportBgColor === '#eee8d5' ? 'border-brand' : 'border-black/5'} bg-[#eee8d5]"
+						onclick={() => atelier.studio.exportBgColor = '#eee8d5'}
+						title="Studio Cream"
+					></button>
+					<button 
+						class="h-10 w-10 rounded-full border-2 {atelier.studio.exportBgColor === '#000000' ? 'border-brand' : 'border-black/5'} bg-black"
+						onclick={() => atelier.studio.exportBgColor = '#000000'}
+						title="Deep Black"
+					></button>
+				</div>
+			</div>
+		</div>
+
+		<button 
+			class="artisan-primary-btn w-full py-5 text-xl"
+			onclick={() => onExport(format, atelier.studio.exportScale, atelier.studio.exportBgColor)}
+		>
+			Weave & Export Artifact
+		</button>
 	</div>
-</div>
-
-{#if showBgPicker}
-	<DyeBasin bind:value={atelier.exportBgColor} onClose={() => (showBgPicker = false)} title="Background Dye" />
-{/if}
-
-<style>
-	.artisan-checker {
-		background-image: linear-gradient(45deg, #eee8d5 25%, transparent 25%), linear-gradient(-45deg, #eee8d5 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #eee8d5 75%), linear-gradient(-45deg, transparent 75%, #eee8d5 75%);
-		background-size: 10px 10px;
-		background-position: 0 0, 0 5px, 5px -5px, -5px 0px;
-	}
-</style>
+</Modal>

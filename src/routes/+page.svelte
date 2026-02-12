@@ -1,24 +1,28 @@
 <script lang="ts">
-	import { atelier } from '$lib/state/atelier.svelte';
-	import { shuttle } from '$lib/engine/shuttle';
-	import { loom } from '$lib/engine/loom.svelte';
-	import { loompad } from '$lib/engine/loompad.svelte';
-	import { ExportEngine } from '$lib/engine/export';
+	import { atelier } from '$lib/state/atelier.svelte.js';
+	import { shuttle } from '$lib/engine/shuttle.js';
+	import { loom } from '$lib/engine/loom.svelte.js';
+	import { loompad } from '$lib/engine/loompad.svelte.js';
+	import { ExportEngine } from '$lib/engine/export.js';
 	
-	// Component Modules
-	import SplashScreen from '$lib/components/brand/SplashScreen.svelte';
+	// Layout Containers
+	import TopBar from '$lib/components/hud/TopBar.svelte';
+	import LeftBar from '$lib/components/hud/LeftBar.svelte';
+	import RightBar from '$lib/components/hud/RightBar.svelte';
+	import BottomBar from '$lib/components/hud/BottomBar.svelte';
+
+	// Canvas
 	import Linen from '$lib/components/canvas/Linen.svelte';
-	import Header from '$lib/components/hud/Header.svelte';
-	import DyePalette from '$lib/components/hud/DyePalette.svelte';
-	import NeedleStats from '$lib/components/hud/NeedleStats.svelte';
-	import WorkshopTools from '$lib/components/hud/WorkshopTools.svelte';
-	import DebugBar from '$lib/components/hud/DebugBar.svelte';
+	import SplashScreen from '$lib/components/brand/SplashScreen.svelte';
 	
 	// Overlay Modules
 	import DyeBasin from '$lib/components/overlay/DyeBasin.svelte';
 	import PatternCatalog from '$lib/components/overlay/PatternCatalog.svelte';
 	import ArtifactCrate from '$lib/components/overlay/ArtifactCrate.svelte';
 	import ArtisanGuide from '$lib/components/overlay/ArtisanGuide.svelte';
+	import ArchivePattern from '$lib/components/overlay/ArchivePattern.svelte';
+	import LinenSettings from '$lib/components/overlay/LinenSettings.svelte';
+	import GoToModal from '$lib/components/overlay/GoToModal.svelte';
 	
 	import { onMount } from 'svelte';
 
@@ -28,14 +32,14 @@
 		bgColor: string | 'transparent' = 'transparent'
 	) {
 		if (format === 'svg') {
-			const svg = ExportEngine.toSVG(atelier.linenWidth, atelier.linenHeight, atelier.stitches, bgColor);
+			const svg = ExportEngine.toSVG(atelier.linen.width, atelier.linen.height, atelier.linen.stitches, bgColor);
 			const blob = new Blob([svg], { type: 'image/svg+xml' });
 			download(URL.createObjectURL(blob), 'stitch-art.svg');
 		} else {
-			const dataUrl = await ExportEngine.toPNG(atelier.linenWidth, atelier.linenHeight, atelier.stitches, scale, bgColor);
+			const dataUrl = await ExportEngine.toPNG(atelier.linen.width, atelier.linen.height, atelier.linen.stitches, scale, bgColor);
 			download(dataUrl, 'stitch-art.png');
 		}
-		atelier.showArtifactCrate = false;
+		atelier.studio.showArtifactCrate = false;
 	}
 
 	function download(url: string, filename: string) {
@@ -46,7 +50,7 @@
 	}
 
 	onMount(() => {
-		const backupInterval = setInterval(() => shuttle.backup(), 10 * 60 * 1000);
+		const backupInterval = setInterval(() => shuttle.persistence.backup(), 10 * 60 * 1000);
 		
 		const onKeyDown = (e: KeyboardEvent) => loom.handleInput(e, 'down');
 		const onKeyUp = (e: KeyboardEvent) => loom.handleInput(e, 'up');
@@ -64,31 +68,42 @@
 
 <SplashScreen />
 
-{#if atelier.showArtisanGuide}
-	<ArtisanGuide />
+{#if atelier.studio.showArtisanGuide}
+	<ArtisanGuide onClose={() => (atelier.studio.showArtisanGuide = false)} />
 {/if}
 
-{#if atelier.showPatternCatalog}
-	<PatternCatalog />
+{#if atelier.studio.showPatternCatalog}
+	<PatternCatalog onClose={() => (atelier.studio.showPatternCatalog = false)} />
 {/if}
 
-{#if atelier.showDyeBasin}
-	<DyeBasin bind:value={atelier.activeDye} onClose={() => (atelier.showDyeBasin = false)} />
+{#if atelier.studio.showDyeBasin}
+	<DyeBasin value={atelier.paletteState.activeDye} onClose={() => (atelier.studio.showDyeBasin = false)} />
 {/if}
 
-{#if atelier.showArtifactCrate}
-	<ArtifactCrate onExport={exportImage} />
+{#if atelier.studio.showArtifactCrate}
+	<ArtifactCrate onExport={exportImage} onClose={() => (atelier.studio.showArtifactCrate = false)} />
 {/if}
 
-<Header />
-<DyePalette />
-<NeedleStats />
-<DebugBar />
+{#if atelier.studio.showArchivePattern}
+	<ArchivePattern onClose={() => (atelier.studio.showArchivePattern = false)} />
+{/if}
+
+{#if atelier.studio.showLinenSettings}
+	<LinenSettings onClose={() => (atelier.studio.showLinenSettings = false)} />
+{/if}
+
+{#if atelier.studio.showGoTo}
+	<GoToModal onClose={() => (atelier.studio.showGoTo = false)} />
+{/if}
+
+<!-- HUD Bars -->
+<TopBar />
+<LeftBar />
+<RightBar />
+<BottomBar />
 
 <div class="relative flex h-screen flex-1 items-center justify-center overflow-hidden">
 	<div class="artisan-frame flex h-[80vh] w-[82vw] items-center justify-center overflow-hidden">
 		<Linen />
 	</div>
 </div>
-
-<WorkshopTools />

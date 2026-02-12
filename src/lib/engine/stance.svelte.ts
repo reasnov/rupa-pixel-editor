@@ -1,4 +1,5 @@
 import { atelier } from '../state/atelier.svelte';
+import { loompad } from './loompad.svelte';
 
 export type StanceType = 'RESTING' | 'THREADING' | 'UNRAVELLING' | 'LOOMING' | 'PICKING';
 
@@ -11,55 +12,25 @@ interface StanceDescriptor {
 }
 
 export class StanceEngine {
-    // Current stance is derived automatically from the Atelier's raw flags
     current = $derived.by((): StanceDescriptor => {
         if (atelier.isPicking) {
-            return {
-                type: 'PICKING',
-                label: 'Picking Dye',
-                icon: '📍',
-                color: 'var(--color-brand)',
-                isPulse: true
-            };
+            return { type: 'PICKING', label: 'Picking Dye', icon: '📍', color: 'var(--color-brand)', isPulse: true };
         }
 
-        if (atelier.isFlowSelect) {
-            return {
-                type: 'LOOMING',
-                label: 'Block Looming',
-                icon: '✨',
-                color: 'var(--color-brand)',
-                isPulse: true
-            };
+        // Truth comes directly from the physical chord held on the LoomPad
+        if (loompad.isCtrlActive && loompad.isShiftActive) {
+            return { type: 'UNRAVELLING', label: 'Unravelling', icon: '🧶', color: 'var(--color-brand)', isPulse: true };
         }
 
-        if (atelier.isFlowUnstitch) {
-            return {
-                type: 'UNRAVELLING',
-                label: 'Unravelling',
-                icon: '🧶',
-                color: 'var(--color-brand)',
-                isPulse: true
-            };
+        if (loompad.isShiftActive) {
+            return { type: 'LOOMING', label: 'Block Looming', icon: '✨', color: 'var(--color-brand)', isPulse: true };
         }
 
-        if (atelier.isFlowStitch) {
-            return {
-                type: 'THREADING',
-                label: 'Threading',
-                icon: '🧵',
-                color: 'var(--color-studio-teal)',
-                isPulse: true
-            };
+        if (loompad.isCtrlActive) {
+            return { type: 'THREADING', label: 'Threading', icon: '🧵', color: 'var(--color-studio-teal)', isPulse: true };
         }
 
-        return {
-            type: 'RESTING',
-            label: 'Studio Ready',
-            icon: '',
-            color: 'var(--color-studio-text)',
-            isPulse: false
-        };
+        return { type: 'RESTING', label: 'Studio Ready', icon: '', color: 'var(--color-studio-text)', isPulse: false };
     });
 }
 

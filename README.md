@@ -1,10 +1,12 @@
 # Rupa Pixel Editor
 
+<p align="center">
+  <img src="static/rupa-logo.png" alt="Rupa Logo" width="400">
+</p>
+
 **Rupa Pixel Editor** is a professional-grade desktop application for creating pixel art through a keyboard-centric interface. Inspired by the philosophy of "Rupa" (form) and the traditional art of "Sulam" (Stitching), it offers a methodical, precise, and meditative drawing experience.
 
 Built with **Svelte 5** and **Electron**, Rupa eliminates the mouse in favor of absolute keyboard precision.
-
-![Rupa Logo](static/rupa-logo.png)
 
 ## ✨ Key Features
 

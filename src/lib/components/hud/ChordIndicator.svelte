@@ -3,7 +3,7 @@
 	import { fade, slide } from 'svelte/transition';
 </script>
 
-<div class="pointer-events-none fixed top-6 right-6 z-50 flex flex-col items-end gap-2">
+<div class="pointer-events-none fixed top-6 right-6 z-[3000] flex flex-col items-end gap-2">
 	{#if loompad.activeKeys.size > 0}
 		<div 
 			transition:fade

@@ -57,6 +57,29 @@
 					/>
 				</div>
 			</div>
+
+			<div class="h-px w-full bg-black/5"></div>
+
+			<div class="flex items-center justify-between">
+				<div class="flex flex-col gap-1">
+					<span class="font-serif text-sm font-bold tracking-tight uppercase opacity-60"
+						>Linen Backdrop</span
+					>
+					<span class="font-serif text-[10px] opacity-40">Visual background color</span>
+				</div>
+				<div class="flex items-center gap-3">
+					<div
+						class="h-10 w-10 rounded-xl border-2 border-white shadow-sm artisan-checker-small"
+						style="background-color: {atelier.studio.canvasBgColor};"
+					></div>
+					<input
+						type="color"
+						bind:value={atelier.studio.canvasBgColor}
+						class="h-10 w-16 cursor-pointer rounded-xl border border-black/5 bg-white p-1"
+					/>
+				</div>
+			</div>
+
 			<p class="font-serif text-[10px] leading-relaxed italic opacity-40">
 				Note: Resizing will center your current work on the new frame. Large dimensions may affect
 				performance in certain environments.

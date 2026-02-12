@@ -16,6 +16,9 @@ export class StudioState {
 	showArchivePattern = $state(false);
 	showGoTo = $state(false);
 
+	// Environment Settings
+	canvasBgColor = $state('#eee8d5'); // Studio Cream (Default)
+
 	// Export Settings
 	exportScale = $state(10);
 	exportBgColor = $state<string | 'transparent'>('transparent');

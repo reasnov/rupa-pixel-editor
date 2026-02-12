@@ -17,7 +17,7 @@
 		--grid-cols: {atelier.linen.width}; 
 		--grid-rows: {atelier.linen.height}; 
 		transform: {atelier.cameraTransform};
-		background-color: #eee8d5;
+		background-color: {atelier.studio.canvasBgColor};
 	"
 >
 	<LinenGuides />

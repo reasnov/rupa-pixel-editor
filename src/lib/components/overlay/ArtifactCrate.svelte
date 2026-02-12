@@ -3,12 +3,32 @@
 	import { ExportEngine } from '../../engine/export.js';
 	import Modal from '../ui/Modal.svelte';
 
+	import { onMount } from 'svelte';
+
 	let { onExport, onClose = () => (atelier.showArtifactCrate = false) } = $props<{
 		onExport: (format: 'svg' | 'png', scale: number, bgColor: string) => void;
 		onClose?: () => void;
 	}>();
 
 	let format = $state<'svg' | 'png'>('png');
+
+	// HSLA / Custom color state
+	let customBg = $state(atelier.studio.canvasBgColor);
+
+	onMount(() => {
+		// Auto-match linen backdrop if it's customized
+		if (atelier.studio.canvasBgColor !== '#eee8d5') {
+			atelier.studio.exportBgColor = atelier.studio.canvasBgColor;
+			customBg = atelier.studio.canvasBgColor;
+		}
+	});
+
+	$effect(() => {
+		// If user changes custom color input, update the export bg
+		if (atelier.studio.exportBgColor !== 'transparent' && atelier.studio.exportBgColor !== '#eee8d5' && atelier.studio.exportBgColor !== '#000000') {
+			atelier.studio.exportBgColor = customBg;
+		}
+	});
 </script>
 
 <Modal title="Artifact Crate" subtitle="Prepare Artifacts for Export" icon="🧺" {onClose}>
@@ -65,14 +85,16 @@
 				/>
 			</div>
 
-			<div class="flex items-center justify-between">
+			<div class="h-px w-full bg-black/5"></div>
+
+			<div class="flex flex-col gap-4">
 				<div class="flex flex-col gap-1">
 					<span class="font-serif text-sm font-bold tracking-tight uppercase opacity-60"
 						>Background</span
 					>
 					<span class="font-serif text-[10px] opacity-40">Fill empty stitches with color</span>
 				</div>
-				<div class="flex gap-2">
+				<div class="flex flex-wrap items-center gap-3">
 					<button
 						class="h-10 w-10 rounded-xl border-2 {atelier.studio.exportBgColor === 'transparent'
 							? 'border-brand'
@@ -95,7 +117,36 @@
 						onclick={() => (atelier.studio.exportBgColor = '#000000')}
 						title="Deep Black"
 					></button>
+
+					<!-- Custom Option -->
+					<div class="flex items-center gap-2">
+						<button
+							class="h-10 w-10 rounded-xl border-2 {atelier.studio.exportBgColor === customBg
+								? 'border-brand'
+								: 'border-black/5'} artisan-checker-small"
+							style="background-color: {customBg};"
+							onclick={() => (atelier.studio.exportBgColor = customBg)}
+							title="Custom Backdrop"
+						></button>
+						<input
+							type="color"
+							bind:value={customBg}
+							class="h-10 w-16 cursor-pointer rounded-xl border border-black/5 bg-white p-1"
+						/>
+					</div>
 				</div>
+
+				{#if atelier.studio.canvasBgColor !== '#eee8d5'}
+					<button
+						onclick={() => {
+							customBg = atelier.studio.canvasBgColor;
+							atelier.studio.exportBgColor = customBg;
+						}}
+						class="flex items-center gap-2 font-serif text-[10px] font-bold tracking-widest uppercase text-brand opacity-60 hover:opacity-100"
+					>
+						<span>🎨</span> Match Linen Backdrop
+					</button>
+				{/if}
 			</div>
 		</div>
 

@@ -2,6 +2,7 @@
 	import { atelier } from '../../state/atelier.svelte.js';
 	import { fade, scale } from 'svelte/transition';
 	import { untrack } from 'svelte';
+	import { SpinnerEngine } from '../../engine/spinner.js';
 	import DyeSlider from './DyeSlider.svelte';
 
 	let { value = $bindable(), onClose } = $props<{ value: string; onClose: () => void }>();
@@ -13,102 +14,21 @@
 	let a = $state(1); // 0.0 to 1.0
 
 	$effect(() => {
-		const hsla = hexToHsla(value);
+		const fiber = SpinnerEngine.unravel(value);
 		untrack(() => {
-			h = hsla.h;
-			s = hsla.s;
-			l = hsla.l;
-			a = hsla.a / 100;
+			h = fiber.h;
+			s = fiber.s;
+			l = fiber.l;
+			a = fiber.a;
 		});
 	});
 
 	$effect(() => {
-		const newHex = hslaToHex(h, s, l, a);
+		const newThread = SpinnerEngine.spin({ h, s, l, a });
 		untrack(() => {
-			value = newHex;
+			value = newThread;
 		});
 	});
-
-	function hexToHsla(hex: string) {
-		let r = 0,
-			g = 0,
-			b = 0,
-			alpha = 1;
-
-		if (hex.length === 4 || hex.length === 5) {
-			r = parseInt(hex[1] + hex[1], 16);
-			g = parseInt(hex[2] + hex[2], 16);
-			b = parseInt(hex[3] + hex[3], 16);
-			if (hex.length === 5) alpha = parseInt(hex[4] + hex[4], 16) / 255;
-		} else if (hex.length === 7 || hex.length === 9) {
-			r = parseInt(hex.substring(1, 3), 16);
-			g = parseInt(hex.substring(3, 5), 16);
-			b = parseInt(hex.substring(5, 7), 16);
-			if (hex.length === 9) alpha = parseInt(hex.substring(7, 9), 16) / 255;
-		}
-
-		r /= 255;
-		g /= 255;
-		b /= 255;
-
-		const max = Math.max(r, g, b),
-			min = Math.min(r, g, b);
-		let h_val = 0,
-			s_val = 0,
-			l_val = (max + min) / 2;
-
-		if (max !== min) {
-			const d = max - min;
-			s_val = l_val > 0.5 ? d / (2 - max - min) : d / (max + min);
-			switch (max) {
-				case r:
-					h_val = (g - b) / d + (g < b ? 6 : 0);
-					break;
-				case g:
-					h_val = (b - r) / d + 2;
-					break;
-				case b:
-					h_val = (r - g) / d + 4;
-					break;
-			}
-			h_val /= 6;
-		}
-		return { h: h_val * 360, s: s_val * 100, l: l_val * 100, a: alpha * 100 };
-	}
-
-	function hslaToHex(h_val: number, s_val: number, l_val: number, a_val: number) {
-		h_val /= 360;
-		s_val /= 100;
-		l_val /= 100;
-		let r, g, b;
-		if (s_val === 0) {
-			r = g = b = l_val;
-		} else {
-			const q = l_val < 0.5 ? l_val * (1 + s_val) : l_val + s_val - l_val * s_val;
-			const p = 2 * l_val - q;
-			const hue2rgb = (t: number) => {
-				if (t < 0) t += 1;
-				if (t > 1) t -= 1;
-				if (t < 1 / 6) return p + (q - p) * 6 * t;
-				if (t < 1 / 2) return q;
-				if (t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6;
-				return p;
-			};
-			r = hue2rgb(h_val + 1 / 3);
-			g = hue2rgb(h_val);
-			b = hue2rgb(h_val - 1 / 3);
-		}
-		const toHex = (x: number) =>
-			Math.round(x * 255)
-				.toString(16)
-				.padStart(2, '0');
-
-		const alphaHex = Math.round(a_val * 255)
-			.toString(16)
-			.padStart(2, '0');
-
-		return `#${toHex(r)}${toHex(g)}${toHex(b)}${alphaHex === 'ff' ? '' : alphaHex}`;
-	}
 </script>
 
 <div

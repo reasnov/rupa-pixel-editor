@@ -50,4 +50,4 @@ A signature feature for creating continuous patterns:
 - **Cozy Feedback:** Every interaction is accompanied by organic sounds—wooden taps, paper rustles, and soft chimes.
 - **Distraction-Free Sanctuary:** A clean, peaceful environment that invites long, meditative sessions of digital crafting.
 - **Inclusive Crafting:** A robust alternative for creators who prefer keyboard efficiency over traditional pointing devices.
-- **Zero-Mouse Commitment:** The entire workflow—from the first stitch to the final export—is achievable using only the keyboard.
+- **Keyboard-Centric Design:** The primary workflow—from the first stitch to the final export—is optimized for the keyboard, though the mouse remains available for specific utility tasks.

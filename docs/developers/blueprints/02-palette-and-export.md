@@ -8,7 +8,7 @@ This blueprint serves as the technical contract for expanding **Rupa Pixel Edito
 
 ## 2. Palette System Protocol
 
-The application must support a dynamic palette system that allows users to switch colors without breaking the keyboard-only workflow.
+The application must support a dynamic palette system that allows users to switch colors without breaking the keyboard-centric workflow.
 
 - **State Integration:** The `activeColor` and `palette` array must be managed as Svelte 5 Runes within `src/lib/state/editor.svelte.ts`.
 - **Keyboard Binding:** Numeric keys `[1-9]` and `0` are reserved for instant palette selection.

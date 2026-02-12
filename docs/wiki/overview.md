@@ -31,10 +31,16 @@ A signature feature for creating continuous patterns:
 
 - **Pulling the Thread:** Hold a modifier key (e.g., `Shift`) to automatically color the path as the needle moves, creating fluid lines across the linen.
 
-### 3.3 Natural Dye Palette
+### 3.3 Command Palette & Atelier Picker
 
-- **Atelier Swatches:** A curated selection of earthy, botanical, and sunset tones for immediate use.
-- **Custom Pigments:** An advanced color picker designed as a "Natural Dye Basin" for creating unique shades.
+- **Universal Command Center:** Press `P` or `K` to summon the Command Palette, a searchable directory of every action available in the studio.
+- **Natural Dye Palette:** A curated selection of earthy, botanical, and sunset tones for immediate use.
+- **Atelier Swatches:** Access the keyboard-driven color picker to mix your own "dyes" with precision.
+
+### 3.4 Pro Artifact Exports
+
+- **Pixel-Perfect PNG:** Export your work with absolute sharpness at any scale.
+- **Optimized SVG:** A vector format that intelligently merges stitches into efficient paths, perfect for further embroidery or high-res printing.
 
 ---
 
@@ -44,3 +50,4 @@ A signature feature for creating continuous patterns:
 - **Cozy Feedback:** Every interaction is accompanied by organic sounds—wooden taps, paper rustles, and soft chimes.
 - **Distraction-Free Sanctuary:** A clean, peaceful environment that invites long, meditative sessions of digital crafting.
 - **Inclusive Crafting:** A robust alternative for creators who prefer keyboard efficiency over traditional pointing devices.
+- **Zero-Mouse Commitment:** The entire workflow—from the first stitch to the final export—is achievable using only the keyboard.

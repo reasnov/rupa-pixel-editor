@@ -1,19 +1,20 @@
-const { app, BrowserWindow } = require('electron');
+const { app, BrowserWindow, ipcMain, dialog } = require('electron');
 const path = require('path');
+const fs = require('fs');
 
 function createWindow() {
 	const win = new BrowserWindow({
 		width: 1200,
 		height: 800,
-		backgroundColor: '#1a1a1a',
+		backgroundColor: '#fdf6e3',
 		webPreferences: {
 			nodeIntegration: false,
-			contextIsolation: true
+			contextIsolation: true,
+			preload: path.join(__dirname, 'preload.cjs')
 		}
 	});
 
 	// In development, load from the Vite dev server
-	// In production, load the built index.html
 	const isDev = !app.isPackaged;
 	if (isDev) {
 		win.loadURL('http://localhost:5173');
@@ -21,6 +22,42 @@ function createWindow() {
 		win.loadFile(path.join(__dirname, '../build/index.html'));
 	}
 }
+
+// IPC Handlers for Persistence
+ipcMain.handle('dialog:saveFile', async (event, content, defaultPath) => {
+	const { filePath, canceled } = await dialog.showSaveDialog({
+		title: 'Save Artisan Project',
+		defaultPath: defaultPath || 'untitled.rupa',
+		filters: [{ name: 'Rupa Project', extensions: ['rupa'] }]
+	});
+
+	if (!canceled && filePath) {
+		fs.writeFileSync(filePath, content);
+		return filePath;
+	}
+	return null;
+});
+
+ipcMain.handle('dialog:openFile', async () => {
+	const { filePaths, canceled } = await dialog.showOpenDialog({
+		title: 'Open Artisan Project',
+		filters: [{ name: 'Rupa Project', extensions: ['rupa'] }],
+		properties: ['openFile']
+	});
+
+	if (!canceled && filePaths.length > 0) {
+		const content = fs.readFileSync(filePaths[0], 'utf-8');
+		return { content, filePath: filePaths[0] };
+	}
+	return null;
+});
+
+ipcMain.handle('file:autoSave', async (event, content) => {
+	const userDataPath = app.getPath('userData');
+	const backupPath = path.join(userDataPath, 'temp_backup.rupa');
+	fs.writeFileSync(backupPath, content);
+	return backupPath;
+});
 
 app.whenReady().then(() => {
 	createWindow();

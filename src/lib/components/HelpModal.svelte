@@ -27,9 +27,9 @@
 			items: [
 				{ label: 'Place Stitch', keys: 'Space' },
 				{ label: 'Unstitch (Erase)', keys: 'Backspace / Del' },
-				{ label: 'Threading (Flow Mode)', keys: 'Hold Shift + Arrows' },
-				{ label: 'Unravelling (Erase Flow)', keys: 'Hold Shift + Ctrl + Arrows' },
-				{ label: 'Block Looming (2D Fill)', keys: 'Hold Shift + Alt + Arrows' }
+				{ label: 'Threading (Flow Mode)', keys: 'Hold Ctrl + Arrows' },
+				{ label: 'Unravelling (Erase Flow)', keys: 'Hold Alt + Arrows' },
+				{ label: 'Block Looming (2D Selection)', keys: 'Hold Shift + Arrows' }
 			]
 		},
 		{

@@ -15,6 +15,14 @@
 		"UNDO": ["Ctrl+z"],
 		"REDO": ["Ctrl+Shift+z", "Ctrl+y"]
 	},
+	"manipulation": {
+		"COPY": ["Ctrl+c"],
+		"CUT": ["Ctrl+x"],
+		"PASTE": ["Ctrl+v"],
+		"FLIP_H": ["h"],
+		"FLIP_V": ["v"],
+		"ROTATE": ["r"]
+	},
 	"view": {
 		"ZOOM_IN": ["+", "="],
 		"ZOOM_OUT": ["-"],
@@ -23,6 +31,8 @@
 	"studio": {
 		"COMMAND_PALETTE": ["Ctrl+k"],
 		"EXPORT": ["Ctrl+e"],
+		"SAVE": ["Ctrl+s"],
+		"OPEN": ["Ctrl+o"],
 		"COLOR_PICKER": ["Ctrl+p"],
 		"CLEAR_LINEN": ["Ctrl+l"],
 		"TOGGLE_MUTE": ["Ctrl+m"],

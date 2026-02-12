@@ -24,6 +24,18 @@
 			action: () => {}
 		},
 		{
+			id: 'save-project',
+			label: 'File: Save Artisan Project (.rupa)',
+			shortcut: shortcuts.getLabel('SAVE'),
+			action: () => editor.saveProject()
+		},
+		{
+			id: 'open-project',
+			label: 'File: Open Artisan Project (.rupa)',
+			shortcut: shortcuts.getLabel('OPEN'),
+			action: () => editor.loadProject()
+		},
+		{
 			id: 'open-dye-basin',
 			label: 'Color: Open Color Wheel (Dye Basin)',
 			shortcut: shortcuts.getLabel('COLOR_PICKER'),
@@ -64,6 +76,42 @@
 			label: 'Project: Clear the Linen (Full Reset)',
 			shortcut: shortcuts.getLabel('CLEAR_LINEN'),
 			action: () => editor.clearCanvas()
+		},
+		{
+			id: 'copy-pattern',
+			label: 'Selection: Copy Pattern to Clipboard',
+			shortcut: shortcuts.getLabel('COPY'),
+			action: () => editor.copySelection()
+		},
+		{
+			id: 'cut-pattern',
+			label: 'Selection: Cut Pattern (Move source to clipboard)',
+			shortcut: shortcuts.getLabel('CUT'),
+			action: () => editor.cutSelection()
+		},
+		{
+			id: 'paste-pattern',
+			label: 'Selection: Paste Pattern from Clipboard',
+			shortcut: shortcuts.getLabel('PASTE'),
+			action: () => editor.pasteSelection()
+		},
+		{
+			id: 'flip-h',
+			label: 'Transform: Flip Linen Horizontally',
+			shortcut: shortcuts.getLabel('FLIP_H'),
+			action: () => editor.flipLinen('horizontal')
+		},
+		{
+			id: 'flip-v',
+			label: 'Transform: Flip Linen Vertically',
+			shortcut: shortcuts.getLabel('FLIP_V'),
+			action: () => editor.flipLinen('vertical')
+		},
+		{
+			id: 'rotate-linen',
+			label: 'Transform: Rotate Linen 90° Clockwise',
+			shortcut: shortcuts.getLabel('ROTATE'),
+			action: () => editor.rotateLinen()
 		}
 	];
 

@@ -4,6 +4,11 @@ import { history } from '../engine/history';
 
 export class EditorState {
 	version = __APP_VERSION__;
+	projectName = $state('Untitled Stitch');
+	currentFilePath = $state<string | null>(null);
+	lastSaved = $state<Date | null>(null);
+	clipboard = $state<{ width: number; height: number; data: ColorHex[] } | null>(null);
+
 	gridWidth = $state(32);
 	gridHeight = $state(32);
 	pixelData = $state<ColorHex[]>([]);
@@ -34,6 +39,7 @@ export class EditorState {
 	isShiftPressed = $state(false);
 	isCtrlPressed = $state(false);
 	isAltPressed = $state(false);
+	isSelecting = $state(false);
 
 	// Inactivity Logic
 	private inactivityTimer: any = null;
@@ -43,7 +49,7 @@ export class EditorState {
 	selectionStart = $state<{ x: number; y: number } | null>(null);
 	selectionEnd = $state<{ x: number; y: number } | null>(null);
 
-	isBlockMode = $derived(this.isShiftPressed && this.isAltPressed);
+	isBlockMode = $derived(this.isSelecting);
 
 	// Universal Escape Stack
 	private escapeStack: (() => void)[] = [];
@@ -98,7 +104,6 @@ export class EditorState {
 				}
 			}
 		}
-
 		sfx.playStitch();
 		this.selectionStart = null;
 		this.selectionEnd = null;
@@ -215,11 +220,11 @@ export class EditorState {
 			this.cursorPos = { x: newX, y: newY };
 			sfx.playMove();
 
-			if (this.isBlockMode) {
+			if (this.isSelecting) {
 				this.updateSelection();
-			} else if (this.isShiftPressed && this.isCtrlPressed) {
+			} else if (this.isAltPressed) {
 				this.unstitch();
-			} else if (this.isShiftPressed) {
+			} else if (this.isCtrlPressed) {
 				this.stitch();
 			}
 		}
@@ -270,6 +275,217 @@ export class EditorState {
 	setColor(color: ColorHex) {
 		this.activeColor = color;
 		this.resetInactivityTimer();
+	}
+
+	// --- Persistence Logic ---
+
+	private serialize() {
+		return JSON.stringify({
+			version: this.version,
+			metadata: {
+				name: this.projectName,
+				created: new Date().toISOString(),
+				lastModified: new Date().toISOString()
+			},
+			dimensions: {
+				width: this.gridWidth,
+				height: this.gridHeight
+			},
+			palette: $state.snapshot(this.palette),
+			pixelData: $state.snapshot(this.pixelData)
+		});
+	}
+
+	async saveProject() {
+		if (typeof window.electronAPI === 'undefined') {
+			// Web Fallback (Download)
+			const blob = new Blob([this.serialize()], { type: 'application/json' });
+			const url = URL.createObjectURL(blob);
+			const a = document.createElement('a');
+			a.href = url;
+			a.download = `${this.projectName.toLowerCase().replace(/\s+/g, '-')}.rupa`;
+			a.click();
+			return;
+		}
+
+		const result = await window.electronAPI.saveFile(this.serialize(), this.currentFilePath || undefined);
+		if (result) {
+			this.currentFilePath = result;
+			this.lastSaved = new Date();
+			sfx.playStitch(); // Tactile feedback for save
+		}
+	}
+
+	async loadProject() {
+		if (typeof window.electronAPI === 'undefined') {
+			// Web Fallback: Open file picker
+			const input = document.createElement('input');
+			input.type = 'file';
+			input.accept = '.rupa';
+			input.onchange = async (e) => {
+				const file = (e.target as HTMLInputElement).files?.[0];
+				if (file) {
+					const reader = new FileReader();
+					reader.onload = (re) => this.deserialize(re.target?.result as string);
+					reader.readAsText(file);
+				}
+			};
+			input.click();
+			return;
+		}
+
+		const result = await window.electronAPI.openFile();
+		if (result) {
+			this.deserialize(result.content);
+			this.currentFilePath = result.filePath;
+			this.lastSaved = new Date();
+			sfx.playStitch();
+		}
+	}
+
+	async backupProject() {
+		if (window.electronAPI) {
+			await window.electronAPI.autoSave(this.serialize());
+			this.lastSaved = new Date();
+		} else {
+			// Web: Save to LocalStorage
+			localStorage.setItem('rupa_auto_backup', this.serialize());
+		}
+	}
+
+	private deserialize(json: string) {
+		try {
+			const data = JSON.parse(json);
+			this.gridWidth = data.dimensions.width;
+			this.gridHeight = data.dimensions.height;
+			this.pixelData = data.pixelData;
+			this.palette = data.palette;
+			this.projectName = data.metadata.name;
+			history.clear(); // Clear history on load to prevent cross-project undo
+		} catch (e) {
+			console.error('Failed to unravel project:', e);
+		}
+	}
+
+	// --- Linen Manipulation ---
+
+	resizeLinen(newWidth: number, newHeight: number) {
+		const newPixelData = Array(newWidth * newHeight).fill('#eee8d5');
+
+		// Transfer existing stitches
+		for (let y = 0; y < Math.min(this.gridHeight, newHeight); y++) {
+			for (let x = 0; x < Math.min(this.gridWidth, newWidth); x++) {
+				const oldIdx = y * this.gridWidth + x;
+				const newIdx = y * newWidth + x;
+				newPixelData[newIdx] = this.pixelData[oldIdx];
+			}
+		}
+
+		this.gridWidth = newWidth;
+		this.gridHeight = newHeight;
+		this.pixelData = newPixelData;
+		history.clear(); // Resizing invalidates history indices
+		sfx.playStitch();
+	}
+
+	flipLinen(axis: 'horizontal' | 'vertical') {
+		const newPixelData = [...this.pixelData];
+		if (axis === 'horizontal') {
+			for (let y = 0; y < this.gridHeight; y++) {
+				const row = this.pixelData.slice(y * this.gridWidth, (y + 1) * this.gridWidth);
+				row.reverse();
+				for (let x = 0; x < this.gridWidth; x++) {
+					newPixelData[y * this.gridWidth + x] = row[x];
+				}
+			}
+		} else {
+			for (let y = 0; y < this.gridHeight; y++) {
+				for (let x = 0; x < this.gridWidth; x++) {
+					const oldIdx = y * this.gridWidth + x;
+					const newIdx = (this.gridHeight - 1 - y) * this.gridWidth + x;
+					newPixelData[newIdx] = this.pixelData[oldIdx];
+				}
+			}
+		}
+		this.pixelData = newPixelData;
+		history.clear();
+		sfx.playStitch();
+	}
+
+	rotateLinen() {
+		// Only supports square rotation for now to avoid dimension complexity
+		if (this.gridWidth !== this.gridHeight) return;
+
+		const newPixelData = Array(this.gridWidth * this.gridHeight).fill('#eee8d5');
+		for (let y = 0; y < this.gridHeight; y++) {
+			for (let x = 0; x < this.gridWidth; x++) {
+				const oldIdx = y * this.gridWidth + x;
+				const newIdx = x * this.gridWidth + (this.gridHeight - 1 - y);
+				newPixelData[newIdx] = this.pixelData[oldIdx];
+			}
+		}
+		this.pixelData = newPixelData;
+		history.clear();
+		sfx.playStitch();
+	}
+
+	// --- Clipboard & Pattern Manipulation ---
+
+	copySelection() {
+		if (!this.selectionStart || !this.selectionEnd) return;
+
+		const x1 = Math.min(this.selectionStart.x, this.selectionEnd.x);
+		const x2 = Math.max(this.selectionStart.x, this.selectionEnd.x);
+		const y1 = Math.min(this.selectionStart.y, this.selectionEnd.y);
+		const y2 = Math.max(this.selectionStart.y, this.selectionEnd.y);
+		const w = x2 - x1 + 1;
+		const h = y2 - y1 + 1;
+
+		const data: ColorHex[] = [];
+		for (let y = y1; y <= y2; y++) {
+			for (let x = x1; x <= x2; x++) {
+				data.push(this.pixelData[y * this.gridWidth + x]);
+			}
+		}
+
+		this.clipboard = { width: w, height: h, data };
+		sfx.playStitch();
+	}
+
+	cutSelection() {
+		this.copySelection();
+		if (!this.selectionStart || !this.selectionEnd) return;
+
+		const x1 = Math.min(this.selectionStart.x, this.selectionEnd.x);
+		const x2 = Math.max(this.selectionStart.x, this.selectionEnd.x);
+		const y1 = Math.min(this.selectionStart.y, this.selectionEnd.y);
+		const y2 = Math.max(this.selectionStart.y, this.selectionEnd.y);
+
+		for (let y = y1; y <= y2; y++) {
+			for (let x = x1; x <= x2; x++) {
+				const idx = y * this.gridWidth + x;
+				this.pixelData[idx] = '#eee8d5';
+			}
+		}
+		sfx.playUnstitch();
+	}
+
+	pasteSelection() {
+		if (!this.clipboard) return;
+
+		for (let y = 0; y < this.clipboard.height; y++) {
+			for (let x = 0; x < this.clipboard.width; x++) {
+				const targetX = this.cursorPos.x + x;
+				const targetY = this.cursorPos.y + y;
+
+				if (targetX < this.gridWidth && targetY < this.gridHeight) {
+					const targetIdx = targetY * this.gridWidth + targetX;
+					const sourceIdx = y * this.clipboard.width + x;
+					this.pixelData[targetIdx] = this.clipboard.data[sourceIdx];
+				}
+			}
+		}
+		sfx.playStitch();
 	}
 }
 

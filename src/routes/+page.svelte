@@ -71,8 +71,9 @@
 		editor.isCtrlPressed = e.ctrlKey || e.metaKey;
 		editor.isAltPressed = e.altKey;
 
-		// 3. Selection Start: Trigger block mode initialization
-		if (editor.isBlockMode && !editor.selectionStart) {
+		// 3. Selection Start: Trigger block mode initialization when Shift is pressed
+		if (e.shiftKey && !editor.isSelecting) {
+			editor.isSelecting = true;
 			editor.startSelection();
 		}
 
@@ -109,13 +110,32 @@
 					return (editor.showColorPicker = !editor.showColorPicker);
 				case 'EXPORT':
 					return (showExportModal = true);
+				case 'SAVE':
+					return editor.saveProject();
+				case 'OPEN':
+					return editor.loadProject();
 				case 'STITCH':
+					if (editor.isSelecting) {
+						return editor.commitSelection();
+					}
 					return editor.stitch();
 				case 'UNSTITCH':
 				case 'UNSTITCH_MOD':
 					return editor.unstitch();
 				case 'EYEDROPPER':
 					return editor.pickColor();
+				case 'COPY':
+					return editor.copySelection();
+				case 'CUT':
+					return editor.cutSelection();
+				case 'PASTE':
+					return editor.pasteSelection();
+				case 'FLIP_H':
+					return editor.flipLinen('horizontal');
+				case 'FLIP_V':
+					return editor.flipLinen('vertical');
+				case 'ROTATE':
+					return editor.rotateLinen();
 				case 'CLEAR_LINEN':
 					return editor.clearCanvas();
 				case 'UNDO':
@@ -140,14 +160,14 @@
 	}
 
 	function handleKeyUp(e: KeyboardEvent) {
-		const wasBlockMode = editor.isBlockMode;
-
-		if (e.key === 'Shift') editor.isShiftPressed = false;
 		if (e.key === 'Control' || e.key === 'Meta') editor.isCtrlPressed = false;
 		if (e.key === 'Alt') editor.isAltPressed = false;
-
-		if (wasBlockMode && !editor.isBlockMode) {
-			editor.commitSelection();
+		
+		if (e.key === 'Shift') {
+			editor.isShiftPressed = false;
+			editor.isSelecting = false;
+			editor.selectionStart = null;
+			editor.selectionEnd = null;
 		}
 	}
 
@@ -166,11 +186,17 @@
 		window.addEventListener('app:execute-command', handleCommand);
 		window.addEventListener('app:close-export', handleCloseExport);
 
+		// 10-minute Artisan Auto-Backup
+		const backupInterval = setInterval(() => {
+			editor.backupProject();
+		}, 10 * 60 * 1000);
+
 		return () => {
 			window.removeEventListener('keydown', handleKeyDown);
 			window.removeEventListener('keyup', handleKeyUp);
 			window.removeEventListener('app:execute-command', handleCommand);
 			window.removeEventListener('app:close-export', handleCloseExport);
+			clearInterval(backupInterval);
 		};
 	});
 </script>

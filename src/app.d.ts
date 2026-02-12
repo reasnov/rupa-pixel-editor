@@ -2,6 +2,13 @@
 // for information about these interfaces
 declare global {
 	const __APP_VERSION__: string;
+	interface Window {
+		electronAPI?: {
+			saveFile: (content: string, defaultPath?: string) => Promise<string | null>;
+			openFile: () => Promise<{ content: string; filePath: string } | null>;
+			autoSave: (content: string) => Promise<string>;
+		};
+	}
 	namespace App {
 		// interface Error {}
 		// interface Locals {}

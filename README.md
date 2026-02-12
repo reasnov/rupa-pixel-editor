@@ -13,7 +13,7 @@ Built with **Svelte 5** and **Electron**, Rupa eliminates the mouse in favor of 
 ## ✨ Key Features
 
 - **Keyboard-Centric Workflow**: Navigate the grid using arrow keys with zero-latency response.
-- **Digital Stitching**: Use the **Stitch-Flow** mode (Hold `Shift`) to "pull the thread" and color paths as you move.
+- **Digital Stitching**: Use the **Stitch-Flow** mode (Hold `Ctrl`) to "pull the thread" and color paths as you move.
 - **Artisan Bloom Cursor**: A dynamic inversion cursor that ensures visibility on any color without visual clutter.
 - **Color Palette & Picker**: Full control over your "threads" with a keyboard-driven color selection system.
 - **Pro Export Engine**: Export your creations as sharp PNGs or optimized SVGs.
@@ -31,8 +31,9 @@ Built with **Svelte 5** and **Electron**, Rupa eliminates the mouse in favor of 
 | `Space`                         | Stitch (Color Pixel)                  |
 | `Backspace` / `Delete`          | Unstitch (Clear Pixel)                |
 | `Ctrl + Space`                  | Unstitch (Clear Pixel)                |
-| `Shift` (Hold)                  | **Stitch-Flow**: Auto-color on move   |
-| `Ctrl + Shift` (Hold)           | **Unstitch-Flow**: Auto-clear on move |
+| `Ctrl` (Hold)                   | **Stitch-Flow**: Auto-color on move   |
+| `Alt` (Hold)                    | **Unstitch-Flow**: Auto-clear on move |
+| `Shift` (Hold)                  | **Block Selection**: Select area      |
 | `I` / `Alt + Space`             | Eyedropper (Pick color)               |
 | `C`                             | Open Color Picker                     |
 | `P` / `K`                       | Open Command Palette                  |

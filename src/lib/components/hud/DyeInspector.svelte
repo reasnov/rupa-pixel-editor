@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { atelier } from '../../state/atelier.svelte.js';
+	import { shuttle } from '../../engine/shuttle.js';
 	import { slide } from 'svelte/transition';
 </script>
 
@@ -28,7 +29,7 @@
 					transition:slide={{ duration: 200 }}
 					class="group relative h-5 w-5 shrink-0 rounded-md border-2 border-white shadow-sm transition-all hover:scale-110 active:scale-95 artisan-checker-small"
 					style="background-color: {color};"
-					onclick={() => (atelier.paletteState.activeDye = color)}
+					onclick={() => shuttle.dye.setDye(color)}
 					title={color}
 				>
 					<div

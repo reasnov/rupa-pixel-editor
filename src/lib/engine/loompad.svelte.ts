@@ -1,4 +1,5 @@
 import shortcutsData from '../config/shortcuts.json' with { type: 'json' };
+import { weaving } from './weaving.svelte.js';
 
 export type LoomIntent =
 	| 'MOVE_UP'
@@ -70,8 +71,6 @@ export class LoomPadEngine {
 
 	// Reactive tracking for UI debugging - Using array for reliable reactivity
 	activeKeys = $state<string[]>([]);
-	sequenceBuffer = $state<string[]>([]);
-	private sequenceTimeout: any = null;
 
 	// The "Resolved State" based on current physical grip
 	isCtrlActive = $state(false);
@@ -203,27 +202,12 @@ export class LoomPadEngine {
 	getIntent(e: KeyboardEvent): LoomIntent | null {
 		const key = e.key.toLowerCase();
 
-		// 1. Sequence Handling
+		// 1. Sequence Handling (Weaving)
 		if (!this.isCtrlActive && !this.isAltActive && !this.isShiftActive) {
-			this.sequenceBuffer.push(key);
-			if (this.sequenceTimeout) clearTimeout(this.sequenceTimeout);
-			this.sequenceTimeout = setTimeout(() => (this.sequenceBuffer = []), 1000);
-
-			const seq = this.sequenceBuffer.join(',');
-			if (seq === 'g,c') {
-				this.sequenceBuffer = [];
-				return 'GOTO'; // Example: G then C
-			}
-			if (seq === 'f,n') {
-				this.sequenceBuffer = [];
-				return 'NEW_FRAME';
-			}
-			if (seq === 'v,n') {
-				this.sequenceBuffer = [];
-				return 'NEW_VEIL';
-			}
+			const sequenceIntent = weaving.process(key);
+			if (sequenceIntent) return sequenceIntent;
 		} else {
-			this.sequenceBuffer = [];
+			weaving.reset();
 		}
 
 		// 2. Navigation is prioritized

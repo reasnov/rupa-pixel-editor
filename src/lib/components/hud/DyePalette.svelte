@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { atelier } from '../../state/atelier.svelte.js';
+	import { shuttle } from '../../engine/shuttle.js';
 </script>
 
 <div class="artisan-panel flex flex-col gap-2 rounded-xl border-l-2 border-white p-2 shadow-sm">
@@ -10,7 +11,7 @@
 				? 'scale-110 border-brand shadow-md ring-2 ring-white'
 				: 'border-white opacity-70 hover:scale-105 hover:opacity-100'}"
 			style="background-color: {color};"
-			onclick={() => atelier.selectPalette(i)}
+			onclick={() => shuttle.dye.select(i)}
 			aria-label="Select dye {i + 1}"
 		></button>
 	{/each}

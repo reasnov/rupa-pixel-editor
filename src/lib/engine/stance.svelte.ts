@@ -1,5 +1,6 @@
 import { atelier } from '../state/atelier.svelte';
 import { loompad } from './loompad.svelte';
+import { weaving } from './weaving.svelte.js';
 
 export type StanceType = 'RESTING' | 'THREADING' | 'UNRAVELLING' | 'LOOMING' | 'PICKING' | 'ORGANIZING';
 
@@ -13,7 +14,7 @@ interface StanceDescriptor {
 
 export class StanceEngine {
 	current = $derived.by((): StanceDescriptor => {
-		if (loompad.sequenceBuffer.length > 0) {
+		if (weaving.isActive) {
 			return {
 				type: 'ORGANIZING',
 				label: 'Weaving...',

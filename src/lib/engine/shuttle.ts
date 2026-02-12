@@ -4,6 +4,8 @@ import { ManipulationService } from './services/manipulation.js';
 import { ClipboardService } from './services/clipboard.js';
 import { PersistenceService } from './services/persistence.js';
 import { FolioService } from './services/folio.js';
+import { SelectionService } from './services/selection.js';
+import { DyeService } from './services/dye.js';
 import { atelier } from '../state/atelier.svelte.js';
 import { history } from './history.js';
 import { sfx } from './audio.js';
@@ -19,6 +21,8 @@ export class ShuttleEngine {
 	readonly clipboard = new ClipboardService();
 	readonly persistence = new PersistenceService();
 	readonly folio = new FolioService();
+	readonly selection = new SelectionService();
+	readonly dye = new DyeService();
 
 	// --- Navigation Aliases ---
 
@@ -30,7 +34,7 @@ export class ShuttleEngine {
 		this.movement.jumpTo(tx, ty);
 	}
 
-	// --- Stitching Aliases ---
+	// --- Stitching & Dye Aliases ---
 
 	stitch() {
 		this.stitching.stitch();
@@ -39,37 +43,19 @@ export class ShuttleEngine {
 		this.stitching.unstitch();
 	}
 	pickDye() {
-		this.stitching.pickDye();
+		this.dye.pickFromLinen();
 	}
 
 	// --- Selection & Manipulation ---
 
 	startSelection() {
-		atelier.selection.begin(atelier.needle.pos.x, atelier.needle.pos.y);
+		this.selection.begin(atelier.needle.pos.x, atelier.needle.pos.y);
 	}
 	updateSelection() {
-		atelier.selection.update(atelier.needle.pos.x, atelier.needle.pos.y);
+		this.selection.update(atelier.needle.pos.x, atelier.needle.pos.y);
 	}
 	commitSelection() {
-		const bounds = atelier.selection.bounds;
-		if (!bounds) return;
-
-		const { x1, x2, y1, y2 } = bounds;
-		const activeDye = atelier.paletteState.activeDye;
-
-		history.beginBatch();
-		for (let y = y1; y <= y2; y++) {
-			for (let x = x1; x <= x2; x++) {
-				const index = atelier.linen.getIndex(x, y);
-				const oldColor = atelier.linen.stitches[index];
-				if (oldColor !== activeDye) {
-					history.push({ index, oldColor, newColor: activeDye });
-					atelier.linen.setColor(x, y, activeDye);
-				}
-			}
-		}
-		history.endBatch();
-		sfx.playStitch();
+		this.selection.commit();
 	}
 
 	clearLinen() {

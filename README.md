@@ -4,9 +4,19 @@
   <img src="static/rupa-logo.png" alt="Rupa Logo" width="400">
 </p>
 
+<p align="center">
+  <img src="https://img.shields.io/badge/version-0.3.0--preview-d33682?style=flat-square" alt="Version">
+  <img src="https://img.shields.io/badge/License-MIT-859900?style=flat-square" alt="License">
+  <img src="https://img.shields.io/badge/Svelte-5-ff3e00?style=flat-square&logo=svelte" alt="Svelte 5">
+  <img src="https://img.shields.io/badge/Electron-Desktop-47848F?style=flat-square&logo=electron" alt="Electron">
+  <img src="https://img.shields.io/badge/Tailwind-4.0-38bdf8?style=flat-square&logo=tailwind-css" alt="Tailwind CSS">
+</p>
+
+---
+
 **Rupa Pixel Editor** is a professional-grade desktop application for creating pixel art through a keyboard-centric interface. Inspired by the philosophy of "Rupa" (form) and the traditional art of "Sulam" (Stitching), it offers a methodical, precise, and meditative drawing experience.
 
-Built with **Svelte 5** and **Electron**, Rupa treats the digital grid as a piece of fine **Linen** and the cursor as a **Needle**, turning every interaction into a meaningful stitch.
+Built with **Svelte 5** and **Electron**, Rupa treats the digital grid as a piece of fine **Linen** and the cursor as a **Needle**, turning every interaction into a meaningful **Stitch**.
 
 **Live Demo**: [**✨ Try the Live Demo**](https://reasnov.github.io/rupa-pixel-editor)
 
@@ -18,21 +28,21 @@ The project documentation has been restructured for clarity and depth. Please re
 
 - **[The Artisan's Vision](./docs/wiki/overview.md)**: Explore the core philosophy and "Cottagecore" aesthetic.
 - **[User Guide](./docs/USER_GUIDE.md)**: A complete manual for navigating the Atelier and mastering the Needle.
-- **[Terminology](./docs/wiki/terminology.md)**: Learn the language of craft used throughout the studio.
-- **[Technical Architecture](./docs/developers/architecture.md)**: In-depth look at Svelte 5 Runes, Electron integration, and the LoomPad engine.
+- **[Terminology](./docs/wiki/terminology.md)**: Learn the language of craft (**Stitch**, **Motif**, **Swatch**).
+- **[Technical Architecture](./docs/developers/architecture.md)**: In-depth look at Svelte 5 Runes, SOC Engine, and LoomPad.
 - **[Technical Specifications](./docs/developers/specs.md)**: Detailed grid mechanics, intent schemas, and design standards.
-- **[Project History](./docs/HISTORY.md)**: Changelogs and release milestones.
+- **[Latest Release Notes](./docs/pubs/releases/v0.3.0.md)**: Highlights and changes in the v0.3.0 update.
 - **[Security Policy](./SECURITY.md)**: Guidelines for reporting vulnerabilities.
 
 ---
 
 ## ✨ Key Features
 
-- **Keyboard-Centric Workflow**: Navigate the grid using arrow keys with zero-latency response.
-- **Digital Stitching**: Use the **Stitch-Flow** mode (Hold `Ctrl`) to "pull the thread" and color paths as you move.
-- **Artisan Bloom Cursor**: A dynamic inversion cursor that ensures visibility on any color without visual clutter.
-- **Color Palette & Picker**: Full control over your "threads" with a keyboard-driven color selection system.
-- **Pro Export Engine**: Export your creations as sharp PNGs or optimized SVGs.
+- **Keyboard-Centric Workflow**: Full navigation and drawing control using the keyboard for zero-latency response.
+- **Digital Stitching**: Use the **Threading** mode (Hold `Ctrl`) to "pull the thread" and color paths as you move.
+- **Looming (Selection)**: Define persistent regions with **Marching Ants** visual feedback. Supports **Batch Fill** (`Shift+Space`).
+- **SOC Engine**: High-performance modular architecture separating state from core business logic.
+- **Smart SVG Artifacts**: Advanced export engine that merges connected stitches into optimized vector paths.
 - **Retro Audio Feedback**: Real-time synthesized SFX for movement and drawing, reinforcing the tactile experience.
 
 ## 🖼️ Gallery
@@ -41,26 +51,29 @@ The project documentation has been restructured for clarity and depth. Please re
 
 ## ⌨️ Quick Controls
 
-| Key | Action |
-| :--- | :--- |
-| `Arrow Keys` | Move Active Cell |
-| `Space` | Stitch (Color Pixel) |
-| `Backspace` | Unstitch (Clear Pixel) |
-| `Ctrl` (Hold) | **Stitch-Flow**: Auto-color on move |
-| `Shift` (Hold) | **Block Selection**: Select area |
-| `[1-9, 0]` | Select Dye from Palette |
-| `P` / `K` | Open Pattern Catalog (Command Palette) |
-| `?` / `F1` | Show Help |
+| Key            | Action                                 |
+| :------------- | :------------------------------------- |
+| `Arrow Keys`   | Move Needle (Active Focus)             |
+| `Space`        | Stitch (Color Cell) / Fill Selection   |
+| `Backspace`    | Unstitch (Clear Cell)                  |
+| `Ctrl` (Hold)  | **Threading**: Auto-color on move      |
+| `Shift` (Hold) | **Looming**: Define selection area     |
+| `G`            | **Go To**: Jump to specific coordinate |
+| `[1-9, 0]`     | Select Dye from Palette                |
+| `P` / `K`      | Open Pattern Catalog (Command Palette) |
+| `Esc`          | Clear Selection / Dismiss UI           |
 
-*For the full list of controls, see the **[User Guide](./docs/USER_GUIDE.md)**.*
+_For the full list of controls, see the **[User Guide](./docs/USER_GUIDE.md)**._
 
 ## 🚀 Getting Started
 
 ### Prerequisites
+
 - [Node.js](https://nodejs.org/) (v18 or higher)
 - [npm](https://www.npmjs.com/)
 
 ### Installation
+
 1. Clone the repository:
    ```bash
    git clone https://github.com/reasnov/rupa-pixel-editor.git
@@ -72,18 +85,22 @@ The project documentation has been restructured for clarity and depth. Please re
    ```
 
 ### Running the App
+
 Start the Vite development server and Electron window simultaneously:
+
 ```bash
 npm run dev:all
 ```
 
 ## 🛠 Tech Stack
+
 - **Framework**: [Svelte 5](https://svelte.dev/) (Runes)
 - **Desktop**: [Electron](https://www.electronjs.org/)
 - **Styling**: [Tailwind CSS 4.0](https://tailwindcss.com/)
 - **Language**: [TypeScript](https://www.typescriptlang.org/)
 
 ## 📜 License
+
 This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
 
 ---

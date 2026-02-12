@@ -3,11 +3,11 @@
 	import { fade, scale } from 'svelte/transition';
 	import { untrack } from 'svelte';
 
-	let { 
-		title = '', 
-		subtitle = '', 
-		icon = '', 
-		onClose, 
+	let {
+		title = '',
+		subtitle = '',
+		icon = '',
+		onClose,
 		children,
 		width = '500px',
 		maxHeight = '85vh'
@@ -49,13 +49,16 @@
 			<div class="flex items-center gap-4">
 				{#if icon}<span class="text-3xl">{icon}</span>{/if}
 				<div class="flex flex-col">
-					<h2 class="font-tiny5 text-3xl text-brand leading-none">{title}</h2>
+					<h2 class="font-tiny5 text-3xl leading-none text-brand">{title}</h2>
 					{#if subtitle}
-						<span class="font-serif text-[10px] font-bold tracking-[0.2em] uppercase opacity-30 mt-1">{subtitle}</span>
+						<span
+							class="mt-1 font-serif text-[10px] font-bold tracking-[0.2em] uppercase opacity-30"
+							>{subtitle}</span
+						>
 					{/if}
 				</div>
 			</div>
-			<button 
+			<button
 				onclick={onClose}
 				class="rounded-full border border-black/5 bg-white/50 px-4 py-2 text-[10px] font-bold tracking-widest uppercase opacity-40 transition-all hover:opacity-100"
 			>
@@ -64,14 +67,21 @@
 		</div>
 
 		<!-- Content -->
-		<div class="flex-1 overflow-y-auto pr-2 custom-scrollbar">
+		<div class="custom-scrollbar flex-1 overflow-y-auto pr-2">
 			{@render children()}
 		</div>
 	</div>
 </div>
 
 <style>
-	.custom-scrollbar::-webkit-scrollbar { width: 4px; }
-	.custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-	.custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(211, 54, 130, 0.1); border-radius: 10px; }
+	.custom-scrollbar::-webkit-scrollbar {
+		width: 4px;
+	}
+	.custom-scrollbar::-webkit-scrollbar-track {
+		background: transparent;
+	}
+	.custom-scrollbar::-webkit-scrollbar-thumb {
+		background: rgba(211, 54, 130, 0.1);
+		border-radius: 10px;
+	}
 </style>

@@ -8,102 +8,133 @@ import { shuttle } from './shuttle.js';
  * It maps LoomIntents to ShuttleEngine operations.
  */
 export class TheLoom {
-    
-    handleInput(e: KeyboardEvent, type: 'down' | 'up') {
-        if (!atelier.studio.isAppReady) return;
-        
-        // 1. Update physical key ledger
-        loompad.updatePhysicalState(e, type);
+	handleInput(e: KeyboardEvent, type: 'down' | 'up') {
+		if (!atelier.studio.isAppReady) return;
 
-        // 2. Shield Check
-        const target = e.target as HTMLElement;
-        if (target instanceof HTMLInputElement || target instanceof HTMLTextAreaElement || target.isContentEditable) {
-            if (type === 'down' && e.key === 'Escape') atelier.handleEscape();
-            return;
-        }
+		// 1. Update physical key ledger
+		loompad.updatePhysicalState(e, type);
 
-        atelier.needle.resetInactivityTimer();
+		// 2. Shield Check
+		const target = e.target as HTMLElement;
+		if (
+			target instanceof HTMLInputElement ||
+			target instanceof HTMLTextAreaElement ||
+			target.isContentEditable
+		) {
+			if (type === 'down' && e.key === 'Escape') atelier.handleEscape();
+			return;
+		}
 
-        // 3. Action Resolution
-        if (type === 'down') {
-            const intent = loompad.getIntent(e);
-            console.log('Loom Intent:', intent, 'Key:', e.key, 'Shift:', e.shiftKey);
-            if (intent) this.executeIntent(intent, e);
-        }
-    }
+		atelier.needle.resetInactivityTimer();
 
-    private executeIntent(intent: LoomIntent, e: KeyboardEvent) {
-        const isNav = intent.startsWith('MOVE_');
-        if (!isNav) e.preventDefault();
+		// 3. Action Resolution
+		if (type === 'down') {
+			const intent = loompad.getIntent(e);
+			console.log('Loom Intent:', intent, 'Key:', e.key, 'Shift:', e.shiftKey);
+			if (intent) this.executeIntent(intent, e);
+		}
+	}
 
-        switch (intent) {
-            case 'MOVE_UP':    return this.executeMove(0, -1);
-            case 'MOVE_DOWN':  return this.executeMove(0, 1);
-            case 'MOVE_LEFT':  return this.executeMove(-1, 0);
-            case 'MOVE_RIGHT': return this.executeMove(1, 0);
-            case 'GOTO': return (atelier.studio.showGoTo = true);
+	private executeIntent(intent: LoomIntent, e: KeyboardEvent) {
+		const isNav = intent.startsWith('MOVE_');
+		if (!isNav) e.preventDefault();
 
-            case 'STITCH':
-                if (atelier.selection.isActive) return shuttle.commitSelection();
-                return shuttle.stitching.stitch();
-            
-            case 'UNSTITCH': return shuttle.stitching.unstitch();
-            case 'PICK_DYE': return shuttle.stitching.pickDye();
-            
-            case 'COPY':  return shuttle.clipboard.copy();
-            case 'CUT':   return shuttle.clipboard.cut();
-            case 'PASTE': return shuttle.clipboard.paste();
-            
-            case 'UNDO': return atelier.undo();
-            case 'REDO': return atelier.redo();
-            case 'SAVE': return shuttle.persistence.save();
-            case 'OPEN': return shuttle.persistence.load();
-            
-            case 'OPEN_ARCHIVE': return (atelier.studio.showArchivePattern = true);
-            case 'OPEN_SETTINGS': return (atelier.studio.showLinenSettings = true);
-            
-            case 'ESCAPE': 
-                if (atelier.selection.isActive) {
-                    atelier.selection.clear();
-                    return;
-                }
-                return atelier.handleEscape();
-            
-            case 'OPEN_PALETTE': return (atelier.studio.showPatternCatalog = !atelier.studio.showPatternCatalog);
-            case 'OPEN_DYES':    return (atelier.studio.showDyeBasin = !atelier.studio.showDyeBasin);
-            case 'OPEN_EXPORT':  return (atelier.studio.showArtifactCrate = true);
-            case 'OPEN_HELP':    return (atelier.studio.showArtisanGuide = true);
-            
-            case 'ZOOM_IN':    return atelier.studio.setZoom(0.1);
-            case 'ZOOM_OUT':   return atelier.studio.setZoom(-0.1);
-            case 'RESET_ZOOM': return atelier.studio.resetZoom();
-            
-            case 'CLEAR_LINEN': return shuttle.manipulation.clearAll();
-            case 'TOGGLE_MUTE': return atelier.studio.toggleMute();
+		switch (intent) {
+			case 'MOVE_UP':
+				return this.executeMove(0, -1);
+			case 'MOVE_DOWN':
+				return this.executeMove(0, 1);
+			case 'MOVE_LEFT':
+				return this.executeMove(-1, 0);
+			case 'MOVE_RIGHT':
+				return this.executeMove(1, 0);
+			case 'GOTO':
+				return (atelier.studio.showGoTo = true);
 
-            case 'FLIP_H': return shuttle.manipulation.flip('horizontal');
-            case 'FLIP_V': return shuttle.manipulation.flip('vertical');
-            case 'ROTATE': return shuttle.manipulation.rotate();
+			case 'STITCH':
+				if (atelier.selection.isActive) return shuttle.commitSelection();
+				return shuttle.stitching.stitch();
 
-            default:
-                if (intent.startsWith('SELECT_DYE_')) {
-                    const num = parseInt(intent.split('_')[2]);
-                    return atelier.paletteState.select(num === 0 ? 9 : num - 1);
-                }
-        }
-    }
+			case 'UNSTITCH':
+				return shuttle.stitching.unstitch();
+			case 'PICK_DYE':
+				return shuttle.stitching.pickDye();
 
-    private executeMove(dx: number, dy: number) {
-        if (shuttle.movement.move(dx, dy)) {
-            const mode = stance.current.type;
-            if (mode === 'LOOMING') {
-                if (!atelier.selection.isActive) shuttle.startSelection();
-                shuttle.updateSelection();
-            }
-            if (mode === 'THREADING') shuttle.stitching.stitch();
-            if (mode === 'UNRAVELLING') shuttle.stitching.unstitch();
-        }
-    }
+			case 'COPY':
+				return shuttle.clipboard.copy();
+			case 'CUT':
+				return shuttle.clipboard.cut();
+			case 'PASTE':
+				return shuttle.clipboard.paste();
+
+			case 'UNDO':
+				return atelier.undo();
+			case 'REDO':
+				return atelier.redo();
+			case 'SAVE':
+				return shuttle.persistence.save();
+			case 'OPEN':
+				return shuttle.persistence.load();
+
+			case 'OPEN_ARCHIVE':
+				return (atelier.studio.showArchivePattern = true);
+			case 'OPEN_SETTINGS':
+				return (atelier.studio.showLinenSettings = true);
+
+			case 'ESCAPE':
+				if (atelier.selection.isActive) {
+					atelier.selection.clear();
+					return;
+				}
+				return atelier.handleEscape();
+
+			case 'OPEN_PALETTE':
+				return (atelier.studio.showPatternCatalog = !atelier.studio.showPatternCatalog);
+			case 'OPEN_DYES':
+				return (atelier.studio.showDyeBasin = !atelier.studio.showDyeBasin);
+			case 'OPEN_EXPORT':
+				return (atelier.studio.showArtifactCrate = true);
+			case 'OPEN_HELP':
+				return (atelier.studio.showArtisanGuide = true);
+
+			case 'ZOOM_IN':
+				return atelier.studio.setZoom(0.1);
+			case 'ZOOM_OUT':
+				return atelier.studio.setZoom(-0.1);
+			case 'RESET_ZOOM':
+				return atelier.studio.resetZoom();
+
+			case 'CLEAR_LINEN':
+				return shuttle.manipulation.clearAll();
+			case 'TOGGLE_MUTE':
+				return atelier.studio.toggleMute();
+
+			case 'FLIP_H':
+				return shuttle.manipulation.flip('horizontal');
+			case 'FLIP_V':
+				return shuttle.manipulation.flip('vertical');
+			case 'ROTATE':
+				return shuttle.manipulation.rotate();
+
+			default:
+				if (intent.startsWith('SELECT_DYE_')) {
+					const num = parseInt(intent.split('_')[2]);
+					return atelier.paletteState.select(num === 0 ? 9 : num - 1);
+				}
+		}
+	}
+
+	private executeMove(dx: number, dy: number) {
+		if (shuttle.movement.move(dx, dy)) {
+			const mode = stance.current.type;
+			if (mode === 'LOOMING') {
+				if (!atelier.selection.isActive) shuttle.startSelection();
+				shuttle.updateSelection();
+			}
+			if (mode === 'THREADING') shuttle.stitching.stitch();
+			if (mode === 'UNRAVELLING') shuttle.stitching.unstitch();
+		}
+	}
 }
 
 export const loom = new TheLoom();

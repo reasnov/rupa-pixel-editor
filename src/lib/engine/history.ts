@@ -10,7 +10,7 @@ export class HistoryManager {
 	private undoStack: HistoryEntry[] = [];
 	private redoStack: HistoryEntry[] = [];
 	private maxHistory = 500;
-	
+
 	private currentBatch: HistoryAction[] | null = null;
 
 	beginBatch() {
@@ -21,7 +21,7 @@ export class HistoryManager {
 		if (this.currentBatch && this.currentBatch.length > 0) {
 			this.undoStack.push(this.currentBatch);
 			this.redoStack = [];
-			
+
 			if (this.undoStack.length > this.maxHistory) {
 				this.undoStack.shift();
 			}

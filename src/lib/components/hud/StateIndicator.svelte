@@ -3,10 +3,14 @@
 	import { stance } from '../../engine/stance.svelte.js';
 </script>
 
-<div class="flex items-center gap-4 transition-opacity duration-1000 {atelier.needle.isVisible ? 'opacity-100' : 'opacity-0'}">
+<div
+	class="flex items-center gap-4 transition-opacity duration-1000 {atelier.needle.isVisible
+		? 'opacity-100'
+		: 'opacity-0'}"
+>
 	<div class="flex w-[180px] items-center">
 		{#key stance.current.type}
-			<div 
+			<div
 				class="status-tag flex items-center gap-2 {stance.current.isPulse ? 'animate-pulse' : ''}"
 				style="
 					border-color: color-mix(in srgb, {stance.current.color} 20%, transparent);
@@ -17,13 +21,17 @@
 				{#if stance.current.icon}
 					<span class="text-xs">{stance.current.icon}</span>
 				{/if}
-				
-				<span class={stance.current.type === 'RESTING' ? 'font-serif italic opacity-60' : 'font-bold'}>
+
+				<span
+					class={stance.current.type === 'RESTING' ? 'font-serif italic opacity-60' : 'font-bold'}
+				>
 					{stance.current.label}
 				</span>
 
 				{#if stance.current.type === 'RESTING'}
-					<span class="ml-1 border-l border-studio-text/20 pl-2 not-italic font-mono text-[9px] tracking-tighter">
+					<span
+						class="ml-1 border-l border-studio-text/20 pl-2 font-mono text-[9px] tracking-tighter not-italic"
+					>
 						v{atelier.version}
 					</span>
 				{/if}
@@ -32,7 +40,10 @@
 	</div>
 
 	{#if atelier.project.lastSaved}
-		{@const time = atelier.project.lastSaved.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+		{@const time = atelier.project.lastSaved.toLocaleTimeString([], {
+			hour: '2-digit',
+			minute: '2-digit'
+		})}
 		<div class="text-[8px] font-bold tracking-[0.2em] uppercase opacity-20">
 			Linen Backed Up: {time}
 		</div>

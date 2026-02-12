@@ -25,14 +25,8 @@
 	{#each atelier.stitches as color, i (i)}
 		{@const x = i % atelier.linen.width}
 		{@const y = Math.floor(i / atelier.linen.width)}
-		
-		<Stitch 
-			{color} 
-			{x} 
-			{y} 
-			activeX={atelier.needle.pos.x} 
-			activeY={atelier.needle.pos.y} 
-		/>
+
+		<Stitch {color} {x} {y} activeX={atelier.needle.pos.x} activeY={atelier.needle.pos.y} />
 	{/each}
 
 	<SelectionLasso />

@@ -20,15 +20,19 @@ The Atelier is organized into four main areas to keep your workspace clean:
 Rupa is designed for a keyboard-first experience.
 
 ### 2.1 Moving the Needle
+
 - **Arrow Keys:** Move the Needle across the linen.
 - **`G` (Go To):** Instantly jump to a specific coordinate using the Cartesian system.
 
 ### 2.2 Applying Dyes (Stitching)
+
 - **Space / Enter:** Apply the active dye to the current cell (Stitch).
 - **Backspace / Delete:** Clear the current cell (Unstitch).
 
 ### 2.3 Batch Filling
+
 You can fill an entire area instantly:
+
 1. Hold **`Shift`** to enter **Looming Mode** (Selection).
 2. Use **Arrow Keys** to define the area.
 3. Press **`Space`** while holding Shift to fill the entire area with the active dye.
@@ -39,13 +43,13 @@ You can fill an entire area instantly:
 
 Mastering Rupa requires understanding how modifiers change your "Stance."
 
-| Stance | Modifier | Action |
-| :--- | :--- | :--- |
-| **Resting** | None | Free movement without altering the linen. |
-| **Threading** | `Ctrl` | **Flow-Stitch:** Color every cell the needle passes through. |
-| **Looming** | `Shift` | **Selection:** Define a rectangular area. The selection persists until cleared. |
-| **Unravelling** | `Ctrl + Shift`| **Flow-Erase:** Clear every cell the needle passes through. |
-| **Picking** | `Alt` | **Eyedropper:** Sample a color directly from the linen. |
+| Stance          | Modifier       | Action                                                                          |
+| :-------------- | :------------- | :------------------------------------------------------------------------------ |
+| **Resting**     | None           | Free movement without altering the linen.                                       |
+| **Threading**   | `Ctrl`         | **Flow-Stitch:** Color every cell the needle passes through.                    |
+| **Looming**     | `Shift`        | **Selection:** Define a rectangular area. The selection persists until cleared. |
+| **Unravelling** | `Ctrl + Shift` | **Flow-Erase:** Clear every cell the needle passes through.                     |
+| **Picking**     | `Alt`          | **Eyedropper:** Sample a color directly from the linen.                         |
 
 ---
 
@@ -91,4 +95,4 @@ When your work is complete, transform it into a permanent file:
 
 ---
 
-*"May your stitches be steady and your palette be vibrant."*
+_"May your stitches be steady and your palette be vibrant."_

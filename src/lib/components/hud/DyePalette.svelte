@@ -2,7 +2,7 @@
 	import { atelier } from '../../state/atelier.svelte.js';
 </script>
 
-<div class="artisan-panel flex flex-col gap-2 p-2 shadow-sm border-l-2 border-white rounded-2xl">
+<div class="artisan-panel flex flex-col gap-2 rounded-2xl border-l-2 border-white p-2 shadow-sm">
 	<span class="mb-1 text-center font-serif text-[7px] font-bold uppercase opacity-30">Dyes</span>
 	{#each atelier.palette as color, i}
 		<button

@@ -28,7 +28,7 @@ export class ExportEngine {
 				const cluster = this.findCluster(x, y, width, height, data, visited);
 				const rects = this.greedyRectMerge(cluster, width);
 
-				rects.forEach(r => {
+				rects.forEach((r) => {
 					svg += `<rect x="${r.x}" y="${r.y}" width="${r.w}" height="${r.h}" fill="${color}" />`;
 				});
 			}
@@ -39,24 +39,29 @@ export class ExportEngine {
 	}
 
 	private static findCluster(
-		startX: number, 
-		startY: number, 
-		width: number, 
-		height: number, 
-		data: (string | null)[], 
+		startX: number,
+		startY: number,
+		width: number,
+		height: number,
+		data: (string | null)[],
 		visited: boolean[]
 	): Set<number> {
 		const color = data[startY * width + startX];
 		const cluster = new Set<number>();
 		const queue = [[startX, startY]];
-		
+
 		visited[startY * width + startX] = true;
 		cluster.add(startY * width + startX);
 
 		while (queue.length > 0) {
 			const [x, y] = queue.shift()!;
-			const neighbors = [[x+1, y], [x-1, y], [x, y+1], [x, y-1]];
-			
+			const neighbors = [
+				[x + 1, y],
+				[x - 1, y],
+				[x, y + 1],
+				[x, y - 1]
+			];
+
 			for (const [nx, ny] of neighbors) {
 				if (nx >= 0 && nx < width && ny >= 0 && ny < height) {
 					const nIdx = ny * width + nx;
@@ -71,7 +76,10 @@ export class ExportEngine {
 		return cluster;
 	}
 
-	private static greedyRectMerge(cluster: Set<number>, totalWidth: number): Array<{x: number, y: number, w: number, h: number}> {
+	private static greedyRectMerge(
+		cluster: Set<number>,
+		totalWidth: number
+	): Array<{ x: number; y: number; w: number; h: number }> {
 		const rects = [];
 		const localVisited = new Set<number>();
 		const points = Array.from(cluster).sort((a, b) => a - b);
@@ -81,7 +89,10 @@ export class ExportEngine {
 			const startX = startIdx % totalWidth;
 			const startY = Math.floor(startIdx / totalWidth);
 			let w = 1;
-			while (cluster.has(startY * totalWidth + (startX + w)) && !localVisited.has(startY * totalWidth + (startX + w))) {
+			while (
+				cluster.has(startY * totalWidth + (startX + w)) &&
+				!localVisited.has(startY * totalWidth + (startX + w))
+			) {
 				w++;
 			}
 			let h = 1;
@@ -136,7 +147,12 @@ export class ExportEngine {
 			const x = i % width;
 			const y = Math.floor(i / width);
 			ctx.fillStyle = color;
-			ctx.fillRect(Math.floor(x * scale), Math.floor(y * scale), Math.ceil(scale), Math.ceil(scale));
+			ctx.fillRect(
+				Math.floor(x * scale),
+				Math.floor(y * scale),
+				Math.ceil(scale),
+				Math.ceil(scale)
+			);
 		});
 		return canvas.toDataURL('image/png');
 	}

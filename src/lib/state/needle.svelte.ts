@@ -2,22 +2,22 @@
  * NeedleState: Manages the artisan's needle (cursor) and its focus.
  */
 export class NeedleState {
-    pos = $state({ x: 0, y: 0 });
-    isVisible = $state(true);
-    
-    private inactivityTimer: any = null;
-    private readonly INACTIVITY_TIMEOUT = 20000;
+	pos = $state({ x: 0, y: 0 });
+	isVisible = $state(true);
 
-    resetInactivityTimer() {
-        this.isVisible = true;
-        if (this.inactivityTimer) clearTimeout(this.inactivityTimer);
-        this.inactivityTimer = setTimeout(() => {
-            this.isVisible = false;
-        }, this.INACTIVITY_TIMEOUT);
-    }
+	private inactivityTimer: any = null;
+	private readonly INACTIVITY_TIMEOUT = 20000;
 
-    setPos(x: number, y: number) {
-        this.pos = { x, y };
-        this.resetInactivityTimer();
-    }
+	resetInactivityTimer() {
+		this.isVisible = true;
+		if (this.inactivityTimer) clearTimeout(this.inactivityTimer);
+		this.inactivityTimer = setTimeout(() => {
+			this.isVisible = false;
+		}, this.INACTIVITY_TIMEOUT);
+	}
+
+	setPos(x: number, y: number) {
+		this.pos = { x, y };
+		this.resetInactivityTimer();
+	}
 }

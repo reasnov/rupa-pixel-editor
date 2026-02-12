@@ -3,7 +3,9 @@
 	import StateIndicator from './StateIndicator.svelte';
 </script>
 
-<div class="artisan-panel bottom-panel flex min-w-[600px] items-center justify-between gap-8 border-t-4 border-white px-10 py-4 shadow-xl">
+<div
+	class="artisan-panel bottom-panel flex min-w-[600px] items-center justify-between gap-8 border-t-4 border-white px-10 py-4 shadow-xl"
+>
 	<div class="flex gap-3">
 		<button class="artisan-tool-btn" onclick={() => (atelier.studio.showPatternCatalog = true)}>
 			<span>📖</span> Catalog

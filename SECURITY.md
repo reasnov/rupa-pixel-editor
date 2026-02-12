@@ -6,10 +6,10 @@ The security of the **Rupa Pixel Editor** and the privacy of our artisans are of
 
 We currently provide security updates for the following versions:
 
-| Version | Supported          |
-| ------- | ------------------ |
-| v0.2.x  | ✅ Yes              |
-| < v0.2  | ❌ No               |
+| Version | Supported |
+| ------- | --------- |
+| v0.2.x  | ✅ Yes    |
+| < v0.2  | ❌ No     |
 
 ---
 
@@ -24,6 +24,7 @@ Instead, please send a detailed report to our secure channel:
 📧 **Email:** [reasnov.official@gmail.com](mailto:reasnov.official@gmail.com)
 
 ### What to Include in Your Report:
+
 - A description of the vulnerability.
 - A proof-of-concept or steps to reproduce the issue.
 - Potential impact on the artisan's environment.
@@ -39,4 +40,4 @@ Thank you for helping us keep the Atelier a safe sanctuary for digital craft.
 
 ---
 
-*"Strength in every stitch, security in every pattern."*
+_"Strength in every stitch, security in every pattern."_

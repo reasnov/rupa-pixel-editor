@@ -3,7 +3,9 @@
 	import NeedleStats from './NeedleStats.svelte';
 </script>
 
-<div class="pointer-events-none fixed top-0 right-0 z-40 flex h-full flex-col items-end justify-center gap-6 p-8">
+<div
+	class="pointer-events-none fixed top-0 right-0 z-40 flex h-full flex-col items-end justify-center gap-6 p-8"
+>
 	<!-- 1. Coordinates & Size -->
 	<div class="pointer-events-auto">
 		<NeedleStats />

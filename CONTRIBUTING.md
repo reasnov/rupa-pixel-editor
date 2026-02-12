@@ -13,7 +13,9 @@ By participating in this project, you agree to maintain a professional, respectf
 ## 🚀 How Can I Contribute?
 
 ### 1. Identifying Loose Threads (Reporting Bugs)
+
 If you encounter an issue that disrupts the rhythm of the studio:
+
 - Search the [GitHub Issue Tracker](https://github.com/reasnov/rupa-pixel-editor/issues) to see if it has already been reported.
 - If not, open a new issue.
 - Provide a clear, descriptive title and detailed steps to reproduce the behavior.
@@ -21,12 +23,15 @@ If you encounter an issue that disrupts the rhythm of the studio:
 - Describe the expected vs. actual behavior within the context of the "Digital Stitching" experience.
 
 ### 2. Suggesting New Patterns (Enhancements)
+
 Have an idea to improve the studio?
+
 - Open an issue with the `enhancement` label.
 - Describe the proposed change and, most importantly, explain how it aligns with the project's **Keyboard-First** and **Cottagecore** philosophy.
 - Consider how the feature would feel—is it tactile? Does it add to the meditative flow?
 
 ### 3. Weaving Code (Pull Requests)
+
 1. **Fork the Repository:** Create your own branch from `main`.
 2. **Adhere to the Blueprint:** Ensure your changes follow the established [Technical Architecture](./docs/developers/architecture.md).
 3. **English Standard:** All code, comments, and documentation must be authored in English.
@@ -42,7 +47,7 @@ Have an idea to improve the studio?
 
 Every contribution must respect the core pillars of Rupa:
 
-- **Keyboard-First (The Loom):** No feature should ever *require* a mouse. The keyboard is the primary instrument of the artisan.
+- **Keyboard-First (The Loom):** No feature should ever _require_ a mouse. The keyboard is the primary instrument of the artisan.
 - **Minimalist Aesthetic (The Sanctuary):** Keep the UI clean, warm, and free of clinical clutter. Use Solarized tones and organic textures.
 - **Tactile Feedback (The Rhythm):** Every action should have a visual or auditory response (SFX). The artisan must "feel" the work.
 - **Svelte 5 Runes (The Thread):** Utilize `$state`, `$derived`, and `$effect` for precise, fine-grained reactivity.
@@ -73,4 +78,4 @@ By contributing to Rupa Pixel Editor, you agree that your work will be licensed 
 
 ---
 
-*"Happy weaving, Artisan."*
+_"Happy weaving, Artisan."_

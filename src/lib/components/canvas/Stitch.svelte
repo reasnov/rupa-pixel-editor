@@ -14,10 +14,10 @@
 </script>
 
 <div
-    class="cell-stitch relative h-full w-full {isActive ? 'z-30' : 'z-10'}"
-    style="background-color: {isEmpty ? 'transparent' : color};"
+	class="cell-stitch relative h-full w-full {isActive ? 'z-30' : 'z-10'}"
+	style="background-color: {isEmpty ? 'transparent' : color};"
 >
-    {#if isActive}
-        <Needle />
-    {/if}
+	{#if isActive}
+		<Needle />
+	{/if}
 </div>

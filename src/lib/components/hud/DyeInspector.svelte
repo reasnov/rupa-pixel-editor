@@ -3,15 +3,15 @@
 	import { slide } from 'svelte/transition';
 </script>
 
-<div class="artisan-panel px-3 py-4 shadow-sm border-r-2 border-white flex flex-col gap-4">
+<div class="artisan-panel flex flex-col gap-4 border-r-2 border-white px-3 py-4 shadow-sm">
 	<!-- Section 1: Active Dye -->
 	<div class="flex flex-col items-center gap-2">
 		<span class="font-serif text-[7px] font-bold uppercase opacity-30">Active Dye</span>
-		<div 
+		<div
 			class="h-8 w-8 rounded-lg border-2 border-white shadow-md transition-colors"
 			style="background-color: {atelier.paletteState.activeDye};"
 		></div>
-		<span class="font-mono text-[8px] font-bold opacity-40 uppercase tracking-tighter">
+		<span class="font-mono text-[8px] font-bold tracking-tighter uppercase opacity-40">
 			{atelier.paletteState.activeDye}
 		</span>
 	</div>
@@ -20,23 +20,27 @@
 
 	<!-- Section 2: Used Dyes -->
 	<div class="flex flex-col gap-3">
-		<span class="font-serif text-[7px] font-bold uppercase opacity-30 text-center">Used Dyes</span>
-		
-		<div class="grid grid-cols-3 gap-1.5 overflow-y-auto max-h-[140px] no-scrollbar">
+		<span class="text-center font-serif text-[7px] font-bold uppercase opacity-30">Used Dyes</span>
+
+		<div class="no-scrollbar grid max-h-[140px] grid-cols-3 gap-1.5 overflow-y-auto">
 			{#each atelier.usedColors as color (color)}
-				<button 
+				<button
 					transition:slide={{ duration: 200 }}
 					class="group relative h-5 w-5 shrink-0 rounded-md border-2 border-white shadow-sm transition-all hover:scale-110 active:scale-95"
 					style="background-color: {color};"
 					onclick={() => (atelier.paletteState.activeDye = color)}
 					title={color}
 				>
-					<div class="absolute inset-0 flex items-center justify-center opacity-0 transition-opacity group-hover:opacity-100">
+					<div
+						class="absolute inset-0 flex items-center justify-center opacity-0 transition-opacity group-hover:opacity-100"
+					>
 						<span class="text-[6px] drop-shadow-sm">📍</span>
 					</div>
 				</button>
 			{:else}
-				<div class="flex h-5 w-5 items-center justify-center rounded-md border-2 border-dashed border-studio-text/10">
+				<div
+					class="flex h-5 w-5 items-center justify-center rounded-md border-2 border-dashed border-studio-text/10"
+				>
 					<span class="text-[6px] opacity-20">🧵</span>
 				</div>
 			{/each}
@@ -52,7 +56,7 @@
 
 	/* Hide scrollbar for IE, Edge and Firefox */
 	.no-scrollbar {
-		-ms-overflow-style: none;  /* IE and Edge */
-		scrollbar-width: none;  /* Firefox */
+		-ms-overflow-style: none; /* IE and Edge */
+		scrollbar-width: none; /* Firefox */
 	}
 </style>

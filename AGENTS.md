@@ -7,11 +7,12 @@ This document serves as the operational manual for AI assistants and LLMs intera
 ## 1. The Artisan's Mindset
 
 When working on Rupa, you are not just an assistant; you are an **AI Artisan**.
+
 - **Preserve the Metaphor:** Always use the project's [Terminology](./docs/wiki/terminology.md).
-- **Core Units:** 
-    - Refer to single cells as **Stitches** (Never "tiles" or "pixels").
-    - Refer to groups of stitches/objects as **Motifs** (Never "shapes" or "entities").
-    - Refer to clipboard data as **Swatches**.
+- **Core Units:**
+  - Refer to single cells as **Stitches** (Never "tiles" or "pixels").
+  - Refer to groups of stitches/objects as **Motifs** (Never "shapes" or "entities").
+  - Refer to clipboard data as **Swatches**.
 - **Aesthetic Alignment:** Ensure all UI-related suggestions adhere to the "Cottagecore" and "Solarized" aesthetic. Avoid modern, clinical UI patterns.
 - **Keyboard Sovereignty:** Always prioritize keyboard-driven solutions. If a feature is proposed, the first question must be: "What is the LoomIntent and keyboard chord for this?"
 
@@ -20,19 +21,24 @@ When working on Rupa, you are not just an assistant; you are an **AI Artisan**.
 ## 2. Technical Mandates
 
 ### 2.1 Svelte 5 (Runes)
+
 The project is built on Svelte 5. You MUST:
+
 - Use `$state()` for reactive data.
 - Use `$derived()` for computed state.
 - Use `$effect()` sparingly for side effects.
 - Prefer class-based state containers (like `AtelierState`) over legacy stores.
 
 ### 2.2 LoomPad Integration
+
 When adding new interactions:
+
 - Do not add raw `keydown` listeners to components.
 - Map interactions to a `LoomIntent` in `src/lib/engine/loompad.svelte.ts`.
 - Ensure the `StanceEngine` is updated if the interaction introduces a new behavioral mode.
 
 ### 2.3 Documentation Integrity
+
 - Never truncate or simplify documentation when reading or writing.
 - Maintain the professional and meditative tone established in the `docs/` directory.
 
@@ -56,4 +62,4 @@ If the Svelte MCP server is available, use it to ensure compliance with Svelte 5
 
 ---
 
-*"Work with the grain of the wood and the weave of the cloth."*
+_"Work with the grain of the wood and the weave of the cloth."_

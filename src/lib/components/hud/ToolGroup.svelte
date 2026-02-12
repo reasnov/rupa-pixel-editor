@@ -3,7 +3,7 @@
 </script>
 
 <div
-	class="artisan-panel pointer-events-auto flex gap-2 rounded-2xl border-b-2 border-white px-4 py-2 shadow-sm"
+	class="artisan-panel pointer-events-auto flex gap-2 rounded-xl border-b-2 border-white px-4 py-2 shadow-sm"
 >
 	<button
 		class="artisan-tool-btn !py-1.5"

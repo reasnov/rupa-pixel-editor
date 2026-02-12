@@ -155,7 +155,7 @@
 >
 	<div
 		transition:scale={{ duration: 150, start: 0.98 }}
-		class="flex w-[600px] flex-col overflow-hidden rounded-[2.5rem] border border-black/5 bg-[#fdf6e3]/95 shadow-2xl"
+		class="flex w-[600px] flex-col overflow-hidden rounded-xl border border-black/5 bg-[#fdf6e3]/95 shadow-2xl"
 	>
 		<div class="relative flex items-center border-b border-black/5 bg-white/40 p-6">
 			<span class="mr-4 text-2xl opacity-40">📖</span>

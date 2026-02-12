@@ -4,6 +4,7 @@
 		value = $bindable(),
 		min = 0,
 		max,
+		step = 1,
 		unit = '',
 		isHue = false
 	} = $props<{
@@ -11,6 +12,7 @@
 		value: number;
 		min?: number;
 		max: number;
+		step?: number;
 		unit?: string;
 		isHue?: boolean;
 	}>();
@@ -21,9 +23,17 @@
 		class="flex justify-between font-serif text-[10px] font-bold tracking-wider uppercase opacity-40"
 	>
 		<span>{label}</span>
-		<span>{Math.round(value)}{unit}</span>
+		<span>{step < 1 ? value.toFixed(2) : Math.round(value)}{unit}</span>
 	</div>
-	<input type="range" {min} {max} bind:value class="custom-slider" class:hue-slider={isHue} />
+	<input
+		type="range"
+		{min}
+		{max}
+		{step}
+		bind:value
+		class="custom-slider"
+		class:hue-slider={isHue}
+	/>
 </div>
 
 <style>
@@ -44,7 +54,7 @@
 		height: 24px;
 		background: #fff;
 		border: 3px solid #859900;
-		border-radius: 50%;
+		border-radius: 8px;
 		cursor: pointer;
 		box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
 	}

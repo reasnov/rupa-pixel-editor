@@ -24,7 +24,7 @@
 	width="450px"
 >
 	<div class="flex flex-col gap-8">
-		<div class="flex flex-col gap-6 rounded-3xl border border-black/5 bg-white/40 p-8">
+		<div class="flex flex-col gap-6 rounded-xl border border-black/5 bg-white/40 p-8">
 			<div class="grid grid-cols-2 gap-8">
 				<div class="flex flex-col gap-2">
 					<label

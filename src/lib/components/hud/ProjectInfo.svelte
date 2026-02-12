@@ -4,7 +4,7 @@
 </script>
 
 <div class="pointer-events-auto flex flex-col items-end gap-2">
-	<div class="artisan-panel rounded-2xl border-b-2 border-white px-6 py-3 shadow-sm">
+	<div class="artisan-panel rounded-xl border-b-2 border-white px-6 py-3 shadow-sm">
 		<h2 class="font-serif text-xs font-bold tracking-[0.2em] uppercase opacity-40">
 			{atelier.project.name}
 		</h2>

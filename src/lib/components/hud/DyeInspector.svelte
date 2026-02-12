@@ -8,7 +8,7 @@
 	<div class="flex flex-col items-center gap-2">
 		<span class="font-serif text-[7px] font-bold uppercase opacity-30">Active Dye</span>
 		<div
-			class="h-8 w-8 rounded-lg border-2 border-white shadow-md transition-colors"
+			class="h-8 w-8 rounded-lg border-2 border-white shadow-md transition-colors artisan-checker-small"
 			style="background-color: {atelier.paletteState.activeDye};"
 		></div>
 		<span class="font-mono text-[8px] font-bold tracking-tighter uppercase opacity-40">
@@ -26,7 +26,7 @@
 			{#each atelier.usedColors as color (color)}
 				<button
 					transition:slide={{ duration: 200 }}
-					class="group relative h-5 w-5 shrink-0 rounded-md border-2 border-white shadow-sm transition-all hover:scale-110 active:scale-95"
+					class="group relative h-5 w-5 shrink-0 rounded-md border-2 border-white shadow-sm transition-all hover:scale-110 active:scale-95 artisan-checker-small"
 					style="background-color: {color};"
 					onclick={() => (atelier.paletteState.activeDye = color)}
 					title={color}

@@ -16,7 +16,7 @@
 	width="400px"
 >
 	<div class="flex flex-col gap-6">
-		<div class="rounded-2xl border border-black/5 bg-white/50 p-6">
+		<div class="rounded-xl border border-black/5 bg-white/50 p-6">
 			<h3 class="mb-2 font-serif text-sm font-bold tracking-tight uppercase opacity-60">
 				Pattern Book (.rupa)
 			</h3>

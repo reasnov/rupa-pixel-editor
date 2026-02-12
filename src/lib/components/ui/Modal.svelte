@@ -41,7 +41,7 @@
 	<div
 		in:scale={{ duration: 200, start: 0.95 }}
 		out:scale={{ duration: 150, start: 1, opacity: 0 }}
-		class="flex flex-col gap-8 overflow-hidden rounded-[2rem] border-8 border-white bg-[#fdf6e3] p-10 shadow-2xl ring-1 ring-black/5"
+		class="flex flex-col gap-8 overflow-hidden rounded-xl border-8 border-white bg-[#fdf6e3] p-10 shadow-2xl ring-1 ring-black/5"
 		style="width: {width}; max-height: {maxHeight};"
 	>
 		<!-- Header -->
@@ -60,7 +60,7 @@
 			</div>
 			<button
 				onclick={onClose}
-				class="rounded-full border border-black/5 bg-white/50 px-4 py-2 text-[10px] font-bold tracking-widest uppercase opacity-40 transition-all hover:opacity-100"
+				class="rounded-xl border border-black/5 bg-white/50 px-4 py-2 text-[10px] font-bold tracking-widest uppercase opacity-40 transition-all hover:opacity-100"
 			>
 				Close
 			</button>

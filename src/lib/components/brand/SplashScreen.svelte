@@ -34,7 +34,7 @@
 		</div>
 
 		<div class="absolute bottom-16 flex flex-col items-center gap-4">
-			<div class="h-0.5 w-48 overflow-hidden rounded-full bg-black/5">
+			<div class="h-0.5 w-48 overflow-hidden rounded-xl bg-black/5">
 				<div class="h-full animate-[loading_2s_ease-in-out_infinite] bg-brand/60"></div>
 			</div>
 			<div class="flex flex-col items-center gap-1">

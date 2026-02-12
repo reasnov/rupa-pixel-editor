@@ -89,7 +89,7 @@
 
 {#if atelier.studio.showDyeBasin}
 	<DyeBasin
-		value={atelier.paletteState.activeDye}
+		bind:value={atelier.paletteState.activeDye}
 		onClose={() => (atelier.studio.showDyeBasin = false)}
 	/>
 {/if}

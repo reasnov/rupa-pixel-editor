@@ -16,7 +16,7 @@
 		<!-- Format Selection -->
 		<div class="grid grid-cols-2 gap-4">
 			<button
-				class="flex flex-col items-center gap-3 rounded-3xl border-2 p-8 transition-all {format ===
+				class="flex flex-col items-center gap-3 rounded-xl border-2 p-8 transition-all {format ===
 				'png'
 					? 'border-brand bg-brand/5'
 					: 'border-black/5 bg-white/40 opacity-40 hover:opacity-100'}"
@@ -31,7 +31,7 @@
 				</div>
 			</button>
 			<button
-				class="flex flex-col items-center gap-3 rounded-3xl border-2 p-8 transition-all {format ===
+				class="flex flex-col items-center gap-3 rounded-xl border-2 p-8 transition-all {format ===
 				'svg'
 					? 'border-brand bg-brand/5'
 					: 'border-black/5 bg-white/40 opacity-40 hover:opacity-100'}"
@@ -48,7 +48,7 @@
 		</div>
 
 		<!-- Settings -->
-		<div class="flex flex-col gap-6 rounded-3xl border border-black/5 bg-white/40 p-8">
+		<div class="flex flex-col gap-6 rounded-xl border border-black/5 bg-white/40 p-8">
 			<div class="flex items-center justify-between">
 				<div class="flex flex-col gap-1">
 					<span class="font-serif text-sm font-bold tracking-tight uppercase opacity-60"
@@ -74,7 +74,7 @@
 				</div>
 				<div class="flex gap-2">
 					<button
-						class="h-10 w-10 rounded-full border-2 {atelier.studio.exportBgColor === 'transparent'
+						class="h-10 w-10 rounded-xl border-2 {atelier.studio.exportBgColor === 'transparent'
 							? 'border-brand'
 							: 'border-black/5'}"
 						style="background: repeating-conic-gradient(#eee8d5 0% 25%, #fff 0% 50%) 50% / 10px 10px;"
@@ -82,14 +82,14 @@
 						title="Transparent"
 					></button>
 					<button
-						class="h-10 w-10 rounded-full border-2 {atelier.studio.exportBgColor === '#eee8d5'
+						class="h-10 w-10 rounded-xl border-2 {atelier.studio.exportBgColor === '#eee8d5'
 							? 'border-brand'
 							: 'border-black/5'} bg-[#eee8d5]"
 						onclick={() => (atelier.studio.exportBgColor = '#eee8d5')}
 						title="Studio Cream"
 					></button>
 					<button
-						class="h-10 w-10 rounded-full border-2 {atelier.studio.exportBgColor === '#000000'
+						class="h-10 w-10 rounded-xl border-2 {atelier.studio.exportBgColor === '#000000'
 							? 'border-brand'
 							: 'border-black/5'} bg-black"
 						onclick={() => (atelier.studio.exportBgColor = '#000000')}

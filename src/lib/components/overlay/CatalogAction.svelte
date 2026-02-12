@@ -7,7 +7,7 @@
 </script>
 
 <button
-	class="artisan-action-btn flex items-center justify-between rounded-2xl px-6 py-4 transition-all {isSelected
+	class="artisan-action-btn flex items-center justify-between rounded-xl px-6 py-4 transition-all {isSelected
 		? 'active bg-brand text-white shadow-lg'
 		: 'hover:bg-black/5'}"
 	onclick={() => {

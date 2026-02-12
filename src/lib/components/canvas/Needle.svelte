@@ -28,7 +28,7 @@
 				class="absolute -top-10 left-1/2 z-[110] flex -translate-x-1/2 flex-col items-center"
 			>
 				<div
-					class="relative h-7 w-7 overflow-hidden rounded-full rounded-br-none border-4 border-white bg-white shadow-xl ring-1 ring-black/5"
+					class="relative h-7 w-7 overflow-hidden rounded-xl rounded-br-none border-4 border-white bg-white shadow-xl ring-1 ring-black/5"
 					style="transform: rotate(45deg);"
 				>
 					<div
@@ -36,7 +36,7 @@
 						style="background-color: {atelier.activeDye};"
 					></div>
 				</div>
-				<div class="-mt-0.5 h-2 w-0.5 rounded-full bg-white opacity-80 shadow-sm"></div>
+				<div class="-mt-0.5 h-2 w-0.5 rounded-xl bg-white opacity-80 shadow-sm"></div>
 			</div>
 		{/if}
 	</div>
@@ -66,7 +66,7 @@
 		position: absolute;
 		background: transparent;
 		backdrop-filter: invert(100%);
-		border-radius: 50%;
+		border-radius: 2px;
 		z-index: 10;
 	}
 
@@ -99,7 +99,7 @@
 		height: 3px;
 		background: transparent;
 		backdrop-filter: invert(100%);
-		border-radius: 50%;
+		border-radius: 1px;
 		z-index: 11;
 	}
 </style>

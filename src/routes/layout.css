@@ -2,14 +2,14 @@
 
 @font-face {
   font-family: 'EB Garamond';
-  src: url('../../static/fonts/EBGaramond.ttf') format('truetype');
+  src: url('/fonts/EBGaramond.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'Lora';
-  src: url('../../static/fonts/Lora.ttf') format('truetype');
+  src: url('/fonts/Lora.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
 }

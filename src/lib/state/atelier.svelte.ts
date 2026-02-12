@@ -1,6 +1,7 @@
 import { type ColorHex } from '../types/index';
 import { sfx } from '../engine/audio';
 import { history } from '../engine/history';
+import { stance } from '../engine/stance.svelte';
 
 /**
  * The AtelierState: The central heart of the artisan's studio.
@@ -109,12 +110,17 @@ export class AtelierState {
 			this.needlePos = { x: newX, y: newY };
 			sfx.playMove();
 
-			if (this.isSelecting) {
-				this.updateSelection();
-			} else if (this.isAltPressed) {
-				this.unstitch();
-			} else if (this.isCtrlPressed) {
-				this.stitch();
+			// Sovereignty check via StanceEngine
+			switch (stance.current.type) {
+				case 'LOOMING':
+					this.updateSelection();
+					break;
+				case 'UNRAVELLING':
+					this.unstitch();
+					break;
+				case 'THREADING':
+					this.stitch();
+					break;
 			}
 		}
 		this.resetInactivityTimer();

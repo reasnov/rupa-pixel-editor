@@ -115,6 +115,7 @@
 
 		if (intent === 'FLOW_STITCH' || key === 'control' || key === 'meta') {
 			atelier.isCtrlPressed = false;
+			atelier.isAltPressed = false; // Break the Ctrl+Shift chord
 		} 
 		
 		if (intent === 'FLOW_UNSTITCH' || key === 'alt') {
@@ -124,6 +125,7 @@
 		if (intent === 'FLOW_SELECT' || key === 'shift') {
 			atelier.isShiftPressed = false;
 			atelier.isSelecting = false;
+			atelier.isAltPressed = false; // Break the Ctrl+Shift chord
 			atelier.selectionStart = null;
 			atelier.selectionEnd = null;
 		}

@@ -18,7 +18,12 @@
 		bgColor: string | 'transparent' = 'transparent'
 	) {
 		if (format === 'svg') {
-			const svg = ExportEngine.toSVG(editor.gridWidth, editor.gridHeight, editor.pixelData, bgColor);
+			const svg = ExportEngine.toSVG(
+				editor.gridWidth,
+				editor.gridHeight,
+				editor.pixelData,
+				bgColor
+			);
 			const blob = new Blob([svg], { type: 'image/svg+xml' });
 			const url = URL.createObjectURL(blob);
 			download(url, 'stitch-art.svg');
@@ -191,7 +196,7 @@
 <!-- TOP BAR: Brand Identity -->
 <div class="pointer-events-none fixed top-0 left-0 z-40 flex w-full justify-center p-6">
 	<div class="flex flex-col items-center">
-		<span class="font-serif text-4xl text-studio-warm italic opacity-90 drop-shadow-sm">Rupa</span>
+		<span class="font-tiny5 text-4xl text-brand opacity-90 drop-shadow-sm">Rupa</span>
 		<span class="-mt-1 font-serif text-[9px] font-bold tracking-[0.3em] uppercase opacity-30"
 			>The Weaver's Studio</span
 		>
@@ -205,7 +210,7 @@
 		{#each editor.palette as color, i}
 			<button
 				class="h-7 w-7 rounded-full border-2 transition-all {editor.activeColor === color
-					? 'scale-110 border-studio-warm shadow-md ring-2 ring-white'
+					? 'scale-110 border-brand shadow-md ring-2 ring-white'
 					: 'border-white opacity-70 hover:scale-105 hover:opacity-100'}"
 				style="background-color: {color};"
 				onclick={() => editor.selectPalette(i)}
@@ -216,7 +221,7 @@
 		<div class="mx-auto my-1 h-px w-4 bg-studio-text/10"></div>
 
 		<button
-			class="via-sage-300 h-7 w-7 rounded-full border-2 border-dashed border-studio-warm/40 bg-gradient-to-tr from-rose-300 via-sage-300 to-sky-300 shadow-sm transition-all hover:scale-110 hover:border-studio-warm"
+			class="via-sage-300 via-sage-300 h-7 w-7 rounded-full border-2 border-dashed border-brand/40 bg-gradient-to-tr from-rose-300 to-sky-300 shadow-sm transition-all hover:scale-110 hover:border-brand"
 			onclick={() => (editor.showColorPicker = true)}
 			title="Natural Dye Basin (Ctrl + P)"
 		></button>
@@ -250,7 +255,7 @@
 						<button
 							class="h-4 w-4 rounded border transition-all hover:scale-110 {editor.activeColor ===
 							color
-								? 'border-studio-warm ring-1 ring-studio-warm/30'
+								? 'border-brand ring-1 ring-brand/30'
 								: 'border-black/5 opacity-60'}"
 							style="background-color: {color};"
 							onclick={() => (editor.activeColor = color)}
@@ -265,7 +270,7 @@
 		<div class="flex w-full flex-col items-end">
 			<span class="mb-1 font-serif text-[8px] font-bold uppercase opacity-40">Dye</span>
 			<div
-				class="h-10 w-10 overflow-hidden rounded-xl border-4 border-white bg-white p-0.5 shadow-lg ring-1 ring-studio-warm/10"
+				class="h-10 w-10 overflow-hidden rounded-xl border-4 border-white bg-white p-0.5 shadow-lg ring-1 ring-brand/10"
 			>
 				<div class="h-full w-full rounded-lg" style="background-color: {editor.activeColor};"></div>
 			</div>
@@ -297,7 +302,8 @@
 				<span>🌿</span> Clear
 			</button>
 			<button class="artisan-tool-btn" onclick={() => editor.toggleMute()}>
-				<span>{editor.isMuted ? '🔇' : '🔊'}</span> {editor.isMuted ? 'Unmute' : 'Mute'}
+				<span>{editor.isMuted ? '🔇' : '🔊'}</span>
+				{editor.isMuted ? 'Unmute' : 'Mute'}
 			</button>
 		</div>
 
@@ -316,7 +322,9 @@
 					{/if}
 				</div>
 			{:else}
-				<div class="status-tag font-serif italic opacity-60">Studio Ready</div>
+				<div class="status-tag font-serif italic opacity-60">
+					Studio Ready <span class="ml-2 border-l border-studio-text/20 pl-2 not-italic">v{editor.version}</span>
+				</div>
 			{/if}
 		</div>
 	</div>

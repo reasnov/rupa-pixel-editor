@@ -1,24 +1,31 @@
 @import 'tailwindcss';
 
 @font-face {
-  font-family: 'EB Garamond';
-  src: url('/fonts/EBGaramond.ttf') format('truetype');
-  font-weight: normal;
-  font-style: normal;
+	font-family: 'EB Garamond';
+	src: url('../lib/fonts/EBGaramond.ttf') format('truetype');
+	font-weight: normal;
+	font-style: normal;
 }
 
 @font-face {
-  font-family: 'Lora';
-  src: url('/fonts/Lora.ttf') format('truetype');
-  font-weight: normal;
-  font-style: normal;
+	font-family: 'Lora';
+	src: url('../lib/fonts/Lora.ttf') format('truetype');
+	font-weight: normal;
+	font-style: normal;
 }
+@font-face {
+	font-family: 'Tiny5';
+	src: url('../lib/fonts/Tiny5-Regular.ttf') format('truetype');
+	font-weight: normal;
+	font-style: normal;
+}
+
 @theme {
+	--color-brand: #d33682;
 	--color-canvas-bg: #fdf6e3;
 	--color-grid-border: #eee8d5;
 	--color-active-cell: #859900;
 	--color-studio-teal: #2aa198;
-	--color-studio-warm: #cb4b16;
 	--color-studio-text: #586e75;
 }
 
@@ -33,6 +40,10 @@ h2,
 h3,
 .font-serif {
 	font-family: 'EB Garamond', serif;
+}
+
+.font-tiny5 {
+	font-family: 'Tiny5', system-ui;
 }
 
 body {
@@ -114,7 +125,8 @@ canvas,
 }
 
 .artisan-checker-small {
-	background-image: linear-gradient(45deg, rgba(0, 0, 0, 0.02) 25%, transparent 25%),
+	background-image:
+		linear-gradient(45deg, rgba(0, 0, 0, 0.02) 25%, transparent 25%),
 		linear-gradient(-45deg, rgba(0, 0, 0, 0.02) 25%, transparent 25%),
 		linear-gradient(45deg, transparent 75%, rgba(0, 0, 0, 0.02) 75%),
 		linear-gradient(-45deg, transparent 75%, rgba(0, 0, 0, 0.02) 75%);
@@ -154,11 +166,11 @@ canvas,
 }
 
 .artisan-tool-btn:hover {
-	background: var(--color-studio-warm);
+	background: var(--color-brand);
 	color: white;
-	border-color: var(--color-studio-warm);
+	border-color: var(--color-brand);
 	transform: translateY(-1px);
-	box-shadow: 0 4px 10px rgba(203, 75, 22, 0.2);
+	box-shadow: 0 4px 10px rgba(211, 54, 130, 0.2);
 }
 
 .artisan-tool-btn:active {

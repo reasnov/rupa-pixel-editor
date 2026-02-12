@@ -5,7 +5,7 @@
 
 <!-- The Canvas (The Linen) -->
 <div
-	class="stitch-grid-pattern artisan-checker-small relative shrink-0 origin-center transition-transform duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] shadow-sm"
+	class="stitch-grid-pattern artisan-checker-small relative shrink-0 origin-center shadow-sm transition-transform duration-500 ease-[cubic-bezier(0.23,1,0.32,1)]"
 	style="
 		display: grid;
 		grid-template-columns: repeat({editor.gridWidth}, 1fr); 
@@ -29,13 +29,19 @@
 		{#each [-24, -16, -8, 8, 16, 24] as offset}
 			{@const pos = 50 + (offset / editor.gridWidth) * 100}
 			{#if pos > 0 && pos < 100}
-				<div class="absolute top-0 bottom-0 w-px -translate-x-1/2 bg-studio-text/10" style="left: {pos}%"></div>
+				<div
+					class="absolute top-0 bottom-0 w-px -translate-x-1/2 bg-studio-text/10"
+					style="left: {pos}%"
+				></div>
 			{/if}
 		{/each}
 		{#each [-24, -16, -8, 8, 16, 24] as offset}
 			{@const pos = 50 + (offset / editor.gridHeight) * 100}
 			{#if pos > 0 && pos < 100}
-				<div class="absolute right-0 left-0 h-px -translate-y-1/2 bg-studio-text/10" style="top: {pos}%"></div>
+				<div
+					class="absolute right-0 left-0 h-px -translate-y-1/2 bg-studio-text/10"
+					style="top: {pos}%"
+				></div>
 			{/if}
 		{/each}
 	</div>
@@ -45,7 +51,7 @@
 		{@const y = Math.floor(i / editor.gridWidth)}
 		{@const isActive = editor.cursorPos.x === x && editor.cursorPos.y === y}
 		{@const isEmpty = color === '#eee8d5'}
-		
+
 		<div
 			class="cell-stitch relative h-full w-full {isActive ? 'z-30' : 'z-10'}"
 			style="background-color: {isEmpty ? 'rgba(238, 232, 213, 0.01)' : color};"
@@ -65,7 +71,7 @@
 		{@const width = x2 - x1 + 1}
 		{@const height = y2 - y1 + 1}
 		<div
-			class="absolute z-40 border-2 border-dashed border-studio-warm bg-studio-warm/10 pointer-events-none"
+			class="pointer-events-none absolute z-40 border-2 border-dashed border-brand bg-brand/10"
 			style="
 				left: {(x1 / editor.gridWidth) * 100}%; 
 				top: {(y1 / editor.gridHeight) * 100}%; 
@@ -73,8 +79,8 @@
 				height: {(height / editor.gridHeight) * 100}%;
 			"
 		>
-			<div 
-				class="absolute h-2 w-2 bg-studio-warm border border-white shadow-sm -translate-x-1/2 -translate-y-1/2"
+			<div
+				class="absolute h-2 w-2 -translate-x-1/2 -translate-y-1/2 border border-white bg-brand shadow-sm"
 				style="
 					left: {((editor.selectionStart.x - x1 + 0.5) / width) * 100}%;
 					top: {((editor.selectionStart.y - y1 + 0.5) / height) * 100}%;

@@ -4,6 +4,8 @@
 
 Built with **Svelte 5** and **Electron**, Rupa eliminates the mouse in favor of absolute keyboard precision.
 
+![Rupa Logo](static/rupa-logo.png)
+
 ## ✨ Key Features
 
 - **Keyboard-Centric Workflow**: Navigate the grid using arrow keys with zero-latency response.
@@ -12,6 +14,10 @@ Built with **Svelte 5** and **Electron**, Rupa eliminates the mouse in favor of 
 - **Color Palette & Picker**: Full control over your "threads" with a keyboard-driven color selection system.
 - **Pro Export Engine**: Export your creations as sharp PNGs or optimized SVGs.
 - **Retro Audio Feedback**: Real-time synthesized SFX for movement and drawing, reinforcing the tactile experience.
+
+## 🖼️ Gallery
+
+![The Artisan's Workshop](static/screenshots/screenshot-1.png)
 
 ## ⌨️ Controls
 

@@ -2,6 +2,7 @@
 	import { editor } from '../state/editor.svelte';
 	import { onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
+	import icon from '$lib/assets/rupa-icon.png';
 
 	let visible = $state(true);
 
@@ -20,31 +21,48 @@
 </script>
 
 {#if visible}
-	<div 
+	<div
 		out:fade={{ duration: 800 }}
-		class="fixed inset-0 z-[2000] flex flex-col items-center justify-center bg-[#fdf6e3] background-image: url('https://www.transparenttextures.com/patterns/natural-paper.png');"
+		class="fixed inset-0 z-[2000] flex flex-col items-center justify-center bg-[#fdf6e3]"
+		style="background-image: url('https://www.transparenttextures.com/patterns/natural-paper.png');"
 	>
-		<div class="flex flex-col items-center gap-2 animate-pulse">
-			<div class="h-16 w-16 rounded-full border-4 border-studio-warm/20 flex items-center justify-center bg-white shadow-sm mb-4">
-				<span class="text-3xl font-serif italic text-studio-warm">R</span>
+		<div class="flex flex-col items-center gap-2">
+			<div
+				class="mb-6 flex animate-bounce items-center justify-center"
+			>
+				<img src={icon} alt="Rupa Icon" class="h-24 w-auto drop-shadow-md" />
 			</div>
-			<h1 class="text-5xl font-serif italic text-studio-warm tracking-tighter">Rupa</h1>
-			<p class="text-[10px] uppercase tracking-[0.4em] font-serif font-bold opacity-30">The Weaver's Studio</p>
+			<h1 class="font-tiny5 text-6xl text-brand drop-shadow-sm">Rupa</h1>
+			<p class="font-serif text-[10px] font-bold tracking-[0.4em] uppercase opacity-40">
+				The Weaver's Studio
+			</p>
 		</div>
 
 		<div class="absolute bottom-16 flex flex-col items-center gap-4">
-			<div class="w-32 h-0.5 bg-studio-text/5 rounded-full overflow-hidden">
-				<div class="h-full bg-studio-warm/40 animate-[loading_2s_ease-in-out_infinite]"></div>
+			<div class="h-0.5 w-48 overflow-hidden rounded-full bg-black/5">
+				<div class="h-full animate-[loading_2s_ease-in-out_infinite] bg-brand/60"></div>
 			</div>
-			<span class="text-[9px] font-serif italic opacity-20 italic">Preparing the linen...</span>
+			<div class="flex flex-col items-center gap-1">
+				<span class="font-serif text-[10px] italic opacity-40">Preparing the digital linen...</span>
+				<span class="font-mono text-[9px] font-bold tracking-widest opacity-20 uppercase">Version {editor.version}</span>
+			</div>
 		</div>
 	</div>
 {/if}
 
 <style>
 	@keyframes loading {
-		0% { width: 0%; transform: translateX(-100%); }
-		50% { width: 50%; transform: translateX(50%); }
-		100% { width: 0%; transform: translateX(200%); }
+		0% {
+			width: 0%;
+			transform: translateX(-100%);
+		}
+		50% {
+			width: 50%;
+			transform: translateX(50%);
+		}
+		100% {
+			width: 0%;
+			transform: translateX(200%);
+		}
 	}
 </style>

@@ -13,7 +13,7 @@
 	const commands: Command[] = [
 		{
 			id: 'open-help',
-			label: 'Help: Open Artisan\'s Guide',
+			label: "Help: Open Artisan's Guide",
 			shortcut: 'F1',
 			action: () => (editor.showHelp = true)
 		},
@@ -163,7 +163,7 @@
 					<button
 						class="flex w-full items-center justify-between rounded-2xl px-6 py-4 text-left transition-all {i ===
 						selectedIndex
-							? 'scale-[1.02] bg-studio-warm text-white shadow-md'
+							? 'scale-[1.02] bg-brand text-white shadow-md'
 							: 'hover:bg-studio-text/5'}"
 						onclick={() => executeCommand(cmd)}
 					>

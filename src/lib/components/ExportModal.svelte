@@ -4,9 +4,7 @@
 	import ColorPicker from './ColorPicker.svelte';
 	import { onMount } from 'svelte';
 
-	let {
-		onExport
-	} = $props<{
+	let { onExport } = $props<{
 		onExport: (format: 'png' | 'svg', scale: number, bgColor: string | 'transparent') => void;
 	}>();
 
@@ -78,7 +76,7 @@
 		class="flex max-h-[90vh] w-[500px] flex-col gap-6 overflow-y-auto rounded-[2.5rem] border-8 border-white bg-[#fdf6e3] p-8 shadow-2xl ring-1 ring-black/5"
 	>
 		<div class="flex items-center justify-between">
-			<span class="font-serif text-2xl text-studio-warm italic">Export Project</span>
+			<span class="font-serif text-2xl text-brand italic">Export Project</span>
 			<button
 				onclick={close}
 				class="text-[10px] font-bold tracking-widest uppercase opacity-30 transition-opacity hover:opacity-100"
@@ -88,9 +86,7 @@
 
 		<!-- Live Preview -->
 		<div class="flex flex-col gap-3">
-			<span class="text-[10px] font-black tracking-wider uppercase opacity-30"
-				>Linen Preview</span
-			>
+			<span class="text-[10px] font-black tracking-wider uppercase opacity-30">Linen Preview</span>
 			<div
 				class="artisan-checker relative flex h-48 items-center justify-center overflow-hidden rounded-2xl border-4 border-white bg-[#eee8d5] shadow-inner"
 			>
@@ -114,7 +110,7 @@
 						<button
 							class="rounded-full border-2 px-2.5 py-1 font-mono text-[10px] transition-all {!isCustom &&
 							editor.exportScale === s
-								? 'border-studio-warm bg-studio-warm text-white'
+								? 'border-brand bg-brand text-white'
 								: 'border-black/5 bg-white opacity-60 hover:opacity-100'}"
 							onclick={() => handlePresetClick(s)}
 						>
@@ -127,7 +123,7 @@
 						type="number"
 						value={Math.round(customWidth)}
 						oninput={handleCustomInput}
-						class="w-full rounded-xl border-2 border-black/5 bg-white/50 px-3 py-1.5 font-mono text-xs outline-none transition-colors focus:border-studio-warm/30"
+						class="w-full rounded-xl border-2 border-black/5 bg-white/50 px-3 py-1.5 font-mono text-xs transition-colors outline-none focus:border-brand/30"
 					/>
 					<span
 						class="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-[8px] font-bold text-studio-text italic opacity-20"
@@ -144,9 +140,9 @@
 				<div class="flex flex-col gap-2">
 					{#each bgPresets as opt}
 						<button
-							class="flex items-center gap-2 rounded-lg border-2 p-1.5 font-serif text-[10px] transition-all italic {editor.exportBgColor ===
+							class="flex items-center gap-2 rounded-lg border-2 p-1.5 font-serif text-[10px] italic transition-all {editor.exportBgColor ===
 							opt.value
-								? 'border-studio-warm bg-white shadow-sm'
+								? 'border-brand bg-white shadow-sm'
 								: 'border-transparent opacity-60 hover:opacity-100'}"
 							onclick={() => (editor.exportBgColor = opt.value)}
 						>
@@ -162,10 +158,10 @@
 
 					<!-- Custom Background Option -->
 					<button
-						class="flex items-center gap-2 rounded-lg border-2 p-1.5 font-serif text-[10px] transition-all italic {!bgPresets.some(
+						class="flex items-center gap-2 rounded-lg border-2 p-1.5 font-serif text-[10px] italic transition-all {!bgPresets.some(
 							(p) => p.value === editor.exportBgColor
 						)
-							? 'border-studio-warm bg-white shadow-sm'
+							? 'border-brand bg-white shadow-sm'
 							: 'border-transparent opacity-60 hover:opacity-100'}"
 						onclick={() => {
 							if (editor.exportBgColor === 'transparent') {
@@ -175,7 +171,7 @@
 						}}
 					>
 						<div
-							class="h-3 w-3 rounded-sm border border-black/10 bg-gradient-to-tr from-rose-300 via-sage-300 to-sky-300"
+							class="via-sage-300 h-3 w-3 rounded-sm border border-black/10 bg-gradient-to-tr from-rose-300 to-sky-300"
 							style="background-color: {!bgPresets.some((p) => p.value === editor.exportBgColor)
 								? editor.exportBgColor
 								: ''}"
@@ -189,7 +185,7 @@
 		<!-- Export Actions -->
 		<div class="mt-2 flex gap-3">
 			<button
-				class="flex flex-1 flex-col items-center rounded-2xl bg-studio-teal py-3 text-white shadow-md transition-all font-serif hover:scale-[1.02] italic active:scale-100"
+				class="flex flex-1 flex-col items-center rounded-2xl bg-studio-teal py-3 font-serif text-white italic shadow-md transition-all hover:scale-[1.02] active:scale-100"
 				onclick={() => onExport('png', editor.exportScale, editor.exportBgColor)}
 			>
 				<span class="text-lg">Export PNG</span>
@@ -198,7 +194,7 @@
 				>
 			</button>
 			<button
-				class="flex flex-1 flex-col items-center rounded-2xl bg-studio-warm py-3 text-white shadow-md transition-all font-serif hover:scale-[1.02] italic active:scale-100"
+				class="flex flex-1 flex-col items-center rounded-2xl bg-brand py-3 font-serif text-white italic shadow-md transition-all hover:scale-[1.02] active:scale-100"
 				onclick={() => onExport('svg', 1, editor.exportBgColor)}
 			>
 				<span class="text-lg">Export SVG</span>
@@ -212,16 +208,17 @@
 
 {#if showBgPicker}
 	<!-- Nested ColorPicker for Background -->
-	<ColorPicker 
-		bind:value={editor.exportBgColor} 
-		onClose={() => showBgPicker = false} 
+	<ColorPicker
+		bind:value={editor.exportBgColor}
+		onClose={() => (showBgPicker = false)}
 		title="Background Dye"
 	/>
 {/if}
 
 <style>
 	.artisan-checker {
-		background-image: linear-gradient(45deg, #eee8d5 25%, transparent 25%),
+		background-image:
+			linear-gradient(45deg, #eee8d5 25%, transparent 25%),
 			linear-gradient(-45deg, #eee8d5 25%, transparent 25%),
 			linear-gradient(45deg, transparent 75%, #eee8d5 75%),
 			linear-gradient(-45deg, transparent 75%, #eee8d5 75%);

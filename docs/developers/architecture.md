@@ -30,44 +30,51 @@ Rupa follows the standard Electron **Main-Renderer** architecture:
 ## 4. Core Systems
 
 ### 4.1 The Artisan's State (`EditorState`)
+
 The heart of the application is the `EditorState` class (`src/lib/state/editor.svelte.ts`). Unlike traditional stores, it uses Svelte 5 Runes to provide fine-grained reactivity.
 
--   **Linen Data**: `pixelData` is a flat array of Hex strings representing the grid.
--   **Needle Tracking**: `cursorPos` ({x, y}) tracks the active cell.
--   **Reactive Projections**: 
-    -   `cameraTransform`: A `$derived` string that calculates CSS `translate` and `scale` values to keep the cursor centered during zoom.
-    -   `usedColors`: A `$derived` set that scans the canvas to provide a dynamic palette of colors currently in use.
--   **Escape Stack**: A LIFO (Last-In, First-Out) stack that manages the closing of nested UI elements (modals, palettes) via the `Esc` key.
+- **Linen Data**: `pixelData` is a flat array of Hex strings representing the grid.
+- **Needle Tracking**: `cursorPos` ({x, y}) tracks the active cell.
+- **Reactive Projections**:
+  - `cameraTransform`: A `$derived` string that calculates CSS `translate` and `scale` values to keep the cursor centered during zoom.
+  - `usedColors`: A `$derived` set that scans the canvas to provide a dynamic palette of colors currently in use.
+- **Escape Stack**: A LIFO (Last-In, First-Out) stack that manages the closing of nested UI elements (modals, palettes) via the `Esc` key.
 
 ### 4.2 The Weaver's Map (`ShortcutManager`)
+
 Located in `src/lib/engine/shortcuts.ts`, this system translates raw keyboard events into semantic "Studio Actions."
 
--   **Priority Matching**: Shortcuts are sorted by modifier count (Ctrl+Shift+Key vs Key). The manager finds the "Best Match" to ensure complex commands don't trigger simpler ones.
--   **Context Awareness**: The global listener in `+page.svelte` ignores shortcuts when the user is typing in input fields (e.g., in the Color Picker).
+- **Priority Matching**: Shortcuts are sorted by modifier count (Ctrl+Shift+Key vs Key). The manager finds the "Best Match" to ensure complex commands don't trigger simpler ones.
+- **Context Awareness**: The global listener in `+page.svelte` ignores shortcuts when the user is typing in input fields (e.g., in the Color Picker).
 
 ### 4.3 History Engine (`HistoryManager`)
+
 Implements the **Command Pattern** for Undo/Redo functionality.
 
--   **Optimization**: Actions are only pushed to the stack if a color change actually occurs.
--   **Constraints**: Capped at 500 steps to maintain memory efficiency in the Electron environment.
+- **Optimization**: Actions are only pushed to the stack if a color change actually occurs.
+- **Constraints**: Capped at 500 steps to maintain memory efficiency in the Electron environment.
 
 ### 4.4 Export Engine
+
 A dual-format engine for transforming the digital linen into artifacts:
 
--   **SVG (Vector)**: Uses a row-scanning algorithm to merge adjacent pixels of the same color into a single `<rect>`, significantly reducing the XML size for complex patterns.
--   **PNG (Raster)**: Utilizes a hidden HTML5 Canvas. It disables image smoothing (`imageSmoothingEnabled = false`) to ensure "pixel-perfect" sharpness regardless of the export scale.
+- **SVG (Vector)**: Uses a row-scanning algorithm to merge adjacent pixels of the same color into a single `<rect>`, significantly reducing the XML size for complex patterns.
+- **PNG (Raster)**: Utilizes a hidden HTML5 Canvas. It disables image smoothing (`imageSmoothingEnabled = false`) to ensure "pixel-perfect" sharpness regardless of the export scale.
 
 ---
 
 ## 5. UI & Rendering Strategy
 
 ### 5.1 Grid Performance
+
 The grid is rendered using **CSS Grid**. While traditional pixel editors use Canvas for rendering, Rupa uses DOM elements for pixels to leverage Svelte's efficient reconciliation and to allow for easier styling of individual "stitches" (e.g., the block selection overlay).
 
 ### 5.2 The Camera Protocol
+
 The viewport movement is handled by applying CSS transforms to the container.
--   **Zoom Focal Point**: Always centered on the `cursorPos`.
--   **Rhythmic Guides**: A separate layer of absolute-positioned lines provides an 8-bit rhythmic structure (every 8 pixels), helping the artisan maintain symmetry.
+
+- **Zoom Focal Point**: Always centered on the `cursorPos`.
+- **Rhythmic Guides**: A separate layer of absolute-positioned lines provides an 8-bit rhythmic structure (every 8 pixels), helping the artisan maintain symmetry.
 
 ---
 
@@ -101,6 +108,6 @@ graph TD
 
 ## 8. Development Guidelines
 
--   **Logic Location**: UI logic belongs in `.svelte` components. Business logic (drawing, history, math) must reside in the `engine/` or `state/` directories.
--   **Reactivity**: Prefer `$derived` over `$effect` for state projections to keep the data flow predictable and debuggable.
--   **Performance**: Avoid looping through the entire `pixelData` array inside a `$derived` that runs on every cursor move unless necessary.
+- **Logic Location**: UI logic belongs in `.svelte` components. Business logic (drawing, history, math) must reside in the `engine/` or `state/` directories.
+- **Reactivity**: Prefer `$derived` over `$effect` for state projections to keep the data flow predictable and debuggable.
+- **Performance**: Avoid looping through the entire `pixelData` array inside a `$derived` that runs on every cursor move unless necessary.

@@ -3,6 +3,7 @@ import { sfx } from '../engine/audio';
 import { history } from '../engine/history';
 
 export class EditorState {
+	version = __APP_VERSION__;
 	gridWidth = $state(32);
 	gridHeight = $state(32);
 	pixelData = $state<ColorHex[]>([]);
@@ -158,10 +159,10 @@ export class EditorState {
 			// Precise tracking: calculate offset to bring needle to (50%, 50%)
 			const xPos = ((this.cursorPos.x + 0.5) / this.gridWidth) * 100;
 			const yPos = ((this.cursorPos.y + 0.5) / this.gridHeight) * 100;
-			
+
 			const tx = 50 - xPos;
 			const ty = 50 - yPos;
-			
+
 			return `translate(${tx}%, ${ty}%) scale(${this.zoomLevel})`;
 		}
 	});

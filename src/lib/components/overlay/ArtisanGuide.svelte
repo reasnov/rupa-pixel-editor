@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { atelier } from '../../state/atelier.svelte';
-	import { loompad } from '../../engine/loompad';
+	import { loompad } from '../../engine/loompad.svelte';
 
 	function close() {
 		atelier.showArtisanGuide = false;

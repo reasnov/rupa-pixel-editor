@@ -14,6 +14,7 @@ To maintain the meditative and creative atmosphere of the project, we use termin
 | **Pixel** | **Stitch** | A single unit of color on the linen. |
 | **Color** | **Dye** | The pigment used to create patterns. |
 | **Hex Code** | **Dye Code** | The unique formula for a specific dye. |
+| **Key Combination** | **Chord** | A set of modifiers and keys played together to create an intent. |
 
 ---
 

@@ -1,5 +1,5 @@
 import { atelier } from '../state/atelier.svelte';
-import { loompad, type LoomIntent } from './loompad';
+import { loompad, type LoomIntent } from './loompad.svelte';
 import { stance } from './stance.svelte';
 import { shuttle } from './shuttle';
 
@@ -8,60 +8,70 @@ export class TheLoom {
     handleInput(e: KeyboardEvent, type: 'down' | 'up') {
         if (!atelier.isAppReady) return;
         
-        // 1. Precise Protection Shield
-        const target = e.target as HTMLElement;
-        const isWriting = target instanceof HTMLInputElement || 
-                          target instanceof HTMLTextAreaElement || 
-                          target.isContentEditable;
+        // 1. Update physical key ledger in LoomPad
+        loompad.updatePhysicalState(e, type);
 
-        if (isWriting) {
+        // 2. Shield Check
+        const target = e.target as HTMLElement;
+        if (target instanceof HTMLInputElement || target instanceof HTMLTextAreaElement || target.isContentEditable) {
             if (type === 'down' && e.key === 'Escape') atelier.handleEscape();
             return;
         }
 
         atelier.resetInactivityTimer();
 
-        // 2. Identify Intent
-        const intent = loompad.getIntent(e, type);
-        const key = e.key.toLowerCase();
+        // 3. Contextual Flow Management (Holding modifiers)
+        // We sync Atelier flags with LoomPad's resolved modifier state
+        this.syncFlowStates();
 
+        // 4. Momentary Action Resolution
         if (type === 'down') {
-            this.processKeyDown(intent, e);
+            const intent = loompad.getIntent(e);
+            if (intent) this.executeIntent(intent, e);
         } else {
-            this.processKeyUp(intent, key);
+            this.handleKeyRelease(e);
         }
     }
 
-    private processKeyDown(intent: LoomIntent | null, e: KeyboardEvent) {
-        if (!intent) return;
-
-        // Prevent browser defaults for matched intents
-        // CRITICAL: NEVER prevent default on pure modifiers or navigation
-        const isModifier = ['control', 'shift', 'alt', 'meta'].includes(e.key.toLowerCase());
-        const isNav = intent.startsWith('MOVE_');
-        
-        if (!isModifier && !isNav) {
-            e.preventDefault();
+    private syncFlowStates() {
+        // High priority: Unravelling (Ctrl + Shift)
+        if (loompad.isCtrlActive && loompad.isShiftActive) {
+            atelier.isFlowUnstitch = true;
+            atelier.isFlowSelect = false;
+            atelier.isFlowStitch = false;
+        } 
+        // Medium priority: Looming (Shift only)
+        else if (loompad.isShiftActive && !loompad.isCtrlActive) {
+            atelier.isFlowSelect = true;
+            atelier.isFlowUnstitch = false;
+            atelier.isFlowStitch = false;
+            if (!atelier.selectionStart) shuttle.startSelection();
+        } 
+        // Medium priority: Threading (Ctrl only)
+        else if (loompad.isCtrlActive && !loompad.isShiftActive) {
+            atelier.isFlowStitch = true;
+            atelier.isFlowUnstitch = false;
+            atelier.isFlowSelect = false;
+        } 
+        // Default: Resting
+        else {
+            atelier.isFlowStitch = false;
+            atelier.isFlowUnstitch = false;
+            atelier.isFlowSelect = false;
+            atelier.selectionStart = null;
+            atelier.selectionEnd = null;
         }
+    }
+
+    private executeIntent(intent: LoomIntent, e: KeyboardEvent) {
+        const isNav = intent.startsWith('MOVE_');
+        if (!isNav) e.preventDefault();
 
         switch (intent) {
             case 'MOVE_UP':    return this.executeMove(0, -1);
             case 'MOVE_DOWN':  return this.executeMove(0, 1);
             case 'MOVE_LEFT':  return this.executeMove(-1, 0);
             case 'MOVE_RIGHT': return this.executeMove(1, 0);
-
-            case 'FLOW_STITCH':   return (atelier.isFlowStitch = true);
-            case 'FLOW_UNSTITCH': 
-                atelier.isFlowUnstitch = true;
-                atelier.isFlowSelect = false; // Priority: Erasing overrides Selecting
-                return;
-            case 'FLOW_SELECT':
-                // Only start selecting if we are NOT currently unravelling
-                if (!atelier.isFlowUnstitch) {
-                    atelier.isFlowSelect = true;
-                    if (!atelier.selectionStart) shuttle.startSelection();
-                }
-                return;
 
             case 'STITCH':
                 if (stance.current.type === 'LOOMING') return shuttle.commitSelection();
@@ -76,7 +86,6 @@ export class TheLoom {
             
             case 'UNDO': return atelier.undo();
             case 'REDO': return atelier.redo();
-            
             case 'SAVE': return shuttle.save();
             case 'OPEN': return shuttle.load();
             
@@ -102,27 +111,12 @@ export class TheLoom {
         }
     }
 
-    private processKeyUp(intent: LoomIntent | null, key: string) {
-        if (intent === 'FLOW_STITCH' || key === 'control' || key === 'meta') {
-            atelier.isFlowStitch = false;
-            atelier.isFlowUnstitch = false; // Break chord
-        } 
-        
-        if (intent === 'FLOW_SELECT' || key === 'shift') {
-            atelier.isFlowSelect = false;
-            atelier.isFlowUnstitch = false; // Break chord
-            atelier.selectionStart = null;
-            atelier.selectionEnd = null;
-        }
-
-        if (key === 'alt') {
-            // Keep state clean even if alt is not a flow trigger yet
-        }
+    private handleKeyRelease(e: KeyboardEvent) {
+        // Handled by syncFlowStates on the next event cycle or via loompad update
     }
 
     private executeMove(dx: number, dy: number) {
         if (shuttle.moveNeedle(dx, dy)) {
-            // Check flags directly from AtelierState
             if (atelier.isFlowSelect) shuttle.updateSelection();
             if (atelier.isFlowStitch) shuttle.stitch();
             if (atelier.isFlowUnstitch) shuttle.unstitch();

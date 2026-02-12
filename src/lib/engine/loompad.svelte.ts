@@ -23,6 +23,14 @@ interface LoomPattern {
 
 export class LoomPadEngine {
     private patterns: LoomPattern[] = [];
+    
+    // Reactive tracking for UI debugging
+    activeKeys = $state<Set<string>>(new Set());
+    
+    // The "Resolved State" based on current physical grip
+    isCtrlActive = $state(false);
+    isShiftActive = $state(false);
+    isAltActive = $state(false);
 
     constructor() {
         this.loadPatterns();
@@ -48,15 +56,10 @@ export class LoomPadEngine {
             Object.entries(category).forEach(([action, keys]) => {
                 const intent = mapping[action];
                 if (!intent) return;
-
                 (keys as string[]).forEach(keyCombo => {
                     const parts = keyCombo.toLowerCase().split('+');
                     let key = parts[parts.length - 1];
-                    
                     if (key === 'ctrl' || key === 'control') key = 'control';
-                    if (key === 'shift') key = 'shift';
-                    if (key === 'alt') key = 'alt';
-
                     this.patterns.push({
                         intent,
                         key: key === ' ' ? ' ' : key,
@@ -68,20 +71,37 @@ export class LoomPadEngine {
             });
         });
 
-        // CRITICAL: Sort by modifier complexity descending
         this.patterns.sort((a, b) => {
             const score = (p: LoomPattern) => (p.ctrl ? 1 : 0) + (p.shift ? 1 : 0) + (p.alt ? 1 : 0);
             return score(b) - score(a);
         });
     }
 
-    getIntent(e: KeyboardEvent, type: 'down' | 'up'): LoomIntent | null {
+    /**
+     * Physical Update: Call this on EVERY keydown/keyup.
+     * It updates the "Grip" (the set of keys currently touching the loom).
+     */
+    updatePhysicalState(e: KeyboardEvent, type: 'down' | 'up') {
         const key = e.key.toLowerCase();
-        const isCtrl = e.ctrlKey || e.metaKey;
-        const isShift = e.shiftKey;
-        const isAlt = e.altKey;
+        if (type === 'down') {
+            this.activeKeys.add(key);
+        } else {
+            this.activeKeys.delete(key);
+        }
 
-        // Navigation is a unique physical intent
+        // Sync modifier states immediately
+        this.isCtrlActive = e.ctrlKey || e.metaKey;
+        this.isShiftActive = e.shiftKey;
+        this.isAltActive = e.altKey;
+    }
+
+    /**
+     * Intent Resolution: Decides what action to take based on current grip.
+     */
+    getIntent(e: KeyboardEvent): LoomIntent | null {
+        const key = e.key.toLowerCase();
+        
+        // Navigation is prioritized
         if (['arrowup', 'arrowdown', 'arrowleft', 'arrowright'].includes(key)) {
             if (key === 'arrowup') return 'MOVE_UP';
             if (key === 'arrowdown') return 'MOVE_DOWN';
@@ -89,26 +109,17 @@ export class LoomPadEngine {
             if (key === 'arrowright') return 'MOVE_RIGHT';
         }
 
+        // Search for the best pattern match given current modifiers
         for (const pattern of this.patterns) {
             const keyMatch = key === pattern.key;
             
-            // For MODIFIERS patterns (FLOW intents)
-            if (['control', 'shift', 'alt'].includes(key)) {
-                if (key === pattern.key) {
-                    // Strict Check: If we match Ctrl+Shift, we MUST have both active
-                    // If we match just Shift, we MUST NOT have Ctrl active (to avoid collision)
-                    const chordMatch = (isCtrl === pattern.ctrl) && (isShift === pattern.shift) && (isAlt === pattern.alt);
-                    if (chordMatch) return pattern.intent;
-                }
-                continue;
-            }
-
-            // For REGULAR ACTION patterns (Chords like Ctrl+S)
-            if (keyMatch && isCtrl === pattern.ctrl && isShift === pattern.shift && isAlt === pattern.alt) {
+            if (keyMatch && 
+                this.isCtrlActive === pattern.ctrl && 
+                this.isShiftActive === pattern.shift && 
+                this.isAltActive === pattern.alt) {
                 return pattern.intent;
             }
         }
-
         return null;
     }
 

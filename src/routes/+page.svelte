@@ -2,6 +2,7 @@
 	import { atelier } from '$lib/state/atelier.svelte';
 	import { shuttle } from '$lib/engine/shuttle';
 	import { loom } from '$lib/engine/loom.svelte';
+	import { loompad } from '$lib/engine/loompad.svelte';
 	import { ExportEngine } from '$lib/engine/export';
 	
 	// Component Modules
@@ -11,6 +12,7 @@
 	import DyePalette from '$lib/components/hud/DyePalette.svelte';
 	import NeedleStats from '$lib/components/hud/NeedleStats.svelte';
 	import WorkshopTools from '$lib/components/hud/WorkshopTools.svelte';
+	import KeyIndicator from '$lib/components/hud/KeyIndicator.svelte';
 	
 	// Overlay Modules
 	import DyeBasin from '$lib/components/overlay/DyeBasin.svelte';
@@ -81,6 +83,7 @@
 <Header />
 <DyePalette />
 <NeedleStats />
+<KeyIndicator />
 
 <div class="relative flex h-screen flex-1 items-center justify-center overflow-hidden">
 	<div class="artisan-frame flex h-[80vh] w-[82vw] items-center justify-center overflow-hidden">

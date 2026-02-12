@@ -8,18 +8,18 @@ export class EditorState {
 	gridHeight = $state(32);
 	pixelData = $state<ColorHex[]>([]);
 	cursorPos = $state({ x: 0, y: 0 });
-	activeColor = $state<ColorHex>('#859900'); // Grass Green
+	activeColor = $state<ColorHex>('#859900'); // Grass Green (Palette 3)
 	palette = $state<ColorHex[]>([
-		'#859900', // Grass Green
-		'#2aa198', // Soft Teal
-		'#b58900', // Earthy Yellow
-		'#cb4b16', // Burnt Orange
-		'#dc322f', // Soft Red
-		'#d33682', // Magenta
-		'#6c71c4', // Violet
+		'#073642', // Base 02 (Dark)
+		'#586e75', // Base 01 (Gray)
+		'#859900', // Green
+		'#2aa198', // Cyan
 		'#268bd2', // Blue
-		'#93a1a1', // Stone Gray
-		'#586e75' // Dark Gray
+		'#6c71c4', // Violet
+		'#d33682', // Magenta
+		'#dc322f', // Red
+		'#cb4b16', // Orange
+		'#b58900'  // Yellow
 	]);
 	zoomLevel = $state(1);
 	showColorPicker = $state(false);

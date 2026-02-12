@@ -22,6 +22,16 @@
 
 @theme {
 	--color-brand: #d33682;
+	--color-palette-1: #073642;
+	--color-palette-2: #586e75;
+	--color-palette-3: #859900;
+	--color-palette-4: #2aa198;
+	--color-palette-5: #268bd2;
+	--color-palette-6: #6c71c4;
+	--color-palette-7: #d33682;
+	--color-palette-8: #dc322f;
+	--color-palette-9: #cb4b16;
+	--color-palette-0: #b58900;
 	--color-canvas-bg: #fdf6e3;
 	--color-grid-border: #eee8d5;
 	--color-active-cell: #859900;

@@ -6,7 +6,7 @@
 </script>
 
 <div
-	class="flex w-64 flex-col overflow-hidden rounded-[2rem] border border-black/5 bg-[#fdf6e3]/80 shadow-lg backdrop-blur-md"
+	class="flex w-64 flex-col overflow-hidden rounded-xl border border-black/5 bg-[#fdf6e3]/80 shadow-lg backdrop-blur-md"
 >
 	<!-- Tab Switcher -->
 	<div class="flex border-b border-black/5 bg-black/5 p-1">
@@ -49,9 +49,23 @@
 							<span class="text-xs opacity-40">{i + 1}</span>
 							<span class="truncate font-serif text-sm font-medium">{frame.name}</span>
 						</div>
-						{#if i === atelier.project.activeFrameIndex}
-							<div class="h-1.5 w-1.5 rounded-full bg-brand"></div>
-						{/if}
+						<div class="flex items-center gap-2">
+							{#if atelier.project.frames.length > 1}
+								<button
+									onclick={(e) => {
+										e.stopPropagation();
+										atelier.project.removeFrame(i);
+									}}
+									class="text-[10px] opacity-0 transition-opacity hover:text-brand group-hover:opacity-40"
+									title="Delete Frame"
+								>
+									🗑️
+								</button>
+							{/if}
+							{#if i === atelier.project.activeFrameIndex}
+								<div class="h-1.5 w-1.5 rounded-xl bg-brand"></div>
+							{/if}
+						</div>
 					</div>
 				{/each}
 			</div>
@@ -90,8 +104,20 @@
 							>
 								{veil.isLocked ? '🔒' : '🔓'}
 							</button>
+							{#if atelier.project.activeFrame.veils.length > 1}
+								<button
+									onclick={(e) => {
+										e.stopPropagation();
+										atelier.project.activeFrame.removeVeil(i);
+									}}
+									class="text-[10px] opacity-0 transition-opacity hover:text-brand group-hover:opacity-40"
+									title="Delete Veil"
+								>
+									🗑️
+								</button>
+							{/if}
 							{#if i === atelier.project.activeFrame.activeVeilIndex}
-								<div class="h-1.5 w-1.5 rounded-full bg-brand"></div>
+								<div class="h-1.5 w-1.5 rounded-xl bg-brand"></div>
 							{/if}
 						</div>
 					</div>
@@ -102,11 +128,17 @@
 
 	<!-- Footer Info -->
 	<div class="flex items-center justify-between bg-black/5 px-5 py-2">
+		<button
+			onclick={() => {
+				if (activeTab === 'frames') atelier.project.addFrame();
+				else atelier.project.activeFrame.addVeil();
+			}}
+			class="flex items-center gap-1 font-serif text-[8px] font-bold tracking-[0.2em] uppercase opacity-30 hover:opacity-60"
+		>
+			<span>＋</span> Add {activeTab === 'frames' ? 'Frame' : 'Veil'}
+		</button>
 		<span class="font-serif text-[8px] font-bold tracking-[0.2em] uppercase opacity-30">
 			{activeTab === 'frames' ? atelier.project.frames.length + ' Frames' : atelier.project.activeFrame.veils.length + ' Veils'}
-		</span>
-		<span class="font-serif text-[8px] font-bold tracking-[0.2em] uppercase opacity-30">
-			Alt+N to add
 		</span>
 	</div>
 </div>

@@ -3,6 +3,7 @@ import { StitchService } from './services/stitch.js';
 import { ManipulationService } from './services/manipulation.js';
 import { ClipboardService } from './services/clipboard.js';
 import { PersistenceService } from './services/persistence.js';
+import { FolioService } from './services/folio.js';
 import { atelier } from '../state/atelier.svelte.js';
 import { history } from './history.js';
 import { sfx } from './audio.js';
@@ -17,12 +18,19 @@ export class ShuttleEngine {
 	readonly manipulation = new ManipulationService();
 	readonly clipboard = new ClipboardService();
 	readonly persistence = new PersistenceService();
+	readonly folio = new FolioService();
 
-	// --- Aliases for Backward Compatibility ---
+	// --- Navigation Aliases ---
 
 	moveNeedle(dx: number, dy: number) {
 		return this.movement.move(dx, dy);
 	}
+
+	jumpTo(tx: number, ty: number) {
+		this.movement.jumpTo(tx, ty);
+	}
+
+	// --- Stitching Aliases ---
 
 	stitch() {
 		this.stitching.stitch();
@@ -33,6 +41,8 @@ export class ShuttleEngine {
 	pickDye() {
 		this.stitching.pickDye();
 	}
+
+	// --- Selection & Manipulation ---
 
 	startSelection() {
 		atelier.selection.begin(atelier.needle.pos.x, atelier.needle.pos.y);
@@ -75,6 +85,8 @@ export class ShuttleEngine {
 		this.manipulation.rotate();
 	}
 
+	// --- Clipboard Aliases ---
+
 	copy() {
 		this.clipboard.copy();
 	}
@@ -86,6 +98,8 @@ export class ShuttleEngine {
 		atelier.selection.clear();
 	}
 
+	// --- Persistence & Backup ---
+
 	save() {
 		this.persistence.save();
 	}
@@ -94,6 +108,35 @@ export class ShuttleEngine {
 	}
 	backup() {
 		this.persistence.backup();
+	}
+
+	/**
+	 * Create a permanent artifact (PNG/SVG) and trigger download.
+	 */
+	async createArtifact(
+		format: 'svg' | 'png',
+		scale: number = 10,
+		bgColor: string | 'transparent' = 'transparent'
+	) {
+		const { ExportEngine } = await import('./export.js');
+		const { width, height, compositeStitches } = atelier.linen;
+
+		if (format === 'svg') {
+			const svg = ExportEngine.toSVG(width, height, compositeStitches, bgColor);
+			const blob = new Blob([svg], { type: 'image/svg+xml' });
+			this.download(URL.createObjectURL(blob), `${atelier.project.name}.svg`);
+		} else {
+			const dataUrl = await ExportEngine.toPNG(width, height, compositeStitches, scale, bgColor);
+			this.download(dataUrl, `${atelier.project.name}.png`);
+		}
+		atelier.studio.showArtifactCrate = false;
+	}
+
+	private download(url: string, filename: string) {
+		const a = document.createElement('a');
+		a.href = url;
+		a.download = filename.toLowerCase().replace(/\s+/g, '-');
+		a.click();
 	}
 }
 

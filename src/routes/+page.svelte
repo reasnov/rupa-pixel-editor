@@ -2,8 +2,6 @@
 	import { atelier } from '$lib/state/atelier.svelte.js';
 	import { shuttle } from '$lib/engine/shuttle.js';
 	import { loom } from '$lib/engine/loom.svelte.js';
-	import { loompad } from '$lib/engine/loompad.svelte.js';
-	import { ExportEngine } from '$lib/engine/export.js';
 
 	// Layout Containers
 	import TopBar from '$lib/components/hud/TopBar.svelte';
@@ -26,54 +24,9 @@
 
 	import { onMount } from 'svelte';
 
-	async function exportImage(
-		format: 'svg' | 'png',
-		scale: number = 10,
-		bgColor: string | 'transparent' = 'transparent'
-	) {
-		if (format === 'svg') {
-			const svg = ExportEngine.toSVG(
-				atelier.linen.width,
-				atelier.linen.height,
-				atelier.linen.compositeStitches,
-				bgColor
-			);
-			const blob = new Blob([svg], { type: 'image/svg+xml' });
-			download(URL.createObjectURL(blob), 'stitch-art.svg');
-		} else {
-			const dataUrl = await ExportEngine.toPNG(
-				atelier.linen.width,
-				atelier.linen.height,
-				atelier.linen.compositeStitches,
-				scale,
-				bgColor
-			);
-			download(dataUrl, 'stitch-art.png');
-		}
-		atelier.studio.showArtifactCrate = false;
-	}
-
-	function download(url: string, filename: string) {
-		const a = document.createElement('a');
-		a.href = url;
-		a.download = filename;
-		a.click();
-	}
-
 	onMount(() => {
-		const backupInterval = setInterval(() => shuttle.persistence.backup(), 10 * 60 * 1000);
-
-		const onKeyDown = (e: KeyboardEvent) => loom.handleInput(e, 'down');
-		const onKeyUp = (e: KeyboardEvent) => loom.handleInput(e, 'up');
-
-		window.addEventListener('keydown', onKeyDown);
-		window.addEventListener('keyup', onKeyUp);
-
-		return () => {
-			window.removeEventListener('keydown', onKeyDown);
-			window.removeEventListener('keyup', onKeyUp);
-			clearInterval(backupInterval);
-		};
+		// Delegate all input and heartbeats to the Loom Engine
+		return loom.mount();
 	});
 </script>
 
@@ -96,7 +49,7 @@
 
 {#if atelier.studio.showArtifactCrate}
 	<ArtifactCrate
-		onExport={exportImage}
+		onExport={(format, scale, bgColor) => shuttle.createArtifact(format, scale, bgColor)}
 		onClose={() => (atelier.studio.showArtifactCrate = false)}
 	/>
 {/if}

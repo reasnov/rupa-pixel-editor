@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { atelier } from '../../state/atelier.svelte.js';
+	import { shuttle } from '../../engine/shuttle.js';
 	import { fade } from 'svelte/transition';
 
 	let activeTab = $state<'frames' | 'veils'>('veils');
@@ -54,7 +55,7 @@
 								<button
 									onclick={(e) => {
 										e.stopPropagation();
-										atelier.project.removeFrame(i);
+										shuttle.folio.removeFrame(i);
 									}}
 									class="text-[10px] opacity-0 transition-opacity hover:text-brand group-hover:opacity-40"
 									title="Delete Frame"
@@ -86,7 +87,7 @@
 							<button
 								onclick={(e) => {
 									e.stopPropagation();
-									veil.isVisible = !veil.isVisible;
+									shuttle.folio.toggleVisibility();
 								}}
 								class="text-xs transition-opacity {veil.isVisible ? 'opacity-100' : 'opacity-20'}"
 							>
@@ -98,7 +99,7 @@
 							<button
 								onclick={(e) => {
 									e.stopPropagation();
-									veil.isLocked = !veil.isLocked;
+									shuttle.folio.toggleLock();
 								}}
 								class="text-[10px] transition-opacity {veil.isLocked ? 'opacity-100' : 'opacity-20'}"
 							>
@@ -108,7 +109,7 @@
 								<button
 									onclick={(e) => {
 										e.stopPropagation();
-										atelier.project.activeFrame.removeVeil(i);
+										shuttle.folio.removeVeil(i);
 									}}
 									class="text-[10px] opacity-0 transition-opacity hover:text-brand group-hover:opacity-40"
 									title="Delete Veil"
@@ -130,8 +131,8 @@
 	<div class="flex items-center justify-between bg-black/5 px-5 py-2">
 		<button
 			onclick={() => {
-				if (activeTab === 'frames') atelier.project.addFrame();
-				else atelier.project.activeFrame.addVeil();
+				if (activeTab === 'frames') shuttle.folio.addFrame();
+				else shuttle.folio.addVeil();
 			}}
 			class="flex items-center gap-1 font-serif text-[8px] font-bold tracking-[0.2em] uppercase opacity-30 hover:opacity-60"
 		>

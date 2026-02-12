@@ -11,32 +11,7 @@
 	let targetY = $state(atelier.displayCoords.y);
 
 	function jump() {
-		// Convert Cartesian back to Internal
-		const midX = Math.floor(atelier.linen.width / 2);
-		const midY = Math.floor(atelier.linen.height / 2);
-
-		let internalX, internalY;
-
-		// X Conversion
-		if (atelier.linen.width % 2 === 0) {
-			internalX = targetX < 0 ? targetX + midX : targetX + midX - 1;
-		} else {
-			internalX = targetX + midX;
-		}
-
-		// Y Conversion (Y is inverted in display)
-		const dispY = -targetY;
-		if (atelier.linen.height % 2 === 0) {
-			internalY = dispY < 0 ? dispY + midY : dispY + midY - 1;
-		} else {
-			internalY = dispY + midY;
-		}
-
-		// Clamp to valid range
-		const finalX = Math.max(0, Math.min(atelier.linen.width - 1, internalX));
-		const finalY = Math.max(0, Math.min(atelier.linen.height - 1, internalY));
-
-		atelier.needle.setPos(finalX, finalY);
+		shuttle.jumpTo(targetX, targetY);
 		onClose();
 	}
 

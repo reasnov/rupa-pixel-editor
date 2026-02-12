@@ -8,6 +8,27 @@ import { shuttle } from './shuttle.js';
  * It maps LoomIntents to ShuttleEngine operations.
  */
 export class TheLoom {
+	private backupInterval: any = null;
+
+	/**
+	 * Mount the loom: initialize listeners and heartbeats.
+	 */
+	mount() {
+		this.backupInterval = setInterval(() => shuttle.persistence.backup(), 10 * 60 * 1000);
+
+		const onKeyDown = (e: KeyboardEvent) => this.handleInput(e, 'down');
+		const onKeyUp = (e: KeyboardEvent) => this.handleInput(e, 'up');
+
+		window.addEventListener('keydown', onKeyDown);
+		window.addEventListener('keyup', onKeyUp);
+
+		return () => {
+			window.removeEventListener('keydown', onKeyDown);
+			window.removeEventListener('keyup', onKeyUp);
+			clearInterval(this.backupInterval);
+		};
+	}
+
 	handleInput(e: KeyboardEvent, type: 'down' | 'up') {
 		if (!atelier.studio.isAppReady) return;
 
@@ -117,40 +138,26 @@ export class TheLoom {
 				return shuttle.manipulation.rotate();
 
 			case 'NEW_FRAME':
-				return atelier.project.addFrame();
+				return shuttle.folio.addFrame();
 			case 'NEXT_FRAME':
-				atelier.project.activeFrameIndex =
-					(atelier.project.activeFrameIndex + 1) % atelier.project.frames.length;
-				return;
+				return shuttle.folio.nextFrame();
 			case 'PREV_FRAME':
-				atelier.project.activeFrameIndex =
-					(atelier.project.activeFrameIndex - 1 + atelier.project.frames.length) %
-					atelier.project.frames.length;
-				return;
+				return shuttle.folio.prevFrame();
 			case 'DELETE_FRAME':
-				return atelier.project.removeFrame(atelier.project.activeFrameIndex);
+				return shuttle.folio.removeFrame(atelier.project.activeFrameIndex);
 
 			case 'NEW_VEIL':
-				return atelier.project.activeFrame.addVeil();
+				return shuttle.folio.addVeil();
 			case 'NEXT_VEIL':
-				atelier.project.activeFrame.activeVeilIndex =
-					(atelier.project.activeFrame.activeVeilIndex + 1) % atelier.project.activeFrame.veils.length;
-				return;
+				return shuttle.folio.nextVeil();
 			case 'PREV_VEIL':
-				atelier.project.activeFrame.activeVeilIndex =
-					(atelier.project.activeFrame.activeVeilIndex - 1 + atelier.project.activeFrame.veils.length) %
-					atelier.project.activeFrame.veils.length;
-				return;
+				return shuttle.folio.prevVeil();
 			case 'DELETE_VEIL':
-				return atelier.project.activeFrame.removeVeil(atelier.project.activeFrame.activeVeilIndex);
+				return shuttle.folio.removeVeil(atelier.project.activeFrame.activeVeilIndex);
 			case 'TOGGLE_VEIL_LOCK':
-				atelier.project.activeFrame.activeVeil.isLocked =
-					!atelier.project.activeFrame.activeVeil.isLocked;
-				return;
+				return shuttle.folio.toggleLock();
 			case 'TOGGLE_VEIL_VISIBILITY':
-				atelier.project.activeFrame.activeVeil.isVisible =
-					!atelier.project.activeFrame.activeVeil.isVisible;
-				return;
+				return shuttle.folio.toggleVisibility();
 			case 'SWITCH_FOCUS':
 				// TODO: Implement focus toggle logic if needed
 				return;

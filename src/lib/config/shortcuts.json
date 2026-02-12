@@ -52,6 +52,21 @@
 		"SELECT_9": ["9"],
 		"SELECT_0": ["0"]
 	},
+	"folio": {
+		"NEW_FRAME": ["Alt+n"],
+		"NEXT_FRAME": ["Alt+PageDown", "Tab"],
+		"PREV_FRAME": ["Alt+PageUp", "Shift+Tab"],
+		"DELETE_FRAME": ["Alt+Backspace"]
+	},
+	"veils": {
+		"NEW_VEIL": ["Alt+Shift+n"],
+		"NEXT_VEIL": ["Alt+ArrowDown"],
+		"PREV_VEIL": ["Alt+ArrowUp"],
+		"TOGGLE_VEIL_LOCK": ["Alt+l"],
+		"TOGGLE_VEIL_VISIBILITY": ["Alt+h"],
+		"MERGE_VEILS": ["Alt+m"],
+		"DELETE_VEIL": ["Alt+Shift+Backspace"]
+	},
 	"modifiers": {
 		"FLOW_STITCH": ["Control"],
 		"FLOW_UNSTITCH": ["Ctrl+Shift"],

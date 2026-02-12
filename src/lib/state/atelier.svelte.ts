@@ -211,7 +211,7 @@ export class AtelierState {
 
 	usedColors = $derived.by(() => {
 		const colors = new Set<string>();
-		this.linen.stitches.forEach((color) => {
+		this.linen.compositeStitches.forEach((color) => {
 			if (color !== null) colors.add(color);
 		});
 		return Array.from(colors);

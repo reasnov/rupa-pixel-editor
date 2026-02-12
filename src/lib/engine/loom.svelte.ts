@@ -116,6 +116,45 @@ export class TheLoom {
 			case 'ROTATE':
 				return shuttle.manipulation.rotate();
 
+			case 'NEW_FRAME':
+				return atelier.project.addFrame();
+			case 'NEXT_FRAME':
+				atelier.project.activeFrameIndex =
+					(atelier.project.activeFrameIndex + 1) % atelier.project.frames.length;
+				return;
+			case 'PREV_FRAME':
+				atelier.project.activeFrameIndex =
+					(atelier.project.activeFrameIndex - 1 + atelier.project.frames.length) %
+					atelier.project.frames.length;
+				return;
+			case 'DELETE_FRAME':
+				return atelier.project.removeFrame(atelier.project.activeFrameIndex);
+
+			case 'NEW_VEIL':
+				return atelier.project.activeFrame.addVeil();
+			case 'NEXT_VEIL':
+				atelier.project.activeFrame.activeVeilIndex =
+					(atelier.project.activeFrame.activeVeilIndex + 1) % atelier.project.activeFrame.veils.length;
+				return;
+			case 'PREV_VEIL':
+				atelier.project.activeFrame.activeVeilIndex =
+					(atelier.project.activeFrame.activeVeilIndex - 1 + atelier.project.activeFrame.veils.length) %
+					atelier.project.activeFrame.veils.length;
+				return;
+			case 'DELETE_VEIL':
+				return atelier.project.activeFrame.removeVeil(atelier.project.activeFrame.activeVeilIndex);
+			case 'TOGGLE_VEIL_LOCK':
+				atelier.project.activeFrame.activeVeil.isLocked =
+					!atelier.project.activeFrame.activeVeil.isLocked;
+				return;
+			case 'TOGGLE_VEIL_VISIBILITY':
+				atelier.project.activeFrame.activeVeil.isVisible =
+					!atelier.project.activeFrame.activeVeil.isVisible;
+				return;
+			case 'SWITCH_FOCUS':
+				// TODO: Implement focus toggle logic if needed
+				return;
+
 			default:
 				if (intent.startsWith('SELECT_DYE_')) {
 					const num = parseInt(intent.split('_')[2]);

@@ -34,6 +34,18 @@ export type LoomIntent =
 	| 'FLIP_H'
 	| 'FLIP_V'
 	| 'ROTATE'
+	| 'NEW_FRAME'
+	| 'NEXT_FRAME'
+	| 'PREV_FRAME'
+	| 'DELETE_FRAME'
+	| 'NEW_VEIL'
+	| 'NEXT_VEIL'
+	| 'PREV_VEIL'
+	| 'DELETE_VEIL'
+	| 'TOGGLE_VEIL_LOCK'
+	| 'TOGGLE_VEIL_VISIBILITY'
+	| 'MERGE_VEILS'
+	| 'SWITCH_FOCUS'
 	| 'SELECT_DYE_1'
 	| 'SELECT_DYE_2'
 	| 'SELECT_DYE_3'
@@ -58,6 +70,8 @@ export class LoomPadEngine {
 
 	// Reactive tracking for UI debugging - Using array for reliable reactivity
 	activeKeys = $state<string[]>([]);
+	sequenceBuffer = $state<string[]>([]);
+	private sequenceTimeout: any = null;
 
 	// The "Resolved State" based on current physical grip
 	isCtrlActive = $state(false);
@@ -101,6 +115,17 @@ export class LoomPadEngine {
 			FLIP_H: 'FLIP_H',
 			FLIP_V: 'FLIP_V',
 			ROTATE: 'ROTATE',
+			NEW_FRAME: 'NEW_FRAME',
+			NEXT_FRAME: 'NEXT_FRAME',
+			PREV_FRAME: 'PREV_FRAME',
+			DELETE_FRAME: 'DELETE_FRAME',
+			NEW_VEIL: 'NEW_VEIL',
+			NEXT_VEIL: 'NEXT_VEIL',
+			PREV_VEIL: 'PREV_VEIL',
+			TOGGLE_VEIL_LOCK: 'TOGGLE_VEIL_LOCK',
+			TOGGLE_VEIL_VISIBILITY: 'TOGGLE_VEIL_VISIBILITY',
+			MERGE_VEILS: 'MERGE_VEILS',
+			DELETE_VEIL: 'DELETE_VEIL',
 			SELECT_1: 'SELECT_DYE_1',
 			SELECT_2: 'SELECT_DYE_2',
 			SELECT_3: 'SELECT_DYE_3',
@@ -178,7 +203,30 @@ export class LoomPadEngine {
 	getIntent(e: KeyboardEvent): LoomIntent | null {
 		const key = e.key.toLowerCase();
 
-		// Navigation is prioritized
+		// 1. Sequence Handling
+		if (!this.isCtrlActive && !this.isAltActive && !this.isShiftActive) {
+			this.sequenceBuffer.push(key);
+			if (this.sequenceTimeout) clearTimeout(this.sequenceTimeout);
+			this.sequenceTimeout = setTimeout(() => (this.sequenceBuffer = []), 1000);
+
+			const seq = this.sequenceBuffer.join(',');
+			if (seq === 'g,c') {
+				this.sequenceBuffer = [];
+				return 'GOTO'; // Example: G then C
+			}
+			if (seq === 'f,n') {
+				this.sequenceBuffer = [];
+				return 'NEW_FRAME';
+			}
+			if (seq === 'v,n') {
+				this.sequenceBuffer = [];
+				return 'NEW_VEIL';
+			}
+		} else {
+			this.sequenceBuffer = [];
+		}
+
+		// 2. Navigation is prioritized
 		if (['arrowup', 'arrowdown', 'arrowleft', 'arrowright'].includes(key)) {
 			if (key === 'arrowup') return 'MOVE_UP';
 			if (key === 'arrowdown') return 'MOVE_DOWN';

@@ -35,7 +35,7 @@
 			const svg = ExportEngine.toSVG(
 				atelier.linen.width,
 				atelier.linen.height,
-				atelier.linen.stitches,
+				atelier.linen.compositeStitches,
 				bgColor
 			);
 			const blob = new Blob([svg], { type: 'image/svg+xml' });
@@ -44,7 +44,7 @@
 			const dataUrl = await ExportEngine.toPNG(
 				atelier.linen.width,
 				atelier.linen.height,
-				atelier.linen.stitches,
+				atelier.linen.compositeStitches,
 				scale,
 				bgColor
 			);

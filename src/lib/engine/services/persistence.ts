@@ -1,21 +1,32 @@
 import { atelier } from '../../state/atelier.svelte.js';
-import { sfx } from '../audio.js';
-import { history } from '../history.js';
+import { sfx } from '../../engine/audio.js';
+import { history } from '../../engine/history.js';
+import { FrameState } from '../../state/frame.svelte.js';
+import { VeilState } from '../../state/veil.svelte.js';
 
 export class PersistenceService {
 	private serialize() {
+		// New v0.4.0 Folio Structure
 		return JSON.stringify({
 			version: atelier.version,
 			metadata: {
 				name: atelier.project.name,
 				lastModified: new Date().toISOString()
 			},
-			dimensions: {
-				width: atelier.linen.width,
-				height: atelier.linen.height
-			},
 			palette: atelier.paletteState.swatches,
-			pixelData: atelier.linen.stitches
+			folio: {
+				frames: atelier.project.frames.map((f) => ({
+					name: f.name,
+					width: f.width,
+					height: f.height,
+					veils: f.veils.map((v) => ({
+						name: v.name,
+						isVisible: v.isVisible,
+						isLocked: v.isLocked,
+						stitches: v.stitches
+					}))
+				}))
+			}
 		});
 	}
 
@@ -87,9 +98,33 @@ export class PersistenceService {
 	private deserialize(json: string) {
 		try {
 			const d = JSON.parse(json);
-			atelier.linen.reset(d.dimensions.width, d.dimensions.height, d.pixelData);
+
+			// 1. Restore Palette & Meta
 			atelier.paletteState.swatches = d.palette;
 			atelier.project.name = d.metadata.name;
+
+			// 2. Restore Folio Structure (with Backward Compatibility)
+			if (d.folio) {
+				// Modern v0.4.0+ format
+				atelier.project.frames = d.folio.frames.map((fd: any) => {
+					const frame = new FrameState(fd.name, fd.width, fd.height);
+					frame.veils = fd.veils.map((vd: any) => {
+						const veil = new VeilState(vd.name, fd.width, fd.height);
+						veil.isVisible = vd.isVisible;
+						veil.isLocked = vd.isLocked;
+						veil.stitches = vd.stitches;
+						return veil;
+					});
+					return frame;
+				});
+			} else if (d.pixelData) {
+				// Legacy v0.3.0 format
+				const frame = new FrameState('Restored Motif', d.dimensions.width, d.dimensions.height);
+				frame.veils[0].stitches = d.pixelData;
+				atelier.project.frames = [frame];
+			}
+
+			atelier.project.activeFrameIndex = 0;
 			history.clear();
 		} catch (e) {
 			console.error('Failed to restore pattern book:', e);

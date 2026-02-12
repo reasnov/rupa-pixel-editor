@@ -36,6 +36,10 @@ export class LinenState {
 	get stitches() {
 		return this.project.activeFrame.activeVeil.stitches;
 	}
+
+	get compositeStitches() {
+		return this.project.activeFrame.compositeStitches;
+	}
 	
 	set stitches(v: (ColorHex | null)[]) {
 		// When legacy code tries to replace the whole array, update the active layer

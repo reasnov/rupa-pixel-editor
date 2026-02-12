@@ -22,7 +22,7 @@
 >
 	<LinenGuides />
 
-	{#each atelier.stitches as color, i (i)}
+	{#each atelier.linen.compositeStitches as color, i (i)}
 		{@const x = i % atelier.linen.width}
 		{@const y = Math.floor(i / atelier.linen.width)}
 

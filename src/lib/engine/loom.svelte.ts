@@ -38,15 +38,15 @@ export class TheLoom {
 
         switch (intent) {
             // --- Navigation Intents ---
-            case 'MOVE_UP':    return shuttle.moveNeedle(0, -1);
-            case 'MOVE_DOWN':  return shuttle.moveNeedle(0, 1);
-            case 'MOVE_LEFT':  return shuttle.moveNeedle(-1, 0);
-            case 'MOVE_RIGHT': return shuttle.moveNeedle(1, 0);
+            case 'MOVE_UP':    return this.executeMove(0, -1);
+            case 'MOVE_DOWN':  return this.executeMove(0, 1);
+            case 'MOVE_LEFT':  return this.executeMove(-1, 0);
+            case 'MOVE_RIGHT': return this.executeMove(1, 0);
 
             // --- Sustained Flow States (Flags) ---
             case 'FLOW_SELECT':
                 atelier.isFlowSelect = true;
-                if (!atelier.selectionStart) atelier.startSelection();
+                if (!atelier.selectionStart) shuttle.startSelection();
                 return;
             
             case 'FLOW_STITCH':
@@ -110,6 +110,17 @@ export class TheLoom {
             atelier.isFlowSelect = false;
             atelier.selectionStart = null;
             atelier.selectionEnd = null;
+        }
+    }
+
+    /**
+     * Executes needle movement and handles the consequences based on current flows.
+     */
+    private executeMove(dx: number, dy: number) {
+        if (shuttle.moveNeedle(dx, dy)) {
+            if (atelier.isFlowSelect) shuttle.updateSelection();
+            if (atelier.isFlowStitch) shuttle.stitch();
+            if (atelier.isFlowUnstitch) shuttle.unstitch();
         }
     }
 }

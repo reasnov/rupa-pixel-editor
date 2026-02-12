@@ -48,6 +48,17 @@ export class ShuttleEngine {
         }
     }
 
+    startSelection() {
+        atelier.selectionStart = { ...atelier.needlePos };
+        atelier.selectionEnd = { ...atelier.needlePos };
+    }
+
+    updateSelection() {
+        if (atelier.selectionStart) {
+            atelier.selectionEnd = { ...atelier.needlePos };
+        }
+    }
+
     commitSelection() {
         if (!atelier.selectionStart) return;
         const x1 = Math.min(atelier.selectionStart.x, atelier.needlePos.x);

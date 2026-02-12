@@ -97,12 +97,6 @@ export class AtelierState {
 		this.resetInactivityTimer();
 	}
 
-	startSelection() {
-		this.selectionStart = { ...this.needlePos };
-		this.selectionEnd = { ...this.needlePos };
-		this.resetInactivityTimer();
-	}
-
 	pushEscapeAction(fn: () => void) {
 		this.escapeStack.push(fn);
 	}

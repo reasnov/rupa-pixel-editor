@@ -60,14 +60,21 @@ export class LoomPadEngine {
 
                 (keys as string[]).forEach(keyCombo => {
                     const parts = keyCombo.toLowerCase().split('+');
-                    const key = parts[parts.length - 1];
+                    let key = parts[parts.length - 1];
+                    
+                    // Normalize modifier keys to their e.key values
+                    if (key === 'ctrl') key = 'control';
+                    if (key === 'meta') key = 'meta';
+                    if (key === 'shift') key = 'shift';
+                    if (key === 'alt') key = 'alt';
+
                     this.patterns.push({
                         intent,
                         key: key === ' ' ? ' ' : key,
-                        ctrl: parts.includes('ctrl'),
+                        ctrl: parts.includes('ctrl') || parts.includes('control'),
                         shift: parts.includes('shift'),
                         alt: parts.includes('alt'),
-                        meta: parts.includes('meta')
+                        meta: parts.includes('meta') || parts.includes('cmd')
                     });
                 });
             });
@@ -89,9 +96,12 @@ export class LoomPadEngine {
         if (type === 'down') this.activeKeys.add(key);
         else this.activeKeys.delete(key);
 
-        const isCtrl = e.ctrlKey || e.metaKey;
-        const isShift = e.shiftKey;
-        const isAlt = e.altKey;
+        // Normalize modifiers, but IF the key itself is a modifier, 
+        // we treat its contribution to the state as 'false' for matching purposes
+        // to allow it to match its own pattern.
+        const isCtrl = (e.ctrlKey || e.metaKey) && key !== 'control' && key !== 'meta';
+        const isShift = e.shiftKey && key !== 'shift';
+        const isAlt = e.altKey && key !== 'alt';
 
         // Navigation check (special handling to allow flow states)
         const navKeys = ['arrowup', 'arrowdown', 'arrowleft', 'arrowright'];

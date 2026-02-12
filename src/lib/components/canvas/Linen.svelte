@@ -63,11 +63,11 @@
 	{/each}
 
 	<!-- Block Selection Overlay -->
-	{#if atelier.isSelecting && atelier.selectionStart && atelier.needlePos}
-		{@const x1 = Math.min(atelier.selectionStart.x, atelier.needlePos.x)}
-		{@const x2 = Math.max(atelier.selectionStart.x, atelier.needlePos.x)}
-		{@const y1 = Math.min(atelier.selectionStart.y, atelier.needlePos.y)}
-		{@const y2 = Math.max(atelier.selectionStart.y, atelier.needlePos.y)}
+	{#if atelier.isFlowSelect && atelier.selectionStart && atelier.selectionEnd}
+		{@const x1 = Math.min(atelier.selectionStart.x, atelier.selectionEnd.x)}
+		{@const x2 = Math.max(atelier.selectionStart.x, atelier.selectionEnd.x)}
+		{@const y1 = Math.min(atelier.selectionStart.y, atelier.selectionEnd.y)}
+		{@const y2 = Math.max(atelier.selectionStart.y, atelier.selectionEnd.y)}
 		{@const width = x2 - x1 + 1}
 		{@const height = y2 - y1 + 1}
 		<div

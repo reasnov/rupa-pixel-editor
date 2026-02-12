@@ -29,7 +29,10 @@ export type ShortcutAction =
 	| 'SELECT_7'
 	| 'SELECT_8'
 	| 'SELECT_9'
-	| 'SELECT_0';
+	| 'SELECT_0'
+	| 'FLOW_STITCH'
+	| 'FLOW_UNSTITCH'
+	| 'FLOW_SELECT';
 
 interface ShortcutDefinition {
 	action: ShortcutAction;

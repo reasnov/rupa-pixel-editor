@@ -49,5 +49,10 @@
 		"SELECT_8": ["8"],
 		"SELECT_9": ["9"],
 		"SELECT_0": ["0"]
+	},
+	"modifiers": {
+		"FLOW_STITCH": ["Control"],
+		"FLOW_UNSTITCH": ["Alt"],
+		"FLOW_SELECT": ["Shift"]
 	}
 }

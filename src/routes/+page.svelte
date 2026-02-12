@@ -66,15 +66,19 @@
 			return;
 		}
 
-		// 2. State Sync: Always update modifier states for mode detection
-		editor.isShiftPressed = e.shiftKey;
-		editor.isCtrlPressed = e.ctrlKey || e.metaKey;
-		editor.isAltPressed = e.altKey;
-
-		// 3. Selection Start: Trigger block mode initialization when Shift is pressed
-		if (e.shiftKey && !editor.isSelecting) {
-			editor.isSelecting = true;
-			editor.startSelection();
+		// 2. State Sync: Use semantic actions for mode detection
+		const modAction = shortcuts.getBestMatch(e);
+		
+		if (modAction === 'FLOW_SELECT') {
+			editor.isShiftPressed = true;
+			if (!editor.isSelecting) {
+				editor.isSelecting = true;
+				editor.startSelection();
+			}
+		} else if (modAction === 'FLOW_STITCH') {
+			editor.isCtrlPressed = true;
+		} else if (modAction === 'FLOW_UNSTITCH') {
+			editor.isAltPressed = true;
 		}
 
 		// Handle F1 specifically for Help
@@ -160,10 +164,13 @@
 	}
 
 	function handleKeyUp(e: KeyboardEvent) {
-		if (e.key === 'Control' || e.key === 'Meta') editor.isCtrlPressed = false;
-		if (e.key === 'Alt') editor.isAltPressed = false;
-		
-		if (e.key === 'Shift') {
+		const action = shortcuts.getBestMatch(e);
+
+		if (action === 'FLOW_STITCH') {
+			editor.isCtrlPressed = false;
+		} else if (action === 'FLOW_UNSTITCH') {
+			editor.isAltPressed = false;
+		} else if (action === 'FLOW_SELECT') {
 			editor.isShiftPressed = false;
 			editor.isSelecting = false;
 			editor.selectionStart = null;

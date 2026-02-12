@@ -12,7 +12,7 @@
 	import DyePalette from '$lib/components/hud/DyePalette.svelte';
 	import NeedleStats from '$lib/components/hud/NeedleStats.svelte';
 	import WorkshopTools from '$lib/components/hud/WorkshopTools.svelte';
-	import ChordIndicator from '$lib/components/hud/ChordIndicator.svelte';
+	import DebugBar from '$lib/components/hud/DebugBar.svelte';
 	
 	// Overlay Modules
 	import DyeBasin from '$lib/components/overlay/DyeBasin.svelte';
@@ -83,7 +83,7 @@
 <Header />
 <DyePalette />
 <NeedleStats />
-<ChordIndicator />
+<DebugBar />
 
 <div class="relative flex h-screen flex-1 items-center justify-center overflow-hidden">
 	<div class="artisan-frame flex h-[80vh] w-[82vw] items-center justify-center overflow-hidden">

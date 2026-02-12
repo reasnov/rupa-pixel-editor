@@ -24,8 +24,8 @@ interface LoomPattern {
 export class LoomPadEngine {
     private patterns: LoomPattern[] = [];
     
-    // Reactive tracking for UI debugging
-    activeKeys = $state<Set<string>>(new Set());
+    // Reactive tracking for UI debugging - Using array for reliable reactivity
+    activeKeys = $state<string[]>([]);
     
     // The "Resolved State" based on current physical grip
     isCtrlActive = $state(false);
@@ -79,20 +79,34 @@ export class LoomPadEngine {
 
     /**
      * Physical Update: Call this on EVERY keydown/keyup.
-     * It updates the "Grip" (the set of keys currently touching the loom).
      */
     updatePhysicalState(e: KeyboardEvent, type: 'down' | 'up') {
         const key = e.key.toLowerCase();
+        
         if (type === 'down') {
-            this.activeKeys.add(key);
+            if (!this.activeKeys.includes(key)) {
+                this.activeKeys.push(key);
+            }
         } else {
-            this.activeKeys.delete(key);
+            // Remove the specific key
+            this.activeKeys = this.activeKeys.filter(k => k !== key);
+            
+            // SECURITY: If Alt is specifically stuck (common browser bug),
+            // we check the physical state reported by the event.
+            if (key === 'alt' && !e.altKey) {
+                this.activeKeys = this.activeKeys.filter(k => k !== 'alt');
+            }
         }
 
-        // Sync modifier states immediately
+        // Sync modifier states immediately with the event's truth
         this.isCtrlActive = e.ctrlKey || e.metaKey;
         this.isShiftActive = e.shiftKey;
         this.isAltActive = e.altKey;
+
+        // Final cleanup: if event says modifier is up, it MUST be removed from array
+        if (!this.isCtrlActive) this.activeKeys = this.activeKeys.filter(k => k !== 'control' && k !== 'meta');
+        if (!this.isShiftActive) this.activeKeys = this.activeKeys.filter(k => k !== 'shift');
+        if (!this.isAltActive) this.activeKeys = this.activeKeys.filter(k => k !== 'alt');
     }
 
     /**

@@ -2,11 +2,22 @@
 
 ## 1. Executive Summary
 
-Rupa is a specialized desktop environment for pixel art, built with a "Keyboard-First" philosophy. The architecture leverages **Svelte 5 (Runes)** for reactive UI management and **Electron** for a native desktop experience. The system is designed around the metaphor of "Digital Stitching," where the canvas is treated as a **Linen** and the cursor as a **Needle**.
+Rupa is a specialized desktop environment for pixel art, built with a "Keyboard-First" philosophy. The architecture follows a **Modular Layered Monolith** pattern, ensuring high cohesion within functional modules while maintaining a strict separation of concerns across technical layers. The system leverages **Svelte 5 (Runes)** for reactive UI management and **Electron** for a native desktop experience. The system is designed around the metaphor of "Digital Stitching," where the canvas is treated as a **Linen** and the cursor as a **Needle**.
 
 ---
 
-## 2. Technology Stack
+## 2. Architectural Pattern: Modular Layered Monolith
+
+Rupa is structured into four distinct layers to ensure scalability and maintainability:
+
+1.  **UI Layer (`src/lib/components/`)**: Purely presentational Svelte components. They consume state and trigger intents.
+2.  **State Layer (`src/lib/state/`)**: Reactive data structures using Svelte 5 Runes. They hold the "Source of Truth" but contain no complex business logic.
+3.  **Service Layer (`src/lib/engine/services/`)**: The core business logic. Services manipulate state and orchestrate complex operations (e.g., Folio management, Stitching algorithms).
+4.  **Engine Layer (`src/lib/engine/`)**: Low-level infrastructure and orchestrators (Input parsing, Audio synthesis, Export algorithms).
+
+---
+
+## 3. Technology Stack
 
 - **Runtime**: Node.js / Electron
 - **Frontend Framework**: Svelte 5 (utilizing Runes: `$state`, `$derived`, `$effect`)

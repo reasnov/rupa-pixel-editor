@@ -97,10 +97,10 @@ export class ShuttleEngine {
 	}
 
 	/**
-	 * Create a permanent artifact (PNG/SVG) and trigger download.
+	 * Create a permanent artifact (PNG/SVG/JPG/WEBP) and trigger download.
 	 */
 	async createArtifact(
-		format: 'svg' | 'png',
+		format: 'svg' | 'png' | 'jpg' | 'webp',
 		scale: number = 10,
 		bgColor: string | 'transparent' = 'transparent'
 	) {
@@ -112,8 +112,15 @@ export class ShuttleEngine {
 			const blob = new Blob([svg], { type: 'image/svg+xml' });
 			this.download(URL.createObjectURL(blob), `${atelier.project.name}.svg`);
 		} else {
-			const dataUrl = await ExportEngine.toPNG(width, height, compositeStitches, scale, bgColor);
-			this.download(dataUrl, `${atelier.project.name}.png`);
+			const dataUrl = await ExportEngine.toRaster(
+				width,
+				height,
+				compositeStitches,
+				scale,
+				format,
+				bgColor
+			);
+			this.download(dataUrl, `${atelier.project.name}.${format}`);
 		}
 		atelier.studio.showArtifactCrate = false;
 	}

@@ -119,13 +119,15 @@ export class ExportEngine {
 	}
 
 	/**
-	 * Renders the pixel data to a data URL (PNG) using HTML5 Canvas.
+	 * Renders the pixel data to a data URL using HTML5 Canvas.
+	 * Supports 'image/png', 'image/jpeg', and 'image/webp'.
 	 */
-	static async toPNG(
+	static async toRaster(
 		width: number,
 		height: number,
 		data: (string | null)[],
 		scale: number,
+		format: 'png' | 'jpg' | 'webp' = 'png',
 		bgColor: string | 'transparent' = 'transparent'
 	): Promise<string> {
 		const canvas = document.createElement('canvas');
@@ -137,13 +139,18 @@ export class ExportEngine {
 		if (!ctx) throw new Error('Could not get canvas context');
 		ctx.imageSmoothingEnabled = false;
 
+		// Handle Background
 		if (bgColor !== 'transparent') {
 			ctx.fillStyle = bgColor;
+			ctx.fillRect(0, 0, finalWidth, finalHeight);
+		} else if (format === 'jpg') {
+			// JPG doesn't support transparency, default to white
+			ctx.fillStyle = '#ffffff';
 			ctx.fillRect(0, 0, finalWidth, finalHeight);
 		}
 
 		data.forEach((color, i) => {
-			if (color === null) return; // Skip empty (null)
+			if (color === null) return;
 			const x = i % width;
 			const y = Math.floor(i / width);
 			ctx.fillStyle = color;
@@ -154,6 +161,8 @@ export class ExportEngine {
 				Math.ceil(scale)
 			);
 		});
-		return canvas.toDataURL('image/png');
+
+		const mimeType = format === 'jpg' ? 'image/jpeg' : `image/${format}`;
+		return canvas.toDataURL(mimeType, 0.9); // 0.9 quality for lossy formats
 	}
 }

@@ -35,10 +35,10 @@ To maintain the meditative and creative atmosphere of the project, we use termin
 | **Opacity**          | **Density**             | The thickness of a Veil's fibers, determining its transparency.        |
 | **Merge Layers**     | **Entwine**             | Permanently joining two Veils into a single fiber.                     |
 | **Copied Object**    | **Swatch**              | A fragment of a Motif captured in the Active Loom for later placement. |
-| **Eyedropper**       | **Pick Dye**          | Identifying a dye already present on the linen to reuse it.            |
-| **Image Mode**       | **Stitch Mode**       | The operational state for static image and motif creation.             |
-| **Motion Mode**      | **Kinetic Mode**      | The operational state for temporal sequence and animation weaving.     |
-| **User Guide**       | **Artisan Codex**     | The sacred scroll containing all studio knowledge and techniques.      |
+| **Eyedropper**       | **Pick Dye**            | Identifying a dye already present on the linen to reuse it.            |
+| **Image Mode**       | **Stitch Mode**         | The operational state for static image and motif creation.             |
+| **Motion Mode**      | **Kinetic Mode**        | The operational state for temporal sequence and animation weaving.     |
+| **User Guide**       | **Artisan Codex**       | The sacred scroll containing all studio knowledge and techniques.      |
 | **Command Palette**  | **Pattern Catalog**     | A searchable directory of all studio actions and patterns.             |
 | **Color Picker**     | **Natural Dye Basin**   | The interface for mixing and creating custom dyes.                     |
 | **Audio Settings**   | **Audio Basin**         | The interface for tuning harmony (SFX) and atmosphere (BGM).           |

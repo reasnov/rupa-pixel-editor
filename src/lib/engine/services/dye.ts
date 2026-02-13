@@ -12,7 +12,7 @@ export class DyeService {
 	 */
 	select(index: number) {
 		atelier.paletteState.select(index);
-		sfx.playStitch();
+		sfx.playScale(index);
 	}
 
 	/**

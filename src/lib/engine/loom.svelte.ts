@@ -169,7 +169,7 @@ export class TheLoom {
 			default:
 				if (intent.startsWith('SELECT_DYE_')) {
 					const num = parseInt(intent.split('_')[2]);
-					return atelier.paletteState.select(num === 0 ? 9 : num - 1);
+					return shuttle.dye.select(num === 0 ? 9 : num - 1);
 				}
 		}
 	}

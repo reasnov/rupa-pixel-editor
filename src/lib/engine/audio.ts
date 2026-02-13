@@ -49,6 +49,25 @@ export class AudioEngine {
 		setTimeout(() => this.playTone(1500, 0.1, 'sine', 0.02), 50);
 	}
 
+	playScale(index: number) {
+		// C Major Scale frequencies (C4 to E5)
+		const scale = [
+			261.63, // C4
+			293.66, // D4
+			329.63, // E4
+			349.23, // F4
+			392.0, // G4
+			440.0, // A4
+			493.88, // B4
+			523.25, // C5
+			587.33, // D5
+			659.25 // E5
+		];
+
+		const freq = scale[index % scale.length];
+		this.playTone(freq, 0.15, 'sine', 0.05);
+	}
+
 	playUnstitch() {
 		// Audible brush/paper rustle
 		this.init();

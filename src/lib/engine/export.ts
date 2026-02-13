@@ -188,13 +188,23 @@ export class ExportEngine {
 			const delay = (i / fps).toFixed(2);
 			svg += `<g class="frame" style="animation: fade ${duration}s step-end infinite; animation-delay: ${delay}s; opacity: ${i === 0 ? 1 : 0}">`;
 
-			// Render individual frame data (optimized via rect merging if needed, but simple for now)
-			data.forEach((color, idx) => {
-				if (color === null) return;
-				const x = idx % width;
-				const y = Math.floor(idx / width);
-				svg += `<rect x="${x}" y="${y}" width="1" height="1" fill="${color}" />`;
-			});
+			// Optimize each frame using Greedy Rect-Merging
+			const visited = new Array(data.length).fill(false);
+			for (let y = 0; y < height; y++) {
+				for (let x = 0; x < width; x++) {
+					const idx = y * width + x;
+					const color = data[idx];
+
+					if (color === null || visited[idx]) continue;
+
+					const cluster = this.findCluster(x, y, width, height, data, visited);
+					const rects = this.greedyRectMerge(cluster, width);
+
+					rects.forEach((r) => {
+						svg += `<rect x="${r.x}" y="${r.y}" width="${r.w}" height="${r.h}" fill="${color}" />`;
+					});
+				}
+			}
 
 			svg += `</g>`;
 		});

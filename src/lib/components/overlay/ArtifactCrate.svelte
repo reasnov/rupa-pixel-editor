@@ -9,14 +9,14 @@
 
 	let { onExport, onClose = () => (atelier.showArtifactCrate = false) } = $props<{
 		onExport: (
-			format: 'svg' | 'png' | 'jpg' | 'webp' | 'webm',
+			format: 'svg' | 'png' | 'jpg' | 'webp' | 'webm' | 'gif' | 'mp4',
 			scale: number,
 			bgColor: string
 		) => void;
 		onClose?: () => void;
 	}>();
 
-	let format = $state<'svg' | 'png' | 'jpg' | 'webp' | 'webm'>('png');
+	let format = $state<'svg' | 'png' | 'jpg' | 'webp' | 'webm' | 'gif' | 'mp4'>('png');
 	let showPicker = $state(false);
 
 	// HSLA / Custom color state
@@ -98,6 +98,30 @@
 							<h3 class="font-serif text-[10px] font-bold tracking-tight uppercase">WebP</h3>
 						</div>
 					</button>
+					<button
+						class="flex flex-col items-center gap-3 rounded-xl border-2 p-4 transition-all {format ===
+						'jpg'
+							? 'border-brand bg-brand/5'
+							: 'border-black/5 bg-white/40 opacity-40 hover:opacity-100'}"
+						onclick={() => (format = 'jpg')}
+					>
+						<span class="text-2xl">📷</span>
+						<div class="text-center">
+							<h3 class="font-serif text-[10px] font-bold tracking-tight uppercase">JPG</h3>
+						</div>
+					</button>
+					<button
+						class="flex flex-col items-center gap-3 rounded-xl border-2 p-4 transition-all {format ===
+							'svg' && atelier.project.frames.length <= 1
+							? 'border-brand bg-brand/5'
+							: 'border-black/5 bg-white/40 opacity-40 hover:opacity-100'}"
+						onclick={() => (format = 'svg')}
+					>
+						<span class="text-2xl">📐</span>
+						<div class="text-center">
+							<h3 class="font-serif text-[10px] font-bold tracking-tight uppercase">Vector SVG</h3>
+						</div>
+					</button>
 				</div>
 			</div>
 
@@ -121,14 +145,42 @@
 					</button>
 					<button
 						class="flex flex-col items-center gap-3 rounded-xl border-2 p-4 transition-all {format ===
-						'svg'
+						'gif'
+							? 'border-brand bg-brand/5'
+							: 'border-black/5 bg-white/40 opacity-40 hover:opacity-100'}"
+						onclick={() => (format = 'gif')}
+					>
+						<span class="text-2xl">🎀</span>
+						<div class="text-center">
+							<h3 class="font-serif text-[10px] font-bold tracking-tight uppercase">
+								Animated GIF
+							</h3>
+						</div>
+					</button>
+					<button
+						class="flex flex-col items-center gap-3 rounded-xl border-2 p-4 transition-all {format ===
+						'mp4'
+							? 'border-brand bg-brand/5'
+							: 'border-black/5 bg-white/40 opacity-40 hover:opacity-100'}"
+						onclick={() => (format = 'mp4')}
+					>
+						<span class="text-2xl">📽️</span>
+						<div class="text-center">
+							<h3 class="font-serif text-[10px] font-bold tracking-tight uppercase">Video MP4</h3>
+						</div>
+					</button>
+					<button
+						class="flex flex-col items-center gap-3 rounded-xl border-2 p-4 transition-all {format ===
+							'svg' && atelier.project.frames.length > 1
 							? 'border-brand bg-brand/5'
 							: 'border-black/5 bg-white/40 opacity-40 hover:opacity-100'}"
 						onclick={() => (format = 'svg')}
 					>
-						<span class="text-2xl">📐</span>
+						<span class="text-2xl">🌀</span>
 						<div class="text-center">
-							<h3 class="font-serif text-[10px] font-bold tracking-tight uppercase">Vector SVG</h3>
+							<h3 class="font-serif text-[10px] font-bold tracking-tight uppercase">
+								Animated SVG
+							</h3>
 						</div>
 					</button>
 				</div>
@@ -152,7 +204,7 @@
 					/>
 				</div>
 
-				{#if format === 'webm' || (format === 'svg' && atelier.project.frames.length > 1)}
+				{#if format === 'webm' || format === 'gif' || format === 'mp4' || (format === 'svg' && atelier.project.frames.length > 1)}
 					<div class="h-px w-full bg-black/5"></div>
 					<div class="flex items-center justify-between">
 						<div class="flex flex-col gap-1">

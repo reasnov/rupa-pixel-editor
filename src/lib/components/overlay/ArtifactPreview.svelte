@@ -2,7 +2,7 @@
 	import { atelier } from '../../state/atelier.svelte.js';
 
 	let { format, scale, bgColor } = $props<{
-		format: 'svg' | 'png' | 'jpg' | 'webp' | 'webm';
+		format: 'svg' | 'png' | 'jpg' | 'webp' | 'webm' | 'gif' | 'mp4';
 		scale: number;
 		bgColor: string | 'transparent';
 	}>();

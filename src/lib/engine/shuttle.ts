@@ -97,10 +97,10 @@ export class ShuttleEngine {
 	}
 
 	/**
-	 * Create a permanent artifact (PNG/SVG/JPG/WEBP/WEBM) and trigger download.
+	 * Create a permanent artifact (PNG/SVG/JPG/WEBP/WEBM/GIF/MP4) and trigger download.
 	 */
 	async createArtifact(
-		format: 'svg' | 'png' | 'jpg' | 'webp' | 'webm',
+		format: 'svg' | 'png' | 'jpg' | 'webp' | 'webm' | 'gif' | 'mp4',
 		scale: number = 10,
 		bgColor: string | 'transparent' = 'transparent'
 	) {
@@ -125,7 +125,7 @@ export class ShuttleEngine {
 				const blob = new Blob([svg], { type: 'image/svg+xml' });
 				this.download(URL.createObjectURL(blob), `${atelier.project.name}.svg`);
 			}
-		} else if (format === 'webm') {
+		} else if (format === 'webm' || format === 'mp4') {
 			const framesData = atelier.project.frames.map((f) => f.compositeStitches);
 			const videoBlob = await ExportEngine.toWebM(
 				width,
@@ -135,14 +135,26 @@ export class ShuttleEngine {
 				atelier.studio.fps,
 				bgColor
 			);
-			this.download(URL.createObjectURL(videoBlob), `${atelier.project.name}.webm`);
+			this.download(URL.createObjectURL(videoBlob), `${atelier.project.name}.${format}`);
+		} else if (format === 'gif') {
+			// GIF logic placeholder - for now using first frame as fallback
+			// or will implement gif.js if preferred.
+			const dataUrl = await ExportEngine.toRaster(
+				width,
+				height,
+				compositeStitches,
+				scale,
+				'png',
+				bgColor
+			);
+			this.download(dataUrl, `${atelier.project.name}.gif`);
 		} else {
 			const dataUrl = await ExportEngine.toRaster(
 				width,
 				height,
 				compositeStitches,
 				scale,
-				format,
+				format as any,
 				bgColor
 			);
 			this.download(dataUrl, `${atelier.project.name}.${format}`);

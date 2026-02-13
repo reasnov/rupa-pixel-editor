@@ -7,15 +7,17 @@
 </script>
 
 {#if atelier.selection.isActive}
-	<!-- Complex Selection Rendering -->
+	<!-- Complex Selection Rendering (Spirit Glow) -->
 	{#each points as point}
 		<div
-			class="pointer-events-none absolute z-40 bg-brand/10"
+			class="pointer-events-none absolute z-40 bg-brand/10 transition-all duration-500"
+			class:animate-pulse={!isLooming}
 			style="
                 left: {(point.x / atelier.linen.width) * 100}%; 
                 top: {(point.y / atelier.linen.height) * 100}%; 
                 width: {100 / atelier.linen.width}%; 
                 height: {100 / atelier.linen.height}%;
+                box-shadow: inset 0 0 2px var(--color-brand);
             "
 		></div>
 	{/each}
@@ -73,10 +75,10 @@
 		}
 		to {
 			background-position:
-				10px 0,
-				-10px 100%,
-				0 -10px,
-				100% 10px;
+				6px 0,
+				-6px 100%,
+				0 -6px,
+				100% 6px;
 		}
 	}
 </style>

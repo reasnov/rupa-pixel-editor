@@ -22,29 +22,27 @@ export class SelectionService {
 	}
 
 	/**
-	 * Batch Fill: Fills the selected region with the active dye.
+	 * Batch Fill: Fills the entire active selection (Loom or Motif) with the active dye.
 	 */
 	commit() {
-		const bounds = atelier.selection.bounds;
-		if (!bounds) return;
+		const points = atelier.selection.getPoints(atelier.linen.width);
+		if (points.length === 0) return;
 
-		const { x1, x2, y1, y2 } = bounds;
 		const activeDye = atelier.paletteState.activeDye;
+		const width = atelier.linen.width;
 
 		history.beginBatch();
 		let changed = false;
 
-		for (let y = y1; y <= y2; y++) {
-			for (let x = x1; x <= x2; x++) {
-				const index = atelier.linen.getIndex(x, y);
-				const oldColor = atelier.linen.stitches[index];
-				if (oldColor !== activeDye) {
-					history.push({ index, oldColor, newColor: activeDye });
-					atelier.linen.setColor(x, y, activeDye);
-					changed = true;
-				}
+		points.forEach((p) => {
+			const index = p.y * width + p.x;
+			const oldColor = atelier.linen.stitches[index];
+			if (oldColor !== activeDye) {
+				history.push({ index, oldColor, newColor: activeDye });
+				atelier.linen.stitches[index] = activeDye;
+				changed = true;
 			}
-		}
+		});
 
 		history.endBatch();
 		if (changed) sfx.playStitch();
@@ -66,13 +64,14 @@ export class SelectionService {
 
 		while (queue.length > 0) {
 			const [cx, cy] = queue.shift()!;
+			const index = cy * width + cx;
 			const key = `${cx},${cy}`;
 
 			if (visited.has(key)) continue;
 			visited.add(key);
 
 			if (atelier.linen.getColor(cx, cy) === targetColor) {
-				atelier.selection.indices.add(cy * width + cx);
+				atelier.selection.indices.add(index);
 
 				const neighbors: [number, number][] = [
 					[cx + 1, cy],
@@ -90,7 +89,7 @@ export class SelectionService {
 		}
 
 		if (atelier.selection.indices.size > 0) {
-			sfx.playStitch();
+			sfx.playScale(4); // Play a specific harmonic note
 		}
 	}
 }

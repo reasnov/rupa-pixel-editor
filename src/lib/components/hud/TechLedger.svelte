@@ -3,6 +3,7 @@
 	import StanceIndicator from './ledger/StanceIndicator.svelte';
 	import AtmosphereIndicator from './ledger/AtmosphereIndicator.svelte';
 	import SessionTimer from './ledger/SessionTimer.svelte';
+	import SelectionInfo from './ledger/SelectionInfo.svelte';
 	import CanvasMetadata from './ledger/CanvasMetadata.svelte';
 </script>
 
@@ -18,6 +19,8 @@
 		<div class="flex items-center gap-4">
 			<SessionTimer />
 			<AtmosphereIndicator />
+			<div class="h-3 w-px bg-brand/10"></div>
+			<SelectionInfo />
 		</div>
 	</div>
 

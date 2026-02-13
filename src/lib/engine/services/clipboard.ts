@@ -1,67 +1,76 @@
-import { type ColorHex } from '../../types/index.js';
 import { atelier } from '../../state/atelier.svelte.js';
-import { sfx } from '../../engine/audio.js';
-import { history } from '../../engine/history.js';
+import { history } from '../history.js';
+import { sfx } from '../audio.js';
 
 export class ClipboardService {
 	copy() {
-		const bounds = atelier.selection.bounds;
-		if (!bounds) return;
+		const width = atelier.linen.width;
+		const points = atelier.selection.getPoints(width);
+		const bounds = atelier.selection.getEffectiveBounds(width);
 
-		const { x1, x2, y1, y2 } = bounds;
-		const w = x2 - x1 + 1;
-		const h = y2 - y1 + 1;
-		const data: (ColorHex | null)[] = [];
+		if (!bounds || points.length === 0) return;
 
-		for (let y = y1; y <= y2; y++) {
-			for (let x = x1; x <= x2; x++) {
-				data.push(atelier.linen.getColor(x, y));
-			}
-		}
-		atelier.project.clipboard = { width: w, height: h, data };
+		const swatchData = new Array(bounds.width * bounds.height).fill(null);
+
+		points.forEach((p) => {
+			const sourceIndex = p.y * width + p.x;
+			const targetX = p.x - bounds.x1;
+			const targetY = p.y - bounds.y1;
+			const targetIndex = targetY * bounds.width + targetX;
+			swatchData[targetIndex] = atelier.linen.stitches[sourceIndex];
+		});
+
+		atelier.project.clipboard = {
+			width: bounds.width,
+			height: bounds.height,
+			data: swatchData
+		};
+
 		sfx.playStitch();
 	}
 
 	cut() {
 		this.copy();
-		const bounds = atelier.selection.bounds;
-		if (!bounds) return;
+		const width = atelier.linen.width;
+		const points = atelier.selection.getPoints(width);
 
-		const { x1, x2, y1, y2 } = bounds;
+		if (points.length === 0) return;
 
 		history.beginBatch();
-		for (let y = y1; y <= y2; y++) {
-			for (let x = x1; x <= x2; x++) {
-				const index = atelier.linen.getIndex(x, y);
-				const oldColor = atelier.linen.stitches[index];
-				if (oldColor !== null) {
-					history.push({ index, oldColor, newColor: null });
-					atelier.linen.setColor(x, y, null);
-				}
-			}
-		}
+		points.forEach((p) => {
+			const index = p.y * width + p.x;
+			const oldColor = atelier.linen.stitches[index];
+			history.push({ index, oldColor, newColor: null });
+			atelier.linen.stitches[index] = null;
+		});
 		history.endBatch();
+
 		sfx.playUnstitch();
+		atelier.selection.clear();
 	}
 
 	paste() {
-		const clip = atelier.project.clipboard;
-		if (!clip) return;
+		const cb = atelier.project.clipboard;
+		if (!cb) return;
 
 		const { x: nx, y: ny } = atelier.needle.pos;
+		const { width: lw, height: lh } = atelier.linen;
 
 		history.beginBatch();
-		for (let y = 0; y < clip.height; y++) {
-			for (let x = 0; x < clip.width; x++) {
+		for (let y = 0; y < cb.height; y++) {
+			for (let x = 0; x < cb.width; x++) {
 				const tx = nx + x;
 				const ty = ny + y;
-				if (atelier.linen.isValidCoord(tx, ty)) {
-					const index = atelier.linen.getIndex(tx, ty);
-					const oldColor = atelier.linen.stitches[index];
-					const newColor = clip.data[y * clip.width + x];
-					if (oldColor !== newColor) {
-						history.push({ index, oldColor, newColor });
-						atelier.linen.setColor(tx, ty, newColor);
+
+				if (tx >= 0 && tx < lw && ty >= 0 && ty < lh) {
+					const cbIdx = y * cb.width + x;
+					const color = cb.data[cbIdx];
+
+					if (color !== null) {
+						const lIdx = ty * lw + tx;
+						const oldColor = atelier.linen.stitches[lIdx];
+						history.push({ index: lIdx, oldColor, newColor: color });
+						atelier.linen.stitches[lIdx] = color;
 					}
 				}
 			}

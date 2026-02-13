@@ -117,10 +117,14 @@ export class TheLoom {
 				return (atelier.studio.showPatternCatalog = !atelier.studio.showPatternCatalog);
 			case 'OPEN_DYES':
 				return (atelier.studio.showDyeBasin = !atelier.studio.showDyeBasin);
+			case 'OPEN_AUDIO':
+				return (atelier.studio.showAudioBasin = !atelier.studio.showAudioBasin);
 			case 'OPEN_EXPORT':
 				return (atelier.studio.showArtifactCrate = true);
 			case 'OPEN_HELP':
 				return (atelier.studio.showArtisanGuide = true);
+			case 'OPEN_CODEX':
+				return (atelier.studio.showArtisanCodex = true);
 
 			case 'ZOOM_IN':
 				return atelier.studio.setZoom(0.1);

@@ -22,6 +22,7 @@
 	import LinenSettings from '$lib/components/overlay/LinenSettings.svelte';
 	import GoToModal from '$lib/components/overlay/GoToModal.svelte';
 	import AudioBasin from '$lib/components/overlay/AudioBasin.svelte';
+	import ArtisanCodex from '$lib/components/overlay/ArtisanCodex.svelte';
 
 	import { onMount } from 'svelte';
 
@@ -69,6 +70,10 @@
 
 {#if atelier.studio.showAudioBasin}
 	<AudioBasin onClose={() => (atelier.studio.showAudioBasin = false)} />
+{/if}
+
+{#if atelier.studio.showArtisanCodex}
+	<ArtisanCodex onClose={() => (atelier.studio.showArtisanCodex = false)} />
 {/if}
 
 <!-- HUD Layout -->

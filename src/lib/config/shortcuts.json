@@ -36,6 +36,8 @@
 		"OPEN": ["Ctrl+o"],
 		"SETTINGS": ["Ctrl+,"],
 		"COLOR_PICKER": ["Ctrl+p"],
+		"AUDIO_SETTINGS": ["Ctrl+Shift+a"],
+		"USER_GUIDE": ["F1", "Ctrl+?"],
 		"CLEAR_LINEN": ["Ctrl+l"],
 		"TOGGLE_MUTE": ["Ctrl+m"],
 		"ESCAPE": ["Escape"]
@@ -73,5 +75,15 @@
 		"FLOW_STITCH": ["Control"],
 		"FLOW_UNSTITCH": ["Ctrl+Shift"],
 		"FLOW_SELECT": ["Shift"]
+	},
+	"reserved_do_not_use": {
+		"OS_CLOSE_WINDOW": ["Ctrl+w"],
+		"OS_QUIT": ["Ctrl+q", "Alt+f4"],
+		"OS_NEW_WINDOW": ["Ctrl+n"],
+		"OS_RELOAD": ["Ctrl+r", "F5"],
+		"OS_DEV_TOOLS": ["Ctrl+Shift+i", "F12"],
+		"OS_FIND": ["Ctrl+f"],
+		"OS_PRINT": ["Ctrl+p", "Ctrl+Shift+p"],
+		"OS_FULLSCREEN": ["F11"]
 	}
 }

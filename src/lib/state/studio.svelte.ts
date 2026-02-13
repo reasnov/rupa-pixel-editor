@@ -21,6 +21,7 @@ export class StudioState {
 	showAudioBasin = $state(false);
 	showPatternCatalog = $state(false);
 	showArtisanGuide = $state(false);
+	showArtisanCodex = $state(false);
 	showArtifactCrate = $state(false);
 	showLinenSettings = $state(false);
 	showArchivePattern = $state(false);

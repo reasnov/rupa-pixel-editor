@@ -190,6 +190,13 @@ export class AtelierState {
 		this.studio.showArtisanGuide = v;
 	}
 
+	get showArtisanCodex() {
+		return this.studio.showArtisanCodex;
+	}
+	set showArtisanCodex(v) {
+		this.studio.showArtisanCodex = v;
+	}
+
 	get showArtifactCrate() {
 		return this.studio.showArtifactCrate;
 	}

@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { atelier } from '../../state/atelier.svelte.js';
+	import { shuttle } from '../../engine/shuttle.js';
 	import { loompad } from '../../engine/loompad.svelte.js';
 	import { fade, scale } from 'svelte/transition';
 	import { onMount, untrack } from 'svelte';
@@ -23,7 +24,7 @@
 			id: 'open-project',
 			label: 'File: Open Artisan Project (.rupa)',
 			shortcut: loompad.getLabel('OPEN'),
-			action: () => atelier.loadProject()
+			action: () => (atelier.studio.showArchivePattern = true)
 		},
 		{
 			id: 'open-dye-basin',
@@ -32,8 +33,14 @@
 			action: () => (atelier.showDyeBasin = true)
 		},
 		{
+			id: 'open-audio-basin',
+			label: 'Audio: Open Harmony & Atmosphere Tuning',
+			shortcut: loompad.getLabel('OPEN_AUDIO'),
+			action: () => (atelier.showAudioBasin = true)
+		},
+		{
 			id: 'toggle-mute',
-			label: 'Studio: Toggle Audio Feedback (Mute/Unmute)',
+			label: 'Audio: Master Mute Toggle',
 			shortcut: loompad.getLabel('TOGGLE_MUTE'),
 			action: () => atelier.toggleMute()
 		},
@@ -74,6 +81,24 @@
 			action: () => atelier.clearLinen()
 		},
 		{
+			id: 'new-frame',
+			label: 'Folio: Add New Frame (Canvas)',
+			shortcut: loompad.getLabel('NEW_FRAME'),
+			action: () => shuttle.folio.addFrame()
+		},
+		{
+			id: 'next-frame',
+			label: 'Folio: Turn to Next Page (Frame)',
+			shortcut: loompad.getLabel('NEXT_FRAME'),
+			action: () => shuttle.folio.nextFrame()
+		},
+		{
+			id: 'new-veil',
+			label: 'Veils: Add New Veil (Layer)',
+			shortcut: loompad.getLabel('NEW_VEIL'),
+			action: () => shuttle.folio.addVeil()
+		},
+		{
 			id: 'copy-pattern',
 			label: 'Selection: Copy Pattern to Clipboard',
 			shortcut: loompad.getLabel('COPY'),
@@ -108,6 +133,18 @@
 			label: 'Transform: Rotate Linen 90° Clockwise',
 			shortcut: loompad.getLabel('ROTATE'),
 			action: () => atelier.rotateLinen()
+		},
+		{
+			id: 'open-codex',
+			label: "Help: Open The Artisan's Codex (User Guide)",
+			shortcut: loompad.getLabel('OPEN_CODEX'),
+			action: () => (atelier.showArtisanCodex = true)
+		},
+		{
+			id: 'open-shortcuts',
+			label: 'Help: Show Quick Shortcut Guide',
+			shortcut: loompad.getLabel('OPEN_HELP'),
+			action: () => (atelier.showArtisanGuide = true)
 		}
 	];
 

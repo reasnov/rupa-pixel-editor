@@ -11,6 +11,7 @@
 			visible = false;
 			setTimeout(() => {
 				atelier.isAppReady = true;
+				atelier.showArtisanCodex = true;
 			}, 800);
 		}, 2000);
 		return () => clearTimeout(timer);

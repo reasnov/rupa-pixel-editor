@@ -15,6 +15,16 @@ export class StudioState {
 	// Session Tracking
 	sessionStartTime = Date.now();
 	usageMinutes = $state(0);
+	usageSeconds = $state(0);
+
+	// Derived human-readable session time
+	sessionTimeLabel = $derived.by(() => {
+		const totalSeconds = this.usageSeconds;
+		const h = Math.floor(totalSeconds / 3600);
+		const m = Math.floor((totalSeconds % 3600) / 60);
+		const s = totalSeconds % 60;
+		return `${h > 0 ? h + ':' : ''}${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+	});
 
 	// Overlay Flags
 	showDyeBasin = $state(false);

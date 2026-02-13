@@ -109,8 +109,10 @@ export class AtelierState {
 	constructor() {
 		// Start Usage Heartbeat
 		setInterval(() => {
-			this.studio.usageMinutes = Math.floor((Date.now() - this.studio.sessionStartTime) / 60000);
-		}, 10000); // Check every 10 seconds for precision
+			const elapsed = Date.now() - this.studio.sessionStartTime;
+			this.studio.usageMinutes = Math.floor(elapsed / 60000);
+			this.studio.usageSeconds = Math.floor(elapsed / 1000);
+		}, 1000); // 1s precision for the working timer
 	}
 
 	get isPicking() {

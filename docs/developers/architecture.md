@@ -101,4 +101,21 @@ Viewport movement is achieved by applying CSS transforms to the `Linen`. The sys
 
 - **Input Latency**: Aiming for < 16ms (60fps) for smooth navigation.
 - **SVG Optimization**: Intelligent path-merging (rect-merging) to keep vector artifacts small.
-- **History Depth**: 500-step undo/redo capacity.
+
+---
+
+## 8. CSS Architecture: SMACSS Pattern
+
+To maintain visual harmony and code maintainability, Rupa Studio follows the **SMACSS** (**S**calable and **M**odular **A**rchitecture for **CSS**) approach, adapted for Svelte 5 and Tailwind CSS:
+
+1.  **Base**: Default styles for HTML elements. In Rupa, these are managed via Tailwind's `@base` layer and global `layout.css`.
+2.  **Layout**: Major structural components (e.g., Sidebars, Header, Spindle Panel). These define the skeleton of the Atelier.
+3.  **Module**: Reusable, independent UI elements (e.g., `.artisan-tool-btn`, `.stitch-cell`). Modules live within Svelte component `<style>` blocks.
+4.  **State**: Describes how modules look in different conditions (e.g., `is-active`, `is-locked`, `is-hidden`). We use Svelte's class toggling for this.
+5.  **Theme**: Visual skinning (e.g., Solarized Cream, Artisan Magenta). These are managed via CSS variables and Tailwind configuration.
+
+### 8.1 Implementation Rules
+
+1. Use `@apply` in Svelte `<style>` blocks to compose complex **Module** or **Layout** classes from Tailwind utilities.
+2. Prefix shared artisan classes with `artisan-` (e.g., `.artisan-panel`) to avoid naming collisions.
+3. Keep state-based classes semantic (e.g., use `.is-stitching` instead of generic `.active`).

@@ -103,12 +103,20 @@
 			</div>
 		</section>
 
-		<!-- Final Note -->
-		<footer class="border-t border-black/5 pt-8 text-center">
+		<footer class="flex flex-col items-center gap-4 border-t border-black/5 pt-8 text-center">
 			<p class="font-serif text-xs italic opacity-40">
 				"May your stitches be true and your colors ever-vivid."
 			</p>
-			<button class="artisan-primary-btn mt-6 px-12" onclick={onClose}>Begin the Weave</button>
+			<div class="flex items-center gap-4">
+				<button
+					class="artisan-secondary-btn px-8"
+					onclick={() => {
+						onClose();
+						atelier.showArtisanGuide = true;
+					}}>View Quick Shortcuts</button
+				>
+				<button class="artisan-primary-btn px-12" onclick={onClose}>Begin the Weave</button>
+			</div>
 		</footer>
 	</div>
 </Modal>

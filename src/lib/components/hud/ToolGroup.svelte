@@ -22,4 +22,11 @@
 		<span>{atelier.isMuted ? '🔇' : '🔊'}</span>
 		Audio
 	</button>
+	<div class="mx-1 h-6 w-px bg-grid-border"></div>
+	<button class="artisan-tool-btn !py-1.5" onclick={() => (atelier.showArtisanCodex = true)}>
+		<span>📜</span> Codex
+	</button>
+	<button class="artisan-tool-btn !py-1.5" onclick={() => (atelier.showArtisanGuide = true)}>
+		<span>⌨️</span> Keys
+	</button>
 </div>

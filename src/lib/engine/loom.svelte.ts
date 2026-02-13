@@ -2,6 +2,7 @@ import { atelier } from '../state/atelier.svelte.js';
 import { loompad, type LoomIntent } from './loompad.svelte.js';
 import { stance } from './stance.svelte.js';
 import { shuttle } from './shuttle.js';
+import { ambient } from './ambient.js';
 
 /**
  * TheLoom: The primary orchestrator of user input and action execution.
@@ -15,6 +16,9 @@ export class TheLoom {
 	 */
 	mount() {
 		this.backupInterval = setInterval(() => shuttle.persistence.backup(), 10 * 60 * 1000);
+
+		// Start generative background music
+		ambient.start();
 
 		const onKeyDown = (e: KeyboardEvent) => this.handleInput(e, 'down');
 		const onKeyUp = (e: KeyboardEvent) => this.handleInput(e, 'up');

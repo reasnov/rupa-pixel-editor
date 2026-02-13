@@ -4,6 +4,7 @@
 export class StudioState {
 	zoomLevel = $state(1);
 	isMuted = $state(false);
+	isAmbientPlaying = $state(true);
 	isAppReady = $state(false);
 	isPicking = $state(false);
 

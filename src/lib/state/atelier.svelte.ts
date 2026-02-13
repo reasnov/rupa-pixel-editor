@@ -81,6 +81,13 @@ export class AtelierState {
 		this.studio.isMuted = v;
 	}
 
+	get isAmbientPlaying() {
+		return this.studio.isAmbientPlaying;
+	}
+	set isAmbientPlaying(v) {
+		this.studio.isAmbientPlaying = v;
+	}
+
 	get isPicking() {
 		return this.studio.isPicking;
 	}

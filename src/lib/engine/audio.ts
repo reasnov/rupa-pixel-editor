@@ -65,7 +65,7 @@ export class AudioEngine {
 		];
 
 		const freq = scale[index % scale.length];
-		this.playTone(freq, 0.15, 'sine', 0.05);
+		this.playTone(freq, 0.15, 'sine', 0.12);
 	}
 
 	playUnstitch() {

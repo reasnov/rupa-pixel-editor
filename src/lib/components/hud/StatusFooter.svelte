@@ -1,6 +1,6 @@
 <script lang="ts">
 	import StateIndicator from './StateIndicator.svelte';
-	import DebugBar from './DebugBar.svelte';
+	import TechLedger from './TechLedger.svelte';
 </script>
 
 <footer
@@ -10,5 +10,5 @@
 		<StateIndicator />
 	</div>
 
-	<DebugBar />
+	<TechLedger />
 </footer>

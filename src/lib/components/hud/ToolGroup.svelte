@@ -22,4 +22,15 @@
 		<span>{atelier.studio.isMuted ? '🔇' : '🔊'}</span>
 		{atelier.studio.isMuted ? 'Unmute' : 'Mute'}
 	</button>
+	<button
+		class="artisan-tool-btn !py-1.5 {atelier.studio.isAmbientPlaying
+			? 'border-brand/40 bg-brand/5 text-brand'
+			: ''}"
+		onclick={() => {
+			atelier.studio.isAmbientPlaying = !atelier.studio.isAmbientPlaying;
+		}}
+	>
+		<span>🎹</span>
+		{atelier.studio.isAmbientPlaying ? 'Music On' : 'Music Off'}
+	</button>
 </div>

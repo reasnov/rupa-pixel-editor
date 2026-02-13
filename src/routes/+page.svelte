@@ -84,9 +84,11 @@
 		<FolioSidebar />
 
 		<main
-			class="relative flex flex-1 items-center justify-center overflow-hidden bg-grid-border/20"
+			class="relative flex flex-1 items-center justify-center overflow-hidden bg-grid-border/20 p-6"
 		>
-			<div class="artisan-frame flex h-[96%] w-[96%] items-center justify-center overflow-hidden">
+			<div
+				class="artisan-frame flex h-full w-full items-center justify-center overflow-hidden shadow-2xl"
+			>
 				<Linen />
 			</div>
 		</main>

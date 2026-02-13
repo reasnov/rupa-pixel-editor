@@ -4,14 +4,14 @@ Welcome to your studio. This guide provides the knowledge needed to master the *
 
 ---
 
-## 1. Entering the Atelier (The HUD)
+## 1. Entering the Atelier (The Workspace)
 
-The Atelier is organized into four main areas to keep your workspace clean:
+Rupa uses a professional container-based layout to maximize your creative focus:
 
-- **Top Bar (Command Center):** Contains the Header, Project Info, and primary tools (Catalog, Export, Clear, Mute).
-- **Left Bar (Dye Palette):** Your selection of threads. Use `1-0` to switch dyes instantly.
-- **Right Bar (Artisan Stats):** Displays the Active Dye, Needle Coordinates, Linen Size, and a history of **Used Dyes**.
-- **Bottom Bar (Ledger):** Shows the **State Indicator** (your current mode) and the **Debug Bar** (technical chord ledger).
+- **Atelier Header (Top):** Your command center. Houses the project name, core tools, and the **Audio Basin** trigger.
+- **Folio Sidebar (Left):** Navigasi project hierarchy. Manage your **Frames** (Pages) and **Veils** (Layers) here. You can reorder them via drag-and-drop or shortcuts.
+- **Inspector Sidebar (Right):** Precision tools. Access the **Dye Inspector**, the full **Dye Palette**, and real-time **Needle Stats**.
+- **TechLedger (Bottom):** A slim bar showing your current working time, chord history, and the **Atmosphere Protocol** status.
 
 ---
 
@@ -22,26 +22,17 @@ Rupa is designed for a keyboard-first experience.
 ### 2.1 Moving the Needle
 
 - **Arrow Keys:** Move the Needle across the linen.
-- **`G` (Go To):** Instantly jump to a specific coordinate using the Cartesian system.
+- **`G` (Go To):** Instantly jump to a specific coordinate.
 
 ### 2.2 Applying Dyes (Stitching)
 
 - **Space / Enter:** Apply the active dye to the current cell (Stitch).
 - **Backspace / Delete:** Clear the current cell (Unstitch).
-
-### 2.3 Batch Filling
-
-You can fill an entire area instantly:
-
-1. Hold **`Shift`** to enter **Looming Mode** (Selection).
-2. Use **Arrow Keys** to define the area.
-3. Press **`Space`** while holding Shift to fill the entire area with the active dye.
+- **Number Keys (1-0):** Select threads from the palette. Each selection plays a note in the **C Major Scale**.
 
 ---
 
 ## 3. The Artisan's Stances (Modes)
-
-Mastering Rupa requires understanding how modifiers change your "Stance."
 
 | Stance          | Modifier       | Action                                                                          |
 | :-------------- | :------------- | :------------------------------------------------------------------------------ |
@@ -53,7 +44,26 @@ Mastering Rupa requires understanding how modifiers change your "Stance."
 
 ---
 
-## 4. Pattern Manipulation (Selection)
+## 4. Layering & Reordering (Veils)
+
+The studio supports unlimited depth through **Veils**.
+
+- **`[` (Left Bracket):** Move active veil up (towards Foreground).
+- **`]` (Right Bracket):** Move active veil down (towards Background).
+- **`Alt+H`:** Toggle veil visibility.
+- **`Alt+L`:** Toggle veil lock.
+
+---
+
+## 5. Atmosphere Protocol (Ambient Music)
+
+The Atelier rewards deep focus. The studio is silent for the first **30 minutes** of your session. After this period, a generative piano melody will begin to weave into your workspace, reaching its full resonant volume at the **60-minute** mark.
+
+You can tune the volumes of both the **Piano (BGM)** and **Stitch Resonance (SFX)** in the **Audio Basin** (`Ctrl+Shift+A`).
+
+---
+
+## 6. Pattern Manipulation (Selection)
 
 When you define a selection (Looming), it remains active as a **Persistent Selection** (shown with a thin gray border) even after releasing Shift.
 

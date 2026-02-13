@@ -35,9 +35,17 @@ Every interaction is mapped to a `LoomIntent` to ensure semantic consistency.
 
 ### 2.4 UI Intents
 
-- `OPEN_CATALOG`: Show Command Palette.
-- `OPEN_BASIN`: Show Color Picker.
-- `OPEN_CRATE`: Show Export Menu.
+- `OPEN_PALETTE`: Show Command Palette (Pattern Catalog).
+- `OPEN_BASIN`: Show Color Picker (Natural Dye Basin).
+- `OPEN_AUDIO`: Show Audio Settings (Audio Basin).
+- `OPEN_CRATE`: Show Export Menu (Artifact Crate).
+- `OPEN_CODEX`: Show User Guide (Artisan Codex).
+
+### 2.5 Convention: Reserved Shortcuts
+
+To maintain cross-platform integrity, the following chord patterns are reserved for the OS/Browser and must not be mapped to studio intents:
+
+- `Ctrl+W` (Close), `Ctrl+Q` (Quit), `Ctrl+N` (New Window), `Ctrl+R` (Reload), `Ctrl+P` (Print), `F11` (Fullscreen), `F12` (DevTools).
 
 ## 3. Visual Identity & Design System
 

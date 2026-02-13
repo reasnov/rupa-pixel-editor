@@ -24,26 +24,26 @@ To maintain the meditative and creative atmosphere of the project, we use termin
 
 ## 2. Interaction & Tools
 
-| Technical Term       | Artisan Term          | Description                                                            |
-| :------------------- | :-------------------- | :--------------------------------------------------------------------- |
-| **Draw / Paint**     | **Stitch**            | To apply dye to a single point on the linen.                           |
-| **Erase**            | **Unstitch**          | To remove dye and return the linen to its natural state.               |
-| **Continuous Draw**  | **Threading**         | Pulling a continuous line of dye across the linen (Hold Ctrl).         |
-| **Continuous Erase** | **Unravelling**       | Removing a continuous line of stitches (Hold Ctrl + Shift).            |
-| **Selection Mode**   | **Looming**           | Defining a rectangular area for mass manipulation (Hold Shift).        |
-| **Selected Area**    | **Active Loom**       | The region currently defined for stitching or capturing.               |
-| **Opacity**          | **Density**           | The thickness of a Veil's fibers, determining its transparency.        |
-| **Merge Layers**     | **Entwine**           | Permanently joining two Veils into a single fiber.                     |
-| **Copied Object**    | **Swatch**            | A fragment of a Motif captured in the Active Loom for later placement. |
-| **Eyedropper**       | **Pick Dye**          | Identifying a dye already present on the linen to reuse it.            |
-| **HSLA Data**        | **Fiber**             | Raw, unspun color data (Hue, Saturation, Lightness, Alpha).            |
-| **Process Color**    | **Spinning**          | Converting raw Fiber into a usable Thread (HEX).                       |
-| **Modify Color**     | **Dyeing**            | Adjusting the pigment or weather of a thread.                          |
-| **Brightness Adj.**  | **Weathering**        | Aging a dye by making it lighter or darker.                            |
-| **Saturation Adj.**  | **Pigmenting**        | Strengthening or weakening the color concentration of a dye.           |
-| **Key Sequence**     | **Weaving**           | Executing a series of rhythmic key presses to trigger complex intents. |
-| **Command Palette**  | **Pattern Catalog**   | A searchable directory of all studio actions and patterns.             |
-| **Color Picker**     | **Natural Dye Basin** | The interface for mixing and creating custom dyes.                     |
+| Technical Term       | Artisan Term            | Description                                                            |
+| :------------------- | :---------------------- | :--------------------------------------------------------------------- |
+| **Draw / Paint**     | **Stitch**              | To apply dye to a single point on the linen.                           |
+| **Erase**            | **Unstitch**            | To remove dye and return the linen to its natural state.               |
+| **Continuous Draw**  | **Threading**           | Pulling a continuous line of dye across the linen (Hold Ctrl).         |
+| **Continuous Erase** | **Unravelling**         | Removing a continuous line of stitches (Hold Ctrl + Shift).            |
+| **Selection Mode**   | **Looming**             | Defining a rectangular area for mass manipulation (Hold Shift).        |
+| **Selected Area**    | **Active Loom**         | The region currently defined for stitching or capturing.               |
+| **Opacity**          | **Density**             | The thickness of a Veil's fibers, determining its transparency.        |
+| **Merge Layers**     | **Entwine**             | Permanently joining two Veils into a single fiber.                     |
+| **Copied Object**    | **Swatch**              | A fragment of a Motif captured in the Active Loom for later placement. |
+| **Eyedropper**       | **Pick Dye**            | Identifying a dye already present on the linen to reuse it.            |
+| **User Guide**       | **Artisan Codex**       | The sacred scroll containing all studio knowledge and techniques.      |
+| **Command Palette**  | **Pattern Catalog**     | A searchable directory of all studio actions and patterns.             |
+| **Color Picker**     | **Natural Dye Basin**   | The interface for mixing and creating custom dyes.                     |
+| **Audio Settings**   | **Audio Basin**         | The interface for tuning harmony (SFX) and atmosphere (BGM).           |
+| **Status Bar**       | **TechLedger**          | The technical ledger at the studio's base tracking chords and state.   |
+| **Background Music** | **Atmosphere Protocol** | Generative piano melodies that weave into the studio over time.        |
+| **Session Time**     | **Working Time**        | The duration of the artisan's current creative session.                |
+| **HSLA Data**        | **Fiber**               | Raw, unspun color data (Hue, Saturation, Lightness, Alpha).            |
 
 ---
 

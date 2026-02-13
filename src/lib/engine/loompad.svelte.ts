@@ -6,6 +6,7 @@ export type LoomIntent =
 	| 'MOVE_DOWN'
 	| 'MOVE_LEFT'
 	| 'MOVE_RIGHT'
+	| 'SET_POSITION'
 	| 'GOTO'
 	| 'STITCH'
 	| 'UNSTITCH'

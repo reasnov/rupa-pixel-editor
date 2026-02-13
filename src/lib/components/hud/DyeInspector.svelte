@@ -23,7 +23,7 @@
 	<div class="flex flex-col gap-3">
 		<span class="text-center font-serif text-[7px] font-bold uppercase opacity-30">Used Dyes</span>
 
-		<div class="no-scrollbar grid max-h-[140px] grid-cols-3 gap-1.5 overflow-y-auto">
+		<div class="no-scrollbar flex max-h-[150px] flex-row flex-wrap gap-1.5 overflow-y-auto">
 			{#each atelier.usedColors as color (color)}
 				<button
 					transition:slide={{ duration: 200 }}

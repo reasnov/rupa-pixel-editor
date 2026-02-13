@@ -5,7 +5,7 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/version-0.5.0--alpha-d33682?style=flat-square" alt="Version">
+  <img src="https://img.shields.io/badge/version-0.5.0-d33682?style=flat-square" alt="Version">
   <img src="https://img.shields.io/badge/License-MIT-859900?style=flat-square" alt="License">
   <img src="https://img.shields.io/badge/Svelte-5-ff3e00?style=flat-square&logo=svelte" alt="Svelte 5">
   <img src="https://img.shields.io/badge/Electron-Desktop-47848F?style=flat-square&logo=electron" alt="Electron">
@@ -31,7 +31,7 @@ The project documentation has been restructured for clarity and depth. Please re
 - **[Terminology](./docs/wiki/terminology.md)**: Learn the language of craft (**Stitch**, **Motif**, **Swatch**).
 - **[Technical Architecture](./docs/developers/architecture.md)**: In-depth look at Svelte 5 Runes, SOC Engine, and LoomPad.
 - **[Technical Specifications](./docs/developers/specs.md)**: Detailed grid mechanics, intent schemas, and design standards.
-- **[Latest Release Notes](./docs/pubs/releases/v0.5.0-alpha.md)**: Highlights and changes in the v0.5.0-alpha update.
+- **[Latest Release Notes](./docs/pubs/releases/v0.5.0.md)**: Highlights and changes in the v0.5.0 update.
 - **[Security Policy](./SECURITY.md)**: Guidelines for reporting vulnerabilities.
 
 ---

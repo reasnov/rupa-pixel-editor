@@ -1,5 +1,6 @@
 import { atelier } from '../state/atelier.svelte.js';
 import { studioAudio } from './audioContext.js';
+import audioConfig from '../config/audio.json' with { type: 'json' };
 
 /**
  * AmbientEngine: A generative music engine that composes and plays
@@ -14,15 +15,9 @@ export class AmbientEngine {
 		return studioAudio.ctx;
 	}
 
-	// Music Theory: Eb Major Pentatonic (Soft & Dreamy)
-	// Eb3, F3, G3, Bb3, C4, Eb4, F4, G4, Bb4, C5
-	private scale = [155.56, 174.61, 196.0, 233.08, 261.63, 311.13, 349.23, 392.0, 466.16, 523.25];
-	private chords = [
-		[155.56, 196.0, 233.08, 261.63], // EbMaj7
-		[174.61, 233.08, 349.23, 466.16], // Bbsus
-		[130.81, 196.0, 261.63, 311.13], // Cm7
-		[116.54, 174.61, 233.08, 349.23] // AbMaj (inverted)
-	];
+	// Music Data from Config
+	private scale = audioConfig.ambient.scale;
+	private chords = audioConfig.ambient.chords;
 
 	private currentChordIndex = 0;
 
@@ -88,16 +83,14 @@ export class AmbientEngine {
 	}
 
 	private pianoPluck(freq: number, time: number, volume = 0.06) {
-		// --- Generative Volume Logic ---
-		// 0 - 30 mins: Silence (0.0)
-		// 30 - 60 mins: Fade in from 0.0 to 1.0
-		// 60+ mins: Full volume (1.0)
+		// --- Generative Volume Logic (Data Driven) ---
+		const { startMins, fullMins } = audioConfig.ambient.fade;
 		const minutes = atelier.usageMinutes;
 		let fadeScale = 0;
 
-		if (minutes >= 30 && minutes < 60) {
-			fadeScale = (minutes - 30) / 30; // Linear fade over 30 mins
-		} else if (minutes >= 60) {
+		if (minutes >= startMins && minutes < fullMins) {
+			fadeScale = (minutes - startMins) / (fullMins - startMins); // Linear fade
+		} else if (minutes >= fullMins) {
 			fadeScale = 1;
 		}
 

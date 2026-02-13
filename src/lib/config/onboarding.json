@@ -1,0 +1,62 @@
+{
+	"splash": {
+		"phases": [
+			"Spinning the threads...",
+			"Warming the pigments...",
+			"Stretching the digital linen...",
+			"Polishing the needle...",
+			"Studio is quiet and ready."
+		]
+	},
+	"codex": {
+		"title": "The Artisan's Codex",
+		"subtitle": "Volume I: The Sacred Weave",
+		"philosophy": {
+			"title": "The Philosophy of Form",
+			"paragraphs": [
+				"In the beginning, there was only the Linen—a vast, untouched cream void. Then came the Needle, guided by the artisan's intent, bringing the first spark of color to the fiber.",
+				"Rupa is not merely an editor; it is a sanctuary where digital threads are woven into motifs. We believe that every pixel is a Stitch, a deliberate act of creation that requires focus, rhythm, and a peaceful heart.",
+				"\"We do not paint pixels; we weave light into the fabric of time.\""
+			]
+		},
+		"pillars": [
+			{
+				"icon": "🪡",
+				"title": "The Needle",
+				"description": "Your focal point. Controlled by the Arrow Keys, it moves with the precision of a master weaver."
+			},
+			{
+				"icon": "🏺",
+				"title": "The Dyes",
+				"description": "Pigments of life. Apply them with Space. Use the Number Keys to switch between resonant tones."
+			},
+			{
+				"icon": "🛡️",
+				"title": "The Veils",
+				"description": "Layers of depth. Manage them via the Folio Sidebar. Each veil adds a new dimension to your motif."
+			}
+		],
+		"techniques": [
+			{
+				"icon": "🧵",
+				"title": "Threading",
+				"description": "Hold Ctrl to pull a continuous line of dye. Flow with the rhythm of the grid."
+			},
+			{
+				"icon": "🪄",
+				"title": "Spirit Pick",
+				"description": "Press W to resonate with connected colors. A magical way to select complex motifs."
+			},
+			{
+				"icon": "⏳",
+				"title": "The Spindle",
+				"description": "The axis of time. Create frames to see your work in motion. Press P to feel the pulse."
+			},
+			{
+				"icon": "🎹",
+				"title": "Resonance",
+				"description": "Listen. The studio breathes with you. Music will emerge once your focus reaches its peak."
+			}
+		]
+	}
+}

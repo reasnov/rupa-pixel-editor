@@ -1,5 +1,6 @@
 import { atelier } from '../state/atelier.svelte';
 import { studioAudio } from './audioContext.js';
+import audioConfig from '../config/audio.json' with { type: 'json' };
 
 export class AudioEngine {
 	private get ctx(): AudioContext {
@@ -35,31 +36,18 @@ export class AudioEngine {
 	}
 
 	playMove() {
-		// Audible wooden tap
-		this.playTone(450, 0.08, 'sine', 0.15);
+		const { freq, duration, volume } = audioConfig.tones.move;
+		this.playTone(freq, duration, 'sine', volume);
 	}
 
 	playStitch() {
-		// Gentle bell/chime
-		this.playTone(1200, 0.15, 'sine', 0.03);
-		setTimeout(() => this.playTone(1500, 0.1, 'sine', 0.02), 50);
+		const { freq, duration, volume } = audioConfig.tones.stitch;
+		this.playTone(freq, duration, 'sine', volume);
+		setTimeout(() => this.playTone(freq * 1.25, duration * 0.6, 'sine', volume * 0.6), 50);
 	}
 
 	playScale(index: number) {
-		// C Major Scale frequencies (C4 to E5)
-		const scale = [
-			261.63, // C4
-			293.66, // D4
-			329.63, // E4
-			349.23, // F4
-			392.0, // G4
-			440.0, // A4
-			493.88, // B4
-			523.25, // C5
-			587.33, // D5
-			659.25 // E5
-		];
-
+		const scale = audioConfig.scales['c-major'];
 		const freq = scale[index % scale.length];
 		this.playTone(freq, 0.15, 'sine', 0.12);
 	}
@@ -98,14 +86,13 @@ export class AudioEngine {
 	}
 
 	playStartup() {
-		// Warm, deep wooden hum
-		this.playTone(220, 0.8, 'sine', 0.1);
-		this.playTone(110, 1.2, 'sine', 0.05);
+		const { freq, duration, volume } = audioConfig.tones.startup;
+		this.playTone(freq, duration, 'sine', volume);
+		this.playTone(freq / 2, duration * 1.5, 'sine', volume / 2);
 	}
 
 	playReady() {
-		// Magical glissando (C5, E5, G5, C6)
-		const notes = [523.25, 659.25, 783.99, 1046.5];
+		const notes = audioConfig.tones.ready;
 		notes.forEach((freq, i) => {
 			setTimeout(() => this.playTone(freq, 0.4, 'sine', 0.05), i * 100);
 		});

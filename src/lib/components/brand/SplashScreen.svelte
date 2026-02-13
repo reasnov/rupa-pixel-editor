@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { atelier } from '../../state/atelier.svelte.js';
 	import { resonance } from '../../engine/resonance.svelte.js';
+	import onboarding from '../../config/onboarding.json' with { type: 'json' };
 	import { onMount } from 'svelte';
 	import { fade, scale, fly } from 'svelte/transition';
 	import { quintOut } from 'svelte/easing';
@@ -11,13 +12,7 @@
 	let phaseIndex = $state(0);
 	let isReadyToEnter = $state(false);
 
-	const phases = [
-		'Spinning the threads...',
-		'Warming the pigments...',
-		'Stretching the digital linen...',
-		'Polishing the needle...',
-		'Studio is quiet and ready.'
-	];
+	const phases = onboarding.splash.phases;
 
 	function startStudio() {
 		resonance.emit('READY');

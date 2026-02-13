@@ -2,6 +2,7 @@
 	import { atelier } from '../../state/atelier.svelte.js';
 	import { shuttle } from '../../engine/shuttle.js';
 	import Modal from '../ui/Modal.svelte';
+	import DyeBasin from './DyeBasin.svelte';
 
 	let { onClose = () => (atelier.studio.showLinenSettings = false) } = $props<{
 		onClose: () => void;
@@ -9,12 +10,17 @@
 
 	let width = $state(atelier.linen.width);
 	let height = $state(atelier.linen.height);
+	let showPicker = $state(false);
 
 	function apply() {
 		shuttle.manipulation.resize(width, height);
 		onClose();
 	}
 </script>
+
+{#if showPicker}
+	<DyeBasin bind:value={atelier.studio.canvasBgColor} onClose={() => (showPicker = false)} />
+{/if}
 
 <Modal
 	title="Linen Settings"
@@ -25,6 +31,24 @@
 >
 	<div class="flex flex-col gap-8">
 		<div class="flex flex-col gap-6 rounded-xl border border-black/5 bg-white/40 p-8">
+			<!-- Project Name -->
+			<div class="flex flex-col gap-2">
+				<label
+					for="project-name"
+					class="font-serif text-[10px] font-bold tracking-widest uppercase opacity-40"
+					>Project Name</label
+				>
+				<input
+					id="project-name"
+					type="text"
+					bind:value={atelier.project.name}
+					placeholder="Unnamed Pattern"
+					class="rounded-xl border border-black/10 bg-white px-4 py-3 font-serif text-lg focus:border-brand focus:outline-none"
+				/>
+			</div>
+
+			<div class="h-px w-full bg-black/5"></div>
+
 			<div class="grid grid-cols-2 gap-8">
 				<div class="flex flex-col gap-2">
 					<label
@@ -67,17 +91,17 @@
 					>
 					<span class="font-serif text-[10px] opacity-40">Visual background color</span>
 				</div>
-				<div class="flex items-center gap-3">
+				<button class="group relative flex items-center gap-3" onclick={() => (showPicker = true)}>
 					<div
-						class="artisan-checker-small h-10 w-10 rounded-xl border-2 border-white shadow-sm"
+						class="artisan-checker-small h-10 w-16 rounded-xl border-2 border-white shadow-sm transition-transform group-hover:scale-105"
 						style="background-color: {atelier.studio.canvasBgColor};"
 					></div>
-					<input
-						type="color"
-						bind:value={atelier.studio.canvasBgColor}
-						class="h-10 w-16 cursor-pointer rounded-xl border border-black/5 bg-white p-1"
-					/>
-				</div>
+					<div
+						class="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-brand text-[8px] text-white opacity-0 transition-opacity group-hover:opacity-100"
+					>
+						🎨
+					</div>
+				</button>
 			</div>
 
 			<p class="font-serif text-[10px] leading-relaxed italic opacity-40">

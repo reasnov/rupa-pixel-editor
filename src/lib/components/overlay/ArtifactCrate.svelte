@@ -2,6 +2,7 @@
 	import { atelier } from '../../state/atelier.svelte.js';
 	import { ExportEngine } from '../../engine/export.js';
 	import Modal from '../ui/Modal.svelte';
+	import DyeBasin from './DyeBasin.svelte';
 
 	import { onMount } from 'svelte';
 
@@ -11,6 +12,7 @@
 	}>();
 
 	let format = $state<'svg' | 'png'>('png');
+	let showPicker = $state(false);
 
 	// HSLA / Custom color state
 	let customBg = $state(atelier.studio.canvasBgColor);
@@ -34,6 +36,10 @@
 		}
 	});
 </script>
+
+{#if showPicker}
+	<DyeBasin bind:value={customBg} onClose={() => (showPicker = false)} />
+{/if}
 
 <Modal title="Artifact Crate" subtitle="Prepare Artifacts for Export" icon="🧺" {onClose}>
 	<div class="flex flex-col gap-8">
@@ -125,18 +131,17 @@
 					<!-- Custom Option -->
 					<div class="flex items-center gap-2">
 						<button
-							class="h-10 w-10 rounded-xl border-2 {atelier.studio.exportBgColor === customBg
+							class="h-10 w-16 rounded-xl border-2 {atelier.studio.exportBgColor === customBg
 								? 'border-brand'
-								: 'border-black/5'} artisan-checker-small"
+								: 'border-black/5'} artisan-checker-small transition-transform hover:scale-105"
 							style="background-color: {customBg};"
-							onclick={() => (atelier.studio.exportBgColor = customBg)}
+							onclick={() => {
+								customBg = customBg; // Trigger reactivity if needed
+								atelier.studio.exportBgColor = customBg;
+								showPicker = true;
+							}}
 							title="Custom Backdrop"
 						></button>
-						<input
-							type="color"
-							bind:value={customBg}
-							class="h-10 w-16 cursor-pointer rounded-xl border border-black/5 bg-white p-1"
-						/>
 					</div>
 				</div>
 

@@ -277,10 +277,11 @@ export class AtelierState {
 	});
 
 	cameraTransform = $derived.by(() => {
-		if (this.studio.zoomLevel <= 1) return `scale(${this.studio.zoomLevel})`;
+		const effectiveZoom = this.studio.zoomLevel * 0.5;
+		if (effectiveZoom <= 1) return `scale(${effectiveZoom})`;
 		const xPos = ((this.needle.pos.x + 0.5) / this.linen.width) * 100;
 		const yPos = ((this.needle.pos.y + 0.5) / this.linen.height) * 100;
-		return `translate(${50 - xPos}%, ${50 - yPos}%) scale(${this.studio.zoomLevel})`;
+		return `translate(${50 - xPos}%, ${50 - yPos}%) scale(${effectiveZoom})`;
 	});
 
 	// --- Passthrough Methods ---

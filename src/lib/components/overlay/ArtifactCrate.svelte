@@ -3,6 +3,7 @@
 	import { ExportEngine } from '../../engine/export.js';
 	import Modal from '../ui/Modal.svelte';
 	import DyeBasin from './DyeBasin.svelte';
+	import ArtifactPreview from './ArtifactPreview.svelte';
 
 	import { onMount } from 'svelte';
 
@@ -43,6 +44,13 @@
 
 <Modal title="Artifact Crate" subtitle="Prepare Artifacts for Export" icon="🧺" {onClose}>
 	<div class="flex flex-col gap-8">
+		<!-- Live Preview -->
+		<ArtifactPreview
+			{format}
+			scale={atelier.studio.exportScale}
+			bgColor={atelier.studio.exportBgColor}
+		/>
+
 		<!-- Format Selection -->
 		<div class="grid grid-cols-2 gap-4">
 			<button

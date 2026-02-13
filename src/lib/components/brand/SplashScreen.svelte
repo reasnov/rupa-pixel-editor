@@ -20,7 +20,6 @@
 	];
 
 	function startStudio() {
-		if (!isReadyToEnter) return;
 		resonance.emit('READY');
 		visible = false;
 		setTimeout(() => {
@@ -44,18 +43,13 @@
 				clearInterval(interval);
 				setTimeout(() => {
 					isReadyToEnter = true;
+					startStudio(); // Auto-close when ready
 				}, 500);
 			}
 		}, 400);
 
-		const handleKey = (e: KeyboardEvent) => {
-			if (isReadyToEnter) startStudio();
-		};
-
-		window.addEventListener('keydown', handleKey);
 		return () => {
 			clearInterval(interval);
-			window.removeEventListener('keydown', handleKey);
 		};
 	});
 </script>
@@ -96,40 +90,25 @@
 		</div>
 
 		<div class="absolute bottom-24 flex flex-col items-center gap-8">
-			{#if !isReadyToEnter}
-				<!-- Loading Bar -->
-				<div class="flex flex-col items-center gap-4" in:fade>
-					<div class="h-1 w-64 overflow-hidden rounded-full bg-black/5 ring-1 ring-black/5">
-						<div
-							class="h-full bg-brand/60 transition-all duration-500 ease-out"
-							style="width: {progress}%"
-						></div>
-					</div>
-					<div class="flex flex-col items-center gap-1">
-						<span class="h-4 font-serif text-[11px] italic opacity-50">{phases[phaseIndex]}</span>
-						<span class="font-mono text-[9px] font-bold tracking-widest uppercase opacity-20"
-							>Version {atelier.version}</span
-						>
-					</div>
+			<!-- Loading Bar -->
+			<div class="flex flex-col items-center gap-4">
+				<div class="h-1 w-64 overflow-hidden rounded-full bg-black/5 ring-1 ring-black/5">
+					<div
+						class="h-full bg-brand/60 transition-all duration-500 ease-out {isReadyToEnter
+							? 'opacity-0'
+							: ''}"
+						style="width: {progress}%"
+					></div>
 				</div>
-			{:else}
-				<!-- Entry Prompt -->
-				<button
-					onclick={startStudio}
-					in:fly={{ y: 10, duration: 800 }}
-					class="group flex flex-col items-center gap-4"
-				>
-					<span class="animate-bounce text-2xl opacity-60">✨</span>
-					<span
-						class="font-tiny5 text-lg tracking-[0.3em] text-brand transition-all group-hover:scale-110 group-hover:tracking-[0.5em]"
+				<div class="flex flex-col items-center gap-1">
+					<span class="h-4 font-serif text-[11px] italic opacity-50"
+						>{isReadyToEnter ? 'Welcome home, artisan.' : phases[phaseIndex]}</span
 					>
-						PRESS ANY KEY TO ENTER
-					</span>
-					<span class="font-serif text-[9px] font-bold tracking-widest uppercase opacity-20"
-						>Welcome home, artisan.</span
+					<span class="font-mono text-[9px] font-bold tracking-widest uppercase opacity-20"
+						>Version {atelier.version}</span
 					>
-				</button>
-			{/if}
+				</div>
+			</div>
 		</div>
 	</div>
 {/if}

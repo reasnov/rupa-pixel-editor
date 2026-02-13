@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { atelier } from '../../state/atelier.svelte';
 	import { fade, scale } from 'svelte/transition';
+	import { quintOut } from 'svelte/easing';
 	import { untrack } from 'svelte';
 
 	let {
@@ -23,9 +24,23 @@
 		scrollable?: boolean;
 	}>();
 
+	// Custom "Paper Roll" Transition
+	function paperRoll(node: HTMLElement, { duration = 600 }) {
+		return {
+			duration,
+			css: (t: number) => {
+				const eased = quintOut(t);
+				return `
+					opacity: ${t};
+					transform: scaleX(${0.9 + eased * 0.1}) scaleY(${0.4 + eased * 0.6});
+					clip-path: inset(0 ${(1 - eased) * 50}% 0 ${(1 - eased) * 50}%);
+				`;
+			}
+		};
+	}
+
 	// Register with Escape Stack once per mount
 	$effect(() => {
-		// Use untrack to ensure registering doesn't re-trigger the effect
 		untrack(() => {
 			atelier.pushEscapeAction(onClose);
 		});
@@ -36,15 +51,19 @@
 <!-- svelte-ignore a11y_no_static_element_interactions -->
 <!-- svelte-ignore a11y_click_events_have_key_events -->
 <div
-	transition:fade={{ duration: 150 }}
-	class="fixed inset-0 z-[1100] flex items-center justify-center bg-black/20 backdrop-blur-sm"
-	onmousedown={(e) => e.target === e.currentTarget && onClose()}
+	transition:fade={{ duration: 200 }}
+	class="fixed inset-0 z-[1100] flex items-center justify-center bg-black/25 backdrop-blur-md"
+	onmousedown={(e) => {
+		e.stopPropagation();
+		if (e.target === e.currentTarget) onClose();
+	}}
 >
 	<div
-		in:scale={{ duration: 200, start: 0.95 }}
-		out:scale={{ duration: 150, start: 1, opacity: 0 }}
+		in:paperRoll={{ duration: 500 }}
+		out:fade={{ duration: 150 }}
 		class="flex flex-col gap-8 overflow-hidden rounded-xl border-8 border-white bg-[#fdf6e3] p-10 shadow-2xl ring-1 ring-black/5"
 		style="width: {width}; max-height: {maxHeight};"
+		onmousedown={(e) => e.stopPropagation()}
 	>
 		<!-- Header -->
 		<div class="flex items-center justify-between border-b border-studio-text/5 pb-6">

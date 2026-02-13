@@ -1,73 +1,48 @@
 import { atelier } from '../state/atelier.svelte.js';
 import { loompad, type LoomIntent } from './loompad.svelte.js';
+import { synapse } from './synapse.svelte.js';
 import { stance } from './stance.svelte.js';
 import { shuttle } from './shuttle.js';
 import { ambient } from './ambient.js';
-import { pulse } from './pulse.js';
+import { chronos } from './chronos.svelte.ts';
 import { studioAudio } from './audioContext.js';
 
 /**
- * TheLoom: The primary orchestrator of user input and action execution.
- * It maps LoomIntents to ShuttleEngine operations.
+ * TheLoom: The primary orchestrator of action execution.
+ * It listens to normalized signals from the SynapseEngine and executes ShuttleEngine operations.
  */
 export class TheLoom {
 	private backupInterval: any = null;
+	private unsubscribeSynapse: (() => void) | null = null;
 
 	/**
-	 * Mount the loom: initialize listeners and heartbeats.
+	 * Mount the loom: initialize heartbeats and subscribe to Synapse.
 	 */
-	mount() {
+	mount(linenElement: HTMLElement | null = null) {
 		this.backupInterval = setInterval(() => shuttle.persistence.backup(), 10 * 60 * 1000);
 
 		// Start generative background music
 		ambient.start();
 
-		const onKeyDown = (e: KeyboardEvent) => this.handleInput(e, 'down');
-		const onKeyUp = (e: KeyboardEvent) => this.handleInput(e, 'up');
+		// Subscribe to normalized input stream
+		this.unsubscribeSynapse = synapse.subscribe((signal) => {
+			this.handleIntent(signal.intent);
+		});
 
-		window.addEventListener('keydown', onKeyDown);
-		window.addEventListener('keyup', onKeyUp);
+		// Initialize Synapse hardware listeners
+		const cleanupSynapse = synapse.mount(window, linenElement);
 
 		return () => {
-			window.removeEventListener('keydown', onKeyDown);
-			window.removeEventListener('keyup', onKeyUp);
+			if (this.unsubscribeSynapse) this.unsubscribeSynapse();
+			cleanupSynapse();
 			clearInterval(this.backupInterval);
 		};
 	}
 
-	handleInput(e: KeyboardEvent, type: 'down' | 'up') {
-		if (!atelier.studio.isAppReady) return;
-
+	handleIntent(intent: LoomIntent) {
 		// Resume Audio Context on interaction
 		studioAudio.resume();
-
-		// 1. Update physical key ledger
-		loompad.updatePhysicalState(e, type);
-
-		// 2. Shield Check
-		const target = e.target as HTMLElement;
-		if (
-			target instanceof HTMLInputElement ||
-			target instanceof HTMLTextAreaElement ||
-			target.isContentEditable
-		) {
-			if (type === 'down' && e.key === 'Escape') atelier.handleEscape();
-			return;
-		}
-
 		atelier.needle.resetInactivityTimer();
-
-		// 3. Action Resolution
-		if (type === 'down') {
-			const intent = loompad.getIntent(e);
-			console.log('Loom Intent:', intent, 'Key:', e.key, 'Shift:', e.shiftKey);
-			if (intent) this.executeIntent(intent, e);
-		}
-	}
-
-	private executeIntent(intent: LoomIntent, e: KeyboardEvent) {
-		const isNav = intent.startsWith('MOVE_');
-		if (!isNav) e.preventDefault();
 
 		switch (intent) {
 			case 'MOVE_UP':
@@ -144,7 +119,7 @@ export class TheLoom {
 			case 'OPEN_CODEX':
 				return (atelier.studio.showArtisanCodex = true);
 			case 'PLAY_PULSE':
-				return pulse.toggle();
+				return chronos.togglePlayback();
 			case 'TOGGLE_GHOST_THREADS':
 				return (atelier.studio.showGhostThreads = !atelier.studio.showGhostThreads);
 
@@ -202,9 +177,6 @@ export class TheLoom {
 				return shuttle.folio.moveVeilUp();
 			case 'MOVE_VEIL_DOWN':
 				return shuttle.folio.moveVeilDown();
-			case 'SWITCH_FOCUS':
-				// TODO: Implement focus toggle logic if needed
-				return;
 
 			default:
 				if (intent.startsWith('SELECT_DYE_')) {

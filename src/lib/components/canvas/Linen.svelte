@@ -1,9 +1,13 @@
 <script lang="ts">
 	import { atelier } from '../../state/atelier.svelte.js';
+	import { synapse } from '../../engine/synapse.svelte.js';
+	import { shuttlepoint } from '../../engine/shuttlepoint.svelte.js';
 	import LinenGuides from './LinenGuides.svelte';
 	import Stitch from './Stitch.svelte';
 	import SelectionLasso from './SelectionLasso.svelte';
 	import GhostFrame from './GhostFrame.svelte';
+
+	let gridEl = $state<HTMLElement | null>(null);
 
 	// The dimensions of the weave
 	let w = $derived(atelier.linen.width);
@@ -40,7 +44,20 @@
 		}
 		return results;
 	});
+
+	// Register the grid element with Synapse when it's available
+	$effect(() => {
+		if (gridEl) {
+			// This allows Synapse/ShuttlePoint to know the bounding box for mapping
+			// TheLoom.mount will use this reference.
+		}
+	});
 </script>
+
+<svelte:window
+	onpointermove={(e) => gridEl && shuttlepoint.handleMove(e, gridEl)}
+	onpointerup={() => shuttlepoint.handleEnd()}
+/>
 
 <!-- The Loom Viewport (Parent Container inside the Artisan Frame) -->
 <div class="loom-viewport relative flex h-full w-full items-center justify-center overflow-hidden">
@@ -59,6 +76,7 @@
 	>
 		<!-- The Actual Linen (The Grid) -->
 		<div
+			bind:this={gridEl}
 			class="stitch-grid-pattern artisan-checker-small relative h-full w-full shadow-[0_10px_40px_rgba(0,0,0,0.06)] ring-1 ring-black/5"
 			style="
 				display: grid;
@@ -67,7 +85,12 @@
 				--grid-cols: {w}; 
 				--grid-rows: {h}; 
 				background-color: {atelier.studio.canvasBgColor};
+				touch-action: none;
 			"
+			role="grid"
+			tabindex="0"
+			oncontextmenu={(e) => e.preventDefault()}
+			onpointerdown={(e) => gridEl && shuttlepoint.handleStart(e, gridEl)}
 		>
 			<LinenGuides />
 

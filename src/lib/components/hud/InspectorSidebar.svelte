@@ -4,7 +4,7 @@
 	import DyePalette from './DyePalette.svelte';
 </script>
 
-<aside class="side-panel-right flex h-full w-64 flex-col gap-6 border-l-2 border-grid-border p-4">
+<aside class="side-panel-right flex h-full w-full flex-col gap-6 p-4">
 	<!-- Active Dye & Palette -->
 	<div class="flex flex-col gap-4">
 		<DyeInspector />

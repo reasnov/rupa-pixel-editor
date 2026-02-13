@@ -77,23 +77,39 @@
 {/if}
 
 <!-- HUD Layout -->
-<div class="flex h-screen w-screen flex-col overflow-hidden bg-canvas-bg">
+<div class="flex h-screen w-screen flex-col overflow-hidden bg-canvas-bg selection:bg-brand/20">
 	<AtelierHeader />
 
-	<div class="flex flex-1 overflow-hidden">
-		<FolioSidebar />
+	<div class="relative flex flex-1 overflow-hidden">
+		<!-- Floating Left Sidebar -->
+		<div class="pointer-events-none absolute inset-y-0 left-6 z-50 flex items-center">
+			<div class="pointer-events-auto max-h-[80%] w-64 overflow-hidden">
+				<FolioSidebar />
+			</div>
+		</div>
 
+		<!-- Main Studio Desk (Workspace) -->
 		<main
-			class="relative flex flex-1 items-center justify-center overflow-hidden bg-grid-border/20 p-6"
+			class="relative flex flex-1 items-center justify-center overflow-hidden bg-grid-border/10 p-12 transition-colors duration-1000"
 		>
+			<!-- Ambient Desk Light/Glow -->
 			<div
-				class="artisan-frame flex h-full w-full items-center justify-center overflow-hidden shadow-2xl"
+				class="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(253,246,227,0)_50%,rgba(0,0,0,0.02)_100%)]"
+			></div>
+
+			<div
+				class="artisan-frame flex h-full w-full items-center justify-center overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.1)] transition-transform duration-700 ease-out"
 			>
 				<Linen />
 			</div>
 		</main>
 
-		<InspectorSidebar />
+		<!-- Floating Right Sidebar -->
+		<div class="pointer-events-none absolute inset-y-0 right-6 z-50 flex items-center">
+			<div class="pointer-events-auto max-h-[80%] w-72 overflow-hidden">
+				<InspectorSidebar />
+			</div>
+		</div>
 	</div>
 
 	<StatusFooter />

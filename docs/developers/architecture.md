@@ -129,3 +129,20 @@ To maintain visual harmony and code maintainability, Rupa Studio follows the **S
 1. Use `@apply` in Svelte `<style>` blocks to compose complex **Module** or **Layout** classes from Tailwind utilities.
 2. Prefix shared artisan classes with `artisan-` (e.g., `.artisan-panel`) to avoid naming collisions.
 3. Keep state-based classes semantic (e.g., use `.is-stitching` instead of generic `.active`).
+
+---
+
+## 9. Data Layer: Static Configuration (SSoT)
+
+To ensure the studio is easily maintainable and scalable, all static data (Shortcuts, Palettes, Audio frequencies, Onboarding text) is stored in the **Data Layer** using JSON files in `src/lib/config/`.
+
+### 9.1 Single Source of Truth (SSoT)
+
+- **Consistency**: Centralizing data in JSON prevents hardcoded strings from scattering across UI components.
+- **Maintainability**: Tuning the "lore" or "vibe" of the studio (e.g., changing sound frequencies or tutorial text) only requires editing a single JSON file.
+
+### 9.2 Access Restrictions
+
+- **Engine/Service Sovereignty**: Only Engines or Services are permitted to import and process JSON configuration files.
+- **Normalization**: Engines act as "Data Brokers," responsible for normalizing raw JSON data (e.g., Title Casing shortcut labels) before exposing them to the State or UI layers.
+- **Passive UI**: Svelte components must remain "dumb" regarding static data. They should consume processed data from the State or through Engine method calls (e.g., `loompad.getActions()`) rather than importing JSON directly.

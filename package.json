@@ -13,7 +13,7 @@
 		"format": "prettier --write .",
 		"electron:dev": "electron . --no-sandbox --disable-vulkan --disable-gpu-sandbox --ozone-platform-hint=auto",
 		"electron:start": "npm run build && electron . --no-sandbox --disable-vulkan --disable-gpu-sandbox --ozone-platform-hint=auto",
-		"dev:all": "vite dev & sleep 5 && npm run electron:dev",
+		"dev:all": "vite dev & sleep 15 && npm run electron:dev",
 		"deploy": "npm run build && gh-pages -d build --dotfiles"
 	},
 	"files": [

@@ -14,10 +14,16 @@ function createWindow() {
 		}
 	});
 
-	// In development, load from the Vite dev server
+	// In development, load from the Vite dev server with retry logic
 	const isDev = !app.isPackaged;
 	if (isDev) {
-		win.loadURL('http://localhost:5173');
+		const loadDevServer = () => {
+			win.loadURL('http://localhost:5173').catch(() => {
+				console.log('Vite not ready, retrying in 1s...');
+				setTimeout(loadDevServer, 1000);
+			});
+		};
+		loadDevServer();
 	} else {
 		win.loadFile(path.join(__dirname, '../build/index.html'));
 	}

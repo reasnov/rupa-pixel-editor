@@ -47,11 +47,11 @@ export class FrameState {
 	// Ideally, the renderer should iterate veils directly.
 	get compositeStitches() {
 		const result = new Array(this.width * this.height).fill(null);
-		
+
 		// Render from bottom to top
 		for (const veil of this.veils) {
 			if (!veil.isVisible) continue;
-			
+
 			for (let i = 0; i < result.length; i++) {
 				const stitch = veil.stitches[i];
 				if (stitch !== null) {

@@ -9,10 +9,10 @@ To maintain the meditative and creative atmosphere of the project, we use termin
 | Technical Term      | Artisan Term    | Description                                                           |
 | :------------------ | :-------------- | :-------------------------------------------------------------------- |
 | **Workspace / App** | **The Atelier** | The creative studio where digital weaving takes place.                |
-| **Project Bundle**  | **The Folio**   | A collection of multiple frames within a single artisan's work.        |
-| **Canvas / Tab**    | **The Frame**   | A single unique composition or "page" in the Folio.                    |
-| **Layer**           | **The Veil**    | A thin, transparent layer that adds depth to the Motif.                |
-| **Canvas / Grid**   | **The Linen**   | The digital fabric upon which stitches are placed (Composite View).    |
+| **Project Bundle**  | **The Folio**   | A collection of multiple frames within a single artisan's work.       |
+| **Canvas / Tab**    | **The Frame**   | A single unique composition or "page" in the Folio.                   |
+| **Layer**           | **The Veil**    | A thin, transparent layer that adds depth to the Motif.               |
+| **Canvas / Grid**   | **The Linen**   | The digital fabric upon which stitches are placed (Composite View).   |
 | **Cursor**          | **The Needle**  | The tool of precision that tracks the active focus on the linen.      |
 | **Pixel / Tile**    | **Stitch**      | A single unit of color on the linen (The fundamental unit).           |
 | **Shape / Object**  | **Motif**       | A collection of stitches forming a distinct visual element or design. |
@@ -32,16 +32,16 @@ To maintain the meditative and creative atmosphere of the project, we use termin
 | **Continuous Erase** | **Unravelling**       | Removing a continuous line of stitches (Hold Ctrl + Shift).            |
 | **Selection Mode**   | **Looming**           | Defining a rectangular area for mass manipulation (Hold Shift).        |
 | **Selected Area**    | **Active Loom**       | The region currently defined for stitching or capturing.               |
-| **Opacity**         | **Density**           | The thickness of a Veil's fibers, determining its transparency.        |
-| **Merge Layers**    | **Entwine**           | Permanently joining two Veils into a single fiber.                     |
+| **Opacity**          | **Density**           | The thickness of a Veil's fibers, determining its transparency.        |
+| **Merge Layers**     | **Entwine**           | Permanently joining two Veils into a single fiber.                     |
 | **Copied Object**    | **Swatch**            | A fragment of a Motif captured in the Active Loom for later placement. |
 | **Eyedropper**       | **Pick Dye**          | Identifying a dye already present on the linen to reuse it.            |
-| **HSLA Data**       | **Fiber**             | Raw, unspun color data (Hue, Saturation, Lightness, Alpha).            |
-| **Process Color**   | **Spinning**          | Converting raw Fiber into a usable Thread (HEX).                       |
-| **Modify Color**    | **Dyeing**            | Adjusting the pigment or weather of a thread.                          |
-| **Brightness Adj.** | **Weathering**        | Aging a dye by making it lighter or darker.                            |
-| **Saturation Adj.** | **Pigmenting**        | Strengthening or weakening the color concentration of a dye.           |
-| **Key Sequence**    | **Weaving**           | Executing a series of rhythmic key presses to trigger complex intents.  |
+| **HSLA Data**        | **Fiber**             | Raw, unspun color data (Hue, Saturation, Lightness, Alpha).            |
+| **Process Color**    | **Spinning**          | Converting raw Fiber into a usable Thread (HEX).                       |
+| **Modify Color**     | **Dyeing**            | Adjusting the pigment or weather of a thread.                          |
+| **Brightness Adj.**  | **Weathering**        | Aging a dye by making it lighter or darker.                            |
+| **Saturation Adj.**  | **Pigmenting**        | Strengthening or weakening the color concentration of a dye.           |
+| **Key Sequence**     | **Weaving**           | Executing a series of rhythmic key presses to trigger complex intents. |
 | **Command Palette**  | **Pattern Catalog**   | A searchable directory of all studio actions and patterns.             |
 | **Color Picker**     | **Natural Dye Basin** | The interface for mixing and creating custom dyes.                     |
 

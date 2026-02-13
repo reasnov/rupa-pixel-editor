@@ -2,7 +2,7 @@
 	import { atelier } from '../../state/atelier.svelte.js';
 </script>
 
-<div class="artisan-panel stats-panel rounded-xl border-r-2 border-white px-4 py-3 shadow-sm">
+<div class="artisan-panel stats-panel w-full rounded-xl px-4 py-3 shadow-sm">
 	<div class="flex flex-col gap-2">
 		<div class="flex flex-col">
 			<span class="font-serif text-[7px] font-bold uppercase opacity-30">Needle Focus</span>

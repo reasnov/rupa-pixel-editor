@@ -36,7 +36,8 @@ _Historical and future development roadmaps._
 - [06: The Master's Folio](./developers/blueprints/06-masters-folio.md)
 
 ### 7. [Release Notes](./pubs/releases/v0.3.0.md)
-*Latest milestone highlights and changes.*
+
+_Latest milestone highlights and changes._
 
 ### 8. [Security Policy](../SECURITY.md)
 

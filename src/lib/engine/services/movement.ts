@@ -68,12 +68,7 @@ export class MovementService {
 	 * Jump the needle to a specific Cartesian coordinate.
 	 */
 	jumpTo(tx: number, ty: number) {
-		const { x, y } = this.cartesianToInternal(
-			tx,
-			ty,
-			atelier.linen.width,
-			atelier.linen.height
-		);
+		const { x, y } = this.cartesianToInternal(tx, ty, atelier.linen.width, atelier.linen.height);
 		atelier.needle.setPos(x, y);
 	}
 }

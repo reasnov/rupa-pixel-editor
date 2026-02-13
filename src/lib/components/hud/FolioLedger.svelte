@@ -7,7 +7,7 @@
 </script>
 
 <div
-	class="flex w-64 flex-col overflow-hidden rounded-xl border border-black/5 bg-[#fdf6e3]/80 shadow-lg backdrop-blur-md"
+	class="flex w-full flex-col overflow-hidden rounded-xl border border-black/5 bg-[#fdf6e3]/80 shadow-lg backdrop-blur-md"
 >
 	<!-- Tab Switcher -->
 	<div class="flex border-b border-black/5 bg-black/5 p-1">
@@ -57,7 +57,7 @@
 										e.stopPropagation();
 										shuttle.folio.removeFrame(i);
 									}}
-									class="text-[10px] opacity-0 transition-opacity hover:text-brand group-hover:opacity-40"
+									class="text-[10px] opacity-0 transition-opacity group-hover:opacity-40 hover:text-brand"
 									title="Delete Frame"
 								>
 									🗑️
@@ -77,7 +77,8 @@
 						role="button"
 						tabindex="0"
 						onclick={() => (atelier.project.activeFrame.activeVeilIndex = i)}
-						onkeydown={(e) => e.key === 'Enter' && (atelier.project.activeFrame.activeVeilIndex = i)}
+						onkeydown={(e) =>
+							e.key === 'Enter' && (atelier.project.activeFrame.activeVeilIndex = i)}
 						class="group flex cursor-pointer items-center justify-between rounded-xl px-4 py-3 transition-all {i ===
 						atelier.project.activeFrame.activeVeilIndex
 							? 'bg-brand/10 text-brand ring-1 ring-brand/20'
@@ -93,7 +94,10 @@
 							>
 								{veil.isVisible ? '👁️' : '🕶️'}
 							</button>
-							<span class="truncate font-serif text-sm font-medium {veil.isVisible ? '' : 'opacity-40'}">{veil.name}</span>
+							<span
+								class="truncate font-serif text-sm font-medium {veil.isVisible ? '' : 'opacity-40'}"
+								>{veil.name}</span
+							>
 						</div>
 						<div class="flex items-center gap-2">
 							<button
@@ -101,7 +105,9 @@
 									e.stopPropagation();
 									shuttle.folio.toggleLock();
 								}}
-								class="text-[10px] transition-opacity {veil.isLocked ? 'opacity-100' : 'opacity-20'}"
+								class="text-[10px] transition-opacity {veil.isLocked
+									? 'opacity-100'
+									: 'opacity-20'}"
 							>
 								{veil.isLocked ? '🔒' : '🔓'}
 							</button>
@@ -111,7 +117,7 @@
 										e.stopPropagation();
 										shuttle.folio.removeVeil(i);
 									}}
-									class="text-[10px] opacity-0 transition-opacity hover:text-brand group-hover:opacity-40"
+									class="text-[10px] opacity-0 transition-opacity group-hover:opacity-40 hover:text-brand"
 									title="Delete Veil"
 								>
 									🗑️
@@ -139,7 +145,9 @@
 			<span>＋</span> Add {activeTab === 'frames' ? 'Frame' : 'Veil'}
 		</button>
 		<span class="font-serif text-[8px] font-bold tracking-[0.2em] uppercase opacity-30">
-			{activeTab === 'frames' ? atelier.project.frames.length + ' Frames' : atelier.project.activeFrame.veils.length + ' Veils'}
+			{activeTab === 'frames'
+				? atelier.project.frames.length + ' Frames'
+				: atelier.project.activeFrame.veils.length + ' Veils'}
 		</span>
 	</div>
 </div>

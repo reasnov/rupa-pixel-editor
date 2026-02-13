@@ -2,7 +2,13 @@ import { atelier } from '../state/atelier.svelte';
 import { loompad } from './loompad.svelte';
 import { weaving } from './weaving.svelte.js';
 
-export type StanceType = 'RESTING' | 'THREADING' | 'UNRAVELLING' | 'LOOMING' | 'PICKING' | 'ORGANIZING';
+export type StanceType =
+	| 'RESTING'
+	| 'THREADING'
+	| 'UNRAVELLING'
+	| 'LOOMING'
+	| 'PICKING'
+	| 'ORGANIZING';
 
 interface StanceDescriptor {
 	type: StanceType;

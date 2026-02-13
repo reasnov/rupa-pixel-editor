@@ -25,7 +25,11 @@
 
 	$effect(() => {
 		// If user changes custom color input, update the export bg
-		if (atelier.studio.exportBgColor !== 'transparent' && atelier.studio.exportBgColor !== '#eee8d5' && atelier.studio.exportBgColor !== '#000000') {
+		if (
+			atelier.studio.exportBgColor !== 'transparent' &&
+			atelier.studio.exportBgColor !== '#eee8d5' &&
+			atelier.studio.exportBgColor !== '#000000'
+		) {
 			atelier.studio.exportBgColor = customBg;
 		}
 	});
@@ -142,7 +146,7 @@
 							customBg = atelier.studio.canvasBgColor;
 							atelier.studio.exportBgColor = customBg;
 						}}
-						class="flex items-center gap-2 font-serif text-[10px] font-bold tracking-widest uppercase text-brand opacity-60 hover:opacity-100"
+						class="flex items-center gap-2 font-serif text-[10px] font-bold tracking-widest text-brand uppercase opacity-60 hover:opacity-100"
 					>
 						<span>🎨</span> Match Linen Backdrop
 					</button>

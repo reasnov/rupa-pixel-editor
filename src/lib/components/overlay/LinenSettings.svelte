@@ -69,7 +69,7 @@
 				</div>
 				<div class="flex items-center gap-3">
 					<div
-						class="h-10 w-10 rounded-xl border-2 border-white shadow-sm artisan-checker-small"
+						class="artisan-checker-small h-10 w-10 rounded-xl border-2 border-white shadow-sm"
 						style="background-color: {atelier.studio.canvasBgColor};"
 					></div>
 					<input

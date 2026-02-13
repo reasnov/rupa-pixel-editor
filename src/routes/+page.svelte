@@ -4,10 +4,10 @@
 	import { loom } from '$lib/engine/loom.svelte.js';
 
 	// Layout Containers
-	import TopBar from '$lib/components/hud/TopBar.svelte';
-	import LeftBar from '$lib/components/hud/LeftBar.svelte';
-	import RightBar from '$lib/components/hud/RightBar.svelte';
-	import BottomBar from '$lib/components/hud/BottomBar.svelte';
+	import AtelierHeader from '$lib/components/hud/AtelierHeader.svelte';
+	import FolioSidebar from '$lib/components/hud/FolioSidebar.svelte';
+	import InspectorSidebar from '$lib/components/hud/InspectorSidebar.svelte';
+	import StatusFooter from '$lib/components/hud/StatusFooter.svelte';
 
 	// Canvas
 	import Linen from '$lib/components/canvas/Linen.svelte';
@@ -66,14 +66,23 @@
 	<GoToModal onClose={() => (atelier.studio.showGoTo = false)} />
 {/if}
 
-<!-- HUD Bars -->
-<TopBar />
-<LeftBar />
-<RightBar />
-<BottomBar />
+<!-- HUD Layout -->
+<div class="flex h-screen w-screen flex-col overflow-hidden bg-canvas-bg">
+	<AtelierHeader />
 
-<div class="relative flex h-screen flex-1 items-center justify-center overflow-hidden">
-	<div class="artisan-frame flex h-[80vh] w-[82vw] items-center justify-center overflow-hidden">
-		<Linen />
+	<div class="flex flex-1 overflow-hidden">
+		<FolioSidebar />
+
+		<main
+			class="relative flex flex-1 items-center justify-center overflow-hidden bg-grid-border/20"
+		>
+			<div class="artisan-frame flex h-[90%] w-[90%] items-center justify-center overflow-hidden">
+				<Linen />
+			</div>
+		</main>
+
+		<InspectorSidebar />
 	</div>
+
+	<StatusFooter />
 </div>

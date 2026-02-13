@@ -54,7 +54,7 @@
 				</div>
 			</div>
 			<div
-				class="h-12 w-12 rounded-xl border-2 border-white shadow-inner artisan-checker-small"
+				class="artisan-checker-small h-12 w-12 rounded-xl border-2 border-white shadow-inner"
 				style="background-color: {value};"
 			></div>
 		</div>

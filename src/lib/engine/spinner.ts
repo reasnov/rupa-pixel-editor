@@ -182,10 +182,7 @@ export class SpinnerEngine {
 	}
 
 	private static rgbToHex(r: number, g: number, b: number, a: number) {
-		const toHex = (x: number) =>
-			Math.round(x)
-				.toString(16)
-				.padStart(2, '0');
+		const toHex = (x: number) => Math.round(x).toString(16).padStart(2, '0');
 		const alphaHex = Math.round(a * 255)
 			.toString(16)
 			.padStart(2, '0');

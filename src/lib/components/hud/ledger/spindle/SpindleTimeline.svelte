@@ -47,15 +47,15 @@
 </script>
 
 <div
-	class="relative flex flex-1 flex-col overflow-hidden rounded-lg border border-black/10 bg-slate-900/5 shadow-inner"
+	class="relative flex flex-1 flex-col overflow-hidden rounded-lg border border-black/10 bg-black/5 shadow-inner"
 >
 	<!-- Time Ruler -->
-	<div class="relative h-4 w-full overflow-hidden border-b border-white/5 bg-slate-800/80">
+	<div class="relative h-4 w-full overflow-hidden border-b border-black/5 bg-[#eee8d5]">
 		<div class="flex items-center px-2">
 			{#each rulerMarks as ms}
 				<div class="absolute flex flex-col items-center gap-0.5" style="left: {ms * 0.6}px;">
-					<div class="h-1.5 w-px bg-white/20"></div>
-					<span class="font-mono text-[6px] text-white/40">{ms}ms</span>
+					<div class="h-1.5 w-px bg-brand/20"></div>
+					<span class="font-mono text-[6px] text-brand/40">{ms}ms</span>
 				</div>
 			{/each}
 		</div>
@@ -68,7 +68,7 @@
 		aria-label="Spindle Timeline"
 	>
 		<!-- The Track -->
-		<div class="flex h-full min-w-full items-center bg-slate-900/20">
+		<div class="flex h-full min-w-full items-center bg-[#eee8d5]/40">
 			{#each atelier.project.frames as frame, i (frame.id)}
 				<div
 					draggable="true"
@@ -93,7 +93,7 @@
 
 			<!-- Add Frame Block -->
 			<button
-				class="flex h-12 w-10 shrink-0 items-center justify-center border-r border-white/10 bg-white/5 text-lg text-white/20 transition-all hover:bg-brand/20 hover:text-white"
+				class="flex h-12 w-10 shrink-0 items-center justify-center border-r border-black/5 bg-black/5 text-lg text-black/20 transition-all hover:bg-brand/10 hover:text-brand"
 				onclick={() => shuttle.folio.addFrame()}
 				title="New Frame (Alt+N)"
 			>
@@ -107,7 +107,7 @@
 			style="left: {playheadOffset}px;"
 		>
 			<div
-				class="absolute -top-1 -left-1.5 h-3 w-3 rounded-full border-2 border-brand bg-slate-900 shadow-lg"
+				class="absolute -top-1 -left-1.5 h-3 w-3 rounded-full border-2 border-brand bg-[#fdf6e3] shadow-md"
 			></div>
 		</div>
 	</div>

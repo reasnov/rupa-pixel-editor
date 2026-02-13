@@ -10,7 +10,7 @@
 	<!-- Complex Selection Rendering -->
 	{#each points as point}
 		<div
-			class="pointer-events-none absolute z-40 bg-brand/20 ring-1 ring-brand/40"
+			class="pointer-events-none absolute z-40 bg-brand/10"
 			style="
                 left: {(point.x / atelier.linen.width) * 100}%; 
                 top: {(point.y / atelier.linen.height) * 100}%; 
@@ -35,8 +35,7 @@
                 top: {(y1 / atelier.linen.height) * 100}%; 
                 width: {(width / atelier.linen.width) * 100}%; 
                 height: {(height / atelier.linen.height) * 100}%;
-                --lasso-color: {isLooming ? 'var(--color-brand)' : 'rgba(0,0,0,0.3)'};
-                box-shadow: 0 0 0 1px rgba(255,255,255,0.5);
+                --lasso-color: {isLooming ? 'var(--color-brand)' : 'rgba(88, 110, 117, 0.25)'};
             "
 		></div>
 	{/if}
@@ -52,16 +51,16 @@
 			linear-gradient(0deg, var(--ants-color) 50%, transparent 50%);
 		background-repeat: repeat-x, repeat-x, repeat-y, repeat-y;
 		background-size:
-			10px 1px,
-			10px 1px,
-			1px 10px,
-			1px 10px;
+			6px 1px,
+			6px 1px,
+			1px 6px,
+			1px 6px;
 		background-position:
 			0 0,
 			0 100%,
 			0 0,
 			100% 0;
-		animation: marching-ants-animation 0.6s infinite linear;
+		animation: marching-ants-animation 1s infinite linear;
 	}
 
 	@keyframes marching-ants-animation {

@@ -26,7 +26,7 @@
 		- Clamped by min() to ensure it fits both width and height constraints of the Artisan Frame.
 	-->
 	<div
-		class="loom-container relative origin-center transition-transform duration-500 ease-[cubic-bezier(0.23,1,0.32,1)]"
+		class="loom-container absolute top-1/2 left-1/2 origin-center transition-transform duration-500 ease-[cubic-bezier(0.23,1,0.32,1)]"
 		style="
 			transform: {atelier.cameraTransform};
 			aspect-ratio: {w} / {h};
@@ -35,7 +35,7 @@
 	>
 		<!-- The Actual Linen (The Grid) -->
 		<div
-			class="stitch-grid-pattern artisan-checker-small relative h-full w-full shadow-2xl ring-1 ring-black/5"
+			class="stitch-grid-pattern artisan-checker-small relative h-full w-full shadow-[0_10px_40px_rgba(0,0,0,0.06)] ring-1 ring-black/5"
 			style="
 				display: grid;
 				grid-template-columns: repeat({w}, 1fr); 

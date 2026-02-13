@@ -278,13 +278,20 @@ export class AtelierState {
 
 	cameraTransform = $derived.by(() => {
 		const effectiveZoom = this.studio.zoomLevel * 0.5;
-		// Overview mode: Center the whole canvas if zoom is 100% or less
-		if (this.studio.zoomLevel <= 1) return `scale(${effectiveZoom})`;
 
-		// Focused mode: Follow the needle
-		const xPos = ((this.needle.pos.x + 0.5) / this.linen.width) * 100;
-		const yPos = ((this.needle.pos.y + 0.5) / this.linen.height) * 100;
-		return `translate(${50 - xPos}%, ${50 - yPos}%) scale(${effectiveZoom})`;
+		// Overview Mode (100% zoom or less)
+		if (this.studio.zoomLevel <= 1) {
+			return `translate(-50%, -50%) scale(${effectiveZoom})`;
+		}
+
+		// Focused Mode (Follow Needle)
+		// We calculate the percentage position of the needle within the linen
+		const xPct = ((this.needle.pos.x + 0.5) / this.linen.width) * 100;
+		const yPct = ((this.needle.pos.y + 0.5) / this.linen.height) * 100;
+
+		// By translating by negative xPct/yPct, we move that specific point to the
+		// origin (which we will set to the center of the viewport).
+		return `translate(-${xPct}%, -${yPct}%) scale(${effectiveZoom})`;
 	});
 
 	// --- Passthrough Methods ---

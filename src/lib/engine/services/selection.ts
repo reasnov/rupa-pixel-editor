@@ -71,7 +71,7 @@ export class SelectionService {
 			visited.add(key);
 
 			if (atelier.linen.getColor(cx, cy) === targetColor) {
-				atelier.selection.indices.add(index);
+				atelier.selection.indices.push(index);
 
 				const neighbors: [number, number][] = [
 					[cx + 1, cy],
@@ -88,7 +88,7 @@ export class SelectionService {
 			}
 		}
 
-		if (atelier.selection.indices.size > 0) {
+		if (atelier.selection.indices.length > 0) {
 			sfx.playScale(4); // Play a specific harmonic note
 		}
 	}

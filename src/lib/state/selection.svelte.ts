@@ -8,10 +8,10 @@ export class SelectionState {
 	end = $state<{ x: number; y: number } | null>(null);
 
 	// The actual set of selected indices
-	indices = $state(new Set<number>());
+	indices = $state<number[]>([]);
 
 	get isActive(): boolean {
-		return this.indices.size > 0 || this.start !== null;
+		return this.indices.length > 0 || this.start !== null;
 	}
 
 	begin(x: number, y: number) {
@@ -29,7 +29,7 @@ export class SelectionState {
 	clear() {
 		this.start = null;
 		this.end = null;
-		this.indices.clear();
+		this.indices = [];
 	}
 
 	/**

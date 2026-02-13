@@ -85,7 +85,7 @@ export class ManipulationService {
 
 		stitches.forEach((color, index) => {
 			const isCorrectColor = color === targetColor;
-			const isInsideSelection = !hasSelection || selectionIndices.has(index);
+			const isInsideSelection = !hasSelection || selectionIndices.includes(index);
 
 			if (isCorrectColor && isInsideSelection) {
 				changes.push({

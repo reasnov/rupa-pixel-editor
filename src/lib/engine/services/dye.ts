@@ -75,16 +75,23 @@ export class DyeService {
 		const visited = new Set<string>();
 		const changes: { index: number; oldColor: string | null; newColor: string | null }[] = [];
 
+		// Selection check
+		const hasSelection = atelier.selection.isActive;
+		const selectionIndices = atelier.selection.indices;
+
 		while (queue.length > 0) {
 			const [cx, cy] = queue.shift()!;
+			const index = cy * width + cx;
 			const key = `${cx},${cy}`;
 
 			if (visited.has(key)) continue;
 			visited.add(key);
 
-			const currentColor = atelier.linen.getColor(cx, cy);
-			if (currentColor === targetColor) {
-				const index = cy * width + cx;
+			// Constraint: Must be target color AND (if selection exists, must be in selection)
+			const isCorrectColor = atelier.linen.getColor(cx, cy) === targetColor;
+			const isInsideSelection = !hasSelection || selectionIndices.has(index);
+
+			if (isCorrectColor && isInsideSelection) {
 				changes.push({
 					index,
 					oldColor: targetColor,

@@ -79,8 +79,15 @@ export class ManipulationService {
 		const { stitches } = atelier.linen;
 		const changes: { index: number; oldColor: string | null; newColor: string | null }[] = [];
 
+		// Selection check
+		const hasSelection = atelier.selection.isActive;
+		const selectionIndices = atelier.selection.indices;
+
 		stitches.forEach((color, index) => {
-			if (color === targetColor) {
+			const isCorrectColor = color === targetColor;
+			const isInsideSelection = !hasSelection || selectionIndices.has(index);
+
+			if (isCorrectColor && isInsideSelection) {
 				changes.push({
 					index,
 					oldColor: targetColor,

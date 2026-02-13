@@ -18,8 +18,8 @@
 		const height = atelier.linen.height;
 		const data = atelier.linen.compositeStitches;
 
-		// Preview scale: fit into a reasonable area (max 180px)
-		const maxPreviewSize = 180;
+		// Preview scale: fit into a reasonable area (max 400px)
+		const maxPreviewSize = 400;
 		const previewScale = Math.min(maxPreviewSize / width, maxPreviewSize / height);
 
 		canvasEl.width = width * previewScale;

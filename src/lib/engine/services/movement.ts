@@ -71,4 +71,14 @@ export class MovementService {
 		const { x, y } = this.cartesianToInternal(tx, ty, atelier.linen.width, atelier.linen.height);
 		atelier.needle.setPos(x, y);
 	}
+
+	/**
+	 * Reset the needle to the absolute center.
+	 */
+	jumpHome() {
+		const cx = Math.floor(atelier.linen.width / 2);
+		const cy = Math.floor(atelier.linen.height / 2);
+		atelier.needle.setPos(cx, cy);
+		sfx.playMove();
+	}
 }

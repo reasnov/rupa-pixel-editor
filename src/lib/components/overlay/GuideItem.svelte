@@ -1,9 +1,10 @@
 <script lang="ts">
 	import { loompad } from '../../engine/loompad.svelte.js';
 
-	let { intent, label } = $props<{
+	let { intent, label, customKey } = $props<{
 		intent: string;
 		label: string;
+		customKey?: string;
 	}>();
 </script>
 
@@ -12,6 +13,6 @@
 	<kbd
 		class="rounded border border-black/10 bg-white/50 px-2 py-1 font-mono text-[10px] font-bold shadow-sm"
 	>
-		{loompad.getLabel(intent as any)}
+		{customKey || loompad.getLabel(intent as any)}
 	</kbd>
 </div>

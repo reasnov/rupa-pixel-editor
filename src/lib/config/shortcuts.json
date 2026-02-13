@@ -4,7 +4,8 @@
 		"DOWN": ["ArrowDown"],
 		"LEFT": ["ArrowLeft"],
 		"RIGHT": ["ArrowRight"],
-		"GOTO": ["g"]
+		"GOTO": ["g"],
+		"JUMP_HOME": ["Ctrl+h"]
 	},
 	"canvas": {
 		"STITCH": ["Space", "Enter"],

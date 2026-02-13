@@ -53,6 +53,8 @@ export class TheLoom {
 				return this.executeMove(-1, 0);
 			case 'MOVE_RIGHT':
 				return this.executeMove(1, 0);
+			case 'JUMP_HOME':
+				return shuttle.jumpHome();
 			case 'GOTO':
 				return (atelier.studio.showGoTo = true);
 

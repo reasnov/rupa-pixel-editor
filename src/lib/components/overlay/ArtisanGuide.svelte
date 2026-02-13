@@ -9,62 +9,96 @@
 
 	const guides = [
 		{
-			group: 'Basic Rhythms (Navigation)',
+			group: 'The Needle (Navigation)',
 			items: [
-				{ intent: 'MOVE_UP', label: 'Step the Needle (Arrow Keys)' },
-				{ intent: 'GOTO', label: 'Jump to a Memory (Coordinate)' },
+				{ intent: 'MOVE_UP', label: 'Step the Needle', customKey: 'Arrows' },
+				{ intent: 'GOTO', label: 'Jump to Coordinate' },
 				{ intent: 'JUMP_HOME', label: 'Return to Center' },
-				{ intent: 'ESCAPE', label: 'Clear Focus / Dismiss Overlays' }
+				{ intent: 'ESCAPE', label: 'Clear Focus / Dismiss' }
 			]
 		},
 		{
-			group: 'The Weaver’s Hand (Drawing)',
+			group: 'The Hand (Basic Stitching)',
 			items: [
-				{ intent: 'STITCH', label: 'Stitch (Apply Active Dye)' },
-				{ intent: 'UNSTITCH', label: 'Unstitch (Clear Fiber)' },
-				{ intent: 'FLOW_STITCH', label: 'Continuous Threading (Hold)' },
-				{ intent: 'FLOW_UNSTITCH', label: 'Continuous Unravelling (Hold)' },
-				{ intent: 'PICK_DYE', label: 'Sample Fiber (Eyedropper)' }
+				{ intent: 'STITCH', label: 'Apply Active Dye' },
+				{ intent: 'UNSTITCH', label: 'Clear Fiber (Unstitch)' },
+				{ intent: 'PICK_DYE', label: 'Sample Color (Picker)' },
+				{ intent: 'SELECT_DYE_1', label: 'Select Dye Swatches', customKey: '1-0' }
 			]
 		},
 		{
-			group: 'Artisan Magic (Automation)',
+			group: 'Continuous Weaving (Flows)',
 			items: [
+				{ intent: 'FLOW_STITCH', label: 'Continuous Threading', customKey: 'Ctrl' },
+				{ intent: 'FLOW_UNSTITCH', label: 'Continuous Unravelling', customKey: 'Ctrl+Shift' },
+				{ intent: 'FLOW_SELECT', label: 'Define Selection (Loom)', customKey: 'Shift' },
+				{ intent: 'SPIRIT_PICK', label: 'Magic Selection (Spirit)' }
+			]
+		},
+		{
+			group: 'The Loom (Manipulation)',
+			items: [
+				{ intent: 'COPY', label: 'Capture to Swatch (Copy)' },
+				{ intent: 'CUT', label: 'Snip to Swatch (Cut)' },
+				{ intent: 'PASTE', label: 'Weave from Clipboard' },
 				{ intent: 'SOAK', label: 'Dye Soak (Flood Fill)' },
 				{ intent: 'BLEACH', label: 'Fiber Bleach (Recolor All)' },
-				{ intent: 'SPIRIT_PICK', label: 'Spirit Pick (Magic Selection)' }
+				{ intent: 'CLEAR_LINEN', label: 'Strip the Linen (Clear All)' }
 			]
 		},
 		{
-			group: 'The Folio & Spindle (Timeline)',
+			group: 'Dimensions & Forms (Transform)',
 			items: [
-				{ intent: 'NEW_FRAME', label: 'Add New Thread of Time (Frame)' },
+				{ intent: 'FLIP_H', label: 'Flip Horizontally' },
+				{ intent: 'FLIP_V', label: 'Flip Vertically' },
+				{ intent: 'ROTATE', label: 'Rotate 90° Clockwise' },
+				{ intent: 'ZOOM_IN', label: 'Zoom In', customKey: '+ / =' },
+				{ intent: 'ZOOM_OUT', label: 'Zoom Out', customKey: '-' },
+				{ intent: 'RESET_ZOOM', label: 'Reset Zoom' }
+			]
+		},
+		{
+			group: 'The Spindle (Animation)',
+			items: [
+				{ intent: 'NEW_FRAME', label: 'New Time Thread (Frame)' },
 				{ intent: 'DUPLICATE_FRAME', label: 'Clone Current Thread' },
 				{ intent: 'DELETE_FRAME', label: 'Dissolve Thread' },
-				{ intent: 'TAB_FRAMES', label: 'Focus the Spindle (Alt+1)' },
-				{ intent: 'PLAY_PULSE', label: 'Feel the Pulse (Playback)' },
-				{ intent: 'TOGGLE_GHOST_THREADS', label: 'See Ghost Threads (Onion Skin)' }
+				{ intent: 'PLAY_PULSE', label: 'Toggle Playback' },
+				{ intent: 'TOGGLE_GHOST_THREADS', label: 'Onion Skin (Ghosts)' },
+				{ intent: 'TAB_FRAMES', label: 'Focus Spindle Tab' }
 			]
 		},
 		{
-			group: 'Layering the Veils',
+			group: 'The Veils (Layering)',
 			items: [
-				{ intent: 'NEW_VEIL', label: 'Add a New Veil (Layer)' },
-				{ intent: 'DUPLICATE_VEIL', label: 'Duplicate Active Veil' },
-				{ intent: 'TAB_VEILS', label: 'Focus the Veils (Alt+2)' },
+				{ intent: 'NEW_VEIL', label: 'Add New Veil (Layer)' },
+				{ intent: 'DUPLICATE_VEIL', label: 'Clone Active Veil' },
+				{ intent: 'DELETE_VEIL', label: 'Remove Active Veil' },
+				{ intent: 'MOVE_VEIL_UP', label: 'Lift Veil Up', customKey: '[' },
+				{ intent: 'MOVE_VEIL_DOWN', label: 'Lower Veil Down', customKey: ']' },
+				{ intent: 'TAB_VEILS', label: 'Focus Veils Tab' },
 				{ intent: 'TOGGLE_VEIL_VISIBILITY', label: 'Reveal/Hide Veil' },
 				{ intent: 'TOGGLE_VEIL_LOCK', label: 'Seal/Unseal Veil' }
 			]
 		},
 		{
-			group: 'Studio Environment',
+			group: 'The Pattern Book (Persistence)',
 			items: [
-				{ intent: 'UNDO', label: 'Rewind the Weave' },
-				{ intent: 'REDO', label: 'Fast-Forward the Weave' },
-				{ intent: 'OPEN_PALETTE', label: 'Consult the Pattern Catalog' },
-				{ intent: 'OPEN_EXPORT', label: 'Open the Artifact Crate' },
-				{ intent: 'OPEN_AUDIO', label: 'Tune Harmony & Atmosphere' },
-				{ intent: 'TOGGLE_MUTE', label: 'Silence the Studio' }
+				{ intent: 'OPEN_ARCHIVE', label: 'Archive Pattern (Save)' },
+				{ intent: 'OPEN', label: 'Open Pattern Book' },
+				{ intent: 'OPEN_EXPORT', label: 'Create Artifact (Export)' },
+				{ intent: 'OPEN_PALETTE', label: 'Pattern Catalog (Search)' },
+				{ intent: 'OPEN_SETTINGS', label: 'Studio Settings' },
+				{ intent: 'OPEN_CODEX', label: 'Open Artisan Codex' }
+			]
+		},
+		{
+			group: 'Atmosphere & Tuning',
+			items: [
+				{ intent: 'OPEN_AUDIO', label: 'Open Audio Basin' },
+				{ intent: 'TOGGLE_MUTE', label: 'Silence the Studio' },
+				{ intent: 'UNDO', label: 'Rewind Last Action' },
+				{ intent: 'REDO', label: 'Fast-Forward the Weave' }
 			]
 		}
 	];
@@ -75,7 +109,7 @@
 	subtitle="The Lexicon of Chords & Flows"
 	icon="🪡"
 	{onClose}
-	width="900px"
+	width="1000px"
 >
 	<div class="flex flex-col gap-12">
 		<header class="flex flex-col gap-2 rounded-2xl bg-brand/5 p-6 ring-1 ring-brand/10">
@@ -86,7 +120,7 @@
 			</p>
 		</header>
 
-		<div class="grid grid-cols-2 gap-x-12 gap-y-10">
+		<div class="grid grid-cols-2 gap-x-16 gap-y-12">
 			{#each guides as group}
 				<GuideGroup {group} />
 			{/each}

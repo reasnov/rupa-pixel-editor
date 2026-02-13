@@ -34,6 +34,10 @@ export class ShuttleEngine {
 		this.movement.jumpTo(tx, ty);
 	}
 
+	jumpHome() {
+		this.movement.jumpHome();
+	}
+
 	// --- Stitching & Dye Aliases ---
 
 	stitch() {

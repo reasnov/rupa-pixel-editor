@@ -4,7 +4,7 @@
 	let { group } = $props<{
 		group: {
 			group: string;
-			items: Array<{ intent: string; label: string }>;
+			items: Array<{ intent: string; label: string; customKey?: string }>;
 		};
 	}>();
 </script>
@@ -17,7 +17,7 @@
 	</h3>
 	<div class="grid grid-cols-2 gap-x-12 gap-y-4">
 		{#each group.items as item}
-			<GuideItem intent={item.intent} label={item.label} />
+			<GuideItem intent={item.intent} label={item.label} customKey={item.customKey} />
 		{/each}
 	</div>
 </div>

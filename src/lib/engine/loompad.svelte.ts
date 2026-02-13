@@ -6,6 +6,7 @@ export type LoomIntent =
 	| 'MOVE_DOWN'
 	| 'MOVE_LEFT'
 	| 'MOVE_RIGHT'
+	| 'JUMP_HOME'
 	| 'SET_POSITION'
 	| 'GOTO'
 	| 'STITCH'
@@ -103,6 +104,7 @@ export class LoomPadEngine {
 			DOWN: 'MOVE_DOWN',
 			LEFT: 'MOVE_LEFT',
 			RIGHT: 'MOVE_RIGHT',
+			JUMP_HOME: 'JUMP_HOME',
 			GOTO: 'GOTO',
 			STITCH: 'STITCH',
 			UNSTITCH: 'UNSTITCH',

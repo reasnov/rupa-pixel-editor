@@ -2,83 +2,70 @@
 	import { atelier } from '../../state/atelier.svelte.js';
 	import { stance } from '../../engine/stance.svelte.js';
 
-	let points = $derived(atelier.selection.getPoints(atelier.linen.width));
+	let edges = $derived(atelier.selection.getBoundaryEdges(atelier.linen.width));
 	let isLooming = $derived(stance.current.type === 'LOOMING');
 </script>
 
 {#if atelier.selection.isActive}
-	<!-- Complex Selection Rendering (Spirit Glow) -->
-	{#each points as point}
+	<!-- Motif Boundary Marching Ants (SVG Overlay) -->
+	<svg
+		class="pointer-events-none absolute z-40 h-full w-full overflow-visible"
+		viewBox="0 0 {atelier.linen.width} {atelier.linen.height}"
+		shape-rendering="crispEdges"
+	>
+		<defs>
+			<pattern id="ants" width="1" height="1" patternUnits="userSpaceOnUse">
+				<line
+					x1="0"
+					y1="0"
+					x2="1"
+					y2="0"
+					stroke="var(--ants-color)"
+					stroke-width="0.1"
+					stroke-dasharray="0.2, 0.2"
+				/>
+			</pattern>
+		</defs>
+
+		{#each edges as edge}
+			<line
+				x1={edge.x1}
+				y1={edge.y1}
+				x2={edge.x2}
+				y2={edge.y2}
+				stroke={isLooming ? 'var(--color-brand)' : 'rgba(211, 54, 130, 0.4)'}
+				stroke-width={0.08}
+				stroke-dasharray="0.2, 0.2"
+				class="marching-ants-svg"
+			/>
+		{/each}
+	</svg>
+
+	<!-- Faint fill for the selected area -->
+	{#each atelier.selection.getPoints(atelier.linen.width) as p}
 		<div
-			class="pointer-events-none absolute z-40 bg-brand/10 transition-all duration-500"
-			class:animate-pulse={!isLooming}
+			class="pointer-events-none absolute z-[39] bg-brand/5"
 			style="
-                left: {(point.x / atelier.linen.width) * 100}%; 
-                top: {(point.y / atelier.linen.height) * 100}%; 
+                left: {(p.x / atelier.linen.width) * 100}%; 
+                top: {(p.y / atelier.linen.height) * 100}%; 
                 width: {100 / atelier.linen.width}%; 
                 height: {100 / atelier.linen.height}%;
-                box-shadow: inset 0 0 2px var(--color-brand);
             "
 		></div>
 	{/each}
-
-	<!-- Rectangular Marching Ants (only if rectangular selection exists) -->
-	{#if atelier.selection.start && atelier.selection.end}
-		{@const x1 = Math.min(atelier.selection.start.x, atelier.selection.end.x)}
-		{@const x2 = Math.max(atelier.selection.start.x, atelier.selection.end.x)}
-		{@const y1 = Math.min(atelier.selection.start.y, atelier.selection.end.y)}
-		{@const y2 = Math.max(atelier.selection.start.y, atelier.selection.end.y)}
-		{@const width = x2 - x1 + 1}
-		{@const height = y2 - y1 + 1}
-		<div
-			class="marching-ants pointer-events-none absolute z-[41]"
-			style="
-                left: {(x1 / atelier.linen.width) * 100}%; 
-                top: {(y1 / atelier.linen.height) * 100}%; 
-                width: {(width / atelier.linen.width) * 100}%; 
-                height: {(height / atelier.linen.height) * 100}%;
-                --lasso-color: {isLooming ? 'var(--color-brand)' : 'rgba(88, 110, 117, 0.25)'};
-            "
-		></div>
-	{/if}
 {/if}
 
 <style>
-	.marching-ants {
-		--ants-color: var(--lasso-color, var(--color-brand));
-		background-image:
-			linear-gradient(90deg, var(--ants-color) 50%, transparent 50%),
-			linear-gradient(90deg, var(--ants-color) 50%, transparent 50%),
-			linear-gradient(0deg, var(--ants-color) 50%, transparent 50%),
-			linear-gradient(0deg, var(--ants-color) 50%, transparent 50%);
-		background-repeat: repeat-x, repeat-x, repeat-y, repeat-y;
-		background-size:
-			6px 1px,
-			6px 1px,
-			1px 6px,
-			1px 6px;
-		background-position:
-			0 0,
-			0 100%,
-			0 0,
-			100% 0;
-		animation: marching-ants-animation 1s infinite linear;
+	.marching-ants-svg {
+		animation: marching-ants-svg-animation 0.5s infinite linear;
 	}
 
-	@keyframes marching-ants-animation {
+	@keyframes marching-ants-svg-animation {
 		from {
-			background-position:
-				0 0,
-				0 100%,
-				0 0,
-				100% 0;
+			stroke-dashoffset: 0;
 		}
 		to {
-			background-position:
-				6px 0,
-				-6px 100%,
-				0 -6px,
-				100% 6px;
+			stroke-dashoffset: 0.4;
 		}
 	}
 </style>

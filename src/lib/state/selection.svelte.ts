@@ -59,6 +59,39 @@ export class SelectionState {
 		return points;
 	}
 
+	/**
+	 * Identifies all outer and inner edges of the selected motif.
+	 * Returns a list of edges as {x1, y1, x2, y2} for SVG rendering.
+	 */
+	getBoundaryEdges(width: number) {
+		const edges: { x1: number; y1: number; x2: number; y2: number }[] = [];
+		const points = this.getPoints(width);
+		if (points.length === 0) return edges;
+
+		const pointSet = new Set(points.map((p) => `${p.x},${p.y}`));
+
+		points.forEach((p) => {
+			// Top Edge
+			if (!pointSet.has(`${p.x},${p.y - 1}`)) {
+				edges.push({ x1: p.x, y1: p.y, x2: p.x + 1, y2: p.y });
+			}
+			// Bottom Edge
+			if (!pointSet.has(`${p.x},${p.y + 1}`)) {
+				edges.push({ x1: p.x, y1: p.y + 1, x2: p.x + 1, y2: p.y + 1 });
+			}
+			// Left Edge
+			if (!pointSet.has(`${p.x - 1},${p.y}`)) {
+				edges.push({ x1: p.x, y1: p.y, x2: p.x, y2: p.y + 1 });
+			}
+			// Right Edge
+			if (!pointSet.has(`${p.x + 1},${p.y}`)) {
+				edges.push({ x1: p.x + 1, y1: p.y, x2: p.x + 1, y2: p.y + 1 });
+			}
+		});
+
+		return edges;
+	}
+
 	// Internal helper for the box logic
 	private get rectangularBounds() {
 		if (!this.start || !this.end) return null;

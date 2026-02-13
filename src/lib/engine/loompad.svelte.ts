@@ -81,12 +81,14 @@ interface LoomPattern {
 	ctrl: boolean;
 	shift: boolean;
 	alt: boolean;
+	label: string;
+	group: string;
 }
 
 export class LoomPadEngine {
 	private patterns: LoomPattern[] = [];
 
-	// Reactive tracking for UI debugging - Using array for reliable reactivity
+	// Reactive tracking for UI debugging
 	activeKeys = $state<string[]>([]);
 
 	// The "Resolved State" based on current physical grip
@@ -99,93 +101,25 @@ export class LoomPadEngine {
 	}
 
 	private loadPatterns() {
-		const mapping: Record<string, LoomIntent> = {
-			UP: 'MOVE_UP',
-			DOWN: 'MOVE_DOWN',
-			LEFT: 'MOVE_LEFT',
-			RIGHT: 'MOVE_RIGHT',
-			JUMP_HOME: 'JUMP_HOME',
-			GOTO: 'GOTO',
-			STITCH: 'STITCH',
-			UNSTITCH: 'UNSTITCH',
-			SOAK: 'SOAK',
-			BIND_VERTEX: 'BIND_VERTEX',
-			SEAL_BINDING: 'SEAL_BINDING',
-			EYEDROPPER: 'PICK_DYE',
-			SAVE: 'OPEN_ARCHIVE',
-			OPEN: 'OPEN',
-			SETTINGS: 'OPEN_SETTINGS',
-			FLOW_STITCH: 'FLOW_STITCH',
-			FLOW_UNSTITCH: 'FLOW_UNSTITCH',
-			FLOW_SELECT: 'FLOW_SELECT',
-			SPIRIT_PICK: 'SPIRIT_PICK',
-			UNDO: 'UNDO',
-			REDO: 'REDO',
-			ZOOM_IN: 'ZOOM_IN',
-			ZOOM_OUT: 'ZOOM_OUT',
-			RESET_ZOOM: 'RESET_ZOOM',
-			COMMAND_PALETTE: 'OPEN_PALETTE',
-			COLOR_PICKER: 'OPEN_DYES',
-			AUDIO_SETTINGS: 'OPEN_AUDIO',
-			USER_GUIDE: 'OPEN_CODEX',
-			QUICK_GUIDE: 'OPEN_HELP',
-			PLAY_PULSE: 'PLAY_PULSE',
-			TOGGLE_GHOST_THREADS: 'TOGGLE_GHOST_THREADS',
-			EXPORT: 'OPEN_EXPORT',
-			CLEAR_LINEN: 'CLEAR_LINEN',
-			TOGGLE_MUTE: 'TOGGLE_MUTE',
-			ESCAPE: 'ESCAPE',
-			COPY: 'COPY',
-			CUT: 'CUT',
-			PASTE: 'PASTE',
-			BLEACH: 'BLEACH',
-			FLIP_H: 'FLIP_H',
-			FLIP_V: 'FLIP_V',
-			ROTATE: 'ROTATE',
-			NEW_FRAME: 'NEW_FRAME',
-			DUPLICATE_FRAME: 'DUPLICATE_FRAME',
-			NEXT_FRAME: 'NEXT_FRAME',
-			PREV_FRAME: 'PREV_FRAME',
-			DELETE_FRAME: 'DELETE_FRAME',
-			TAB_FRAMES: 'TAB_FRAMES',
-			TAB_VEILS: 'TAB_VEILS',
-			NEW_VEIL: 'NEW_VEIL',
-			DUPLICATE_VEIL: 'DUPLICATE_VEIL',
-			NEXT_VEIL: 'NEXT_VEIL',
-			PREV_VEIL: 'PREV_VEIL',
-			TOGGLE_VEIL_LOCK: 'TOGGLE_VEIL_LOCK',
-			TOGGLE_VEIL_VISIBILITY: 'TOGGLE_VEIL_VISIBILITY',
-			MOVE_VEIL_UP: 'MOVE_VEIL_UP',
-			MOVE_VEIL_DOWN: 'MOVE_VEIL_DOWN',
-			MERGE_VEILS: 'MERGE_VEILS',
-			DELETE_VEIL: 'DELETE_VEIL',
-			SELECT_1: 'SELECT_DYE_1',
-			SELECT_2: 'SELECT_DYE_2',
-			SELECT_3: 'SELECT_DYE_3',
-			SELECT_4: 'SELECT_DYE_4',
-			SELECT_5: 'SELECT_DYE_5',
-			SELECT_6: 'SELECT_DYE_6',
-			SELECT_7: 'SELECT_DYE_7',
-			SELECT_8: 'SELECT_DYE_8',
-			SELECT_9: 'SELECT_DYE_9',
-			SELECT_0: 'SELECT_DYE_0'
-		};
-
+		this.patterns = [];
 		Object.values(shortcutsData).forEach((category) => {
-			Object.entries(category).forEach(([action, keys]) => {
-				const intent = mapping[action];
-				if (!intent) return;
-				(keys as string[]).forEach((keyCombo) => {
+			Object.entries(category).forEach(([intent, data]) => {
+				const { label, keys, group } = data as { label: string; keys: string[]; group: string };
+
+				keys.forEach((keyCombo) => {
 					const parts = keyCombo.toLowerCase().split('+');
 					let key = parts[parts.length - 1].trim();
 					if (key === 'space') key = ' ';
 					if (key === 'ctrl' || key === 'control') key = 'control';
+
 					this.patterns.push({
-						intent,
+						intent: intent as LoomIntent,
 						key,
 						ctrl: parts.includes('ctrl') || parts.includes('control'),
 						shift: parts.includes('shift'),
-						alt: parts.includes('alt')
+						alt: parts.includes('alt'),
+						label,
+						group
 					});
 				});
 			});
@@ -195,6 +129,104 @@ export class LoomPadEngine {
 			const score = (p: LoomPattern) => (p.ctrl ? 1 : 0) + (p.shift ? 1 : 0) + (p.alt ? 1 : 0);
 			return score(b) - score(a);
 		});
+	}
+
+	/**
+	 * Get a flattened list of all unique actions for search and catalogs.
+	 */
+	getActions() {
+		const uniqueIntents = new Set<LoomIntent>();
+		const result: Array<{ intent: LoomIntent; label: string; group: string; shortcut: string }> =
+			[];
+
+		this.patterns.forEach((p) => {
+			if (!uniqueIntents.has(p.intent)) {
+				uniqueIntents.add(p.intent);
+				result.push({
+					intent: p.intent,
+					label: p.label,
+					group: p.group,
+					shortcut: this.getLabel(p.intent)
+				});
+			}
+		});
+
+		return result;
+	}
+
+	/**
+	 * Get actions grouped for the Guide.
+	 */
+	getGroupedActions() {
+		const actions = this.getActions();
+		const groups: Record<string, typeof actions> = {};
+
+		// Special handling for key groups to avoid listing every arrow/number
+		const groupMapping: Record<string, string> = {
+			MOVE_UP: 'Arrows',
+			MOVE_DOWN: 'Arrows',
+			MOVE_LEFT: 'Arrows',
+			MOVE_RIGHT: 'Arrows',
+			SELECT_DYE_1: '1-0',
+			SELECT_DYE_2: '1-0',
+			SELECT_DYE_3: '1-0',
+			SELECT_DYE_4: '1-0',
+			SELECT_DYE_5: '1-0',
+			SELECT_DYE_6: '1-0',
+			SELECT_DYE_7: '1-0',
+			SELECT_DYE_8: '1-0',
+			SELECT_DYE_9: '1-0',
+			SELECT_DYE_0: '1-0'
+		};
+
+		const finalActions: Array<{
+			intent: LoomIntent;
+			label: string;
+			group: string;
+			customKey?: string;
+		}> = [];
+		const seenGroupedIntents = new Set<string>();
+
+		actions.forEach((a) => {
+			const custom = groupMapping[a.intent];
+			if (custom) {
+				if (!seenGroupedIntents.has(custom)) {
+					seenGroupedIntents.add(custom);
+					// Simplify labels for groups
+					const cleanLabel = custom === 'Arrows' ? 'Step the Needle' : 'Select Dye Swatches';
+					finalActions.push({ ...a, label: cleanLabel, customKey: custom });
+				}
+			} else {
+				finalActions.push(a);
+			}
+		});
+
+		finalActions.forEach((a) => {
+			if (!groups[a.group]) groups[a.group] = [];
+			groups[a.group].push(a as any);
+		});
+
+		// Order groups logically
+		const order = [
+			'Basic Rhythms',
+			'The Needle',
+			'The Hand',
+			'Continuous Weaving',
+			'Artisan Magic',
+			'The Loom',
+			'Dimensions & Forms',
+			'The Spindle',
+			'The Veils',
+			'The Pattern Book',
+			'Atmosphere & Tuning'
+		];
+
+		return order
+			.filter((name) => groups[name])
+			.map((name) => ({
+				group: name,
+				items: groups[name]
+			}));
 	}
 
 	/**
@@ -208,22 +240,16 @@ export class LoomPadEngine {
 				this.activeKeys.push(key);
 			}
 		} else {
-			// Remove the specific key
 			this.activeKeys = this.activeKeys.filter((k) => k !== key);
-
-			// SECURITY: If Alt is specifically stuck (common browser bug),
-			// we check the physical state reported by the event.
 			if (key === 'alt' && !e.altKey) {
 				this.activeKeys = this.activeKeys.filter((k) => k !== 'alt');
 			}
 		}
 
-		// Sync modifier states immediately with the event's truth
 		this.isCtrlActive = e.ctrlKey || e.metaKey;
 		this.isShiftActive = e.shiftKey;
 		this.isAltActive = e.altKey;
 
-		// Final cleanup: if event says modifier is up, it MUST be removed from array
 		if (!this.isCtrlActive)
 			this.activeKeys = this.activeKeys.filter((k) => k !== 'control' && k !== 'meta');
 		if (!this.isShiftActive) this.activeKeys = this.activeKeys.filter((k) => k !== 'shift');
@@ -236,7 +262,6 @@ export class LoomPadEngine {
 	getIntent(e: KeyboardEvent): LoomIntent | null {
 		const key = e.key.toLowerCase();
 
-		// 1. Sequence Handling (Weaving)
 		if (!this.isCtrlActive && !this.isAltActive && !this.isShiftActive) {
 			const sequenceIntent = weaving.process(key);
 			if (sequenceIntent) return sequenceIntent;
@@ -244,7 +269,6 @@ export class LoomPadEngine {
 			weaving.reset();
 		}
 
-		// 2. Navigation is prioritized
 		if (['arrowup', 'arrowdown', 'arrowleft', 'arrowright'].includes(key)) {
 			if (key === 'arrowup') return 'MOVE_UP';
 			if (key === 'arrowdown') return 'MOVE_DOWN';
@@ -252,7 +276,6 @@ export class LoomPadEngine {
 			if (key === 'arrowright') return 'MOVE_RIGHT';
 		}
 
-		// Search for the best pattern match given current modifiers
 		for (const pattern of this.patterns) {
 			const keyMatch = key === pattern.key;
 
@@ -280,10 +303,8 @@ export class LoomPadEngine {
 		if (p.shift) modifiers.push('Shift');
 		if (p.alt) modifiers.push('Alt');
 
-		// 1. Normalize the Key Label
 		let keyLabel = p.key;
 
-		// Map special technical names to professional labels
 		const keyMap: Record<string, string> = {
 			' ': 'Space',
 			control: 'Ctrl',
@@ -305,15 +326,11 @@ export class LoomPadEngine {
 		if (keyMap[lowerKey]) {
 			keyLabel = keyMap[lowerKey];
 		} else {
-			// Title Case for regular keys (e.g., 'g' -> 'G', 'f' -> 'F')
 			keyLabel = keyLabel.charAt(0).toUpperCase() + keyLabel.slice(1).toLowerCase();
 		}
 
-		// 2. Filter out redundant modifiers if the key is the same modifier
-		// e.g. "Shift+SHIFT" -> "Shift", "Ctrl+CONTROL" -> "Ctrl"
 		const filteredModifiers = modifiers.filter((m) => m.toLowerCase() !== keyLabel.toLowerCase());
 
-		// 3. Assemble
 		if (filteredModifiers.length === 0) return keyLabel;
 		return filteredModifiers.join('+') + '+' + keyLabel;
 	}

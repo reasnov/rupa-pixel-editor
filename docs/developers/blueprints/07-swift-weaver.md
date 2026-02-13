@@ -1,46 +1,34 @@
-# Blueprint 07: The Swift Weaver (Advanced Drawing Tools)
+# Blueprint 07: The Swift Weaver (Stitch Mode Refinement)
 
 ## 1. Executive Summary
-
-Blueprint 07 bertujuan untuk meningkatkan efisiensi menggambar dan mengurangi kelelahan fisik artisan saat menggunakan antarmuka berbasis keyboard. Fokus utamanya adalah pengenalan alat pengisian otomatis (Dye Soak) dan sistem seleksi yang lebih fleksibel (Binding Thread).
-
----
-
-## 2. Terminology & Metaphors
-
-| Technical Term      | Artisan Term       | Philosophy                                                      |
-| :------------------ | :----------------- | :-------------------------------------------------------------- |
-| **Flood Fill**      | **Dye Soak**       | Pewarna yang meresap ke serat kain hingga terhalang motif lain. |
-| **Lasso Selection** | **Binding Thread** | Mengikat sekumpulan serat menjadi satu kesatuan motif.          |
-| **Recolor**         | **Fiber Bleach**   | Mengganti pigmen motif tanpa merusak struktur tenunan.          |
-| **Magic Wand**      | **Spirit Pick**    | Memilih serat dengan resonansi warna yang sama secara otomatis. |
+This blueprint refines the **Stitch Mode** (Image/Static Editing) to minimize physical fatigue and maximize drawing speed. It introduces automated filling, global recoloring, and pixel-perfect selection logic.
 
 ---
 
-## 3. Core Mechanics (Keyboard-First)
-
-### 3.1 Dye Soak (Flood Fill)
-
-- **Shortcut**: `F` (Fill).
-- **Behavior**: Algoritma Breadth-First Search (BFS) yang menyebar dari posisi **Needle**.
-- **Constraint**: Mengisi area kosong (`null`) atau warna yang sama hingga menyentuh batas warna yang berbeda.
-
-### 3.2 Fiber Bleach (Recoloring)
-
-- **Shortcut**: `Alt + R`.
-- **Behavior**: Mengganti semua unit warna yang identik dengan warna di bawah Needle menjadi **Active Dye** saat ini di seluruh kanvas atau area seleksi.
-
-### 3.3 Binding Thread (Poly-Lasso)
-
-- **Workflow**:
-  1. Tekan `Shift + Enter` untuk mulai mengikat.
-  2. Gerakkan Needle ke sudut-sudut motif, tekan `Enter` untuk menandai titik.
-  3. Tekan `F` untuk mengisi area di dalam ikatan titik-titik tersebut.
+## 2. Terminology & Core Modes
+Rupa operates in two distinct operational states:
+1. **Stitch Mode** (The Still Weave): Focused on pixel-perfect static images and motifs.
+2. **Kinetic Mode** (The Moving Weave): Focused on the temporal sequence of frames and motion.
 
 ---
 
-## 4. Implementation Goals (v0.5.0-alpha)
+## 3. Stitch Mode Mechanics (Static)
 
-1. Implementasi `DyeService.soak()` (Flood Fill logic).
-2. Implementasi `ManipulationService.bleach()` (Recolor logic).
-3. Integrasi ke `LoomPad` intent mapping.
+### 3.1 Advanced Tools
+| Technical Term | Artisan Term | Action |
+| :--- | :--- | :--- |
+| **Flood Fill** | **Dye Soak** | `F` - Spread dye to connected fibers of the same tone. |
+| **Recolor** | **Fiber Bleach** | `Alt + R` - Instantly transmute every instance of a pigment in the veil. |
+| **Magic Wand** | **Spirit Pick** | `W` - Select a motif based on color resonance. |
+
+### 3.2 Artifact Creation (Image Export)
+In **Stitch Mode**, the studio exports permanent static artifacts:
+- **Vector**: SVG (Scalable Vector Graphics).
+- **Raster**: PNG (Lossless), JPG (Compressed), WEBP (Modern Web Standard).
+
+---
+
+## 4. Implementation Goals (v0.5.0)
+1. Complete the transition of selection logic from "Rectangular" to "Motif-based" (Arbitrary Pixels).
+2. Ensure all automation tools respect the **Active Loom** (Current Selection).
+3. Implement WEBP and JPG support in the **Artifact Crate**.

@@ -1,41 +1,39 @@
-# Blueprint 08: The Spindle of Time (Animation Engine)
+# Blueprint 08: The Spindle of Time (Kinetic Mode Engine)
 
 ## 1. Executive Summary
-
-Blueprint 08 mentransformasi Rupa dari editor gambar statis menjadi studio animasi. Memanfaatkan struktur **Folio** yang sudah ada, sistem ini akan memperkenalkan kontrol waktu dan pratinjau gerak (Playback).
+This blueprint defines the **Kinetic Mode** (Motion/Video Editing), transforming the Folio into a temporal sequence. It introduces timeline orchestration, onion skinning, and motion-based export formats.
 
 ---
 
 ## 2. Terminology & Metaphors
-
-| Technical Term     | Artisan Term      | Philosophy                                             |
-| :----------------- | :---------------- | :----------------------------------------------------- |
-| **Timeline**       | **The Spindle**   | Poros tempat benang waktu digulung.                    |
-| **Playback**       | **The Pulse**     | Jantung studio yang menentukan kecepatan rotasi waktu. |
-| **Onion Skinning** | **Ghost Threads** | Bayangan benang dari masa lalu dan masa depan.         |
-| **Frame Rate**     | **Weave Pace**    | Kerapatan detak jantung animasi.                       |
+| Technical Term | Artisan Term | Philosophy |
+| :--- | :--- | :--- |
+| **Motion Mode** | **Kinetic Mode** | The weave in motion; breathing life into the motif. |
+| **Timeline** | **The Spindle** | The axis around which the thread of time is wound. |
+| **Playback** | **The Pulse** | The studio's heartbeat governing movement. |
+| **Onion Skinning** | **Ghost Threads** | Traces of motifs from the past and future. |
 
 ---
 
-## 3. Architecture
+## 3. Kinetic Mode Mechanics (Temporal)
 
-### 3.1 The Spindle UI
-
-- Panel horizontal yang menampilkan urutan **Frames**.
-- Navigasi cepat antar frame menggunakan `Alt + PageUp/Down`.
+### 3.1 The Spindle (Timeline Orchestrator)
+- **Visuals**: A horizontal ledger of **Frames**.
+- **Orchestration**: Assigning `duration` (in milliseconds) to each frame.
+- **Pulse Control**: Play/Pause (`P`), Loop, and Weave Pace (FPS).
 
 ### 3.2 Ghost Threads (Onion Skinning)
+- Visualizing frame `n-1` and `n+1` with low density (opacity) to guide the artisan's hand.
 
-- Merender frame `n-1` (merah transparan) dan `n+1` (hijau transparan) di bawah layer aktif untuk panduan visual gerakan.
-
-### 3.3 The Pulse (Playback Engine)
-
-- Menjalankan loop waktu yang mengganti frame aktif secara otomatis berdasarkan durasi per frame.
+### 3.3 Artifact Creation (Motion Export)
+In **Kinetic Mode**, the studio exports the living weave:
+- **Animated Vector**: **SVG** (utilizing SMIL or CSS animations for lightweight motion).
+- **Video**: **MP4** (Universal), **WebM** (Optimized for the web).
+- **Raster Animation**: **GIF** (Classic Pixel Art format), **Sprite Sheet** (PNG Atlas).
 
 ---
 
-## 4. Implementation Goals (v0.5.0-beta)
-
-1. Pembuatan komponen `SpindlePanel` (Timeline).
-2. Implementasi logic `OnionSkinning` pada `Linen.svelte`.
-3. Integrasi ekspor **Animated GIF** dan **Sprite Sheet**.
+## 4. Implementation Goals (v0.6.0+)
+1. Construct **The Spindle** UI panel with horizontal scrolling.
+2. Implement composite rendering for **Ghost Threads** in the Linen.
+3. Integrate an animation-capable export engine (GIF and WebM focus).

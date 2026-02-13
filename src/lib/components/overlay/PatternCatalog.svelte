@@ -2,7 +2,7 @@
 	import { atelier } from '../../state/atelier.svelte.js';
 	import { loompad } from '../../engine/loompad.svelte.js';
 	import { fade, scale } from 'svelte/transition';
-	import { onMount } from 'svelte';
+	import { onMount, untrack } from 'svelte';
 	import CatalogAction from './CatalogAction.svelte';
 
 	let { onClose = () => (atelier.studio.showPatternCatalog = false) } = $props<{
@@ -144,6 +144,12 @@
 	}
 
 	onMount(() => document.getElementById('catalog-search')?.focus());
+
+	// Register with Escape Stack
+	$effect(() => {
+		untrack(() => atelier.pushEscapeAction(onClose));
+		return () => atelier.popEscapeAction(onClose);
+	});
 </script>
 
 <div

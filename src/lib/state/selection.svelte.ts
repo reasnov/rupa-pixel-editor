@@ -1,6 +1,6 @@
 /**
  * SelectionState: Manages complex selections (Motifs).
- * Supports both rectangular bounds and arbitrary pixel sets.
+ * Supports rectangular bounds, arbitrary pixel sets, and polygon vertices.
  */
 export class SelectionState {
 	// Traditional rectangular bounds
@@ -10,8 +10,11 @@ export class SelectionState {
 	// The actual set of selected indices
 	indices = $state<number[]>([]);
 
+	// Polygon vertices for "Binding Thread" (Poly-Lasso)
+	vertices = $state<{ x: number; y: number }[]>([]);
+
 	get isActive(): boolean {
-		return this.indices.length > 0 || this.start !== null;
+		return this.indices.length > 0 || this.start !== null || this.vertices.length > 0;
 	}
 
 	begin(x: number, y: number) {
@@ -30,17 +33,18 @@ export class SelectionState {
 		this.start = null;
 		this.end = null;
 		this.indices = [];
+		this.vertices = [];
 	}
 
 	/**
 	 * Returns all currently selected points as {x, y} coordinates.
 	 */
 	getPoints(width: number) {
-		const points: { x: number; y: number }[] = [];
+		const pointsMap = new Map<number, { x: number; y: number }>();
 
 		// Add points from arbitrary selection (Spirit Pick)
 		this.indices.forEach((idx) => {
-			points.push({
+			pointsMap.set(idx, {
 				x: idx % width,
 				y: Math.floor(idx / width)
 			});
@@ -51,17 +55,17 @@ export class SelectionState {
 		if (b) {
 			for (let y = b.y1; y <= b.y2; y++) {
 				for (let x = b.x1; x <= b.x2; x++) {
-					points.push({ x, y });
+					const idx = y * width + x;
+					pointsMap.set(idx, { x, y });
 				}
 			}
 		}
 
-		return points;
+		return Array.from(pointsMap.values());
 	}
 
 	/**
 	 * Identifies all outer and inner edges of the selected motif.
-	 * Returns a list of edges as {x1, y1, x2, y2} for SVG rendering.
 	 */
 	getBoundaryEdges(width: number) {
 		const edges: { x1: number; y1: number; x2: number; y2: number }[] = [];
@@ -71,22 +75,14 @@ export class SelectionState {
 		const pointSet = new Set(points.map((p) => `${p.x},${p.y}`));
 
 		points.forEach((p) => {
-			// Top Edge
-			if (!pointSet.has(`${p.x},${p.y - 1}`)) {
+			if (!pointSet.has(`${p.x},${p.y - 1}`))
 				edges.push({ x1: p.x, y1: p.y, x2: p.x + 1, y2: p.y });
-			}
-			// Bottom Edge
-			if (!pointSet.has(`${p.x},${p.y + 1}`)) {
+			if (!pointSet.has(`${p.x},${p.y + 1}`))
 				edges.push({ x1: p.x, y1: p.y + 1, x2: p.x + 1, y2: p.y + 1 });
-			}
-			// Left Edge
-			if (!pointSet.has(`${p.x - 1},${p.y}`)) {
+			if (!pointSet.has(`${p.x - 1},${p.y}`))
 				edges.push({ x1: p.x, y1: p.y, x2: p.x, y2: p.y + 1 });
-			}
-			// Right Edge
-			if (!pointSet.has(`${p.x + 1},${p.y}`)) {
+			if (!pointSet.has(`${p.x + 1},${p.y}`))
 				edges.push({ x1: p.x + 1, y1: p.y, x2: p.x + 1, y2: p.y + 1 });
-			}
 		});
 
 		return edges;
@@ -105,7 +101,6 @@ export class SelectionState {
 
 	/**
 	 * Unified bounds for operations like Copy/Paste.
-	 * Calculates the smallest rectangle that contains all selected pixels.
 	 */
 	getEffectiveBounds(width: number) {
 		const points = this.getPoints(width);

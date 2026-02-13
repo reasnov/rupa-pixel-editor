@@ -88,6 +88,15 @@ export class TheLoom {
 				return shuttle.stitching.unstitch();
 			case 'SOAK':
 				return shuttle.dye.soak();
+			case 'BIND_VERTEX':
+				return shuttle.selection.addVertex(atelier.needle.pos.x, atelier.needle.pos.y);
+			case 'SEAL_BINDING':
+				if (atelier.selection.vertices.length >= 3) {
+					return shuttle.selection.sealBinding();
+				}
+				// Fallback to STITCH if not enough vertices
+				if (atelier.selection.isActive) return shuttle.commitSelection();
+				return shuttle.stitching.stitch();
 			case 'PICK_DYE':
 				return shuttle.stitching.pickDye();
 

@@ -8,11 +8,11 @@
 	import { onMount } from 'svelte';
 
 	let { onExport, onClose = () => (atelier.showArtifactCrate = false) } = $props<{
-		onExport: (format: 'svg' | 'png', scale: number, bgColor: string) => void;
+		onExport: (format: 'svg' | 'png' | 'jpg' | 'webp', scale: number, bgColor: string) => void;
 		onClose?: () => void;
 	}>();
 
-	let format = $state<'svg' | 'png'>('png');
+	let format = $state<'svg' | 'png' | 'jpg' | 'webp'>('png');
 	let showPicker = $state(false);
 
 	// HSLA / Custom color state
@@ -65,34 +65,64 @@
 		<!-- Right: Settings - Independent Scroll -->
 		<div class="custom-scrollbar flex h-full flex-1 flex-col gap-8 overflow-y-auto pr-4">
 			<!-- Format Selection -->
-			<div class="grid grid-cols-2 gap-4">
+			<div class="grid grid-cols-2 gap-3">
 				<button
-					class="flex flex-col items-center gap-3 rounded-xl border-2 p-8 transition-all {format ===
+					class="flex flex-col items-center gap-3 rounded-xl border-2 p-6 transition-all {format ===
 					'png'
 						? 'border-brand bg-brand/5'
 						: 'border-black/5 bg-white/40 opacity-40 hover:opacity-100'}"
 					onclick={() => (format = 'png')}
 				>
-					<span class="text-4xl">🖼️</span>
+					<span class="text-3xl">🖼️</span>
 					<div class="text-center">
-						<h3 class="font-serif text-sm font-bold tracking-tight uppercase">Raster PNG</h3>
-						<span class="font-serif text-[9px] font-bold tracking-widest uppercase opacity-40"
-							>Pixel Perfect</span
+						<h3 class="font-serif text-[11px] font-bold tracking-tight uppercase">Raster PNG</h3>
+						<span class="font-serif text-[8px] font-bold tracking-widest uppercase opacity-40"
+							>Lossless</span
 						>
 					</div>
 				</button>
 				<button
-					class="flex flex-col items-center gap-3 rounded-xl border-2 p-8 transition-all {format ===
+					class="flex flex-col items-center gap-3 rounded-xl border-2 p-6 transition-all {format ===
 					'svg'
 						? 'border-brand bg-brand/5'
 						: 'border-black/5 bg-white/40 opacity-40 hover:opacity-100'}"
 					onclick={() => (format = 'svg')}
 				>
-					<span class="text-4xl">📐</span>
+					<span class="text-3xl">📐</span>
 					<div class="text-center">
-						<h3 class="font-serif text-sm font-bold tracking-tight uppercase">Vector SVG</h3>
-						<span class="font-serif text-[9px] font-bold tracking-widest uppercase opacity-40"
-							>Infinite Scale</span
+						<h3 class="font-serif text-[11px] font-bold tracking-tight uppercase">Vector SVG</h3>
+						<span class="font-serif text-[8px] font-bold tracking-widest uppercase opacity-40"
+							>Scalable</span
+						>
+					</div>
+				</button>
+				<button
+					class="flex flex-col items-center gap-3 rounded-xl border-2 p-6 transition-all {format ===
+					'webp'
+						? 'border-brand bg-brand/5'
+						: 'border-black/5 bg-white/40 opacity-40 hover:opacity-100'}"
+					onclick={() => (format = 'webp')}
+				>
+					<span class="text-3xl">🕸️</span>
+					<div class="text-center">
+						<h3 class="font-serif text-[11px] font-bold tracking-tight uppercase">WebP</h3>
+						<span class="font-serif text-[8px] font-bold tracking-widest uppercase opacity-40"
+							>Optimized</span
+						>
+					</div>
+				</button>
+				<button
+					class="flex flex-col items-center gap-3 rounded-xl border-2 p-6 transition-all {format ===
+					'jpg'
+						? 'border-brand bg-brand/5'
+						: 'border-black/5 bg-white/40 opacity-40 hover:opacity-100'}"
+					onclick={() => (format = 'jpg')}
+				>
+					<span class="text-3xl">📷</span>
+					<div class="text-center">
+						<h3 class="font-serif text-[11px] font-bold tracking-tight uppercase">JPEG</h3>
+						<span class="font-serif text-[8px] font-bold tracking-widest uppercase opacity-40"
+							>Compressed</span
 						>
 					</div>
 				</button>

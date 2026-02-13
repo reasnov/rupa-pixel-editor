@@ -14,6 +14,8 @@
 				{ intent: 'MOVE_UP', label: 'Move Needle' },
 				{ intent: 'GOTO', label: 'Go to Coordinate' },
 				{ intent: 'FLOW_SELECT', label: 'Block Selection (Hold)' },
+				{ intent: 'BIND_VERTEX', label: 'Binding Thread (Add Point)' },
+				{ intent: 'SEAL_BINDING', label: 'Seal Binding (Select area)' },
 				{ intent: 'ESCAPE', label: 'Clear Selection / Dismiss' }
 			]
 		},

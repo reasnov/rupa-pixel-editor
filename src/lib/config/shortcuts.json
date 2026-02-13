@@ -7,11 +7,13 @@
 		"GOTO": ["g"]
 	},
 	"canvas": {
-		"STITCH": ["Space", "Shift+Space"],
+		"STITCH": ["Space", "Enter"],
 		"UNSTITCH": ["Backspace", "Delete"],
 		"UNSTITCH_MOD": ["Ctrl+Space"],
 		"EYEDROPPER": ["i", "Alt+Space"],
-		"SOAK": ["f"]
+		"SOAK": ["f"],
+		"BIND_VERTEX": ["Shift+Enter"],
+		"SEAL_BINDING": ["Enter"]
 	},
 	"history": {
 		"UNDO": ["Ctrl+z"],

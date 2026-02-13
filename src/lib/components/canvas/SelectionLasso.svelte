@@ -3,6 +3,7 @@
 	import { stance } from '../../engine/stance.svelte.js';
 
 	let edges = $derived(atelier.selection.getBoundaryEdges(atelier.linen.width));
+	let vertices = $derived(atelier.selection.vertices);
 	let isLooming = $derived(stance.current.type === 'LOOMING');
 </script>
 
@@ -40,6 +41,25 @@
 				class="marching-ants-svg"
 			/>
 		{/each}
+
+		<!-- Binding Thread Vertices & Lines -->
+		{#if vertices.length > 0}
+			{#each vertices as v, i}
+				{@const nextV = vertices[i + 1] || vertices[0]}
+				<circle cx={v.x + 0.5} cy={v.y + 0.5} r="0.2" fill="var(--color-brand)" />
+				{#if vertices.length > 1 && i < vertices.length - (vertices.length >= 3 ? 0 : 1)}
+					<line
+						x1={v.x + 0.5}
+						y1={v.y + 0.5}
+						x2={nextV.x + 0.5}
+						y2={nextV.y + 0.5}
+						stroke="var(--color-brand)"
+						stroke-width="0.05"
+						stroke-dasharray="0.1, 0.1"
+					/>
+				{/if}
+			{/each}
+		{/if}
 	</svg>
 
 	<!-- Faint fill for the selected area -->

@@ -54,6 +54,14 @@ The studio supports unlimited depth through **Veils**.
 - **`Alt+H`:** Toggle veil visibility.
 - **`Alt+L`:** Toggle veil lock.
 
+### 4.2 Binding Thread (Poly-Lasso)
+
+For non-rectangular shapes, you can use the **Binding Thread** technique:
+
+1.  Press **`Shift + Enter`** to place your first anchor point.
+2.  Move the Needle and press **`Shift + Enter`** at every corner of your desired shape.
+3.  Press **`Enter`** to "seal" the binding. Rupa will automatically select every stitch inside the defined boundary.
+
 ---
 
 ## 5. Atmosphere Protocol (Ambient Music)

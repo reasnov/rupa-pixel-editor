@@ -10,6 +10,8 @@ export type LoomIntent =
 	| 'STITCH'
 	| 'UNSTITCH'
 	| 'SOAK'
+	| 'BIND_VERTEX'
+	| 'SEAL_BINDING'
 	| 'PICK_DYE'
 	| 'SAVE'
 	| 'OPEN'
@@ -98,6 +100,8 @@ export class LoomPadEngine {
 			STITCH: 'STITCH',
 			UNSTITCH: 'UNSTITCH',
 			SOAK: 'SOAK',
+			BIND_VERTEX: 'BIND_VERTEX',
+			SEAL_BINDING: 'SEAL_BINDING',
 			EYEDROPPER: 'PICK_DYE',
 			SAVE: 'OPEN_ARCHIVE',
 			OPEN: 'OPEN',

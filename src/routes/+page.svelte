@@ -76,7 +76,7 @@
 		<main
 			class="relative flex flex-1 items-center justify-center overflow-hidden bg-grid-border/20"
 		>
-			<div class="artisan-frame flex h-[90%] w-[90%] items-center justify-center overflow-hidden">
+			<div class="artisan-frame flex h-[96%] w-[96%] items-center justify-center overflow-hidden">
 				<Linen />
 			</div>
 		</main>

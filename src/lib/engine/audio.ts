@@ -1,15 +1,9 @@
 import { atelier } from '../state/atelier.svelte';
+import { studioAudio } from './audioContext.js';
 
 export class AudioEngine {
-	private ctx: AudioContext | null = null;
-
-	private init() {
-		if (!this.ctx) {
-			this.ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
-		}
-		if (this.ctx.state === 'suspended') {
-			this.ctx.resume();
-		}
+	private get ctx(): AudioContext {
+		return studioAudio.ctx;
 	}
 
 	private playTone(
@@ -19,8 +13,7 @@ export class AudioEngine {
 		volume = 0.1,
 		rampTo = 0.0001
 	) {
-		this.init();
-		if (!this.ctx || atelier.isMuted) return;
+		if (atelier.isMuted) return;
 
 		const osc = this.ctx.createOscillator();
 		const gain = this.ctx.createGain();
@@ -73,8 +66,7 @@ export class AudioEngine {
 
 	playUnstitch() {
 		// Audible brush/paper rustle
-		this.init();
-		if (!this.ctx || atelier.isMuted) return;
+		if (atelier.isMuted) return;
 
 		const duration = 0.25;
 		const bufferSize = this.ctx.sampleRate * duration;

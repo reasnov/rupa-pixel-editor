@@ -1,14 +1,18 @@
 import { atelier } from '../state/atelier.svelte.js';
+import { studioAudio } from './audioContext.js';
 
 /**
  * AmbientEngine: A generative music engine that composes and plays
  * a soft, meditative piano-like soundscape.
  */
 export class AmbientEngine {
-	private ctx: AudioContext | null = null;
 	private isPlaying = false;
 	private nextNoteTime = 0;
 	private timer: any = null;
+
+	private get ctx(): AudioContext {
+		return studioAudio.ctx;
+	}
 
 	// Music Theory: Eb Major Pentatonic (Soft & Dreamy)
 	// Eb3, F3, G3, Bb3, C4, Eb4, F4, G4, Bb4, C5
@@ -22,15 +26,6 @@ export class AmbientEngine {
 
 	private currentChordIndex = 0;
 
-	private init() {
-		if (!this.ctx) {
-			this.ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
-		}
-		if (this.ctx.state === 'suspended') {
-			this.ctx.resume();
-		}
-	}
-
 	toggle() {
 		if (this.isPlaying) {
 			this.stop();
@@ -40,10 +35,9 @@ export class AmbientEngine {
 	}
 
 	start() {
-		this.init();
 		if (this.isPlaying) return;
 		this.isPlaying = true;
-		this.nextNoteTime = this.ctx!.currentTime;
+		this.nextNoteTime = this.ctx.currentTime;
 		this.scheduler();
 	}
 
@@ -53,12 +47,7 @@ export class AmbientEngine {
 	}
 
 	private scheduler() {
-		if (
-			!this.isPlaying ||
-			!this.ctx ||
-			atelier.studio.isMuted ||
-			!atelier.studio.isAmbientPlaying
-		) {
+		if (!this.isPlaying || atelier.studio.isMuted || !atelier.studio.isAmbientPlaying) {
 			this.timer = setTimeout(() => this.scheduler(), 100);
 			return;
 		}
@@ -80,8 +69,6 @@ export class AmbientEngine {
 	}
 
 	private playGenerativeNote(time: number) {
-		if (!this.ctx) return;
-
 		// Pick a note from the current chord or the general scale
 		const chord = this.chords[this.currentChordIndex];
 		const useChord = Math.random() > 0.3;
@@ -101,8 +88,6 @@ export class AmbientEngine {
 	}
 
 	private pianoPluck(freq: number, time: number, volume = 0.06) {
-		if (!this.ctx) return;
-
 		// --- Generative Volume Logic ---
 		// 0 - 30 mins: Silence (0.0)
 		// 30 - 60 mins: Fade in from 0.0 to 1.0

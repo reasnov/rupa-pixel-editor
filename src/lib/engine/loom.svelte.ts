@@ -3,6 +3,7 @@ import { loompad, type LoomIntent } from './loompad.svelte.js';
 import { stance } from './stance.svelte.js';
 import { shuttle } from './shuttle.js';
 import { ambient } from './ambient.js';
+import { studioAudio } from './audioContext.js';
 
 /**
  * TheLoom: The primary orchestrator of user input and action execution.
@@ -35,6 +36,9 @@ export class TheLoom {
 
 	handleInput(e: KeyboardEvent, type: 'down' | 'up') {
 		if (!atelier.studio.isAppReady) return;
+
+		// Resume Audio Context on interaction
+		studioAudio.resume();
 
 		// 1. Update physical key ledger
 		loompad.updatePhysicalState(e, type);
@@ -82,6 +86,8 @@ export class TheLoom {
 
 			case 'UNSTITCH':
 				return shuttle.stitching.unstitch();
+			case 'SOAK':
+				return shuttle.dye.soak();
 			case 'PICK_DYE':
 				return shuttle.stitching.pickDye();
 
@@ -91,6 +97,8 @@ export class TheLoom {
 				return shuttle.clipboard.cut();
 			case 'PASTE':
 				return shuttle.clipboard.paste();
+			case 'BLEACH':
+				return shuttle.manipulation.bleach();
 
 			case 'UNDO':
 				return atelier.undo();
@@ -137,6 +145,8 @@ export class TheLoom {
 				return shuttle.manipulation.clearAll();
 			case 'TOGGLE_MUTE':
 				return atelier.studio.toggleMute();
+			case 'SPIRIT_PICK':
+				return shuttle.selection.spiritPick();
 
 			case 'FLIP_H':
 				return shuttle.manipulation.flip('horizontal');

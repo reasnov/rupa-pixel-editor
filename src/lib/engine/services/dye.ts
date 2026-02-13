@@ -1,5 +1,6 @@
 import { atelier } from '../../state/atelier.svelte.js';
 import { sfx } from '../audio.js';
+import { history } from '../history.js';
 import { SpinnerEngine } from '../spinner.js';
 
 /**
@@ -55,5 +56,65 @@ export class DyeService {
 	mixActiveDye(otherHex: string, ratio = 0.5) {
 		const newDye = SpinnerEngine.entwine(atelier.activeDye, otherHex, ratio);
 		this.setDye(newDye);
+	}
+
+	/**
+	 * Dye Soak (Flood Fill): Automatically fills connected stitches of the same color.
+	 */
+	soak() {
+		const { x, y } = atelier.needle.pos;
+		const targetColor = atelier.linen.getColor(x, y);
+		const replacementColor = atelier.activeDye;
+
+		// Don't fill if color is already the same
+		if (targetColor === replacementColor) return;
+
+		const width = atelier.linen.width;
+		const height = atelier.linen.height;
+		const queue: [number, number][] = [[x, y]];
+		const visited = new Set<string>();
+		const changes: { index: number; oldColor: string | null; newColor: string | null }[] = [];
+
+		while (queue.length > 0) {
+			const [cx, cy] = queue.shift()!;
+			const key = `${cx},${cy}`;
+
+			if (visited.has(key)) continue;
+			visited.add(key);
+
+			const currentColor = atelier.linen.getColor(cx, cy);
+			if (currentColor === targetColor) {
+				const index = cy * width + cx;
+				changes.push({
+					index,
+					oldColor: targetColor,
+					newColor: replacementColor
+				});
+
+				// Update state immediately for visual feedback
+				atelier.linen.stitches[index] = replacementColor;
+
+				// Neighbors
+				const neighbors: [number, number][] = [
+					[cx + 1, cy],
+					[cx - 1, cy],
+					[cx, cy + 1],
+					[cx, cy - 1]
+				];
+
+				for (const [nx, ny] of neighbors) {
+					if (nx >= 0 && nx < width && ny >= 0 && ny < height) {
+						queue.push([nx, ny]);
+					}
+				}
+			}
+		}
+
+		if (changes.length > 0) {
+			history.beginBatch();
+			changes.forEach((c) => history.push(c));
+			history.endBatch();
+			sfx.playStitch();
+		}
 	}
 }

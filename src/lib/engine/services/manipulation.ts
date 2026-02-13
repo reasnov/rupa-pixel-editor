@@ -65,4 +65,36 @@ export class ManipulationService {
 			sfx.playUnstitch();
 		}
 	}
+
+	/**
+	 * Fiber Bleach (Recoloring): Replaces all occurrences of a color with the active dye.
+	 */
+	bleach() {
+		const { x, y } = atelier.needle.pos;
+		const targetColor = atelier.linen.getColor(x, y);
+		const replacementColor = atelier.activeDye;
+
+		if (targetColor === replacementColor) return;
+
+		const { stitches } = atelier.linen;
+		const changes: { index: number; oldColor: string | null; newColor: string | null }[] = [];
+
+		stitches.forEach((color, index) => {
+			if (color === targetColor) {
+				changes.push({
+					index,
+					oldColor: targetColor,
+					newColor: replacementColor
+				});
+				atelier.linen.stitches[index] = replacementColor;
+			}
+		});
+
+		if (changes.length > 0) {
+			history.beginBatch();
+			changes.forEach((c) => history.push(c));
+			history.endBatch();
+			sfx.playStitch();
+		}
+	}
 }

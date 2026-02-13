@@ -1,27 +1,45 @@
 <script lang="ts">
 	import { atelier } from '../../state/atelier.svelte.js';
 	import { stance } from '../../engine/stance.svelte.js';
+
+	let points = $derived(atelier.selection.getPoints(atelier.linen.width));
+	let isLooming = $derived(stance.current.type === 'LOOMING');
 </script>
 
-{#if atelier.selection.isActive && atelier.selection.start && atelier.selection.end}
-	{@const isLooming = stance.current.type === 'LOOMING'}
-	{@const x1 = Math.min(atelier.selection.start.x, atelier.selection.end.x)}
-	{@const x2 = Math.max(atelier.selection.start.x, atelier.selection.end.x)}
-	{@const y1 = Math.min(atelier.selection.start.y, atelier.selection.end.y)}
-	{@const y2 = Math.max(atelier.selection.start.y, atelier.selection.end.y)}
-	{@const width = x2 - x1 + 1}
-	{@const height = y2 - y1 + 1}
-	<div
-		class="marching-ants pointer-events-none absolute z-40"
-		style="
-            left: {(x1 / atelier.linen.width) * 100}%; 
-            top: {(y1 / atelier.linen.height) * 100}%; 
-            width: {(width / atelier.linen.width) * 100}%; 
-            height: {(height / atelier.linen.height) * 100}%;
-            --lasso-color: {isLooming ? 'var(--color-brand)' : 'rgba(0,0,0,0.3)'};
-            box-shadow: 0 0 0 1px rgba(255,255,255,0.5);
-        "
-	></div>
+{#if atelier.selection.isActive}
+	<!-- Complex Selection Rendering -->
+	{#each points as point}
+		<div
+			class="pointer-events-none absolute z-40 bg-brand/20 ring-1 ring-brand/40"
+			style="
+                left: {(point.x / atelier.linen.width) * 100}%; 
+                top: {(point.y / atelier.linen.height) * 100}%; 
+                width: {100 / atelier.linen.width}%; 
+                height: {100 / atelier.linen.height}%;
+            "
+		></div>
+	{/each}
+
+	<!-- Rectangular Marching Ants (only if rectangular selection exists) -->
+	{#if atelier.selection.start && atelier.selection.end}
+		{@const x1 = Math.min(atelier.selection.start.x, atelier.selection.end.x)}
+		{@const x2 = Math.max(atelier.selection.start.x, atelier.selection.end.x)}
+		{@const y1 = Math.min(atelier.selection.start.y, atelier.selection.end.y)}
+		{@const y2 = Math.max(atelier.selection.start.y, atelier.selection.end.y)}
+		{@const width = x2 - x1 + 1}
+		{@const height = y2 - y1 + 1}
+		<div
+			class="marching-ants pointer-events-none absolute z-[41]"
+			style="
+                left: {(x1 / atelier.linen.width) * 100}%; 
+                top: {(y1 / atelier.linen.height) * 100}%; 
+                width: {(width / atelier.linen.width) * 100}%; 
+                height: {(height / atelier.linen.height) * 100}%;
+                --lasso-color: {isLooming ? 'var(--color-brand)' : 'rgba(0,0,0,0.3)'};
+                box-shadow: 0 0 0 1px rgba(255,255,255,0.5);
+            "
+		></div>
+	{/if}
 {/if}
 
 <style>

@@ -28,6 +28,14 @@ _Behavioral orchestration: Managing modes (Threading, Looming, Unravelling) and 
 
 _Multi-frame and multi-layer orchestration: Managing complex projects and hierarchical data._
 
+### [07: The Swift Weaver](./07-swift-weaver.md)
+
+_Efficiency and automation: Flood fill, smart selection, and keyboard-centric drawing speed._
+
+### [08: The Spindle of Time](./08-spindle-of-time.md)
+
+_Bringing stitches to life: Timeline management, onion skinning, and animation playback._
+
 ---
 
 _Note: Blueprints are finalized once implemented but remain here as architectural reference._

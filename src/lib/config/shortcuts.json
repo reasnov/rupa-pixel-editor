@@ -10,7 +10,8 @@
 		"STITCH": ["Space", "Shift+Space"],
 		"UNSTITCH": ["Backspace", "Delete"],
 		"UNSTITCH_MOD": ["Ctrl+Space"],
-		"EYEDROPPER": ["i", "Alt+Space"]
+		"EYEDROPPER": ["i", "Alt+Space"],
+		"SOAK": ["f"]
 	},
 	"history": {
 		"UNDO": ["Ctrl+z"],
@@ -20,6 +21,7 @@
 		"COPY": ["Ctrl+c"],
 		"CUT": ["Ctrl+x"],
 		"PASTE": ["Ctrl+v"],
+		"BLEACH": ["Alt+r"],
 		"FLIP_H": ["h"],
 		"FLIP_V": ["v"],
 		"ROTATE": ["r"]
@@ -74,7 +76,8 @@
 	"modifiers": {
 		"FLOW_STITCH": ["Control"],
 		"FLOW_UNSTITCH": ["Ctrl+Shift"],
-		"FLOW_SELECT": ["Shift"]
+		"FLOW_SELECT": ["Shift"],
+		"SPIRIT_PICK": ["w"]
 	},
 	"reserved_do_not_use": {
 		"OS_CLOSE_WINDOW": ["Ctrl+w"],

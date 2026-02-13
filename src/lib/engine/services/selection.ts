@@ -49,4 +49,48 @@ export class SelectionService {
 		history.endBatch();
 		if (changed) sfx.playStitch();
 	}
+
+	/**
+	 * Spirit Pick (Magic Wand): Selects all connected stitches of the same color.
+	 */
+	spiritPick() {
+		const { x, y } = atelier.needle.pos;
+		const targetColor = atelier.linen.getColor(x, y);
+		const width = atelier.linen.width;
+		const height = atelier.linen.height;
+
+		const queue: [number, number][] = [[x, y]];
+		const visited = new Set<string>();
+
+		atelier.selection.clear();
+
+		while (queue.length > 0) {
+			const [cx, cy] = queue.shift()!;
+			const key = `${cx},${cy}`;
+
+			if (visited.has(key)) continue;
+			visited.add(key);
+
+			if (atelier.linen.getColor(cx, cy) === targetColor) {
+				atelier.selection.indices.add(cy * width + cx);
+
+				const neighbors: [number, number][] = [
+					[cx + 1, cy],
+					[cx - 1, cy],
+					[cx, cy + 1],
+					[cx, cy - 1]
+				];
+
+				for (const [nx, ny] of neighbors) {
+					if (nx >= 0 && nx < width && ny >= 0 && ny < height) {
+						queue.push([nx, ny]);
+					}
+				}
+			}
+		}
+
+		if (atelier.selection.indices.size > 0) {
+			sfx.playStitch();
+		}
+	}
 }

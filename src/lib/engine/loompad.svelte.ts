@@ -9,6 +9,7 @@ export type LoomIntent =
 	| 'GOTO'
 	| 'STITCH'
 	| 'UNSTITCH'
+	| 'SOAK'
 	| 'PICK_DYE'
 	| 'SAVE'
 	| 'OPEN'
@@ -17,6 +18,7 @@ export type LoomIntent =
 	| 'FLOW_STITCH'
 	| 'FLOW_UNSTITCH'
 	| 'FLOW_SELECT'
+	| 'SPIRIT_PICK'
 	| 'UNDO'
 	| 'REDO'
 	| 'ZOOM_IN'
@@ -34,6 +36,7 @@ export type LoomIntent =
 	| 'COPY'
 	| 'CUT'
 	| 'PASTE'
+	| 'BLEACH'
 	| 'FLIP_H'
 	| 'FLIP_V'
 	| 'ROTATE'
@@ -94,6 +97,7 @@ export class LoomPadEngine {
 			GOTO: 'GOTO',
 			STITCH: 'STITCH',
 			UNSTITCH: 'UNSTITCH',
+			SOAK: 'SOAK',
 			EYEDROPPER: 'PICK_DYE',
 			SAVE: 'OPEN_ARCHIVE',
 			OPEN: 'OPEN',
@@ -101,6 +105,7 @@ export class LoomPadEngine {
 			FLOW_STITCH: 'FLOW_STITCH',
 			FLOW_UNSTITCH: 'FLOW_UNSTITCH',
 			FLOW_SELECT: 'FLOW_SELECT',
+			SPIRIT_PICK: 'SPIRIT_PICK',
 			UNDO: 'UNDO',
 			REDO: 'REDO',
 			ZOOM_IN: 'ZOOM_IN',
@@ -117,6 +122,7 @@ export class LoomPadEngine {
 			COPY: 'COPY',
 			CUT: 'CUT',
 			PASTE: 'PASTE',
+			BLEACH: 'BLEACH',
 			FLIP_H: 'FLIP_H',
 			FLIP_V: 'FLIP_V',
 			ROTATE: 'ROTATE',

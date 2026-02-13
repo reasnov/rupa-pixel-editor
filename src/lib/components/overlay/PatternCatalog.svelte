@@ -51,6 +51,24 @@
 			action: () => atelier.pickDye()
 		},
 		{
+			id: 'soak-dye',
+			label: 'Color: Dye Soak (Flood Fill connected area)',
+			shortcut: loompad.getLabel('SOAK'),
+			action: () => shuttle.dye.soak()
+		},
+		{
+			id: 'bleach-fiber',
+			label: 'Color: Fiber Bleach (Recolor all instances)',
+			shortcut: loompad.getLabel('BLEACH'),
+			action: () => shuttle.manipulation.bleach()
+		},
+		{
+			id: 'spirit-pick',
+			label: 'Selection: Spirit Pick (Magic Wand selection)',
+			shortcut: loompad.getLabel('SPIRIT_PICK'),
+			action: () => shuttle.selection.spiritPick()
+		},
+		{
 			id: 'reset-zoom',
 			label: 'View: Reset Loom Zoom',
 			shortcut: loompad.getLabel('RESET_ZOOM'),

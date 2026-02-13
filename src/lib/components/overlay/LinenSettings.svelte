@@ -84,6 +84,27 @@
 
 			<div class="h-px w-full bg-black/5"></div>
 
+			<!-- Kinetic Pace (FPS) -->
+			<div class="flex items-center justify-between">
+				<div class="flex flex-col gap-1">
+					<span class="font-serif text-sm font-bold tracking-tight uppercase opacity-60"
+						>Weave Pace (FPS)</span
+					>
+					<span class="font-serif text-[10px] opacity-40">Default frames per second</span>
+				</div>
+				<div class="flex items-center gap-3">
+					<input
+						type="number"
+						bind:value={atelier.studio.fps}
+						min="1"
+						max="60"
+						class="w-20 rounded-xl border border-black/10 bg-white px-4 py-2 font-mono text-lg focus:border-brand focus:outline-none"
+					/>
+				</div>
+			</div>
+
+			<div class="h-px w-full bg-black/5"></div>
+
 			<div class="flex items-center justify-between">
 				<div class="flex flex-col gap-1">
 					<span class="font-serif text-sm font-bold tracking-tight uppercase opacity-60"

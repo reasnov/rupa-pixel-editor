@@ -19,6 +19,24 @@ export class FolioService {
 		sfx.playUnstitch();
 	}
 
+	duplicateFrame(index: number) {
+		const source = atelier.project.frames[index];
+		const newFrame = atelier.project.addFrame(`${source.name} (Copy)`);
+
+		// Copy dimensions and durations
+		newFrame.width = source.width;
+		newFrame.height = source.height;
+		newFrame.duration = source.duration;
+
+		// Copy veils and their stitches
+		newFrame.veils = source.veils.map((v) => {
+			const newVeil = v.clone(source.width, source.height);
+			return newVeil;
+		});
+
+		sfx.playStitch();
+	}
+
 	nextFrame() {
 		atelier.project.activeFrameIndex =
 			(atelier.project.activeFrameIndex + 1) % atelier.project.frames.length;

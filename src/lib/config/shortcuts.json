@@ -62,6 +62,7 @@
 	},
 	"folio": {
 		"NEW_FRAME": ["Alt+n"],
+		"DUPLICATE_FRAME": ["Alt+d"],
 		"NEXT_FRAME": ["Alt+PageDown", "Tab"],
 		"PREV_FRAME": ["Alt+PageUp", "Shift+Tab"],
 		"DELETE_FRAME": ["Alt+Backspace"]

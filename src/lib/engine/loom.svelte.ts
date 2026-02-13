@@ -169,6 +169,8 @@ export class TheLoom {
 
 			case 'NEW_FRAME':
 				return shuttle.folio.addFrame();
+			case 'DUPLICATE_FRAME':
+				return shuttle.folio.duplicateFrame(atelier.project.activeFrameIndex);
 			case 'NEXT_FRAME':
 				return shuttle.folio.nextFrame();
 			case 'PREV_FRAME':

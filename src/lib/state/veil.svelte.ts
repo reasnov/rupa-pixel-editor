@@ -19,6 +19,15 @@ export class VeilState {
 		this.stitches = Array(width * height).fill(null);
 	}
 
+	clone(width: number, height: number) {
+		const newVeil = new VeilState(this.name, width, height);
+		newVeil.stitches = [...this.stitches];
+		newVeil.isVisible = this.isVisible;
+		newVeil.isLocked = this.isLocked;
+		newVeil.opacity = this.opacity;
+		return newVeil;
+	}
+
 	clear() {
 		this.stitches.fill(null);
 	}

@@ -12,6 +12,10 @@ export class StudioState {
 	bgmVolume = $state(0.5);
 	sfxVolume = $state(0.5);
 
+	// Kinetic Settings
+	fps = $state(10); // Default 10 FPS
+	isKineticMode = $state(false);
+
 	// Session Tracking
 	sessionStartTime = Date.now();
 	usageMinutes = $state(0);

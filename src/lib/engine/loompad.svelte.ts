@@ -44,6 +44,7 @@ export type LoomIntent =
 	| 'FLIP_V'
 	| 'ROTATE'
 	| 'NEW_FRAME'
+	| 'DUPLICATE_FRAME'
 	| 'NEXT_FRAME'
 	| 'PREV_FRAME'
 	| 'DELETE_FRAME'
@@ -134,6 +135,7 @@ export class LoomPadEngine {
 			FLIP_V: 'FLIP_V',
 			ROTATE: 'ROTATE',
 			NEW_FRAME: 'NEW_FRAME',
+			DUPLICATE_FRAME: 'DUPLICATE_FRAME',
 			NEXT_FRAME: 'NEXT_FRAME',
 			PREV_FRAME: 'PREV_FRAME',
 			DELETE_FRAME: 'DELETE_FRAME',

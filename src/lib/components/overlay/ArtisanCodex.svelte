@@ -100,6 +100,24 @@
 						</p>
 					</div>
 				</div>
+
+				<div class="flex gap-6">
+					<div
+						class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand/10 text-xl"
+					>
+						🎬
+					</div>
+					<div class="flex flex-col gap-1">
+						<span class="font-serif text-sm font-bold uppercase opacity-80"
+							>Kinetic Mode (Motion)</span
+						>
+						<p class="font-serif text-xs leading-relaxed opacity-60">
+							Breath life into your motifs using <strong>The Spindle</strong> (Timeline). Create
+							multiple frames, adjust their pace, and press <strong>P</strong> to witness the pulse of
+							your creation. Export your work as WebM or Animated SVG artifacts.
+						</p>
+					</div>
+				</div>
 			</div>
 		</section>
 

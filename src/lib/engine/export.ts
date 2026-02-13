@@ -165,4 +165,115 @@ export class ExportEngine {
 		const mimeType = format === 'jpg' ? 'image/jpeg' : `image/${format}`;
 		return canvas.toDataURL(mimeType, 0.9); // 0.9 quality for lossy formats
 	}
+
+	/**
+	 * Generates an Animated SVG using CSS keyframes.
+	 */
+	static toAnimatedSVG(
+		width: number,
+		height: number,
+		frames: (string | null)[][],
+		fps: number,
+		bgColor: string | 'transparent' = 'transparent'
+	): string {
+		const duration = (frames.length / fps).toFixed(2);
+		let svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}" shape-rendering="crispEdges">`;
+
+		if (bgColor !== 'transparent') {
+			svg += `<rect width="${width}" height="${height}" fill="${bgColor}" />`;
+		}
+
+		// Each frame becomes a group that is toggled via CSS animation
+		frames.forEach((data, i) => {
+			const delay = (i / fps).toFixed(2);
+			svg += `<g class="frame" style="animation: fade ${duration}s step-end infinite; animation-delay: ${delay}s; opacity: ${i === 0 ? 1 : 0}">`;
+
+			// Render individual frame data (optimized via rect merging if needed, but simple for now)
+			data.forEach((color, idx) => {
+				if (color === null) return;
+				const x = idx % width;
+				const y = Math.floor(idx / width);
+				svg += `<rect x="${x}" y="${y}" width="1" height="1" fill="${color}" />`;
+			});
+
+			svg += `</g>`;
+		});
+
+		svg += `<style>
+            @keyframes fade {
+                0%, ${100 / frames.length}% { opacity: 1; }
+                ${100 / frames.length + 0.01}%, 100% { opacity: 0; }
+            }
+            .frame { pointer-events: none; }
+        </style>`;
+
+		svg += '</svg>';
+		return svg;
+	}
+
+	/**
+	 * Renders a sequence of frames to a WebM video using MediaRecorder.
+	 */
+	static async toWebM(
+		width: number,
+		height: number,
+		frames: (string | null)[][],
+		scale: number,
+		fps: number,
+		bgColor: string | 'transparent' = 'transparent'
+	): Promise<Blob> {
+		const canvas = document.createElement('canvas');
+		const finalWidth = Math.round(width * scale);
+		const finalHeight = Math.round(height * scale);
+		canvas.width = finalWidth;
+		canvas.height = finalHeight;
+		const ctx = canvas.getContext('2d')!;
+		ctx.imageSmoothingEnabled = false;
+
+		const stream = canvas.captureStream(fps);
+		const recorder = new MediaRecorder(stream, { mimeType: 'video/webm' });
+		const chunks: Blob[] = [];
+
+		recorder.ondataavailable = (e) => chunks.push(e.data);
+
+		return new Promise((resolve) => {
+			recorder.onstop = () => resolve(new Blob(chunks, { type: 'video/webm' }));
+			recorder.start();
+
+			let currentFrame = 0;
+			const renderNext = () => {
+				if (currentFrame >= frames.length) {
+					recorder.stop();
+					return;
+				}
+
+				// Draw background
+				if (bgColor !== 'transparent') {
+					ctx.fillStyle = bgColor;
+					ctx.fillRect(0, 0, finalWidth, finalHeight);
+				} else {
+					ctx.clearRect(0, 0, finalWidth, finalHeight);
+				}
+
+				// Draw frame
+				frames[currentFrame].forEach((color, i) => {
+					if (color === null) return;
+					const x = i % width;
+					const y = Math.floor(i / width);
+					ctx.fillStyle = color;
+					ctx.fillRect(
+						Math.floor(x * scale),
+						Math.floor(y * scale),
+						Math.ceil(scale),
+						Math.ceil(scale)
+					);
+				});
+
+				currentFrame++;
+				setTimeout(renderNext, 1000 / fps);
+			};
+
+			renderNext();
+		});
+	}
 }

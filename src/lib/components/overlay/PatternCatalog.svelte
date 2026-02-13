@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { atelier } from '../../state/atelier.svelte.js';
 	import { shuttle } from '../../engine/shuttle.js';
+	import { pulse } from '../../engine/pulse.js';
 	import { loompad } from '../../engine/loompad.svelte.js';
 	import { fade, scale } from 'svelte/transition';
 	import { onMount, untrack } from 'svelte';
@@ -105,10 +106,22 @@
 			action: () => shuttle.folio.addFrame()
 		},
 		{
+			id: 'duplicate-frame',
+			label: 'Folio: Duplicate Current Frame',
+			shortcut: loompad.getLabel('DUPLICATE_FRAME'),
+			action: () => shuttle.folio.duplicateFrame(atelier.project.activeFrameIndex)
+		},
+		{
 			id: 'next-frame',
 			label: 'Folio: Turn to Next Page (Frame)',
 			shortcut: loompad.getLabel('NEXT_FRAME'),
 			action: () => shuttle.folio.nextFrame()
+		},
+		{
+			id: 'toggle-playback',
+			label: 'Kinetic: Toggle Animation Playback',
+			shortcut: loompad.getLabel('PLAY_PULSE'),
+			action: () => pulse.toggle()
 		},
 		{
 			id: 'new-veil',

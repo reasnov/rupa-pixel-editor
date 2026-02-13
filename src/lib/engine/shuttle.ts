@@ -97,10 +97,10 @@ export class ShuttleEngine {
 	}
 
 	/**
-	 * Create a permanent artifact (PNG/SVG/JPG/WEBP) and trigger download.
+	 * Create a permanent artifact (PNG/SVG/JPG/WEBP/WEBM) and trigger download.
 	 */
 	async createArtifact(
-		format: 'svg' | 'png' | 'jpg' | 'webp',
+		format: 'svg' | 'png' | 'jpg' | 'webp' | 'webm',
 		scale: number = 10,
 		bgColor: string | 'transparent' = 'transparent'
 	) {
@@ -108,9 +108,34 @@ export class ShuttleEngine {
 		const { width, height, compositeStitches } = atelier.linen;
 
 		if (format === 'svg') {
-			const svg = ExportEngine.toSVG(width, height, compositeStitches, bgColor);
-			const blob = new Blob([svg], { type: 'image/svg+xml' });
-			this.download(URL.createObjectURL(blob), `${atelier.project.name}.svg`);
+			// Check if we have multiple frames for animation
+			if (atelier.project.frames.length > 1) {
+				const framesData = atelier.project.frames.map((f) => f.compositeStitches);
+				const svg = ExportEngine.toAnimatedSVG(
+					width,
+					height,
+					framesData,
+					atelier.studio.fps,
+					bgColor
+				);
+				const blob = new Blob([svg], { type: 'image/svg+xml' });
+				this.download(URL.createObjectURL(blob), `${atelier.project.name}-kinetic.svg`);
+			} else {
+				const svg = ExportEngine.toSVG(width, height, compositeStitches, bgColor);
+				const blob = new Blob([svg], { type: 'image/svg+xml' });
+				this.download(URL.createObjectURL(blob), `${atelier.project.name}.svg`);
+			}
+		} else if (format === 'webm') {
+			const framesData = atelier.project.frames.map((f) => f.compositeStitches);
+			const videoBlob = await ExportEngine.toWebM(
+				width,
+				height,
+				framesData,
+				scale,
+				atelier.studio.fps,
+				bgColor
+			);
+			this.download(URL.createObjectURL(videoBlob), `${atelier.project.name}.webm`);
 		} else {
 			const dataUrl = await ExportEngine.toRaster(
 				width,

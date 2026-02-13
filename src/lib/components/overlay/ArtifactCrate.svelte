@@ -8,11 +8,15 @@
 	import { onMount } from 'svelte';
 
 	let { onExport, onClose = () => (atelier.showArtifactCrate = false) } = $props<{
-		onExport: (format: 'svg' | 'png' | 'jpg' | 'webp', scale: number, bgColor: string) => void;
+		onExport: (
+			format: 'svg' | 'png' | 'jpg' | 'webp' | 'webm',
+			scale: number,
+			bgColor: string
+		) => void;
 		onClose?: () => void;
 	}>();
 
-	let format = $state<'svg' | 'png' | 'jpg' | 'webp'>('png');
+	let format = $state<'svg' | 'png' | 'jpg' | 'webp' | 'webm'>('png');
 	let showPicker = $state(false);
 
 	// HSLA / Custom color state
@@ -64,68 +68,70 @@
 
 		<!-- Right: Settings - Independent Scroll -->
 		<div class="custom-scrollbar flex h-full flex-1 flex-col gap-8 overflow-y-auto pr-4">
-			<!-- Format Selection -->
-			<div class="grid grid-cols-2 gap-3">
-				<button
-					class="flex flex-col items-center gap-3 rounded-xl border-2 p-6 transition-all {format ===
-					'png'
-						? 'border-brand bg-brand/5'
-						: 'border-black/5 bg-white/40 opacity-40 hover:opacity-100'}"
-					onclick={() => (format = 'png')}
+			<!-- Section: Static Stitches -->
+			<div class="flex flex-col gap-3">
+				<span class="font-serif text-[10px] font-bold tracking-[0.2em] uppercase opacity-30"
+					>Static Stitches</span
 				>
-					<span class="text-3xl">🖼️</span>
-					<div class="text-center">
-						<h3 class="font-serif text-[11px] font-bold tracking-tight uppercase">Raster PNG</h3>
-						<span class="font-serif text-[8px] font-bold tracking-widest uppercase opacity-40"
-							>Lossless</span
-						>
-					</div>
-				</button>
-				<button
-					class="flex flex-col items-center gap-3 rounded-xl border-2 p-6 transition-all {format ===
-					'svg'
-						? 'border-brand bg-brand/5'
-						: 'border-black/5 bg-white/40 opacity-40 hover:opacity-100'}"
-					onclick={() => (format = 'svg')}
+				<div class="grid grid-cols-2 gap-3">
+					<button
+						class="flex flex-col items-center gap-3 rounded-xl border-2 p-4 transition-all {format ===
+						'png'
+							? 'border-brand bg-brand/5'
+							: 'border-black/5 bg-white/40 opacity-40 hover:opacity-100'}"
+						onclick={() => (format = 'png')}
+					>
+						<span class="text-2xl">🖼️</span>
+						<div class="text-center">
+							<h3 class="font-serif text-[10px] font-bold tracking-tight uppercase">Raster PNG</h3>
+						</div>
+					</button>
+					<button
+						class="flex flex-col items-center gap-3 rounded-xl border-2 p-4 transition-all {format ===
+						'webp'
+							? 'border-brand bg-brand/5'
+							: 'border-black/5 bg-white/40 opacity-40 hover:opacity-100'}"
+						onclick={() => (format = 'webp')}
+					>
+						<span class="text-2xl">🕸️</span>
+						<div class="text-center">
+							<h3 class="font-serif text-[10px] font-bold tracking-tight uppercase">WebP</h3>
+						</div>
+					</button>
+				</div>
+			</div>
+
+			<!-- Section: Kinetic Weaves -->
+			<div class="flex flex-col gap-3">
+				<span class="font-serif text-[10px] font-bold tracking-[0.2em] uppercase opacity-30"
+					>Kinetic Weaves</span
 				>
-					<span class="text-3xl">📐</span>
-					<div class="text-center">
-						<h3 class="font-serif text-[11px] font-bold tracking-tight uppercase">Vector SVG</h3>
-						<span class="font-serif text-[8px] font-bold tracking-widest uppercase opacity-40"
-							>Scalable</span
-						>
-					</div>
-				</button>
-				<button
-					class="flex flex-col items-center gap-3 rounded-xl border-2 p-6 transition-all {format ===
-					'webp'
-						? 'border-brand bg-brand/5'
-						: 'border-black/5 bg-white/40 opacity-40 hover:opacity-100'}"
-					onclick={() => (format = 'webp')}
-				>
-					<span class="text-3xl">🕸️</span>
-					<div class="text-center">
-						<h3 class="font-serif text-[11px] font-bold tracking-tight uppercase">WebP</h3>
-						<span class="font-serif text-[8px] font-bold tracking-widest uppercase opacity-40"
-							>Optimized</span
-						>
-					</div>
-				</button>
-				<button
-					class="flex flex-col items-center gap-3 rounded-xl border-2 p-6 transition-all {format ===
-					'jpg'
-						? 'border-brand bg-brand/5'
-						: 'border-black/5 bg-white/40 opacity-40 hover:opacity-100'}"
-					onclick={() => (format = 'jpg')}
-				>
-					<span class="text-3xl">📷</span>
-					<div class="text-center">
-						<h3 class="font-serif text-[11px] font-bold tracking-tight uppercase">JPEG</h3>
-						<span class="font-serif text-[8px] font-bold tracking-widest uppercase opacity-40"
-							>Compressed</span
-						>
-					</div>
-				</button>
+				<div class="grid grid-cols-2 gap-3">
+					<button
+						class="flex flex-col items-center gap-3 rounded-xl border-2 p-4 transition-all {format ===
+						'webm'
+							? 'border-brand bg-brand/5'
+							: 'border-black/5 bg-white/40 opacity-40 hover:opacity-100'}"
+						onclick={() => (format = 'webm')}
+					>
+						<span class="text-2xl">🎬</span>
+						<div class="text-center">
+							<h3 class="font-serif text-[10px] font-bold tracking-tight uppercase">Video WebM</h3>
+						</div>
+					</button>
+					<button
+						class="flex flex-col items-center gap-3 rounded-xl border-2 p-4 transition-all {format ===
+						'svg'
+							? 'border-brand bg-brand/5'
+							: 'border-black/5 bg-white/40 opacity-40 hover:opacity-100'}"
+						onclick={() => (format = 'svg')}
+					>
+						<span class="text-2xl">📐</span>
+						<div class="text-center">
+							<h3 class="font-serif text-[10px] font-bold tracking-tight uppercase">Vector SVG</h3>
+						</div>
+					</button>
+				</div>
 			</div>
 
 			<!-- Settings -->
@@ -145,6 +151,25 @@
 						class="w-24 rounded-xl border border-black/10 bg-white px-4 py-2 font-mono text-lg focus:outline-none"
 					/>
 				</div>
+
+				{#if format === 'webm' || (format === 'svg' && atelier.project.frames.length > 1)}
+					<div class="h-px w-full bg-black/5"></div>
+					<div class="flex items-center justify-between">
+						<div class="flex flex-col gap-1">
+							<span class="font-serif text-sm font-bold tracking-tight uppercase opacity-60"
+								>Kinetic Pace (FPS)</span
+							>
+							<span class="font-serif text-[10px] opacity-40">Frames per second</span>
+						</div>
+						<input
+							type="number"
+							bind:value={atelier.studio.fps}
+							min="1"
+							max="60"
+							class="w-24 rounded-xl border border-black/10 bg-white px-4 py-2 font-mono text-lg focus:outline-none"
+						/>
+					</div>
+				{/if}
 
 				<div class="h-px w-full bg-black/5"></div>
 

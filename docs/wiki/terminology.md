@@ -36,6 +36,8 @@ To maintain the meditative and creative atmosphere of the project, we use termin
 | **Merge Layers**     | **Entwine**             | Permanently joining two Veils into a single fiber.                     |
 | **Copied Object**    | **Swatch**              | A fragment of a Motif captured in the Active Loom for later placement. |
 | **Eyedropper**       | **Pick Dye**            | Identifying a dye already present on the linen to reuse it.            |
+| **Mouse Input**      | **ShuttlePoint**        | The engine that translates fluid pointer movement into stitches.       |
+| **Freehand Draw**    | **Fluid Stitching**     | Drawing organic motifs effortlessly using the mouse or stylus.         |
 | **Image Mode**       | **Stitch Mode**         | The operational state for static image and motif creation.             |
 | **Motion Mode**      | **Kinetic Mode**        | The operational state for temporal sequence and animation weaving.     |
 | **User Guide**       | **Artisan Codex**       | The sacred scroll containing all studio knowledge and techniques.      |

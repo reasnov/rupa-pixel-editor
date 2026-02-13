@@ -2,7 +2,7 @@
 
 ## 1. Executive Summary
 
-Rupa is a specialized desktop environment for pixel art, built with a "Keyboard-First" philosophy. The architecture follows a **Modular Layered Monolith** pattern, ensuring high cohesion within functional modules while maintaining a strict separation of concerns across technical layers. The system leverages **Svelte 5 (Runes)** for reactive UI management and **Electron** for a native desktop experience. The system is designed around the metaphor of "Digital Stitching," where the canvas is treated as a **Linen** and the cursor as a **Needle**.
+Rupa is a specialized desktop environment for pixel art, built with a "Keyboard-First, Mouse-Friendly" philosophy. The architecture follows a **Modular Layered Monolith** pattern, ensuring high cohesion within functional modules while maintaining a strict separation of concerns across technical layers. The system leverages **Svelte 5 (Runes)** for reactive UI management and **Electron** for a native desktop experience. The system is designed around the metaphor of "Digital Stitching," where the canvas is treated as a **Linen** and the cursor as a **Needle**.
 
 ---
 
@@ -23,7 +23,9 @@ Rupa is structured into four distinct layers to ensure scalability and maintaina
 - **Frontend Framework**: Svelte 5 (utilizing Runes: `$state`, `$derived`, `$effect`)
 - **Build Tool**: Vite / SvelteKit (Static Adapter)
 - **Styling**: Tailwind CSS 4.0
-- **Input Engine**: **LoomPad** (Semantic intent-based mapping)
+- **Input Engines**:
+  - **LoomPad**: Keyboard-centric semantic intent mapping.
+  - **ShuttlePoint**: Mouse-based positional intent and "Fluid Stitching" mapping.
 - **State Management**: **AtelierState** (Reactive Class-based Singleton)
 - **Persistence**: Electron File System (Native) & IndexedDB (Web)
 
@@ -71,6 +73,14 @@ A generative music system producing real-time piano soundscapes.
 
 - **Procedural Composition**: Uses Eb Major Pentatonic scale and progressive chord cycles.
 - **Atmosphere Protocol**: Implements a 30-minute silence delay followed by a 30-minute volume fade-in.
+
+### 4.5 The ShuttlePoint Engine (`src/lib/engine/shuttlepoint.svelte.ts`)
+
+The specialized engine for mouse and pointer interactions.
+
+- **Positional Awareness**: Maps screen-space coordinates to the Linen's grid-space.
+- **Fluid Stitching**: Enables organic freehand drawing while respecting the current Stance (Threading, Unravelling, Looming).
+- **Gesture Orchestration**: Translates clicks and drags into LoomIntents to maintain consistency with the LoomPad engine.
 
 ---
 

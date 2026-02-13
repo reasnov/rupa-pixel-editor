@@ -54,13 +54,14 @@ Sound is 50% of the Rupa experience. It anchors the artisan in the meditative st
 
 ---
 
-## 5. Interaction Design: Keyboard Weaving
+## 5. Interaction Design: Hybrid Weaving
 
-Rupa is a "Keyboard-First" environment. The hands should rarely leave the home row, creating a flow state similar to playing a musical instrument.
+Rupa follows a **"Keyboard-First, Mouse-Friendly"** model. This hybrid approach balances the precision of keyboard-row navigation with the organic flow of mouse-guided drawing.
 
-- **LoomIntents**: All interactions are semantic. A "Shortcut" is actually a "Chord" played on the keyboard.
-- **The Flow**: Holding modifiers (Ctrl/Shift) should trigger continuous "Threading" or "Looming," making the artisan feel like they are pulling thread across the fabric.
-- **Camera Protocol**: The viewport should automatically track the Needle, ensuring the artisan never has to manually pan the view while in the "zone."
+- **The Keyboard (LoomPad)**: Provides the structural "Metronome." Perfect for geometric patterns, precise navigational jumps, and bulk folio manipulations.
+- **The Mouse (ShuttlePoint)**: Provides **"Fluid Stitching."** Enables artisans to draw freehand curves and organic motifs that would be physically exhausting via keyboard.
+- **Seamless Hand-off**: The Needle follows both inputs instantly. An artisan can move with arrow keys and immediately start a freehand line with the mouse without changing modes.
+- **Context Sovereignty**: UI overlays (Basins) respond to both keyboard shortcuts and mouse clicks, ensuring no artisan is forced into a single input method.
 
 ---
 
@@ -69,7 +70,8 @@ Rupa is a "Keyboard-First" environment. The hands should rarely leave the home r
 When adding a new feature, ask:
 
 1. Is it reachable via a keyboard chord?
-2. Does it have a tactile sound or visual glow?
-3. Does it fit within the Solarized/Cottagecore aesthetic?
-4. Does it make the user feel more relaxed or more stressed? (Goal: Relaxed).
-5. Does it feel like a "tool" or a "toy"? (Goal: A professional tool that feels like a toy).
+2. Is it intuitive via mouse pointer (**ShuttlePoint**)?
+3. Does it have a tactile sound or visual glow?
+4. Does it fit within the Solarized/Cottagecore aesthetic?
+5. Does it make the user feel more relaxed or more stressed? (Goal: Relaxed).
+6. Does it feel like a "tool" or a "toy"? (Goal: A professional tool that feels like a toy).

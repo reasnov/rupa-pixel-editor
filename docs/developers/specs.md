@@ -11,26 +11,27 @@
 - **Stitch Data:** Hex color strings (`ColorHex`).
 - **Empty State:** Studio-specific cream `#eee8d5`.
 
-## 2. LoomPad Intent Schema
+## 2. Intent Schema
 
-Every interaction is mapped to a `LoomIntent` to ensure semantic consistency.
+Every interaction is mapped to a `LoomIntent` to ensure semantic consistency. Intents are triggered by the **LoomPad** (Keyboard chords) or the **ShuttlePoint** (Mouse/Pointer gestures).
 
-### 2.1 Navigation Intents
+### 2.1 Navigation & Positioning
 
-- `MOVE_UP`, `MOVE_DOWN`, `MOVE_LEFT`, `MOVE_RIGHT`
+- `MOVE_UP`, `MOVE_DOWN`, `MOVE_LEFT`, `MOVE_RIGHT`: Keyboard-driven step movement.
+- `SET_POSITION`: ShuttlePoint-driven absolute positioning (Screen-to-Linen mapping).
 - `JUMP_HOME`: Reset position to center.
 
 ### 2.2 Action Intents
 
-- `STITCH`: Apply dye.
-- `UNSTITCH`: Remove dye.
+- `STITCH`: Apply dye (Space/Click).
+- `UNSTITCH`: Remove dye (Backspace/Right-click).
 - `UNDO`, `REDO`: History traversal.
 
 ### 2.3 Flow Intents (Sustained)
 
-- `FLOW_THREAD`: Enable threading (Draw Flow).
-- `FLOW_UNRAVEL`: Enable unravelling (Erase Flow).
-- `FLOW_LOOM`: Enable looming (Selection).
+- `FLOW_THREAD`: Enable threading (Draw Flow - Ctrl/Drag).
+- `FLOW_UNRAVEL`: Enable unravelling (Erase Flow - Ctrl+Shift/Right-drag).
+- `FLOW_LOOM`: Enable looming (Selection - Shift/Drag).
 - `FLOW_PICK`: Enable dye picking (Eyedropper).
 
 ### 2.4 UI Intents

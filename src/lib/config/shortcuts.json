@@ -39,7 +39,7 @@
 		"SETTINGS": ["Ctrl+,"],
 		"COLOR_PICKER": ["Ctrl+p"],
 		"AUDIO_SETTINGS": ["Ctrl+Shift+a"],
-		"USER_GUIDE": ["F1", "Ctrl+?"],
+		"USER_GUIDE": ["F1"],
 		"CLEAR_LINEN": ["Ctrl+l"],
 		"TOGGLE_MUTE": ["Ctrl+m"],
 		"ESCAPE": ["Escape"]

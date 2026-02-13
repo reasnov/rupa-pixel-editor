@@ -23,6 +23,7 @@ Rupa is designed for a keyboard-first experience.
 
 - **Arrow Keys:** Move the Needle across the linen.
 - **`G` (Go To):** Instantly jump to a specific coordinate.
+- **`F1`:** Open the **Artisan Codex** for deep study.
 
 ### 2.2 Applying Dyes (Stitching)
 

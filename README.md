@@ -51,19 +51,19 @@ The project documentation has been restructured for clarity and depth. Please re
 
 ## ⌨️ Quick Controls
 
-| Key             | Action                                 |
-| :-------------- | :------------------------------------- |
-| `Arrow Keys`    | Move Needle (Active Focus)             |
-| `Space`         | Stitch (Color Cell) / Fill Selection   |
-| `Backspace`     | Unstitch (Clear Cell)                  |
-| `Ctrl` (Hold)   | **Threading**: Auto-color on move      |
-| `Shift` (Hold)  | **Looming**: Define selection area     |
-| `[` / `]`       | Move Active Veil Up / Down             |
-| `G`             | **Go To**: Jump to specific coordinate |
-| `[1-9, 0]`      | Select Dye (Plays musical scale)       |
-| `P` / `K`       | Open Pattern Catalog (Command Palette) |
-| `F1` / `Ctrl+?` | Open **Artisan Codex** (User Guide)    |
-| `Esc`           | Clear Selection / Dismiss UI           |
+| Key            | Action                                 |
+| :------------- | :------------------------------------- |
+| `Arrow Keys`   | Move Needle (Active Focus)             |
+| `Space`        | Stitch (Color Cell) / Fill Selection   |
+| `Backspace`    | Unstitch (Clear Cell)                  |
+| `Ctrl` (Hold)  | **Threading**: Auto-color on move      |
+| `Shift` (Hold) | **Looming**: Define selection area     |
+| `[` / `]`      | Move Active Veil Up / Down             |
+| `G`            | **Go To**: Jump to specific coordinate |
+| `[1-9, 0]`     | Select Dye (Plays musical scale)       |
+| `P` / `K`      | Open Pattern Catalog (Command Palette) |
+| `F1`           | Open **Artisan Codex** (User Guide)    |
+| `Esc`          | Clear Selection / Dismiss UI           |
 
 _For the full list of controls, see the **[User Guide](./docs/USER_GUIDE.md)**._
 

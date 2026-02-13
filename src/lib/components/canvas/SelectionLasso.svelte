@@ -35,8 +35,8 @@
 				x2={edge.x2}
 				y2={edge.y2}
 				stroke={isLooming ? 'var(--color-brand)' : 'rgba(211, 54, 130, 0.8)'}
-				stroke-width={0.15}
-				stroke-dasharray="0.3, 0.3"
+				stroke-width={0.08}
+				stroke-dasharray="0.2, 0.2"
 				class="marching-ants-svg"
 			/>
 		{/each}
@@ -71,7 +71,7 @@
 			stroke-dashoffset: 0;
 		}
 		to {
-			stroke-dashoffset: 0.6;
+			stroke-dashoffset: 0.4;
 		}
 	}
 </style>

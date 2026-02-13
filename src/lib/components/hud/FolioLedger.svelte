@@ -88,7 +88,7 @@
 							<button
 								onclick={(e) => {
 									e.stopPropagation();
-									shuttle.folio.toggleVisibility();
+									shuttle.folio.toggleVisibility(i);
 								}}
 								class="text-xs transition-opacity {veil.isVisible ? 'opacity-100' : 'opacity-20'}"
 							>
@@ -103,7 +103,7 @@
 							<button
 								onclick={(e) => {
 									e.stopPropagation();
-									shuttle.folio.toggleLock();
+									shuttle.folio.toggleLock(i);
 								}}
 								class="text-[10px] transition-opacity {veil.isLocked
 									? 'opacity-100'

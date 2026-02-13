@@ -57,15 +57,25 @@ export class FolioService {
 		sfx.playMove();
 	}
 
-	toggleLock() {
-		const veil = atelier.project.activeFrame.activeVeil;
-		veil.isLocked = !veil.isLocked;
-		sfx.playStitch();
+	toggleLock(index?: number) {
+		const veil =
+			index !== undefined
+				? atelier.project.activeFrame.veils[index]
+				: atelier.project.activeFrame.activeVeil;
+		if (veil) {
+			veil.isLocked = !veil.isLocked;
+			sfx.playStitch();
+		}
 	}
 
-	toggleVisibility() {
-		const veil = atelier.project.activeFrame.activeVeil;
-		veil.isVisible = !veil.isVisible;
-		sfx.playStitch();
+	toggleVisibility(index?: number) {
+		const veil =
+			index !== undefined
+				? atelier.project.activeFrame.veils[index]
+				: atelier.project.activeFrame.activeVeil;
+		if (veil) {
+			veil.isVisible = !veil.isVisible;
+			sfx.playStitch();
+		}
 	}
 }

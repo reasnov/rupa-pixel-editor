@@ -44,6 +44,7 @@
 		"USER_GUIDE": ["F1"],
 		"QUICK_GUIDE": ["F2"],
 		"PLAY_PULSE": ["p"],
+		"TOGGLE_GHOST_THREADS": ["Alt+g"],
 		"CLEAR_LINEN": ["Ctrl+l"],
 		"TOGGLE_MUTE": ["Ctrl+m"],
 		"ESCAPE": ["Escape"]
@@ -62,13 +63,16 @@
 	},
 	"folio": {
 		"NEW_FRAME": ["Alt+n"],
-		"DUPLICATE_FRAME": ["Alt+d"],
+		"DUPLICATE_FRAME": ["Ctrl+d"],
 		"NEXT_FRAME": ["Alt+PageDown", "Tab"],
 		"PREV_FRAME": ["Alt+PageUp", "Shift+Tab"],
-		"DELETE_FRAME": ["Alt+Backspace"]
+		"DELETE_FRAME": ["Alt+d"],
+		"TAB_FRAMES": ["Alt+1"],
+		"TAB_VEILS": ["Alt+2"]
 	},
 	"veils": {
 		"NEW_VEIL": ["Alt+Shift+n"],
+		"DUPLICATE_VEIL": ["Ctrl+d"],
 		"NEXT_VEIL": ["Alt+ArrowDown"],
 		"PREV_VEIL": ["Alt+ArrowUp"],
 		"TOGGLE_VEIL_LOCK": ["Alt+l"],
@@ -76,7 +80,7 @@
 		"MERGE_VEILS": ["Alt+m"],
 		"MOVE_VEIL_UP": ["["],
 		"MOVE_VEIL_DOWN": ["]"],
-		"DELETE_VEIL": ["Alt+Shift+Backspace"]
+		"DELETE_VEIL": ["Alt+d"]
 	},
 	"modifiers": {
 		"FLOW_STITCH": ["Control"],

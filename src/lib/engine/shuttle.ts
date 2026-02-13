@@ -107,7 +107,11 @@ export class ShuttleEngine {
 		const { ExportEngine } = await import('./export.js');
 		const { width, height, compositeStitches } = atelier.linen;
 
-		if (format === 'svg') {
+		// Fallback for kinetic formats with single frames
+		const isKinetic = ['webm', 'gif', 'mp4'].includes(format);
+		const actualFormat = atelier.project.frames.length <= 1 && isKinetic ? 'png' : format;
+
+		if (actualFormat === 'svg') {
 			// Check if we have multiple frames for animation
 			if (atelier.project.frames.length > 1) {
 				const framesData = atelier.project.frames.map((f) => f.compositeStitches);
@@ -125,7 +129,7 @@ export class ShuttleEngine {
 				const blob = new Blob([svg], { type: 'image/svg+xml' });
 				this.download(URL.createObjectURL(blob), `${atelier.project.name}.svg`);
 			}
-		} else if (format === 'webm' || format === 'mp4') {
+		} else if (actualFormat === 'webm' || actualFormat === 'mp4') {
 			const framesData = atelier.project.frames.map((f) => f.compositeStitches);
 			const videoBlob = await ExportEngine.toWebM(
 				width,
@@ -135,8 +139,8 @@ export class ShuttleEngine {
 				atelier.studio.fps,
 				bgColor
 			);
-			this.download(URL.createObjectURL(videoBlob), `${atelier.project.name}.${format}`);
-		} else if (format === 'gif') {
+			this.download(URL.createObjectURL(videoBlob), `${atelier.project.name}.${actualFormat}`);
+		} else if (actualFormat === 'gif') {
 			// GIF logic placeholder - for now using first frame as fallback
 			// or will implement gif.js if preferred.
 			const dataUrl = await ExportEngine.toRaster(
@@ -154,10 +158,10 @@ export class ShuttleEngine {
 				height,
 				compositeStitches,
 				scale,
-				format as any,
+				actualFormat as any,
 				bgColor
 			);
-			this.download(dataUrl, `${atelier.project.name}.${format}`);
+			this.download(dataUrl, `${atelier.project.name}.${actualFormat}`);
 		}
 		atelier.studio.showArtifactCrate = false;
 	}

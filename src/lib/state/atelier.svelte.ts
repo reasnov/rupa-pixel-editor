@@ -88,6 +88,20 @@ export class AtelierState {
 		this.studio.isAmbientPlaying = v;
 	}
 
+	get isKineticMode() {
+		return this.studio.isKineticMode;
+	}
+	set isKineticMode(v) {
+		this.studio.isKineticMode = v;
+	}
+
+	get showGhostThreads() {
+		return this.studio.showGhostThreads;
+	}
+	set showGhostThreads(v) {
+		this.studio.showGhostThreads = v;
+	}
+
 	get bgmVolume() {
 		return this.studio.bgmVolume;
 	}
@@ -324,16 +338,20 @@ export class AtelierState {
 	undo() {
 		const entry = history.undo();
 		if (entry) {
-			if (Array.isArray(entry)) {
+			if ('isStructural' in entry) {
+				entry.undo();
+				sfx.playUnstitch();
+			} else if (Array.isArray(entry)) {
 				// Revert in reverse order
 				for (let i = entry.length - 1; i >= 0; i--) {
 					const action = entry[i];
 					this.linen.stitches[action.index] = action.oldColor;
 				}
+				sfx.playUnstitch();
 			} else {
 				this.linen.stitches[entry.index] = entry.oldColor;
+				sfx.playUnstitch();
 			}
-			sfx.playUnstitch();
 		}
 		this.needle.resetInactivityTimer();
 	}
@@ -341,14 +359,18 @@ export class AtelierState {
 	redo() {
 		const entry = history.redo();
 		if (entry) {
-			if (Array.isArray(entry)) {
+			if ('isStructural' in entry) {
+				entry.redo();
+				sfx.playStitch();
+			} else if (Array.isArray(entry)) {
 				for (const action of entry) {
 					this.linen.stitches[action.index] = action.newColor;
 				}
+				sfx.playStitch();
 			} else {
 				this.linen.stitches[entry.index] = entry.newColor;
+				sfx.playStitch();
 			}
-			sfx.playStitch();
 		}
 		this.needle.resetInactivityTimer();
 	}

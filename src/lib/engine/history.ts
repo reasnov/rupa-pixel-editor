@@ -4,7 +4,14 @@ export interface HistoryAction {
 	newColor: string | null;
 }
 
-export type HistoryEntry = HistoryAction | HistoryAction[];
+export interface StructuralAction {
+	isStructural: true;
+	label: string;
+	undo: () => void;
+	redo: () => void;
+}
+
+export type HistoryEntry = HistoryAction | HistoryAction[] | StructuralAction;
 
 export class HistoryManager {
 	private undoStack: HistoryEntry[] = [];
@@ -29,14 +36,16 @@ export class HistoryManager {
 		this.currentBatch = null;
 	}
 
-	push(action: HistoryAction) {
-		// Only push if colors actually changed
-		if (action.oldColor === action.newColor) return;
+	push(entry: HistoryEntry) {
+		// Only push if colors actually changed (for standard actions)
+		if (!('isStructural' in entry) && !Array.isArray(entry)) {
+			if (entry.oldColor === entry.newColor) return;
+		}
 
-		if (this.currentBatch) {
-			this.currentBatch.push(action);
+		if (this.currentBatch && !('isStructural' in entry) && !Array.isArray(entry)) {
+			this.currentBatch.push(entry);
 		} else {
-			this.undoStack.push(action);
+			this.undoStack.push(entry);
 			this.redoStack = []; // Clear redo on new action
 
 			if (this.undoStack.length > this.maxHistory) {

@@ -145,6 +145,8 @@ export class TheLoom {
 				return (atelier.studio.showArtisanCodex = true);
 			case 'PLAY_PULSE':
 				return pulse.toggle();
+			case 'TOGGLE_GHOST_THREADS':
+				return (atelier.studio.showGhostThreads = !atelier.studio.showGhostThreads);
 
 			case 'ZOOM_IN':
 				return atelier.studio.setZoom(0.1);
@@ -177,9 +179,15 @@ export class TheLoom {
 				return shuttle.folio.prevFrame();
 			case 'DELETE_FRAME':
 				return shuttle.folio.removeFrame(atelier.project.activeFrameIndex);
+			case 'TAB_FRAMES':
+				return (atelier.studio.folioActiveTab = 'frames');
+			case 'TAB_VEILS':
+				return (atelier.studio.folioActiveTab = 'veils');
 
 			case 'NEW_VEIL':
 				return shuttle.folio.addVeil();
+			case 'DUPLICATE_VEIL':
+				return shuttle.folio.duplicateVeil(atelier.project.activeFrame.activeVeilIndex);
 			case 'NEXT_VEIL':
 				return shuttle.folio.nextVeil();
 			case 'PREV_VEIL':

@@ -112,6 +112,12 @@
 			action: () => shuttle.folio.duplicateFrame(atelier.project.activeFrameIndex)
 		},
 		{
+			id: 'delete-frame',
+			label: 'Folio: Delete Current Frame',
+			shortcut: loompad.getLabel('DELETE_FRAME'),
+			action: () => shuttle.folio.removeFrame(atelier.project.activeFrameIndex)
+		},
+		{
 			id: 'next-frame',
 			label: 'Folio: Turn to Next Page (Frame)',
 			shortcut: loompad.getLabel('NEXT_FRAME'),
@@ -124,10 +130,28 @@
 			action: () => pulse.toggle()
 		},
 		{
+			id: 'toggle-ghosts',
+			label: 'Kinetic: Toggle Ghost Threads (Onion Skinning)',
+			shortcut: loompad.getLabel('TOGGLE_GHOST_THREADS'),
+			action: () => (atelier.studio.showGhostThreads = !atelier.studio.showGhostThreads)
+		},
+		{
 			id: 'new-veil',
 			label: 'Veils: Add New Veil (Layer)',
 			shortcut: loompad.getLabel('NEW_VEIL'),
 			action: () => shuttle.folio.addVeil()
+		},
+		{
+			id: 'duplicate-veil',
+			label: 'Veils: Duplicate Current Veil',
+			shortcut: loompad.getLabel('DUPLICATE_VEIL'),
+			action: () => shuttle.folio.duplicateVeil(atelier.project.activeFrame.activeVeilIndex)
+		},
+		{
+			id: 'delete-veil',
+			label: 'Veils: Delete Current Veil',
+			shortcut: loompad.getLabel('DELETE_VEIL'),
+			action: () => shuttle.folio.removeVeil(atelier.project.activeFrame.activeVeilIndex)
 		},
 		{
 			id: 'copy-pattern',

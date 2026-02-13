@@ -3,6 +3,7 @@
 	import LinenGuides from './LinenGuides.svelte';
 	import Stitch from './Stitch.svelte';
 	import SelectionLasso from './SelectionLasso.svelte';
+	import GhostFrame from './GhostFrame.svelte';
 
 	// The dimensions of the weave
 	let w = $derived(atelier.linen.width);
@@ -16,6 +17,29 @@
 	 */
 	let fitWidth = $derived(`calc(100% * ${w} / (${w} + 2))`);
 	let fitHeight = $derived(`calc(100% * ${h} / (${h} + 2))`);
+
+	// Ghost (Onion Skinning) Logic
+	let ghosts = $derived.by(() => {
+		if (!atelier.studio.showGhostThreads) return [];
+		const activeIdx = atelier.project.activeFrameIndex;
+		const results = [];
+
+		// Frame n-1
+		if (activeIdx > 0) {
+			results.push({
+				stitches: atelier.project.frames[activeIdx - 1].compositeStitches,
+				opacity: 0.3
+			});
+		}
+		// Frame n-2
+		if (activeIdx > 1) {
+			results.push({
+				stitches: atelier.project.frames[activeIdx - 2].compositeStitches,
+				opacity: 0.1
+			});
+		}
+		return results;
+	});
 </script>
 
 <!-- The Loom Viewport (Parent Container inside the Artisan Frame) -->
@@ -46,6 +70,12 @@
 			"
 		>
 			<LinenGuides />
+
+			{#if atelier.studio.showGhostThreads}
+				{#each ghosts as ghost, i (i)}
+					<GhostFrame stitches={ghost.stitches} width={w} height={h} opacity={ghost.opacity} />
+				{/each}
+			{/if}
 
 			{#each atelier.linen.compositeStitches as color, i (i)}
 				{@const x = i % w}

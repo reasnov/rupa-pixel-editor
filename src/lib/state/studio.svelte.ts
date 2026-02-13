@@ -15,6 +15,7 @@ export class StudioState {
 	// Kinetic Settings
 	fps = $state(10); // Default 10 FPS
 	isKineticMode = $state(false);
+	showGhostThreads = $state(false);
 
 	// Session Tracking
 	sessionStartTime = Date.now();
@@ -40,6 +41,9 @@ export class StudioState {
 	showLinenSettings = $state(false);
 	showArchivePattern = $state(false);
 	showGoTo = $state(false);
+
+	// Tab States
+	folioActiveTab = $state<'frames' | 'veils'>('veils');
 
 	// Environment Settings
 	canvasBgColor = $state('#eee8d5'); // Studio Cream (Default)

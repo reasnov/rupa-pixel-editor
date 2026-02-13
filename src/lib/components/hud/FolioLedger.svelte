@@ -3,7 +3,6 @@
 	import { shuttle } from '../../engine/shuttle.js';
 	import { fade } from 'svelte/transition';
 
-	let activeTab = $state<'frames' | 'veils'>('veils');
 	let draggedIndex = $state<number | null>(null);
 	let dropTargetIndex = $state<number | null>(null);
 
@@ -19,7 +18,7 @@
 	function handleDrop(e: DragEvent, toIndex: number) {
 		e.preventDefault();
 		if (draggedIndex !== null) {
-			if (activeTab === 'veils') {
+			if (atelier.studio.folioActiveTab === 'veils') {
 				shuttle.folio.reorderVeil(draggedIndex, toIndex);
 			} else {
 				shuttle.folio.reorderFrame(draggedIndex, toIndex);
@@ -41,18 +40,18 @@
 	<!-- Tab Switcher -->
 	<div class="flex border-b border-black/5 bg-black/5 p-1">
 		<button
-			onclick={() => (activeTab = 'frames')}
-			class="flex flex-1 items-center justify-center gap-2 py-2 text-[10px] font-bold tracking-widest uppercase transition-all {activeTab ===
-			'frames'
+			onclick={() => (atelier.studio.folioActiveTab = 'frames')}
+			class="flex flex-1 items-center justify-center gap-2 py-2 text-[10px] font-bold tracking-widest uppercase transition-all {atelier
+				.studio.folioActiveTab === 'frames'
 				? 'rounded-xl bg-white text-brand shadow-sm'
 				: 'opacity-40 hover:opacity-60'}"
 		>
 			<span>🖼️</span> Frames
 		</button>
 		<button
-			onclick={() => (activeTab = 'veils')}
-			class="flex flex-1 items-center justify-center gap-2 py-2 text-[10px] font-bold tracking-widest uppercase transition-all {activeTab ===
-			'veils'
+			onclick={() => (atelier.studio.folioActiveTab = 'veils')}
+			class="flex flex-1 items-center justify-center gap-2 py-2 text-[10px] font-bold tracking-widest uppercase transition-all {atelier
+				.studio.folioActiveTab === 'veils'
 				? 'rounded-xl bg-white text-brand shadow-sm'
 				: 'opacity-40 hover:opacity-60'}"
 		>
@@ -62,7 +61,7 @@
 
 	<!-- Content -->
 	<div class="custom-scrollbar max-h-[30vh] overflow-y-auto p-3">
-		{#if activeTab === 'frames'}
+		{#if atelier.studio.folioActiveTab === 'frames'}
 			<div class="flex flex-col gap-1" transition:fade={{ duration: 150 }}>
 				{#each atelier.project.frames as frame, i}
 					<div
@@ -87,6 +86,16 @@
 							<span class="truncate font-serif text-sm font-medium">{frame.name}</span>
 						</div>
 						<div class="flex items-center gap-2">
+							<button
+								onclick={(e) => {
+									e.stopPropagation();
+									shuttle.folio.duplicateFrame(i);
+								}}
+								class="text-[10px] opacity-0 transition-opacity group-hover:opacity-40 hover:text-brand"
+								title="Duplicate Frame (Ctrl+D)"
+							>
+								📋
+							</button>
 							{#if atelier.project.frames.length > 1}
 								<button
 									onclick={(e) => {
@@ -94,7 +103,7 @@
 										shuttle.folio.removeFrame(i);
 									}}
 									class="text-[10px] opacity-0 transition-opacity group-hover:opacity-40 hover:text-brand"
-									title="Delete Frame"
+									title="Delete Frame (Alt+D)"
 								>
 									🗑️
 								</button>
@@ -154,6 +163,16 @@
 							>
 								{veil.isLocked ? '🔒' : '🔓'}
 							</button>
+							<button
+								onclick={(e) => {
+									e.stopPropagation();
+									shuttle.folio.duplicateVeil(i);
+								}}
+								class="text-[10px] opacity-0 transition-opacity group-hover:opacity-40 hover:text-brand"
+								title="Duplicate Veil (Ctrl+D)"
+							>
+								📋
+							</button>
 							{#if atelier.project.activeFrame.veils.length > 1}
 								<button
 									onclick={(e) => {
@@ -161,7 +180,7 @@
 										shuttle.folio.removeVeil(i);
 									}}
 									class="text-[10px] opacity-0 transition-opacity group-hover:opacity-40 hover:text-brand"
-									title="Delete Veil"
+									title="Delete Veil (Alt+D)"
 								>
 									🗑️
 								</button>
@@ -180,15 +199,15 @@
 	<div class="flex items-center justify-between bg-black/5 px-5 py-2">
 		<button
 			onclick={() => {
-				if (activeTab === 'frames') shuttle.folio.addFrame();
+				if (atelier.studio.folioActiveTab === 'frames') shuttle.folio.addFrame();
 				else shuttle.folio.addVeil();
 			}}
 			class="flex items-center gap-1 font-serif text-[8px] font-bold tracking-[0.2em] uppercase opacity-30 hover:opacity-60"
 		>
-			<span>＋</span> Add {activeTab === 'frames' ? 'Frame' : 'Veil'}
+			<span>＋</span> Add {atelier.studio.folioActiveTab === 'frames' ? 'Frame' : 'Veil'}
 		</button>
 		<span class="font-serif text-[8px] font-bold tracking-[0.2em] uppercase opacity-30">
-			{activeTab === 'frames'
+			{atelier.studio.folioActiveTab === 'frames'
 				? atelier.project.frames.length + ' Frames'
 				: atelier.project.activeFrame.veils.length + ' Veils'}
 		</span>

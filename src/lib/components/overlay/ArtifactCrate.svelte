@@ -40,6 +40,16 @@
 			atelier.studio.exportBgColor = customBg;
 		}
 	});
+
+	// Fallback logic for single-frame projects
+	$effect(() => {
+		const isKinetic =
+			['webm', 'gif', 'mp4'].includes(format) ||
+			(format === 'svg' && atelier.project.frames.length > 1);
+		if (atelier.project.frames.length <= 1 && isKinetic) {
+			format = 'png';
+		}
+	});
 </script>
 
 {#if showPicker}
@@ -127,16 +137,29 @@
 
 			<!-- Section: Kinetic Weaves -->
 			<div class="flex flex-col gap-3">
-				<span class="font-serif text-[10px] font-bold tracking-[0.2em] uppercase opacity-30"
-					>Kinetic Weaves</span
+				<div class="flex items-center justify-between">
+					<span class="font-serif text-[10px] font-bold tracking-[0.2em] uppercase opacity-30"
+						>Kinetic Weaves</span
+					>
+					{#if atelier.project.frames.length <= 1}
+						<span class="font-serif text-[9px] font-bold text-brand italic opacity-60">
+							Requires multiple frames
+						</span>
+					{/if}
+				</div>
+				<div
+					class="grid grid-cols-2 gap-3 {atelier.project.frames.length <= 1 ? 'opacity-40' : ''}"
 				>
-				<div class="grid grid-cols-2 gap-3">
 					<button
 						class="flex flex-col items-center gap-3 rounded-xl border-2 p-4 transition-all {format ===
 						'webm'
 							? 'border-brand bg-brand/5'
-							: 'border-black/5 bg-white/40 opacity-40 hover:opacity-100'}"
+							: 'border-black/5 bg-white/40 opacity-40 hover:opacity-100'} {atelier.project.frames
+							.length <= 1
+							? 'pointer-events-none opacity-20'
+							: ''}"
 						onclick={() => (format = 'webm')}
+						disabled={atelier.project.frames.length <= 1}
 					>
 						<span class="text-2xl">🎬</span>
 						<div class="text-center">
@@ -147,8 +170,12 @@
 						class="flex flex-col items-center gap-3 rounded-xl border-2 p-4 transition-all {format ===
 						'gif'
 							? 'border-brand bg-brand/5'
-							: 'border-black/5 bg-white/40 opacity-40 hover:opacity-100'}"
+							: 'border-black/5 bg-white/40 opacity-40 hover:opacity-100'} {atelier.project.frames
+							.length <= 1
+							? 'pointer-events-none opacity-20'
+							: ''}"
 						onclick={() => (format = 'gif')}
+						disabled={atelier.project.frames.length <= 1}
 					>
 						<span class="text-2xl">🎀</span>
 						<div class="text-center">
@@ -161,8 +188,12 @@
 						class="flex flex-col items-center gap-3 rounded-xl border-2 p-4 transition-all {format ===
 						'mp4'
 							? 'border-brand bg-brand/5'
-							: 'border-black/5 bg-white/40 opacity-40 hover:opacity-100'}"
+							: 'border-black/5 bg-white/40 opacity-40 hover:opacity-100'} {atelier.project.frames
+							.length <= 1
+							? 'pointer-events-none opacity-20'
+							: ''}"
 						onclick={() => (format = 'mp4')}
+						disabled={atelier.project.frames.length <= 1}
 					>
 						<span class="text-2xl">📽️</span>
 						<div class="text-center">
@@ -173,8 +204,12 @@
 						class="flex flex-col items-center gap-3 rounded-xl border-2 p-4 transition-all {format ===
 							'svg' && atelier.project.frames.length > 1
 							? 'border-brand bg-brand/5'
-							: 'border-black/5 bg-white/40 opacity-40 hover:opacity-100'}"
+							: 'border-black/5 bg-white/40 opacity-40 hover:opacity-100'} {atelier.project.frames
+							.length <= 1
+							? 'pointer-events-none opacity-20'
+							: ''}"
 						onclick={() => (format = 'svg')}
+						disabled={atelier.project.frames.length <= 1}
 					>
 						<span class="text-2xl">🌀</span>
 						<div class="text-center">

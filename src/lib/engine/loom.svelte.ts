@@ -3,6 +3,7 @@ import { loompad, type LoomIntent } from './loompad.svelte.js';
 import { stance } from './stance.svelte.js';
 import { shuttle } from './shuttle.js';
 import { ambient } from './ambient.js';
+import { pulse } from './pulse.js';
 import { studioAudio } from './audioContext.js';
 
 /**
@@ -142,6 +143,8 @@ export class TheLoom {
 				return (atelier.studio.showArtisanGuide = true);
 			case 'OPEN_CODEX':
 				return (atelier.studio.showArtisanCodex = true);
+			case 'PLAY_PULSE':
+				return pulse.toggle();
 
 			case 'ZOOM_IN':
 				return atelier.studio.setZoom(0.1);

@@ -12,6 +12,7 @@ export class ProjectState {
 	// Folio Structure
 	frames = $state<FrameState[]>([]);
 	activeFrameIndex = $state(0);
+	isPlaying = $state(false);
 
 	clipboard = $state<{ width: number; height: number; data: (ColorHex | null)[] } | null>(null);
 

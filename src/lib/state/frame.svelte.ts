@@ -9,6 +9,7 @@ export class FrameState {
 	name = $state('Untitled Frame');
 	width = $state(32);
 	height = $state(32);
+	duration = $state(100); // Duration in ms (Default 100ms = 10 FPS)
 
 	// The stack of layers. Order: [Background, ..., Foreground]
 	veils = $state<VeilState[]>([]);

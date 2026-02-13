@@ -43,6 +43,7 @@
 		"AUDIO_SETTINGS": ["Ctrl+Shift+a"],
 		"USER_GUIDE": ["F1"],
 		"QUICK_GUIDE": ["F2"],
+		"PLAY_PULSE": ["p"],
 		"CLEAR_LINEN": ["Ctrl+l"],
 		"TOGGLE_MUTE": ["Ctrl+m"],
 		"ESCAPE": ["Escape"]

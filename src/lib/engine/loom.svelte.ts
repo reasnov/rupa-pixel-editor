@@ -158,6 +158,10 @@ export class TheLoom {
 				return shuttle.folio.toggleLock();
 			case 'TOGGLE_VEIL_VISIBILITY':
 				return shuttle.folio.toggleVisibility();
+			case 'MOVE_VEIL_UP':
+				return shuttle.folio.moveVeilUp();
+			case 'MOVE_VEIL_DOWN':
+				return shuttle.folio.moveVeilDown();
 			case 'SWITCH_FOCUS':
 				// TODO: Implement focus toggle logic if needed
 				return;

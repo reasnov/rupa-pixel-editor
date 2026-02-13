@@ -78,4 +78,59 @@ export class FolioService {
 			sfx.playStitch();
 		}
 	}
+
+	reorderVeil(fromIndex: number, toIndex: number) {
+		const frame = atelier.project.activeFrame;
+		if (fromIndex === toIndex) return;
+		if (toIndex < 0 || toIndex >= frame.veils.length) return;
+
+		const [movedVeil] = frame.veils.splice(fromIndex, 1);
+		frame.veils.splice(toIndex, 0, movedVeil);
+
+		// Update active index to follow the moved layer
+		if (frame.activeVeilIndex === fromIndex) {
+			frame.activeVeilIndex = toIndex;
+		} else if (fromIndex < frame.activeVeilIndex && toIndex >= frame.activeVeilIndex) {
+			frame.activeVeilIndex--;
+		} else if (fromIndex > frame.activeVeilIndex && toIndex <= frame.activeVeilIndex) {
+			frame.activeVeilIndex++;
+		}
+
+		sfx.playMove();
+	}
+
+	reorderFrame(fromIndex: number, toIndex: number) {
+		const project = atelier.project;
+		if (fromIndex === toIndex) return;
+		if (toIndex < 0 || toIndex >= project.frames.length) return;
+
+		const [movedFrame] = project.frames.splice(fromIndex, 1);
+		project.frames.splice(toIndex, 0, movedFrame);
+
+		if (project.activeFrameIndex === fromIndex) {
+			project.activeFrameIndex = toIndex;
+		} else if (fromIndex < project.activeFrameIndex && toIndex >= project.activeFrameIndex) {
+			project.activeFrameIndex--;
+		} else if (fromIndex > project.activeFrameIndex && toIndex <= project.activeFrameIndex) {
+			project.activeFrameIndex++;
+		}
+
+		sfx.playMove();
+	}
+
+	moveVeilUp() {
+		const frame = atelier.project.activeFrame;
+		const current = frame.activeVeilIndex;
+		if (current < frame.veils.length - 1) {
+			this.reorderVeil(current, current + 1);
+		}
+	}
+
+	moveVeilDown() {
+		const frame = atelier.project.activeFrame;
+		const current = frame.activeVeilIndex;
+		if (current > 0) {
+			this.reorderVeil(current, current - 1);
+		}
+	}
 }

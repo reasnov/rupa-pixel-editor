@@ -4,6 +4,35 @@
 	import { fade } from 'svelte/transition';
 
 	let activeTab = $state<'frames' | 'veils'>('veils');
+	let draggedIndex = $state<number | null>(null);
+	let dropTargetIndex = $state<number | null>(null);
+
+	function handleDragStart(index: number) {
+		draggedIndex = index;
+	}
+
+	function handleDragOver(e: DragEvent, index: number) {
+		e.preventDefault();
+		dropTargetIndex = index;
+	}
+
+	function handleDrop(e: DragEvent, toIndex: number) {
+		e.preventDefault();
+		if (draggedIndex !== null) {
+			if (activeTab === 'veils') {
+				shuttle.folio.reorderVeil(draggedIndex, toIndex);
+			} else {
+				shuttle.folio.reorderFrame(draggedIndex, toIndex);
+			}
+		}
+		draggedIndex = null;
+		dropTargetIndex = null;
+	}
+
+	function handleDragEnd() {
+		draggedIndex = null;
+		dropTargetIndex = null;
+	}
 </script>
 
 <div
@@ -39,12 +68,19 @@
 					<div
 						role="button"
 						tabindex="0"
+						draggable="true"
+						ondragstart={() => handleDragStart(i)}
+						ondragover={(e) => handleDragOver(e, i)}
+						ondrop={(e) => handleDrop(e, i)}
+						ondragend={handleDragEnd}
 						onclick={() => (atelier.project.activeFrameIndex = i)}
 						onkeydown={(e) => e.key === 'Enter' && (atelier.project.activeFrameIndex = i)}
-						class="group flex cursor-pointer items-center justify-between rounded-xl px-4 py-3 transition-all {i ===
+						class="group flex cursor-grab items-center justify-between rounded-xl px-4 py-3 transition-all {i ===
 						atelier.project.activeFrameIndex
 							? 'bg-brand/10 text-brand ring-1 ring-brand/20'
-							: 'hover:bg-black/5'}"
+							: 'hover:bg-black/5'} {dropTargetIndex === i && draggedIndex !== i
+							? 'border-t-2 border-brand'
+							: ''} {draggedIndex === i ? 'opacity-40' : ''}"
 					>
 						<div class="flex items-center gap-3 overflow-hidden">
 							<span class="text-xs opacity-40">{i + 1}</span>
@@ -76,13 +112,20 @@
 					<div
 						role="button"
 						tabindex="0"
+						draggable="true"
+						ondragstart={() => handleDragStart(i)}
+						ondragover={(e) => handleDragOver(e, i)}
+						ondrop={(e) => handleDrop(e, i)}
+						ondragend={handleDragEnd}
 						onclick={() => (atelier.project.activeFrame.activeVeilIndex = i)}
 						onkeydown={(e) =>
 							e.key === 'Enter' && (atelier.project.activeFrame.activeVeilIndex = i)}
-						class="group flex cursor-pointer items-center justify-between rounded-xl px-4 py-3 transition-all {i ===
+						class="group flex cursor-grab items-center justify-between rounded-xl px-4 py-3 transition-all {i ===
 						atelier.project.activeFrame.activeVeilIndex
 							? 'bg-brand/10 text-brand ring-1 ring-brand/20'
-							: 'hover:bg-black/5'}"
+							: 'hover:bg-black/5'} {dropTargetIndex === i && draggedIndex !== i
+							? 'border-t-2 border-brand'
+							: ''} {draggedIndex === i ? 'opacity-40' : ''}"
 					>
 						<div class="flex items-center gap-3 overflow-hidden">
 							<button

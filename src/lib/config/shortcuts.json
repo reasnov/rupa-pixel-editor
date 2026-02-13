@@ -65,6 +65,8 @@
 		"TOGGLE_VEIL_LOCK": ["Alt+l"],
 		"TOGGLE_VEIL_VISIBILITY": ["Alt+h"],
 		"MERGE_VEILS": ["Alt+m"],
+		"MOVE_VEIL_UP": ["Alt+Ctrl+ArrowUp"],
+		"MOVE_VEIL_DOWN": ["Alt+Ctrl+ArrowDown"],
 		"DELETE_VEIL": ["Alt+Shift+Backspace"]
 	},
 	"modifiers": {

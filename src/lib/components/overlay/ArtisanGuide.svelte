@@ -36,6 +36,16 @@
 				{ intent: 'OPEN_EXPORT', label: 'Export Artifact Crate' },
 				{ intent: 'OPEN_SETTINGS', label: 'Linen Settings' }
 			]
+		},
+		{
+			group: 'Folio & Veils',
+			items: [
+				{ intent: 'NEXT_FRAME', label: 'Next Frame (Turn Page)' },
+				{ intent: 'NEW_VEIL', label: 'Add New Veil' },
+				{ intent: 'MOVE_VEIL_UP', label: 'Move Veil Up' },
+				{ intent: 'MOVE_VEIL_DOWN', label: 'Move Veil Down' },
+				{ intent: 'TOGGLE_VEIL_VISIBILITY', label: 'Show/Hide Veil' }
+			]
 		}
 	];
 </script>

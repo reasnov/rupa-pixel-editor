@@ -266,15 +266,54 @@ export class LoomPadEngine {
 		return null;
 	}
 
+	/**
+	 * Get a normalized, professional label for an intent's shortcut.
+	 */
 	getLabel(intent: LoomIntent): string {
 		const p = this.patterns.find((p) => p.intent === intent);
-		if (!p) return '';
-		let label = '';
-		if (p.ctrl) label += 'Ctrl+';
-		if (p.shift) label += 'Shift+';
-		if (p.alt) label += 'Alt+';
-		label += p.key === ' ' ? 'Space' : p.key.toUpperCase();
-		return label;
+		if (!p) return 'Unassigned';
+
+		const modifiers: string[] = [];
+		if (p.ctrl) modifiers.push('Ctrl');
+		if (p.shift) modifiers.push('Shift');
+		if (p.alt) modifiers.push('Alt');
+
+		// 1. Normalize the Key Label
+		let keyLabel = p.key;
+
+		// Map special technical names to professional labels
+		const keyMap: Record<string, string> = {
+			' ': 'Space',
+			control: 'Ctrl',
+			meta: 'Cmd',
+			alt: 'Alt',
+			shift: 'Shift',
+			arrowup: 'Up',
+			arrowdown: 'Down',
+			arrowleft: 'Left',
+			arrowright: 'Right',
+			backspace: 'Backspace',
+			delete: 'Delete',
+			enter: 'Enter',
+			escape: 'Esc',
+			tab: 'Tab'
+		};
+
+		const lowerKey = keyLabel.toLowerCase();
+		if (keyMap[lowerKey]) {
+			keyLabel = keyMap[lowerKey];
+		} else {
+			// Title Case for regular keys (e.g., 'g' -> 'G', 'f' -> 'F')
+			keyLabel = keyLabel.charAt(0).toUpperCase() + keyLabel.slice(1).toLowerCase();
+		}
+
+		// 2. Filter out redundant modifiers if the key is the same modifier
+		// e.g. "Shift+SHIFT" -> "Shift", "Ctrl+CONTROL" -> "Ctrl"
+		const filteredModifiers = modifiers.filter((m) => m.toLowerCase() !== keyLabel.toLowerCase());
+
+		// 3. Assemble
+		if (filteredModifiers.length === 0) return keyLabel;
+		return filteredModifiers.join('+') + '+' + keyLabel;
 	}
 }
 

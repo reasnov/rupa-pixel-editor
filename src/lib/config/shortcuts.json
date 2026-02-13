@@ -83,7 +83,7 @@
 		"DELETE_VEIL": ["Alt+d"]
 	},
 	"modifiers": {
-		"FLOW_STITCH": ["Control"],
+		"FLOW_STITCH": ["Ctrl"],
 		"FLOW_UNSTITCH": ["Ctrl+Shift"],
 		"FLOW_SELECT": ["Shift"],
 		"SPIRIT_PICK": ["w"]

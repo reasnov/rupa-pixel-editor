@@ -28,7 +28,10 @@ export class AudioEngine {
 		osc.type = type;
 		osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
 
-		gain.gain.setValueAtTime(volume, this.ctx.currentTime);
+		// Apply global SFX volume
+		const effectiveVolume = volume * atelier.sfxVolume;
+
+		gain.gain.setValueAtTime(effectiveVolume, this.ctx.currentTime);
 		gain.gain.exponentialRampToValueAtTime(rampTo, this.ctx.currentTime + duration);
 
 		osc.connect(gain);
@@ -91,7 +94,8 @@ export class AudioEngine {
 		filter.frequency.exponentialRampToValueAtTime(400, this.ctx.currentTime + duration);
 
 		const gain = this.ctx.createGain();
-		gain.gain.setValueAtTime(0.1, this.ctx.currentTime);
+		const effectiveVolume = 0.1 * atelier.sfxVolume;
+		gain.gain.setValueAtTime(effectiveVolume, this.ctx.currentTime);
 		gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + duration);
 
 		noise.connect(filter);

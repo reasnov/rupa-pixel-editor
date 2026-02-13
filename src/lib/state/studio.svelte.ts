@@ -8,8 +8,17 @@ export class StudioState {
 	isAppReady = $state(false);
 	isPicking = $state(false);
 
+	// Audio Levels (0.0 to 1.0)
+	bgmVolume = $state(0.5);
+	sfxVolume = $state(0.5);
+
+	// Session Tracking
+	sessionStartTime = Date.now();
+	usageMinutes = $state(0);
+
 	// Overlay Flags
 	showDyeBasin = $state(false);
+	showAudioBasin = $state(false);
 	showPatternCatalog = $state(false);
 	showArtisanGuide = $state(false);
 	showArtifactCrate = $state(false);

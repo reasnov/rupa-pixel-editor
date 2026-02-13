@@ -88,6 +88,31 @@ export class AtelierState {
 		this.studio.isAmbientPlaying = v;
 	}
 
+	get bgmVolume() {
+		return this.studio.bgmVolume;
+	}
+	set bgmVolume(v) {
+		this.studio.bgmVolume = v;
+	}
+
+	get sfxVolume() {
+		return this.studio.sfxVolume;
+	}
+	set sfxVolume(v) {
+		this.studio.sfxVolume = v;
+	}
+
+	get usageMinutes() {
+		return this.studio.usageMinutes;
+	}
+
+	constructor() {
+		// Start Usage Heartbeat
+		setInterval(() => {
+			this.studio.usageMinutes = Math.floor((Date.now() - this.studio.sessionStartTime) / 60000);
+		}, 10000); // Check every 10 seconds for precision
+	}
+
 	get isPicking() {
 		return this.studio.isPicking;
 	}
@@ -142,6 +167,13 @@ export class AtelierState {
 	}
 	set showDyeBasin(v) {
 		this.studio.showDyeBasin = v;
+	}
+
+	get showAudioBasin() {
+		return this.studio.showAudioBasin;
+	}
+	set showAudioBasin(v) {
+		this.studio.showAudioBasin = v;
 	}
 
 	get showPatternCatalog() {

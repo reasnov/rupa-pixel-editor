@@ -21,6 +21,7 @@
 	import ArchivePattern from '$lib/components/overlay/ArchivePattern.svelte';
 	import LinenSettings from '$lib/components/overlay/LinenSettings.svelte';
 	import GoToModal from '$lib/components/overlay/GoToModal.svelte';
+	import AudioBasin from '$lib/components/overlay/AudioBasin.svelte';
 
 	import { onMount } from 'svelte';
 
@@ -64,6 +65,10 @@
 
 {#if atelier.studio.showGoTo}
 	<GoToModal onClose={() => (atelier.studio.showGoTo = false)} />
+{/if}
+
+{#if atelier.studio.showAudioBasin}
+	<AudioBasin onClose={() => (atelier.studio.showAudioBasin = false)} />
 {/if}
 
 <!-- HUD Layout -->

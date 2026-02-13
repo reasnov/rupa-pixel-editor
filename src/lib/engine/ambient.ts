@@ -103,6 +103,25 @@ export class AmbientEngine {
 	private pianoPluck(freq: number, time: number, volume = 0.06) {
 		if (!this.ctx) return;
 
+		// --- Generative Volume Logic ---
+		// 0 - 30 mins: Silence (0.0)
+		// 30 - 60 mins: Fade in from 0.0 to 1.0
+		// 60+ mins: Full volume (1.0)
+		const minutes = atelier.usageMinutes;
+		let fadeScale = 0;
+
+		if (minutes >= 30 && minutes < 60) {
+			fadeScale = (minutes - 30) / 30; // Linear fade over 30 mins
+		} else if (minutes >= 60) {
+			fadeScale = 1;
+		}
+
+		// Combined effective volume: (Base Volume * Fade Scale * User Settings)
+		const effectiveVolume = volume * fadeScale * atelier.bgmVolume;
+
+		// Skip rendering if volume is negligible
+		if (effectiveVolume < 0.001) return;
+
 		const osc = this.ctx.createOscillator();
 		const gain = this.ctx.createGain();
 		const filter = this.ctx.createBiquadFilter();
@@ -116,7 +135,7 @@ export class AmbientEngine {
 		filter.frequency.exponentialRampToValueAtTime(400, time + 1.5);
 
 		gain.gain.setValueAtTime(0, time);
-		gain.gain.linearRampToValueAtTime(volume, time + 0.02); // Soft attack
+		gain.gain.linearRampToValueAtTime(effectiveVolume, time + 0.02); // Soft attack
 		gain.gain.exponentialRampToValueAtTime(0.0001, time + 2.5); // Long sustain/release
 
 		osc.connect(filter);

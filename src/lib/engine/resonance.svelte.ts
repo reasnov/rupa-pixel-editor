@@ -46,6 +46,12 @@ export class ResonanceEngine {
 			case 'MOVE':
 				sfx.playMove();
 				break;
+			case 'STARTUP':
+				sfx.playStartup();
+				break;
+			case 'READY':
+				sfx.playReady();
+				break;
 			case 'SUCCESS':
 				// sfx.playSuccess(); // Placeholder
 				break;
@@ -60,6 +66,11 @@ export class ResonanceEngine {
 		if (event === 'CLEAR_LINEN') {
 			this.screenShake = true;
 			setTimeout(() => (this.screenShake = false), 200);
+		}
+
+		if (event === 'READY') {
+			this.flashColor = 'rgba(211, 54, 130, 0.1)';
+			setTimeout(() => (this.flashColor = null), 500);
 		}
 	}
 

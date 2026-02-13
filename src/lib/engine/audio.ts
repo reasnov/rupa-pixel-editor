@@ -96,6 +96,20 @@ export class AudioEngine {
 
 		noise.start();
 	}
+
+	playStartup() {
+		// Warm, deep wooden hum
+		this.playTone(220, 0.8, 'sine', 0.1);
+		this.playTone(110, 1.2, 'sine', 0.05);
+	}
+
+	playReady() {
+		// Magical glissando (C5, E5, G5, C6)
+		const notes = [523.25, 659.25, 783.99, 1046.5];
+		notes.forEach((freq, i) => {
+			setTimeout(() => this.playTone(freq, 0.4, 'sine', 0.05), i * 100);
+		});
+	}
 }
 
 export const sfx = new AudioEngine();

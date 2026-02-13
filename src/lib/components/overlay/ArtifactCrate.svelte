@@ -48,9 +48,10 @@
 	icon="🧺"
 	{onClose}
 	width="1000px"
+	scrollable={false}
 >
-	<div class="flex items-start gap-12">
-		<!-- Left: Live Preview (Square Area) -->
+	<div class="flex h-[550px] items-start gap-12 overflow-hidden">
+		<!-- Left: Live Preview (Square Area) - Fixed -->
 		<div
 			class="flex aspect-square w-[420px] shrink-0 items-center justify-center rounded-2xl bg-black/5 p-6 ring-1 ring-black/5"
 		>
@@ -61,8 +62,8 @@
 			/>
 		</div>
 
-		<!-- Right: Settings -->
-		<div class="flex flex-1 flex-col gap-8">
+		<!-- Right: Settings - Independent Scroll -->
+		<div class="custom-scrollbar flex h-full flex-1 flex-col gap-8 overflow-y-auto pr-4">
 			<!-- Format Selection -->
 			<div class="grid grid-cols-2 gap-4">
 				<button

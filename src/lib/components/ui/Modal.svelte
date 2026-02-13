@@ -10,7 +10,8 @@
 		onClose,
 		children,
 		width = '500px',
-		maxHeight = '85vh'
+		maxHeight = '85vh',
+		scrollable = true
 	} = $props<{
 		title?: string;
 		subtitle?: string;
@@ -19,6 +20,7 @@
 		children: any;
 		width?: string;
 		maxHeight?: string;
+		scrollable?: boolean;
 	}>();
 
 	// Register with Escape Stack once per mount
@@ -67,7 +69,11 @@
 		</div>
 
 		<!-- Content -->
-		<div class="custom-scrollbar flex-1 overflow-y-auto pr-2">
+		<div
+			class="custom-scrollbar flex-1 {scrollable
+				? 'overflow-y-auto pr-2'
+				: 'flex flex-col overflow-hidden'}"
+		>
 			{@render children()}
 		</div>
 	</div>

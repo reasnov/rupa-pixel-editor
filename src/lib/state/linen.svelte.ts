@@ -3,13 +3,15 @@ import type { ProjectState } from './project.svelte.js';
 
 /**
  * LinenState (Adapter):
- * Formerly the source of truth for the grid, this class now acts as a
- * compatibility proxy (adapter) to the active Frame and Veil in the ProjectState.
- * This ensures the rest of the application (Renderer, Engine) continues to work
- * while we transition to the Multi-Layer architecture.
+ * Acts as a proxy to the active Frame and manages the temporary stitch buffer.
  */
 export class LinenState {
 	private project: ProjectState;
+
+	// --- Batch Stitch Buffer (Reactive) ---
+	stitchBuffer = $state<number[]>([]);
+	strokePoints = $state<Array<{ x: number; y: number }>>([]);
+	private internalBuffer = new Set<number>();
 
 	constructor(project: ProjectState) {
 		this.project = project;
@@ -31,7 +33,7 @@ export class LinenState {
 		this.project.activeFrame.height = v;
 	}
 
-	// --- Proxies to Active Veil (The actual pixel data) ---
+	// --- Proxies to Active Veil ---
 
 	get stitches() {
 		return this.project.activeFrame.activeVeil.stitches;
@@ -42,17 +44,47 @@ export class LinenState {
 	}
 
 	set stitches(v: (ColorHex | null)[]) {
-		// When legacy code tries to replace the whole array, update the active layer
 		this.project.activeFrame.activeVeil.stitches = v;
 	}
 
-	// --- Methods ---
+	// --- Buffer Management ---
+
+	clearBuffer() {
+		this.internalBuffer.clear();
+		this.stitchBuffer = [];
+		this.strokePoints = [];
+	}
+
+	/**
+	 * Optimized batch update to prevent main-thread freeze during fast movement.
+	 */
+	addBatchToBuffer(points: Array<{ x: number; y: number }>) {
+		const newStrokePoints = [...this.strokePoints];
+
+		points.forEach((p) => {
+			const px = Math.floor(p.x);
+			const py = Math.floor(p.y);
+
+			if (this.isValidCoord(px, py)) {
+				this.internalBuffer.add(this.getIndex(px, py));
+				newStrokePoints.push({ x: p.x, y: p.y });
+			}
+		});
+
+		// Trigger re-assignment only ONCE per batch
+		this.strokePoints = newStrokePoints;
+		this.stitchBuffer = Array.from(this.internalBuffer);
+	}
+
+	addToBuffer(x: number, y: number) {
+		this.addBatchToBuffer([{ x, y }]);
+	}
+
+	// --- Utilities ---
 
 	reset(width: number, height: number, stitches: (ColorHex | null)[]) {
-		// Update Frame Dimensions
 		this.width = width;
 		this.height = height;
-		// Update Active Veil Data
 		this.stitches = stitches;
 	}
 

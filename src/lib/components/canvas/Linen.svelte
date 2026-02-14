@@ -52,6 +52,14 @@
 			// TheLoom.mount will use this reference.
 		}
 	});
+
+	// Check if the current stroke is snapped for visual feedback
+	let isSnapped = $derived(shuttlepoint.isSnappedState);
+
+	// High-performance track string
+	let polylinePoints = $derived(
+		atelier.linen.strokePoints.map((p) => `${p.x},${p.y}`).join(' ')
+	);
 </script>
 
 <svelte:window
@@ -107,6 +115,27 @@
 				<Stitch {color} {x} {y} activeX={atelier.needle.pos.x} activeY={atelier.needle.pos.y} />
 			{/each}
 
+			<!-- Pointer Track (Visual Feedback during Dragging) -->
+			<svg
+				class="pointer-events-none absolute inset-0 z-[20] h-full w-full overflow-visible"
+				viewBox="0 0 {w} {h}"
+				preserveAspectRatio="none"
+			>
+				{#if atelier.linen.strokePoints.length > 1}
+					<polyline
+						points={polylinePoints}
+						fill="none"
+						stroke={atelier.paletteState.activeDye}
+						stroke-width={isSnapped ? '0.08' : '0.03'}
+						stroke-dasharray={isSnapped ? 'none' : '0.1 0.1'}
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						class="{isSnapped ? 'drop-shadow-md' : 'marching-ants'} transition-all duration-300"
+						style="opacity: {isSnapped ? '1' : '0.4'}"
+					/>
+				{/if}
+			</svg>
+
 			<SelectionLasso />
 		</div>
 	</div>
@@ -121,5 +150,18 @@
 	.loom-container {
 		/* Ensure pixels are always square regardless of parent flex/grid behavior */
 		display: block;
+	}
+
+	.marching-ants {
+		animation: ants 1s linear infinite;
+	}
+
+	@keyframes ants {
+		from {
+			stroke-dashoffset: 0.2;
+		}
+		to {
+			stroke-dashoffset: 0;
+		}
 	}
 </style>

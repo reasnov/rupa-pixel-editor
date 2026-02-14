@@ -60,7 +60,7 @@
 						{__({ key: 'dye_basin.title' })}
 					</h2>
 					<span
-						class="mt-1 font-serif text-[10px] font-bold tracking-[0.2em] uppercase text-studio-text/40"
+						class="mt-1 font-serif text-[10px] font-bold tracking-[0.2em] text-studio-text/40 uppercase"
 					>
 						{__({ key: 'dye_basin.subtitle' })}
 					</span>
@@ -81,8 +81,18 @@
 				unit="°"
 				isHue={true}
 			/>
-			<DyeSlider label={__({ key: 'dye_basin.sliders.saturation' })} bind:value={s} max={100} unit="%" />
-			<DyeSlider label={__({ key: 'dye_basin.sliders.lightness' })} bind:value={l} max={100} unit="%" />
+			<DyeSlider
+				label={__({ key: 'dye_basin.sliders.saturation' })}
+				bind:value={s}
+				max={100}
+				unit="%"
+			/>
+			<DyeSlider
+				label={__({ key: 'dye_basin.sliders.lightness' })}
+				bind:value={l}
+				max={100}
+				unit="%"
+			/>
 			<DyeSlider
 				label={__({ key: 'dye_basin.sliders.alpha' })}
 				bind:value={a}
@@ -102,7 +112,7 @@
 					id="hex-input"
 					type="text"
 					bind:value
-					class="w-full bg-transparent font-mono text-lg font-bold uppercase text-studio-text focus:outline-none"
+					class="w-full bg-transparent font-mono text-lg font-bold text-studio-text uppercase focus:outline-none"
 				/>
 			</div>
 			<div class="flex gap-3">

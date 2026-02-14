@@ -8,12 +8,13 @@ Rupa is a specialized desktop environment for pixel art, built with a "Keyboard-
 
 ## 2. Architectural Pattern: Modular Layered Monolith
 
-Rupa is structured into four distinct layers to ensure scalability and maintainability:
+Rupa is structured into five distinct layers to ensure scalability and maintainability:
 
 1.  **UI Layer (`src/lib/components/`)**: Purely presentational Svelte components. They consume state and trigger intents.
 2.  **State Layer (`src/lib/state/`)**: Reactive data structures using Svelte 5 Runes. They hold the "Source of Truth" but contain no complex business logic.
 3.  **Service Layer (`src/lib/engine/services/`)**: The core business logic. Services manipulate state and orchestrate complex operations (e.g., Folio management, Stitching algorithms).
 4.  **Engine Layer (`src/lib/engine/`)**: Low-level infrastructure and orchestrators (Input parsing, Audio synthesis, Export algorithms).
+5.  **Logic Layer (`src/lib/logic/`)**: The "Brain" of the atelier. Pure, stateless algorithms and mathematical models (Geometry, Path processing, Color theory).
 
 ---
 
@@ -90,9 +91,15 @@ The internationalization layer for the studio.
 - **Global Helper**: Provides the `__()` global function for component-level translations without imports.
 - **Artisan Lexicon**: Manages localized strings for tools, metadata, and ambiance descriptions.
 
----
++### 4.7 The Logic Layer (`src/lib/logic/`)
 
-## 5. UI & Rendering Strategy
+- +The "Brain" of the studio. This layer contains pure, side-effect-free algorithms.
+- +- **Geometry Module**: Handles line interpolation (Bresenham) and arc fitting for shape correction.
+  +- **Path Module**: Manages smoothing and simplification (Douglas-Peucker) of artisan strokes.
+  +- **Computational Sovereignty**: Logic modules must never import from State, Services, or UI layers. They receive raw data and return calculated results.
+- ***
+
+  ## 5. UI & Rendering Strategy
 
 ### 5.1 Professional Workspace Layout
 

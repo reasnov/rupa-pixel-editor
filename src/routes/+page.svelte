@@ -86,12 +86,14 @@
 			<FolioSidebar />
 		</aside>
 
-		<!-- Main Workspace -->
 		<main
 			class="relative flex flex-1 items-center justify-center overflow-hidden bg-grid-border/20 p-6"
 		>
 			<div
-				class="artisan-frame flex h-full w-full items-center justify-center overflow-hidden shadow-2xl transition-transform duration-700 ease-out"
+				class="artisan-frame flex h-full w-full items-center justify-center overflow-hidden shadow-2xl transition-all duration-700 ease-out {atelier
+					.project.isPlaying && atelier.project.frames.length > 1
+					? 'ring-8 ring-palette-0 ring-inset animate-pulse'
+					: ''}"
 			>
 				<Linen />
 			</div>

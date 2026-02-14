@@ -1,9 +1,10 @@
 import { atelier } from '../state/atelier.svelte.js';
+import { sfx } from './audio.js';
 
 /**
  * ChronosEngine: The Temporal Broker.
  * Manages time, playback, frame interpolation logic, and the "pulse" of the Kinetic Mode.
- * It abstracts "Time" away from the "Structure" (FolioService).
+ * It is the single source of truth for temporal orchestration.
  */
 export class ChronosEngine {
 	private interval: any = null;
@@ -13,29 +14,30 @@ export class ChronosEngine {
 		return atelier.project.frames.reduce((acc, f) => acc + f.duration, 0);
 	});
 
-	// Get frame at a specific timestamp (for random access playback)
-	getFrameAt(ms: number) {
-		let accumulated = 0;
-		for (let i = 0; i < atelier.project.frames.length; i++) {
-			const frame = atelier.project.frames[i];
-			if (ms >= accumulated && ms < accumulated + frame.duration) {
-				return i;
-			}
-			accumulated += frame.duration;
-		}
-		return 0; // Fallback
-	}
-
+	/**
+	 * startPlayback: Begins the temporal sequence.
+	 * Requires at least 2 frames to function.
+	 */
 	startPlayback() {
 		if (atelier.project.isPlaying) return;
+
+		// Safety Protocol: Cannot play a static weave
+		if (atelier.project.frames.length <= 1) {
+			sfx.playUnstitch(); // Error feedback
+			return;
+		}
+
 		atelier.project.isPlaying = true;
+		sfx.playStitch(); // Success feedback
 		this.tick();
 	}
 
 	stopPlayback() {
 		atelier.project.isPlaying = false;
-		if (this.interval) clearTimeout(this.interval);
-		this.interval = null;
+		if (this.interval) {
+			clearTimeout(this.interval);
+			this.interval = null;
+		}
 	}
 
 	togglePlayback() {
@@ -43,21 +45,20 @@ export class ChronosEngine {
 		else this.startPlayback();
 	}
 
-	// The Heartbeat
+	/**
+	 * The Heartbeat of the Studio.
+	 */
 	private tick() {
 		if (!atelier.project.isPlaying) return;
 
 		const currentFrame = atelier.project.activeFrame;
-		// Use the specific frame's duration instead of global FPS
-		const duration = currentFrame.duration;
-
-		// Advance Frame
 		const nextIndex = (atelier.project.activeFrameIndex + 1) % atelier.project.frames.length;
 
 		this.interval = setTimeout(() => {
+			// Advance to next thread of time
 			atelier.project.activeFrameIndex = nextIndex;
-			this.tick(); // Loop
-		}, duration);
+			this.tick(); // Loop the pulse
+		}, currentFrame.duration);
 	}
 }
 

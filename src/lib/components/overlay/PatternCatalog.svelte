@@ -93,7 +93,7 @@
 		</div>
 		<div class="custom-scrollbar max-h-[50vh] overflow-y-auto p-4" role="list">
 			{#if filteredActions.length === 0}
-				<div class="p-8 text-center font-serif text-sm italic text-studio-text/40">
+				<div class="p-8 text-center font-serif text-sm text-studio-text/40 italic">
 					{__({ key: 'hud.basin.catalog_no_results', replace: { query: searchQuery } })}
 				</div>
 			{:else}
@@ -109,10 +109,10 @@
 			{/if}
 		</div>
 		<div class="flex items-center justify-between border-t border-black/5 bg-black/5 px-8 py-4">
-			<span class="font-serif text-[9px] font-bold tracking-[0.2em] uppercase text-studio-text/30">
+			<span class="font-serif text-[9px] font-bold tracking-[0.2em] text-studio-text/30 uppercase">
 				{__({ key: 'hud.basin.catalog_footer' })}
 			</span>
-			<span class="font-serif text-[9px] font-bold tracking-[0.2em] uppercase text-studio-text/30">
+			<span class="font-serif text-[9px] font-bold tracking-[0.2em] text-studio-text/30 uppercase">
 				{__({ key: 'hud.basin.catalog_count', replace: { count: filteredActions.length } })}
 			</span>
 		</div>

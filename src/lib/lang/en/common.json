@@ -176,6 +176,21 @@
 		"header_desc": "In Rupa, we do not simply press buttons; we play chords. These combinations of keys create a flow state, allowing your needle to dance across the linen with professional precision.",
 		"footer_quote": "A master weaver knows every thread by heart."
 	},
+	"settings": {
+		"title": "Linen Settings",
+		"subtitle": "Configure the Weaver's Frame",
+		"project_name": "Project Name",
+		"width": "Width",
+		"height": "Height",
+		"weave_pace": "Weave Pace (FPS)",
+		"fps_desc": "Default frames per second",
+		"backdrop": "Linen Backdrop",
+		"backdrop_desc": "Visual background color",
+		"stabilization": "Line Stabilization",
+		"stabilization_desc": "Corrects jittery pointer movement",
+		"apply": "Re-stretch Linen",
+		"note": "Note: Resizing will center your current work on the new frame. Large dimensions may affect performance."
+	},
 	"shortcuts": {
 		"groups": {
 			"the_needle": "The Needle",

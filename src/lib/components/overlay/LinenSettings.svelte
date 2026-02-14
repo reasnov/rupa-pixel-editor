@@ -23,96 +23,140 @@
 {/if}
 
 <Modal
-	title="Linen Settings"
-	subtitle="Configure the Weaver's Frame"
+	title={__({ key: 'settings.title' })}
+	subtitle={__({ key: 'settings.subtitle' })}
 	icon="📐"
 	{onClose}
 	width="450px"
 >
-	<div class="flex flex-col gap-8">
+	<div class="flex flex-col gap-8" role="form">
 		<div class="flex flex-col gap-6 rounded-xl border border-black/5 bg-white/40 p-8">
 			<!-- Project Name -->
 			<div class="flex flex-col gap-2">
 				<label
 					for="project-name"
-					class="font-serif text-[10px] font-bold tracking-widest uppercase opacity-40"
-					>Project Name</label
+					class="font-serif text-[10px] font-bold tracking-widest text-studio-text/40 uppercase"
 				>
+					{__({ key: 'settings.project_name' })}
+				</label>
 				<input
 					id="project-name"
 					type="text"
 					bind:value={atelier.project.name}
 					placeholder="Unnamed Pattern"
-					class="rounded-xl border border-black/10 bg-white px-4 py-3 font-serif text-lg focus:border-brand focus:outline-none"
+					class="rounded-xl border border-black/10 bg-white px-4 py-3 font-serif text-lg text-studio-text focus:border-brand focus:outline-none"
 				/>
 			</div>
 
-			<div class="h-px w-full bg-black/5"></div>
+			<div class="h-px w-full bg-black/5" aria-hidden="true"></div>
 
+			<!-- Dimensions -->
 			<div class="grid grid-cols-2 gap-8">
 				<div class="flex flex-col gap-2">
 					<label
 						for="width"
-						class="font-serif text-[10px] font-bold tracking-widest uppercase opacity-40"
-						>Width</label
+						class="font-serif text-[10px] font-bold tracking-widest text-studio-text/40 uppercase"
 					>
+						{__({ key: 'settings.width' })}
+					</label>
 					<input
 						id="width"
 						type="number"
 						bind:value={width}
 						min="4"
 						max="128"
-						class="rounded-xl border border-black/10 bg-white px-4 py-3 font-mono text-xl focus:border-brand focus:outline-none"
+						class="rounded-xl border border-black/10 bg-white px-4 py-3 font-mono text-xl text-studio-text focus:border-brand focus:outline-none"
 					/>
 				</div>
 				<div class="flex flex-col gap-2">
 					<label
 						for="height"
-						class="font-serif text-[10px] font-bold tracking-widest uppercase opacity-40"
-						>Height</label
+						class="font-serif text-[10px] font-bold tracking-widest text-studio-text/40 uppercase"
 					>
+						{__({ key: 'settings.height' })}
+					</label>
 					<input
 						id="height"
 						type="number"
 						bind:value={height}
 						min="4"
 						max="128"
-						class="rounded-xl border border-black/10 bg-white px-4 py-3 font-mono text-xl focus:border-brand focus:outline-none"
+						class="rounded-xl border border-black/10 bg-white px-4 py-3 font-mono text-xl text-studio-text focus:border-brand focus:outline-none"
 					/>
 				</div>
 			</div>
 
-			<div class="h-px w-full bg-black/5"></div>
+			<div class="h-px w-full bg-black/5" aria-hidden="true"></div>
+
+			<!-- Stabilization -->
+			<div class="flex flex-col gap-3">
+				<div class="flex items-center justify-between">
+					<div class="flex flex-col gap-1">
+						<label
+							for="stab-input"
+							class="font-serif text-sm font-bold tracking-tight text-studio-text/60 uppercase"
+						>
+							{__({ key: 'settings.stabilization' })}
+						</label>
+						<span class="font-serif text-[10px] text-studio-text/40">
+							{__({ key: 'settings.stabilization_desc' })}
+						</span>
+					</div>
+					<span class="font-mono text-sm font-bold text-brand">{atelier.studio.stabilization}%</span
+					>
+				</div>
+				<input
+					id="stab-input"
+					type="range"
+					bind:value={atelier.studio.stabilization}
+					min="0"
+					max="100"
+					class="h-1.5 w-full cursor-pointer appearance-none rounded-lg bg-black/5 accent-brand"
+				/>
+			</div>
+
+			<div class="h-px w-full bg-black/5" aria-hidden="true"></div>
 
 			<!-- Kinetic Pace (FPS) -->
 			<div class="flex items-center justify-between">
 				<div class="flex flex-col gap-1">
-					<span class="font-serif text-sm font-bold tracking-tight uppercase opacity-60"
-						>Weave Pace (FPS)</span
+					<label
+						for="fps-input"
+						class="font-serif text-sm font-bold tracking-tight text-studio-text/60 uppercase"
 					>
-					<span class="font-serif text-[10px] opacity-40">Default frames per second</span>
+						{__({ key: 'settings.weave_pace' })}
+					</label>
+					<span class="font-serif text-[10px] text-studio-text/40">
+						{__({ key: 'settings.fps_desc' })}
+					</span>
 				</div>
-				<div class="flex items-center gap-3">
-					<input
-						type="number"
-						bind:value={atelier.studio.fps}
-						min="1"
-						max="60"
-						class="w-20 rounded-xl border border-black/10 bg-white px-4 py-2 font-mono text-lg focus:border-brand focus:outline-none"
-					/>
-				</div>
+				<input
+					id="fps-input"
+					type="number"
+					bind:value={atelier.studio.fps}
+					min="1"
+					max="60"
+					class="w-20 rounded-xl border border-black/10 bg-white px-4 py-2 font-mono text-lg text-studio-text focus:border-brand focus:outline-none"
+				/>
 			</div>
 
-			<div class="h-px w-full bg-black/5"></div>
+			<div class="h-px w-full bg-black/5" aria-hidden="true"></div>
 
+			<!-- Backdrop -->
 			<div class="flex items-center justify-between">
 				<div class="flex flex-col gap-1">
-					<span class="font-serif text-sm font-bold tracking-tight uppercase opacity-60"
-						>Linen Backdrop</span
-					>
-					<span class="font-serif text-[10px] opacity-40">Visual background color</span>
+					<span class="font-serif text-sm font-bold tracking-tight text-studio-text/60 uppercase">
+						{__({ key: 'settings.backdrop' })}
+					</span>
+					<span class="font-serif text-[10px] text-studio-text/40">
+						{__({ key: 'settings.backdrop_desc' })}
+					</span>
 				</div>
-				<button class="group relative flex items-center gap-3" onclick={() => (showPicker = true)}>
+				<button
+					class="group relative flex items-center gap-3"
+					onclick={() => (showPicker = true)}
+					aria-label="Change Backdrop Color"
+				>
 					<div
 						class="artisan-checker-small h-10 w-16 rounded-xl border-2 border-white shadow-sm transition-transform group-hover:scale-105"
 						style="background-color: {atelier.studio.canvasBgColor};"
@@ -125,14 +169,13 @@
 				</button>
 			</div>
 
-			<p class="font-serif text-[10px] leading-relaxed italic opacity-40">
-				Note: Resizing will center your current work on the new frame. Large dimensions may affect
-				performance in certain environments.
+			<p class="font-serif text-[10px] leading-relaxed text-studio-text/40 italic">
+				{__({ key: 'settings.note' })}
 			</p>
 		</div>
 
 		<button class="artisan-primary-btn w-full py-4 text-lg" onclick={apply}>
-			Re-stretch Linen
+			{__({ key: 'settings.apply' })}
 		</button>
 	</div>
 </Modal>

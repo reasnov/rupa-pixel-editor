@@ -1,11 +1,38 @@
 import { type ColorHex } from '../types/index.js';
+import { Geometry } from '../logic/geometry.js';
+import { Path } from '../logic/path.js';
 
 /**
- * FiberEngine: Heavy Task Processor.
- * Handles computationally expensive pixel operations (Flood Fill, Recolor, Analysis).
- * Designed to potentially run in a Web Worker in the future.
+ * FiberEngine: Orchestrator for heavy pixel tasks.
+ * It now delegates pure mathematical logic to the Logic Layer (src/lib/logic/).
  */
 export class FiberEngine {
+	// --- Delegation to Logic Layer ---
+
+	static getLinePoints(x0: number, y0: number, x1: number, y1: number, broadness = 0) {
+		return Geometry.getLinePoints(x0, y0, x1, y1, broadness);
+	}
+
+	static simplifyPath(points: Array<{ x: number; y: number }>, epsilon: number) {
+		return Path.simplify(points, epsilon);
+	}
+
+	static smoothPath(points: Array<{ x: number; y: number }>, strength: number) {
+		return Path.smooth(points, strength);
+	}
+
+	static fitArc(points: Array<{ x: number; y: number }>, stabilization: number) {
+		if (stabilization < 10) return null;
+		const circularityLimit = 0.05 + (stabilization / 100) * 0.35;
+		return Geometry.fitArc(points, circularityLimit);
+	}
+
+	static getCirclePoints(cx: number, cy: number, r: number) {
+		return Geometry.getCirclePoints(cx, cy, r);
+	}
+
+	// --- Pixel Manipulation Logic ---
+
 	/**
 	 * Flood Fill (Dye Soak): Fills a connected area of the same color.
 	 */
@@ -18,9 +45,9 @@ export class FiberEngine {
 		fillColor: ColorHex
 	): (ColorHex | null)[] {
 		const targetColor = data[startY * width + startX];
-		if (targetColor === fillColor) return data; // No change needed
+		if (targetColor === fillColor) return data;
 
-		const newData = [...data]; // Copy for immutability
+		const newData = [...data];
 		const queue = [[startX, startY]];
 		const visited = new Set<number>();
 
@@ -38,11 +65,9 @@ export class FiberEngine {
 					[x, y + 1],
 					[x, y - 1]
 				];
-
 				for (const [nx, ny] of neighbors) {
 					if (nx >= 0 && nx < width && ny >= 0 && ny < height) {
-						const nIdx = ny * width + nx;
-						if (newData[nIdx] === targetColor) {
+						if (newData[ny * width + nx] === targetColor) {
 							queue.push([nx, ny]);
 						}
 					}
@@ -52,21 +77,11 @@ export class FiberEngine {
 		return newData;
 	}
 
-	/**
-	 * Global Recolor (Fiber Bleach): Replaces all instances of a color.
-	 */
-	static recolor(
-		data: (ColorHex | null)[],
-		oldColor: ColorHex | null,
-		newColor: ColorHex
-	): (ColorHex | null)[] {
+	static recolor(data: (ColorHex | null)[], oldColor: ColorHex | null, newColor: ColorHex) {
 		return data.map((c) => (c === oldColor ? newColor : c));
 	}
 
-	/**
-	 * Analyzes the linen to find all used colors.
-	 */
-	static getPaletteUsage(data: (ColorHex | null)[]): Set<ColorHex> {
+	static getPaletteUsage(data: (ColorHex | null)[]) {
 		const usage = new Set<ColorHex>();
 		data.forEach((c) => {
 			if (c) usage.add(c);

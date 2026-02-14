@@ -8,6 +8,9 @@ export class StudioState {
 	isAppReady = $state(false);
 	isPicking = $state(false);
 
+	// Smoothing & Stabilization (0 to 100)
+	stabilization = $state(50);
+
 	// Audio Levels (0.0 to 1.0)
 	bgmVolume = $state(0.5);
 	sfxVolume = $state(0.5);

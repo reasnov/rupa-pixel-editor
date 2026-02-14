@@ -45,23 +45,27 @@
 			onclick={() => (atelier.studio.folioActiveTab = 'frames')}
 			role="tab"
 			aria-selected={atelier.studio.folioActiveTab === 'frames'}
+			title={__({ key: 'shortcuts.labels.TAB_FRAMES' }) + ' (Alt+1)'}
 			class="flex flex-1 items-center justify-center gap-2 py-2 text-[10px] font-bold tracking-widest uppercase transition-all {atelier
 				.studio.folioActiveTab === 'frames'
 				? 'rounded-xl bg-white text-brand shadow-sm'
 				: 'opacity-40 hover:opacity-60'}"
 		>
-			<span aria-hidden="true">🖼️</span> {__({ key: 'hud.ledger.frames' })}
+			<span aria-hidden="true">🖼️</span>
+			{__({ key: 'hud.ledger.frames' })}
 		</button>
 		<button
 			onclick={() => (atelier.studio.folioActiveTab = 'veils')}
 			role="tab"
 			aria-selected={atelier.studio.folioActiveTab === 'veils'}
+			title={__({ key: 'shortcuts.labels.TAB_VEILS' }) + ' (Alt+2)'}
 			class="flex flex-1 items-center justify-center gap-2 py-2 text-[10px] font-bold tracking-widest uppercase transition-all {atelier
 				.studio.folioActiveTab === 'veils'
 				? 'rounded-xl bg-white text-brand shadow-sm'
 				: 'opacity-40 hover:opacity-60'}"
 		>
-			<span aria-hidden="true">🧵</span> {__({ key: 'hud.ledger.veils' })}
+			<span aria-hidden="true">🧵</span>
+			{__({ key: 'hud.ledger.veils' })}
 		</button>
 	</div>
 
@@ -90,7 +94,9 @@
 							onclick={() => (atelier.project.activeFrameIndex = i)}
 						>
 							<span class="text-xs opacity-40" aria-hidden="true">{i + 1}</span>
-							<span class="truncate font-serif text-sm font-medium text-studio-text">{frame.name}</span>
+							<span class="truncate font-serif text-sm font-medium text-studio-text"
+								>{frame.name}</span
+							>
 						</button>
 						<div class="flex items-center gap-2 pr-2">
 							<button
@@ -146,7 +152,9 @@
 									e.stopPropagation();
 									shuttle.folio.toggleVisibility(i);
 								}}
-								class="ml-2 text-xs transition-opacity {veil.isVisible ? 'opacity-100' : 'opacity-20'}"
+								class="ml-2 text-xs transition-opacity {veil.isVisible
+									? 'opacity-100'
+									: 'opacity-20'}"
 								title={__({ key: 'hud.ledger.visibility' })}
 							>
 								<span aria-hidden="true">{veil.isVisible ? '👁️' : '🕶️'}</span>
@@ -212,18 +220,17 @@
 				if (atelier.studio.folioActiveTab === 'frames') shuttle.folio.addFrame();
 				else shuttle.folio.addVeil();
 			}}
-			class="flex items-center gap-1 font-serif text-[8px] font-bold tracking-[0.2em] uppercase text-studio-text/30 hover:text-studio-text/60"
+			class="flex items-center gap-1 font-serif text-[8px] font-bold tracking-[0.2em] text-studio-text/30 uppercase hover:text-studio-text/60"
 		>
 			<span aria-hidden="true">＋</span>
 			{atelier.studio.folioActiveTab === 'frames'
 				? __({ key: 'hud.actions.add_frame' })
 				: __({ key: 'hud.actions.add_veil' })}
 		</button>
-		<span class="font-serif text-[8px] font-bold tracking-[0.2em] uppercase text-studio-text/30">
+		<span class="font-serif text-[8px] font-bold tracking-[0.2em] text-studio-text/30 uppercase">
 			{atelier.studio.folioActiveTab === 'frames'
 				? atelier.project.frames.length + ' ' + __({ key: 'hud.ledger.frames' })
 				: atelier.project.activeFrame.veils.length + ' ' + __({ key: 'hud.ledger.veils' })}
 		</span>
 	</div>
 </div>
-

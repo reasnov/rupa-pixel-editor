@@ -76,7 +76,7 @@ export class TheLoom {
 				if (atelier.selection.isActive) return shuttle.commitSelection();
 				return shuttle.stitching.stitch();
 			case 'PICK_DYE':
-				return shuttle.stitching.pickDye();
+				return shuttle.dye.pickFromLinen();
 
 			case 'COPY':
 				return shuttle.clipboard.copy();
@@ -102,10 +102,20 @@ export class TheLoom {
 				return (atelier.studio.showLinenSettings = true);
 
 			case 'ESCAPE':
+				// Priority 1: Cancel active drawing/tracking
+				import('./shuttlepoint.svelte.js').then(({ shuttlepoint }) => {
+					if ((shuttlepoint as any).isPointerDown) {
+						shuttlepoint.cancel();
+						return;
+					}
+				});
+
+				// Priority 2: Clear selection
 				if (atelier.selection.isActive) {
 					atelier.selection.clear();
 					return;
 				}
+				// Priority 3: Dismiss overlays
 				return atelier.handleEscape();
 
 			case 'OPEN_PALETTE':

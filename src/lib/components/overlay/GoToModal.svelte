@@ -25,49 +25,56 @@
 </script>
 
 <Modal
-	title="Go To Coordinate"
-	subtitle="Direct Needle Placement"
+	title={__({ key: 'goto.title' })}
+	subtitle={__({ key: 'goto.subtitle' })}
 	icon="📍"
 	{onClose}
 	width="400px"
 >
-	<div class="flex flex-col gap-8">
+	<div class="flex flex-col gap-8" role="form">
 		<div class="flex flex-col gap-6 rounded-xl border border-black/5 bg-white/40 p-8">
 			<div class="grid grid-cols-2 gap-8">
 				<div class="flex flex-col gap-2">
 					<label
 						for="goto-x"
-						class="font-serif text-[10px] font-bold tracking-widest uppercase opacity-40"
-						>Cartesian X</label
+						class="font-serif text-[10px] font-bold tracking-widest text-studio-text/40 uppercase"
 					>
+						{__({ key: 'goto.label_x' })}
+					</label>
 					<input
 						id="goto-x"
 						type="number"
 						bind:value={targetX}
 						onkeydown={handleKey}
-						class="rounded-xl border border-black/10 bg-white px-4 py-3 font-mono text-xl focus:border-brand focus:outline-none"
+						class="rounded-xl border border-black/10 bg-white px-4 py-3 font-mono text-xl text-studio-text focus:border-brand focus:outline-none"
 					/>
 				</div>
 				<div class="flex flex-col gap-2">
 					<label
 						for="goto-y"
-						class="font-serif text-[10px] font-bold tracking-widest uppercase opacity-40"
-						>Cartesian Y</label
+						class="font-serif text-[10px] font-bold tracking-widest text-studio-text/40 uppercase"
 					>
+						{__({ key: 'goto.label_y' })}
+					</label>
 					<input
 						id="goto-y"
 						type="number"
 						bind:value={targetY}
 						onkeydown={handleKey}
-						class="rounded-xl border border-black/10 bg-white px-4 py-3 font-mono text-xl focus:border-brand focus:outline-none"
+						class="rounded-xl border border-black/10 bg-white px-4 py-3 font-mono text-xl text-studio-text focus:border-brand focus:outline-none"
 					/>
 				</div>
 			</div>
-			<p class="font-serif text-[10px] leading-relaxed italic opacity-40">
-				Current Position: {atelier.displayCoords.x}, {atelier.displayCoords.y}
+			<p class="font-serif text-[10px] leading-relaxed text-studio-text/40 italic">
+				{__({
+					key: 'goto.current',
+					replace: { x: atelier.displayCoords.x, y: atelier.displayCoords.y }
+				})}
 			</p>
 		</div>
 
-		<button class="artisan-primary-btn w-full py-4 text-lg" onclick={jump}> Move Needle </button>
+		<button class="artisan-primary-btn w-full py-4 text-lg" onclick={jump}>
+			{__({ key: 'goto.action' })}
+		</button>
 	</div>
 </Modal>

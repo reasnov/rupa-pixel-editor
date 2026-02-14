@@ -2,17 +2,18 @@
 	import { atelier } from '../../../state/atelier.svelte';
 </script>
 
-<div class="flex items-center gap-1.5" title="Atmosphere Status">
-	<span class="text-[9px] {atelier.usageMinutes >= 30 ? 'animate-pulse' : 'opacity-20 grayscale'}"
-		>🎹</span
+<div class="flex items-center gap-1.5" title={__({ key: 'ledger.atmosphere.title' })}>
+	<span
+		class="text-[9px] {atelier.usageMinutes >= 30 ? 'animate-pulse' : 'opacity-20 grayscale'}"
+		aria-hidden="true">🎹</span
 	>
 	<span class="font-serif text-[8px] font-bold tracking-wider text-brand/40 uppercase italic">
 		{#if atelier.usageMinutes < 30}
-			Silent
+			{__({ key: 'ledger.atmosphere.silent' })}
 		{:else if atelier.usageMinutes < 60}
-			Weaving
+			{__({ key: 'ledger.atmosphere.weaving' })}
 		{:else}
-			Resonance
+			{__({ key: 'ledger.atmosphere.resonance' })}
 		{/if}
 	</span>
 </div>

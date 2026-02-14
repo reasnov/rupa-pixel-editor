@@ -67,7 +67,16 @@ To maintain cross-platform integrity, the following chord patterns are reserved 
   - **PNG:** Scaling must use nearest-neighbor interpolation (no blurring).
 - **History:** Command Pattern stack depth of 500 actions.
 
-## 5. File Formats
+## 5. Accessibility (A11y) Standards
+
+- **Keyboard Sovereignty**: 100% of UI functionality must be accessible via LoomPad shortcuts.
+- **Contrast**: Text and iconic elements must maintain a contrast ratio of 4.5:1 (WCAG AA) against the Paper background.
+- **Screen Reading**:
+  - The Linen uses `role="grid"` with coordinate-based labels.
+  - Interactive elements must have descriptive `aria-label` attributes using artisan terminology.
+- **Focus Indicators**: All focusable elements must display a `2px` solid Artisan Magenta outline when active.
+
+## 6. File Formats
 
 - **Pattern Book (.rupa):** JSON-based schema storing:
   - Version metadata.

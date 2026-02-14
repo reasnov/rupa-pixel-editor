@@ -82,6 +82,14 @@ The specialized engine for mouse and pointer interactions.
 - **Fluid Stitching**: Enables organic freehand drawing while respecting the current Stance (Threading, Unravelling, Looming).
 - **Gesture Orchestration**: Translates clicks and drags into LoomIntents to maintain consistency with the LoomPad engine.
 
+### 4.6 The i18n System (`src/lib/state/i18n.svelte.ts`)
+
+The internationalization layer for the studio.
+
+- **Reactive Translation**: Uses `i18next` integrated with Svelte Runes for real-time language switching.
+- **Global Helper**: Provides the `__()` global function for component-level translations without imports.
+- **Artisan Lexicon**: Manages localized strings for tools, metadata, and ambiance descriptions.
+
 ---
 
 ## 5. UI & Rendering Strategy

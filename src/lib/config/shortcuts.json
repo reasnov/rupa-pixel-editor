@@ -234,6 +234,11 @@
 			"keys": ["F1"],
 			"group": "The Pattern Book"
 		},
+		"OPEN_DYES": {
+			"label": "Open Natural Dye Basin",
+			"keys": ["b"],
+			"group": "The Pattern Book"
+		},
 		"OPEN_HELP": {
 			"label": "Quick Guide",
 			"keys": ["F2"],

@@ -8,17 +8,22 @@
 >
 	<div class="flex gap-3">
 		<button class="artisan-tool-btn" onclick={() => (atelier.studio.showPatternCatalog = true)}>
-			<span>📖</span> Catalog
+			<span>📖</span>
+			{__({ key: 'hud.basin.catalog_title' })}
 		</button>
 		<button class="artisan-tool-btn" onclick={() => (atelier.studio.showArtifactCrate = true)}>
-			<span>🧺</span> Export
+			<span>🧺</span>
+			{__({ key: 'hud.actions.preserve_weave' })}
 		</button>
 		<button class="artisan-tool-btn" onclick={() => atelier.clearLinen()}>
-			<span>🌿</span> Clear
+			<span>🌿</span>
+			{__({ key: 'hud.actions.clear_linen' })}
 		</button>
 		<button class="artisan-tool-btn" onclick={() => atelier.toggleMute()}>
 			<span>{atelier.studio.isMuted ? '🔇' : '🔊'}</span>
-			{atelier.studio.isMuted ? 'Unmute' : 'Mute'}
+			{atelier.studio.isMuted
+				? __({ key: 'hud.actions.unmute_ambient' })
+				: __({ key: 'hud.actions.mute_ambient' })}
 		</button>
 	</div>
 

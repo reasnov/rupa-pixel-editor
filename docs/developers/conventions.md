@@ -35,6 +35,14 @@ Rupa follows a strict **Separation of Concerns (SOC)** across its layered monoli
 - **Services**: Suffix with `Service` (e.g., `FolioService`).
 - **Components**: PascalCase (e.g., `DyeBasin.svelte`).
 - **Artisan Terms**: Use artisan terminology in UI labels but maintain technical clarity in variable names (e.g., `usageMinutes` vs "Working Time").
+- **i18n Keys**: Use semantic, hierarchical keys based on the studio's lore (e.g., `hud.basin.dye_title`). Avoid generic technical keys.
+
+### 2.4 Internationalization (i18n)
+
+- **No Hardcoded Strings**: All UI text must use the global `__({ key })` function.
+- **Global Availability**: The `__()` function is registered globally (via `globalThis`). **DO NOT** import it manually in Svelte components.
+- **Translation Files**: Located in `src/lib/lang/{locale}/common.json`.
+- **Locale Standard**: The English (`en`) locale is the primary source of truth for all artisan terminology.
 
 ---
 

@@ -51,7 +51,18 @@ To maintain the meditative and creative atmosphere of the project, we use termin
 
 ---
 
-## 3. Storage & Artifacts
+## 3. Inclusivity & Global Reach
+
+| Technical Term           | Artisan Term         | Description                                                             |
+| :----------------------- | :------------------- | :---------------------------------------------------------------------- |
+| **Internationalization** | **Global Craft**     | The system for translating the studio's language to artisans worldwide. |
+| **Accessibility**        | **Inclusive Studio** | Ensuring the atelier is reachable and welcoming for every artisan.      |
+| **Translation Key**      | **Lore Key**         | A unique identifier mapping a concept to its localized name.            |
+| **Screen Reader**        | **Echo Thread**      | Assistive technology that speaks the studio's state for artisans.       |
+
+---
+
+## 4. Storage & Artifacts
 
 | Technical Term           | Artisan Term         | Description                                                         |
 | :----------------------- | :------------------- | :------------------------------------------------------------------ |

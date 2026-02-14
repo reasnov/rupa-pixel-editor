@@ -2,6 +2,20 @@
 // for information about these interfaces
 declare global {
 	const __APP_VERSION__: string;
+
+	/**
+	 * The Artisan's Global Translation Function
+	 */
+	function __({
+		key,
+		replace,
+		locale
+	}: {
+		key: string;
+		replace?: Record<string, any>;
+		locale?: string;
+	}): string;
+
 	interface Window {
 		electronAPI?: {
 			saveFile: (content: string, defaultPath?: string) => Promise<string | null>;

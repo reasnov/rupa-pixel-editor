@@ -7,26 +7,31 @@
 		class="artisan-tool-btn !py-1.5"
 		onclick={() => (atelier.studio.showPatternCatalog = true)}
 	>
-		<span>📖</span> Catalog
+		<span aria-hidden="true">📖</span>
+		{__({ key: 'hud.basin.catalog_title' })}
 	</button>
 	<button
 		class="artisan-tool-btn !py-1.5"
 		onclick={() => (atelier.studio.showArtifactCrate = true)}
 	>
-		<span>🧺</span> Export
+		<span aria-hidden="true">🧺</span>
+		{__({ key: 'hud.actions.preserve_weave' })}
 	</button>
 	<button class="artisan-tool-btn !py-1.5" onclick={() => atelier.clearLinen()}>
-		<span>🌿</span> Clear
+		<span aria-hidden="true">🌿</span>
+		{__({ key: 'hud.actions.clear_linen' })}
 	</button>
 	<button class="artisan-tool-btn !py-1.5" onclick={() => (atelier.showAudioBasin = true)}>
-		<span>{atelier.isMuted ? '🔇' : '🔊'}</span>
-		Audio
+		<span aria-hidden="true">{atelier.isMuted ? '🔇' : '🔊'}</span>
+		{__({ key: 'hud.atmosphere.title' })}
 	</button>
-	<div class="mx-1 h-6 w-px bg-grid-border"></div>
+	<div class="mx-1 h-6 w-px bg-grid-border" aria-hidden="true"></div>
 	<button class="artisan-tool-btn !py-1.5" onclick={() => (atelier.showArtisanCodex = true)}>
-		<span>📜</span> Codex
+		<span aria-hidden="true">📜</span>
+		{__({ key: 'codex.title' })}
 	</button>
 	<button class="artisan-tool-btn !py-1.5" onclick={() => (atelier.showArtisanGuide = true)}>
-		<span>⌨️</span> Keys
+		<span aria-hidden="true">⌨️</span>
+		{__({ key: 'guide.title' })}
 	</button>
 </div>

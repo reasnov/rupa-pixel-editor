@@ -4,7 +4,7 @@
 
 <div class="flex items-center gap-2">
 	<span class="font-serif text-[8px] font-black tracking-widest text-brand/40 uppercase italic"
-		>Chord:</span
+		>{__({ key: 'ledger.chord' })}:</span
 	>
 	<div class="flex min-w-[120px] gap-1.5">
 		{#if loompad.activeKeys.length > 0}
@@ -16,7 +16,9 @@
 				</span>
 			{/each}
 		{:else}
-			<span class="font-mono text-[9px] italic opacity-20">None</span>
+			<span class="font-mono text-[9px] text-studio-text/20 italic"
+				>{__({ key: 'ledger.none' })}</span
+			>
 		{/if}
 	</div>
 </div>

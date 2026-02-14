@@ -57,8 +57,8 @@
 {/if}
 
 <Modal
-	title="Artifact Crate"
-	subtitle="Prepare Artifacts for Export"
+	title={__({ key: 'artifact.title' })}
+	subtitle={__({ key: 'artifact.subtitle' })}
 	icon="🧺"
 	{onClose}
 	width="1000px"
@@ -68,6 +68,8 @@
 		<!-- Left: Live Preview (Square Area) - Fixed -->
 		<div
 			class="flex aspect-square w-[420px] shrink-0 items-center justify-center rounded-2xl bg-black/5 p-6 ring-1 ring-black/5"
+			role="img"
+			aria-label="Artifact Preview"
 		>
 			<ArtifactPreview
 				{format}
@@ -77,23 +79,34 @@
 		</div>
 
 		<!-- Right: Settings - Independent Scroll -->
-		<div class="custom-scrollbar flex h-full flex-1 flex-col gap-8 overflow-y-auto pr-4">
+		<div
+			class="custom-scrollbar flex h-full flex-1 flex-col gap-8 overflow-y-auto pr-4"
+			role="group"
+			aria-label="Export Settings"
+		>
 			<!-- Section: Static Stitches -->
 			<div class="flex flex-col gap-3">
-				<span class="font-serif text-[10px] font-bold tracking-[0.2em] uppercase opacity-30"
-					>Static Stitches</span
+				<span
+					class="font-serif text-[10px] font-bold tracking-[0.2em] text-studio-text/30 uppercase"
+					aria-hidden="true"
 				>
-				<div class="grid grid-cols-2 gap-3">
+					{__({ key: 'artifact.static_title' })}
+				</span>
+				<div class="grid grid-cols-2 gap-3" role="radiogroup" aria-label="Static Formats">
 					<button
 						class="flex flex-col items-center gap-3 rounded-xl border-2 p-4 transition-all {format ===
 						'png'
 							? 'border-brand bg-brand/5'
 							: 'border-black/5 bg-white/40 opacity-40 hover:opacity-100'}"
 						onclick={() => (format = 'png')}
+						role="radio"
+						aria-checked={format === 'png'}
 					>
-						<span class="text-2xl">🖼️</span>
+						<span class="text-2xl" aria-hidden="true">🖼️</span>
 						<div class="text-center">
-							<h3 class="font-serif text-[10px] font-bold tracking-tight uppercase">Raster PNG</h3>
+							<h3 class="font-serif text-[10px] font-bold tracking-tight uppercase">
+								{__({ key: 'artifact.formats.png' })}
+							</h3>
 						</div>
 					</button>
 					<button
@@ -102,10 +115,14 @@
 							? 'border-brand bg-brand/5'
 							: 'border-black/5 bg-white/40 opacity-40 hover:opacity-100'}"
 						onclick={() => (format = 'webp')}
+						role="radio"
+						aria-checked={format === 'webp'}
 					>
-						<span class="text-2xl">🕸️</span>
+						<span class="text-2xl" aria-hidden="true">🕸️</span>
 						<div class="text-center">
-							<h3 class="font-serif text-[10px] font-bold tracking-tight uppercase">WebP</h3>
+							<h3 class="font-serif text-[10px] font-bold tracking-tight uppercase">
+								{__({ key: 'artifact.formats.webp' })}
+							</h3>
 						</div>
 					</button>
 					<button
@@ -114,10 +131,14 @@
 							? 'border-brand bg-brand/5'
 							: 'border-black/5 bg-white/40 opacity-40 hover:opacity-100'}"
 						onclick={() => (format = 'jpg')}
+						role="radio"
+						aria-checked={format === 'jpg'}
 					>
-						<span class="text-2xl">📷</span>
+						<span class="text-2xl" aria-hidden="true">📷</span>
 						<div class="text-center">
-							<h3 class="font-serif text-[10px] font-bold tracking-tight uppercase">JPG</h3>
+							<h3 class="font-serif text-[10px] font-bold tracking-tight uppercase">
+								{__({ key: 'artifact.formats.jpg' })}
+							</h3>
 						</div>
 					</button>
 					<button
@@ -126,10 +147,14 @@
 							? 'border-brand bg-brand/5'
 							: 'border-black/5 bg-white/40 opacity-40 hover:opacity-100'}"
 						onclick={() => (format = 'svg')}
+						role="radio"
+						aria-checked={format === 'svg' && atelier.project.frames.length <= 1}
 					>
-						<span class="text-2xl">📐</span>
+						<span class="text-2xl" aria-hidden="true">📐</span>
 						<div class="text-center">
-							<h3 class="font-serif text-[10px] font-bold tracking-tight uppercase">Vector SVG</h3>
+							<h3 class="font-serif text-[10px] font-bold tracking-tight uppercase">
+								{__({ key: 'artifact.formats.svg_static' })}
+							</h3>
 						</div>
 					</button>
 				</div>
@@ -138,17 +163,22 @@
 			<!-- Section: Kinetic Weaves -->
 			<div class="flex flex-col gap-3">
 				<div class="flex items-center justify-between">
-					<span class="font-serif text-[10px] font-bold tracking-[0.2em] uppercase opacity-30"
-						>Kinetic Weaves</span
+					<span
+						class="font-serif text-[10px] font-bold tracking-[0.2em] text-studio-text/30 uppercase"
+						aria-hidden="true"
 					>
+						{__({ key: 'artifact.kinetic_title' })}
+					</span>
 					{#if atelier.project.frames.length <= 1}
 						<span class="font-serif text-[9px] font-bold text-brand italic opacity-60">
-							Requires multiple frames
+							{__({ key: 'artifact.requires_frames' })}
 						</span>
 					{/if}
 				</div>
 				<div
 					class="grid grid-cols-2 gap-3 {atelier.project.frames.length <= 1 ? 'opacity-40' : ''}"
+					role="radiogroup"
+					aria-label="Kinetic Formats"
 				>
 					<button
 						class="flex flex-col items-center gap-3 rounded-xl border-2 p-4 transition-all {format ===
@@ -160,10 +190,14 @@
 							: ''}"
 						onclick={() => (format = 'webm')}
 						disabled={atelier.project.frames.length <= 1}
+						role="radio"
+						aria-checked={format === 'webm'}
 					>
-						<span class="text-2xl">🎬</span>
+						<span class="text-2xl" aria-hidden="true">🎬</span>
 						<div class="text-center">
-							<h3 class="font-serif text-[10px] font-bold tracking-tight uppercase">Video WebM</h3>
+							<h3 class="font-serif text-[10px] font-bold tracking-tight uppercase">
+								{__({ key: 'artifact.formats.webm' })}
+							</h3>
 						</div>
 					</button>
 					<button
@@ -176,11 +210,13 @@
 							: ''}"
 						onclick={() => (format = 'gif')}
 						disabled={atelier.project.frames.length <= 1}
+						role="radio"
+						aria-checked={format === 'gif'}
 					>
-						<span class="text-2xl">🎀</span>
+						<span class="text-2xl" aria-hidden="true">🎀</span>
 						<div class="text-center">
 							<h3 class="font-serif text-[10px] font-bold tracking-tight uppercase">
-								Animated GIF
+								{__({ key: 'artifact.formats.gif' })}
 							</h3>
 						</div>
 					</button>
@@ -194,10 +230,14 @@
 							: ''}"
 						onclick={() => (format = 'mp4')}
 						disabled={atelier.project.frames.length <= 1}
+						role="radio"
+						aria-checked={format === 'mp4'}
 					>
-						<span class="text-2xl">📽️</span>
+						<span class="text-2xl" aria-hidden="true">📽️</span>
 						<div class="text-center">
-							<h3 class="font-serif text-[10px] font-bold tracking-tight uppercase">Video MP4</h3>
+							<h3 class="font-serif text-[10px] font-bold tracking-tight uppercase">
+								{__({ key: 'artifact.formats.mp4' })}
+							</h3>
 						</div>
 					</button>
 					<button
@@ -210,11 +250,13 @@
 							: ''}"
 						onclick={() => (format = 'svg')}
 						disabled={atelier.project.frames.length <= 1}
+						role="radio"
+						aria-checked={format === 'svg' && atelier.project.frames.length > 1}
 					>
-						<span class="text-2xl">🌀</span>
+						<span class="text-2xl" aria-hidden="true">🌀</span>
 						<div class="text-center">
 							<h3 class="font-serif text-[10px] font-bold tracking-tight uppercase">
-								Animated SVG
+								{__({ key: 'artifact.formats.svg_kinetic' })}
 							</h3>
 						</div>
 					</button>
@@ -225,49 +267,67 @@
 			<div class="flex flex-col gap-6 rounded-xl border border-black/5 bg-white/40 p-8">
 				<div class="flex items-center justify-between">
 					<div class="flex flex-col gap-1">
-						<span class="font-serif text-sm font-bold tracking-tight uppercase opacity-60"
-							>Artifact Scale</span
+						<label
+							for="scale-input"
+							class="font-serif text-sm font-bold tracking-tight text-studio-text/60 uppercase"
 						>
-						<span class="font-serif text-[10px] opacity-40">Multiplier for raster output size</span>
+							{__({ key: 'artifact.scale_label' })}
+						</label>
+						<span class="font-serif text-[10px] text-studio-text/40">
+							{__({ key: 'artifact.scale_desc' })}
+						</span>
 					</div>
 					<input
+						id="scale-input"
 						type="number"
 						bind:value={atelier.studio.exportScale}
 						min="1"
 						max="100"
-						class="w-24 rounded-xl border border-black/10 bg-white px-4 py-2 font-mono text-lg focus:outline-none"
+						class="w-24 rounded-xl border border-black/10 bg-white px-4 py-2 font-mono text-lg text-studio-text focus:outline-none"
 					/>
 				</div>
 
 				{#if format === 'webm' || format === 'gif' || format === 'mp4' || (format === 'svg' && atelier.project.frames.length > 1)}
-					<div class="h-px w-full bg-black/5"></div>
+					<div class="h-px w-full bg-black/5" aria-hidden="true"></div>
 					<div class="flex items-center justify-between">
 						<div class="flex flex-col gap-1">
-							<span class="font-serif text-sm font-bold tracking-tight uppercase opacity-60"
-								>Kinetic Pace (FPS)</span
+							<label
+								for="fps-input"
+								class="font-serif text-sm font-bold tracking-tight text-studio-text/60 uppercase"
 							>
-							<span class="font-serif text-[10px] opacity-40">Frames per second</span>
+								{__({ key: 'artifact.fps_label' })}
+							</label>
+							<span class="font-serif text-[10px] text-studio-text/40">
+								{__({ key: 'artifact.fps_desc' })}
+							</span>
 						</div>
 						<input
+							id="fps-input"
 							type="number"
 							bind:value={atelier.studio.fps}
 							min="1"
 							max="60"
-							class="w-24 rounded-xl border border-black/10 bg-white px-4 py-2 font-mono text-lg focus:outline-none"
+							class="w-24 rounded-xl border border-black/10 bg-white px-4 py-2 font-mono text-lg text-studio-text focus:outline-none"
 						/>
 					</div>
 				{/if}
 
-				<div class="h-px w-full bg-black/5"></div>
+				<div class="h-px w-full bg-black/5" aria-hidden="true"></div>
 
 				<div class="flex flex-col gap-4">
 					<div class="flex flex-col gap-1">
-						<span class="font-serif text-sm font-bold tracking-tight uppercase opacity-60"
-							>Background</span
-						>
-						<span class="font-serif text-[10px] opacity-40">Fill empty stitches with color</span>
+						<span class="font-serif text-sm font-bold tracking-tight text-studio-text/60 uppercase">
+							{__({ key: 'artifact.bg_label' })}
+						</span>
+						<span class="font-serif text-[10px] text-studio-text/40">
+							{__({ key: 'artifact.bg_desc' })}
+						</span>
 					</div>
-					<div class="flex flex-wrap items-center gap-3">
+					<div
+						class="flex flex-wrap items-center gap-3"
+						role="radiogroup"
+						aria-label="Background Type"
+					>
 						<button
 							class="h-10 w-10 rounded-xl border-2 {atelier.studio.exportBgColor === 'transparent'
 								? 'border-brand'
@@ -275,6 +335,8 @@
 							style="background: repeating-conic-gradient(#eee8d5 0% 25%, #fff 0% 50%) 50% / 10px 10px;"
 							onclick={() => (atelier.studio.exportBgColor = 'transparent')}
 							title="Transparent"
+							role="radio"
+							aria-checked={atelier.studio.exportBgColor === 'transparent'}
 						></button>
 						<button
 							class="h-10 w-10 rounded-xl border-2 {atelier.studio.exportBgColor === '#eee8d5'
@@ -282,6 +344,8 @@
 								: 'border-black/5'} bg-[#eee8d5]"
 							onclick={() => (atelier.studio.exportBgColor = '#eee8d5')}
 							title="Studio Cream"
+							role="radio"
+							aria-checked={atelier.studio.exportBgColor === '#eee8d5'}
 						></button>
 						<button
 							class="h-10 w-10 rounded-xl border-2 {atelier.studio.exportBgColor === '#000000'
@@ -289,6 +353,8 @@
 								: 'border-black/5'} bg-black"
 							onclick={() => (atelier.studio.exportBgColor = '#000000')}
 							title="Deep Black"
+							role="radio"
+							aria-checked={atelier.studio.exportBgColor === '#000000'}
 						></button>
 
 						<!-- Custom Option -->
@@ -304,6 +370,8 @@
 									showPicker = true;
 								}}
 								title="Custom Backdrop"
+								role="radio"
+								aria-checked={atelier.studio.exportBgColor === customBg}
 							></button>
 						</div>
 					</div>
@@ -316,7 +384,8 @@
 							}}
 							class="flex items-center gap-2 font-serif text-[10px] font-bold tracking-widest text-brand uppercase opacity-60 hover:opacity-100"
 						>
-							<span>🎨</span> Match Linen Backdrop
+							<span aria-hidden="true">🎨</span>
+							{__({ key: 'artifact.match_linen' })}
 						</button>
 					{/if}
 				</div>
@@ -326,7 +395,7 @@
 				class="artisan-primary-btn w-full py-5 text-xl"
 				onclick={() => onExport(format, atelier.studio.exportScale, atelier.studio.exportBgColor)}
 			>
-				Weave & Export Artifact
+				{__({ key: 'artifact.export_action' })}
 			</button>
 		</div>
 	</div></Modal

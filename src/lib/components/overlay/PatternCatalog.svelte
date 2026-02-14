@@ -16,14 +16,10 @@
 	const actions = loompad.getActions();
 
 	// Map actions to the specific format needed for display and execution
-	// We handle the execution logic here while getting the labels/shortcuts from the engine
 	const catalogActions = actions.map((a) => ({
 		...a,
 		id: a.intent.toLowerCase().replace(/_/g, '-'),
 		action: () => {
-			// Trigger the intent manually in the loom engine or specific shuttle methods
-			// For simplicity, we trigger the intent via the central Loom orchestration
-			// But for now, we'll keep the search behavior clean.
 			import('../../engine/loom.svelte.js').then(({ loom }) => {
 				loom.handleIntent(a.intent);
 			});
@@ -75,27 +71,30 @@
 	class="fixed inset-0 z-[1200] flex items-start justify-center bg-black/10 pt-[15vh] backdrop-blur-sm"
 	onmousedown={(e) => e.target === e.currentTarget && onClose()}
 	onkeydown={handleKey}
-	role="button"
-	tabindex="-1"
+	role="presentation"
 >
 	<div
 		transition:scale={{ duration: 150, start: 0.98 }}
-		class="flex w-[600px] flex-col overflow-hidden rounded-xl border border-black/5 bg-[#fdf6e3]/95 shadow-2xl"
+		class="flex w-[600px] flex-col overflow-hidden rounded-xl border border-black/5 bg-canvas-bg/95 shadow-2xl"
+		role="dialog"
+		aria-labelledby="catalog-title"
+		aria-modal="true"
 	>
 		<div class="relative flex items-center border-b border-black/5 bg-white/40 p-6">
-			<span class="mr-4 text-2xl opacity-40">📖</span>
+			<span class="mr-4 text-2xl opacity-40" aria-hidden="true">📖</span>
+			<h2 id="catalog-title" class="sr-only">{__({ key: 'hud.basin.catalog_title' })}</h2>
 			<input
 				id="catalog-search"
 				type="text"
 				bind:value={searchQuery}
-				placeholder="Search for a pattern or studio action..."
-				class="w-full bg-transparent font-serif text-xl focus:outline-none"
+				placeholder={__({ key: 'hud.basin.catalog_search' })}
+				class="w-full bg-transparent font-serif text-xl text-studio-text focus:outline-none"
 			/>
 		</div>
-		<div class="custom-scrollbar max-h-[50vh] overflow-y-auto p-4">
+		<div class="custom-scrollbar max-h-[50vh] overflow-y-auto p-4" role="list">
 			{#if filteredActions.length === 0}
-				<div class="p-8 text-center font-serif text-sm italic opacity-40">
-					No patterns found for "{searchQuery}"
+				<div class="p-8 text-center font-serif text-sm italic text-studio-text/40">
+					{__({ key: 'hud.basin.catalog_no_results', replace: { query: searchQuery } })}
 				</div>
 			{:else}
 				<div class="flex flex-col gap-1">
@@ -110,12 +109,12 @@
 			{/if}
 		</div>
 		<div class="flex items-center justify-between border-t border-black/5 bg-black/5 px-8 py-4">
-			<span class="font-serif text-[9px] font-bold tracking-[0.2em] uppercase opacity-30"
-				>Use Arrows to Navigate • Enter to Weave</span
-			>
-			<span class="font-serif text-[9px] font-bold tracking-[0.2em] uppercase opacity-30"
-				>{filteredActions.length} Actions Available</span
-			>
+			<span class="font-serif text-[9px] font-bold tracking-[0.2em] uppercase text-studio-text/30">
+				{__({ key: 'hud.basin.catalog_footer' })}
+			</span>
+			<span class="font-serif text-[9px] font-bold tracking-[0.2em] uppercase text-studio-text/30">
+				{__({ key: 'hud.basin.catalog_count', replace: { count: filteredActions.length } })}
+			</span>
 		</div>
 	</div>
 </div>

@@ -75,3 +75,29 @@ When adding a new feature, ask:
 4. Does it fit within the Solarized/Cottagecore aesthetic?
 5. Does it make the user feel more relaxed or more stressed? (Goal: Relaxed).
 6. Does it feel like a "tool" or a "toy"? (Goal: A professional tool that feels like a toy).
+
+---
+
+## 7. Accessibility (A11y): The Inclusive Studio
+
+Accessibility in Rupa is not just about compliance, but about ensuring the "Sanctuary" is open to everyone.
+
+- **The Keyboard as an Assistive Tool**: Since Rupa is keyboard-first, most accessibility for motor-impaired users is built into the **LoomPad**. Ensure all chords are remappable and logical.
+- **Semantic ARIA with Craft Terminology**:
+  - Use `aria-label` to describe actions in the artisan metaphor (e.g., `aria-label="Soak the linen with dye"` instead of `aria-label="Flood fill"`).
+  - The **Linen** must be treated as a `role="grid"` or `role="img"` with an alt-description of the pattern being woven.
+- **Focus Management**: The **Needle** acts as the primary focus anchor. When moving between panels (Ledgers), the focus should be clearly visible with a soft magenta outline.
+- **Color Contrast**: All text must meet WCAG AA standards against the Paper (`#fdf6e3`) background. Use Artisan Magenta for high-contrast highlights.
+
+---
+
+## 8. Internationalization (i18n): Global Craft
+
+Rupa uses **i18next** to translate the "language of craft" for a global audience.
+
+- **Source of Truth**: All strings must live in `src/lib/lang/en/` (as the initial standard).
+- **Artisan-Centric Keys**: Use semantic keys that reflect the studio's lore.
+  - _Bad_: `ui.button.save`, `ui.modal.header`
+  - _Good_: `hud.actions.preserve_weave`, `hud.basin.dye_title`
+- **Interpolation**: Use i18next's interpolation for dynamic stats (e.g., `{{count}} stitches applied`).
+- **Implementation Rule**: Never hardcode text in Svelte components. Use the `$t` (translate) function provided by the i18n store.

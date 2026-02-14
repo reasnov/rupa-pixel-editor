@@ -7,6 +7,8 @@
 	class="flex items-center gap-4 transition-opacity duration-1000 {atelier.needle.isVisible
 		? 'opacity-100'
 		: 'opacity-0'}"
+	role="status"
+	aria-live="polite"
 >
 	<div class="flex w-[180px] items-center">
 		{#key stance.current.type}
@@ -19,7 +21,7 @@
 				"
 			>
 				{#if stance.current.icon}
-					<span class="text-xs">{stance.current.icon}</span>
+					<span class="text-xs" aria-hidden="true">{stance.current.icon}</span>
 				{/if}
 
 				<span
@@ -44,8 +46,11 @@
 			hour: '2-digit',
 			minute: '2-digit'
 		})}
-		<div class="text-[8px] font-bold tracking-[0.2em] uppercase opacity-20">
-			Linen Backed Up: {time}
+		<div
+			class="text-[8px] font-bold tracking-[0.2em] text-studio-text/20 uppercase"
+			aria-label={__({ key: 'project.archived', replace: { time } })}
+		>
+			{__({ key: 'project.archived', replace: { time } })}
 		</div>
 	{/if}
 </div>

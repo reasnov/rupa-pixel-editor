@@ -1,5 +1,6 @@
 <script lang="ts">
 	import './layout.css';
+	import '$lib/state/i18n.svelte.js';
 
 	let { children } = $props();
 </script>

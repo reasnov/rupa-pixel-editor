@@ -104,7 +104,12 @@ export class LoomPadEngine {
 		this.patterns = [];
 		Object.values(shortcutsData).forEach((category) => {
 			Object.entries(category).forEach(([intent, data]) => {
-				const { label, keys, group } = data as { label: string; keys: string[]; group: string };
+				const { keys, group } = data as { label: string; keys: string[]; group: string };
+
+				// Get translated label and group
+				const label = __({ key: `shortcuts.labels.${intent}` });
+				const groupKey = group.toLowerCase().replace(/ & /g, '_').replace(/ /g, '_');
+				const translatedGroup = __({ key: `shortcuts.groups.${groupKey}` });
 
 				keys.forEach((keyCombo) => {
 					const parts = keyCombo.toLowerCase().split('+');
@@ -119,7 +124,7 @@ export class LoomPadEngine {
 						shift: parts.includes('shift'),
 						alt: parts.includes('alt'),
 						label,
-						group
+						group: translatedGroup
 					});
 				});
 			});
@@ -144,7 +149,7 @@ export class LoomPadEngine {
 				uniqueIntents.add(p.intent);
 				result.push({
 					intent: p.intent,
-					label: p.label,
+					label: p.label, // This is already translated in loadPatterns
 					group: p.group,
 					shortcut: this.getLabel(p.intent)
 				});
@@ -192,8 +197,9 @@ export class LoomPadEngine {
 			if (custom) {
 				if (!seenGroupedIntents.has(custom)) {
 					seenGroupedIntents.add(custom);
-					// Simplify labels for groups
-					const cleanLabel = custom === 'Arrows' ? 'Step the Needle' : 'Select Dye Swatches';
+					// Get translated labels for custom groups
+					const groupKey = custom.toLowerCase();
+					const cleanLabel = __({ key: `shortcuts.groups.${groupKey}` });
 					finalActions.push({ ...a, label: cleanLabel, customKey: custom });
 				}
 			} else {
@@ -206,19 +212,19 @@ export class LoomPadEngine {
 			groups[a.group].push(a as any);
 		});
 
-		// Order groups logically
+		// Order groups logically using translated names
 		const order = [
-			'Basic Rhythms',
-			'The Needle',
-			'The Hand',
-			'Continuous Weaving',
-			'Artisan Magic',
-			'The Loom',
-			'Dimensions & Forms',
-			'The Spindle',
-			'The Veils',
-			'The Pattern Book',
-			'Atmosphere & Tuning'
+			__({ key: 'shortcuts.groups.basic_rhythms' }),
+			__({ key: 'shortcuts.groups.the_needle' }),
+			__({ key: 'shortcuts.groups.the_hand' }),
+			__({ key: 'shortcuts.groups.continuous_weaving' }),
+			__({ key: 'shortcuts.groups.artisan_magic' }),
+			__({ key: 'shortcuts.groups.the_loom' }),
+			__({ key: 'shortcuts.groups.dimensions_forms' }),
+			__({ key: 'shortcuts.groups.the_spindle' }),
+			__({ key: 'shortcuts.groups.the_veils' }),
+			__({ key: 'shortcuts.groups.the_pattern_book' }),
+			__({ key: 'shortcuts.groups.atmosphere_tuning' })
 		];
 
 		return order

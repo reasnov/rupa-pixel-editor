@@ -24,6 +24,12 @@
 		scrollable?: boolean;
 	}>();
 
+	// Register this modal to the global Escape handler
+	$effect(() => {
+		atelier.pushEscapeAction(onClose);
+		return () => atelier.popEscapeAction(onClose);
+	});
+
 	// Custom "Paper Roll" Transition
 	function paperRoll(node: HTMLElement, { duration = 600 }) {
 		return {
@@ -38,14 +44,6 @@
 			}
 		};
 	}
-
-	// Register with Escape Stack once per mount
-	$effect(() => {
-		untrack(() => {
-			atelier.pushEscapeAction(onClose);
-		});
-		return () => atelier.popEscapeAction(onClose);
-	});
 </script>
 
 <!-- svelte-ignore a11y_no_static_element_interactions -->

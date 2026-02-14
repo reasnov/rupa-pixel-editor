@@ -3,7 +3,7 @@
 	import { fade } from 'svelte/transition';
 </script>
 
-<div class="flex items-center gap-4 text-studio-text/40" role="status">
+<div class="flex items-center gap-3 text-studio-text/40" role="status">
 	{#if atelier.project.lastSaved}
 		<div transition:fade class="flex items-center gap-1.5">
 			<span class="text-[10px]" aria-hidden="true">💾</span>
@@ -23,7 +23,7 @@
 		<div class="h-3 w-px bg-brand/20" aria-hidden="true"></div>
 	{/if}
 
-	<div class="flex gap-3 font-mono text-[8px] font-bold tracking-tighter uppercase">
+	<div class="flex gap-2 font-mono text-[8px] font-bold tracking-tighter uppercase">
 		<span>Pos: {atelier.needle.pos.x},{atelier.needle.pos.y}</span>
 		<span>Size: {atelier.linen.width}x{atelier.linen.height}</span>
 		<span>Zoom: {Math.round(atelier.studio.zoomLevel * 100)}%</span>

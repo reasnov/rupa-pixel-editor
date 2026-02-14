@@ -59,12 +59,6 @@
 	}
 
 	onMount(() => document.getElementById('catalog-search')?.focus());
-
-	// Register with Escape Stack
-	$effect(() => {
-		untrack(() => atelier.studio.pushEscapeAction(onClose));
-		return () => atelier.studio.popEscapeAction(onClose);
-	});
 </script>
 
 <div

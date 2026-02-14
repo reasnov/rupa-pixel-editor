@@ -35,7 +35,7 @@ _Historical and future development roadmaps._
 - [05: The Artisan's Stance](./developers/blueprints/05-artisan-stance.md)
 - [06: The Master's Folio](./developers/blueprints/06-masters-folio.md)
 
-### 7. [Release Notes](./pubs/releases/v0.3.0.md)
+### 7. [Release Notes](./pubs/releases/v0.6.1.md)
 
 _Latest milestone highlights and changes._
 

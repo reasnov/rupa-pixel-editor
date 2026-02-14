@@ -10,7 +10,7 @@ export class PersistenceService {
 		return JSON.stringify({
 			version: atelier.version,
 			metadata: {
-				name: atelier.project.name,
+				name: 'Artisan Pattern',
 				lastModified: new Date().toISOString()
 			},
 			palette: atelier.paletteState.swatches,
@@ -42,7 +42,7 @@ export class PersistenceService {
 			atelier.project.currentFilePath || undefined
 		);
 		if (res) {
-			atelier.project.setMetadata(atelier.project.name, res);
+			atelier.project.setMetadata(res);
 			sfx.playStitch();
 		}
 	}
@@ -52,7 +52,7 @@ export class PersistenceService {
 		const url = URL.createObjectURL(blob);
 		const a = document.createElement('a');
 		a.href = url;
-		a.download = `${atelier.project.name.toLowerCase().replace(/\s+/g, '-')}.rupa`;
+		a.download = `rupa-motif.rupa`;
 		a.click();
 	}
 
@@ -65,7 +65,7 @@ export class PersistenceService {
 		const res = await window.electronAPI.openFile();
 		if (res) {
 			this.deserialize(res.content);
-			atelier.project.setMetadata(atelier.project.name, res.filePath);
+			atelier.project.setMetadata(res.filePath);
 			sfx.playStitch();
 		}
 	}
@@ -99,9 +99,8 @@ export class PersistenceService {
 		try {
 			const d = JSON.parse(json);
 
-			// 1. Restore Palette & Meta
+			// 1. Restore Palette
 			atelier.paletteState.swatches = d.palette;
-			atelier.project.name = d.metadata.name;
 
 			// 2. Restore Folio Structure (with Backward Compatibility)
 			if (d.folio) {

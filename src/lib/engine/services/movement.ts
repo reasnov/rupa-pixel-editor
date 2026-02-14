@@ -73,12 +73,10 @@ export class MovementService {
 	}
 
 	/**
-	 * Reset the needle to the absolute center.
+	 * Reset the needle to the artisan's home (1,1).
 	 */
 	jumpHome() {
-		const cx = Math.floor(atelier.linen.width / 2);
-		const cy = Math.floor(atelier.linen.height / 2);
-		atelier.needle.setPos(cx, cy);
+		this.jumpTo(1, 1);
 		sfx.playMove();
 	}
 }

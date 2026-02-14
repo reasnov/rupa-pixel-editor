@@ -97,7 +97,8 @@ export class LinenState {
 	}
 
 	getColor(x: number, y: number): ColorHex | null {
-		return this.stitches[this.getIndex(x, y)];
+		// Layer agnostic picking: use composite stitches
+		return this.compositeStitches[this.getIndex(x, y)];
 	}
 
 	setColor(x: number, y: number, color: ColorHex | null) {
@@ -106,5 +107,22 @@ export class LinenState {
 
 	isValidCoord(x: number, y: number): boolean {
 		return x >= 0 && x < this.width && y >= 0 && y < this.height;
+	}
+
+	// --- Viewport Fitting (Derived) ---
+
+	fitWidth = $derived(`calc((100cqi - 20px) * ${this.width} / (${this.width} + 2))`);
+	fitHeight = $derived(`calc((100cqb - 20px) * ${this.height} / (${this.height} + 2))`);
+
+	/**
+	 * Calculates the effective dimension of the linen within the viewport
+	 * for a specific orientation, matching the Loom's aspect-ratio fitting.
+	 */
+	getFitDimension(orientation: 'horizontal' | 'vertical'): string {
+		const w = this.width;
+		const h = this.height;
+		return orientation === 'horizontal'
+			? `min(${this.fitWidth}, calc(${this.fitHeight} * (${w} / ${h})))`
+			: `min(${this.fitHeight}, calc(${this.fitWidth} * (${h} / ${w})))`;
 	}
 }

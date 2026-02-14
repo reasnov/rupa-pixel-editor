@@ -8,6 +8,7 @@ import { sfx } from './audio.js';
  */
 export class ChronosEngine {
 	private interval: any = null;
+	elapsedTime = $state(0); // Track global playback time for playhead
 
 	// Derived State for Rendering
 	totalDuration = $derived.by(() => {
@@ -28,6 +29,12 @@ export class ChronosEngine {
 		}
 
 		atelier.project.isPlaying = true;
+		// Reset elapsed time to the start of current frame
+		this.elapsedTime = 0;
+		for(let i=0; i<atelier.project.activeFrameIndex; i++) {
+			this.elapsedTime += atelier.project.frames[i].duration;
+		}
+
 		sfx.playStitch(); // Success feedback
 		this.tick();
 	}
@@ -57,6 +64,11 @@ export class ChronosEngine {
 		this.interval = setTimeout(() => {
 			// Advance to next thread of time
 			atelier.project.activeFrameIndex = nextIndex;
+			
+			// Loop elapsed time if wrapping
+			if (nextIndex === 0) this.elapsedTime = 0;
+			else this.elapsedTime += currentFrame.duration;
+
 			this.tick(); // Loop the pulse
 		}, currentFrame.duration);
 	}

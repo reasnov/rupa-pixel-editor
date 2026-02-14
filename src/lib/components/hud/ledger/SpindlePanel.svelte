@@ -5,7 +5,7 @@
 </script>
 
 <div
-	class="artisan-panel flex h-28 w-full flex-col gap-1.5 overflow-hidden px-4 py-2 shadow-2xl transition-all hover:bg-white/40"
+	class="artisan-panel flex h-36 w-full flex-col gap-1.5 overflow-hidden px-4 py-2 shadow-2xl transition-all hover:bg-white/40"
 	role="region"
 	aria-label={__({ key: 'ledger.spindle_title' })}
 >

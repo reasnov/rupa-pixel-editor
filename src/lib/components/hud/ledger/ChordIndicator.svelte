@@ -6,7 +6,7 @@
 	<span class="font-serif text-[8px] font-black tracking-widest text-brand/40 uppercase italic"
 		>{__({ key: 'ledger.chord' })}:</span
 	>
-	<div class="flex min-w-[120px] gap-1.5">
+	<div class="flex min-w-[100px] gap-1.5">
 		{#if loompad.activeKeys.length > 0}
 			{#each loompad.activeKeys as key}
 				<span

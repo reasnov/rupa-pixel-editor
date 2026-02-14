@@ -62,23 +62,22 @@
 		{/if}
 	</svg>
 
-	<!-- Faint fill for the selected area -->
-	<div
-		class="pointer-events-none absolute inset-0 z-[39]"
+	<!-- Faint fill for the selected area (SVG-based for performance) -->
+	<svg
+		class="pointer-events-none absolute inset-0 z-[39] h-full w-full overflow-visible"
 		style="grid-column: 1 / -1; grid-row: 1 / -1;"
+		viewBox="0 0 {atelier.linen.width} {atelier.linen.height}"
+		shape-rendering="crispEdges"
 	>
-		{#each atelier.selection.getPoints(atelier.linen.width) as p}
-			<div
-				class="absolute bg-brand/10"
-				style="
-                left: {(p.x / atelier.linen.width) * 100}%; 
-                top: {(p.y / atelier.linen.height) * 100}%; 
-                width: {100 / atelier.linen.width}%; 
-                height: {100 / atelier.linen.height}%;
-            "
-			></div>
-		{/each}
-	</div>
+		<path
+			d={atelier.selection
+				.getPoints(atelier.linen.width)
+				.map((p) => `M${p.x},${p.y}h1v1h-1z`)
+				.join(' ')}
+			fill="var(--color-brand)"
+			fill-opacity="0.1"
+		/>
+	</svg>
 {/if}
 
 <style>

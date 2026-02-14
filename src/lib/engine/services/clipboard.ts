@@ -11,13 +11,14 @@ export class ClipboardService {
 		if (!bounds || points.length === 0) return;
 
 		const swatchData = new Array(bounds.width * bounds.height).fill(null);
+		const source = atelier.linen.compositeStitches; // Layer-Agnostic: Use merged image
 
 		points.forEach((p) => {
 			const sourceIndex = p.y * width + p.x;
 			const targetX = p.x - bounds.x1;
 			const targetY = p.y - bounds.y1;
 			const targetIndex = targetY * bounds.width + targetX;
-			swatchData[targetIndex] = atelier.linen.stitches[sourceIndex];
+			swatchData[targetIndex] = source[sourceIndex];
 		});
 
 		atelier.project.clipboard = {

@@ -7,12 +7,6 @@
 	let { onClose = () => (atelier.studio.showAudioBasin = false) } = $props<{
 		onClose: () => void;
 	}>();
-
-	// Register with Escape Stack
-	$effect(() => {
-		untrack(() => atelier.pushEscapeAction(onClose));
-		return () => atelier.popEscapeAction(onClose);
-	});
 </script>
 
 <Modal title="Audio Basin" subtitle="Harmony & Atmosphere Tuning" icon="🔊" {onClose} width="450px">

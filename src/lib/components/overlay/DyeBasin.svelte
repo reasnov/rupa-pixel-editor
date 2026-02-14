@@ -30,12 +30,6 @@
 			value = newThread;
 		});
 	});
-
-	// Register with Escape Stack
-	$effect(() => {
-		untrack(() => atelier.pushEscapeAction(onClose));
-		return () => atelier.popEscapeAction(onClose);
-	});
 </script>
 
 <div

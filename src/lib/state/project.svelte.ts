@@ -5,7 +5,6 @@ import { FrameState } from './frame.svelte.js';
  * ProjectState (The Folio): Manages metadata, clipboard data, and the collection of Frames.
  */
 export class ProjectState {
-	name = $state('Untitled Stitch');
 	currentFilePath = $state<string | null>(null);
 	lastSaved = $state<Date | null>(null);
 
@@ -41,8 +40,7 @@ export class ProjectState {
 		}
 	}
 
-	setMetadata(name: string, path: string | null = null) {
-		this.name = name;
+	setMetadata(path: string | null = null) {
 		this.currentFilePath = path;
 		this.lastSaved = new Date();
 	}

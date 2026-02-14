@@ -1,6 +1,9 @@
+import { Path } from '../logic/path.js';
+
 export class ExportEngine {
 	/**
-	 * Generates an optimized SVG string using a Greedy Rect-Merging algorithm.
+	 * Generates an optimized SVG string using a Path-Merging algorithm.
+	 * This converts clusters of the same color into single <path> objects.
 	 */
 	static toSVG(
 		width: number,
@@ -15,24 +18,21 @@ export class ExportEngine {
 			svg += `<rect width="${width}" height="${height}" fill="${bgColor}" />`;
 		}
 
-		const visited = new Array(data.length).fill(false);
+		const clustersByColor: Map<string, Set<number>> = new Map();
 
-		for (let y = 0; y < height; y++) {
-			for (let x = 0; x < width; x++) {
-				const idx = y * width + x;
-				const color = data[idx];
-
-				// Now we only skip if the value is explicitly null (Empty)
-				if (color === null || visited[idx]) continue;
-
-				const cluster = this.findCluster(x, y, width, height, data, visited);
-				const rects = this.greedyRectMerge(cluster, width);
-
-				rects.forEach((r) => {
-					svg += `<rect x="${r.x}" y="${r.y}" width="${r.w}" height="${r.h}" fill="${color}" />`;
-				});
-			}
+		for (let i = 0; i < data.length; i++) {
+			const color = data[i];
+			if (color === null) continue;
+			if (!clustersByColor.has(color)) clustersByColor.set(color, new Set());
+			clustersByColor.get(color)!.add(i);
 		}
+
+		clustersByColor.forEach((indices, color) => {
+			const pathData = Path.traceCluster(indices, width);
+			if (pathData) {
+				svg += `<path d="${pathData}" fill="${color}" />`;
+			}
+		});
 
 		svg += '</svg>';
 		return svg;
@@ -168,68 +168,75 @@ export class ExportEngine {
 
 	/**
 	 * Generates an Animated SVG using CSS keyframes.
+	 * Respects per-frame durations.
 	 */
 	static toAnimatedSVG(
 		width: number,
 		height: number,
-		frames: (string | null)[][],
-		fps: number,
+		framesData: (string | null)[][],
+		frameDurations: number[],
 		bgColor: string | 'transparent' = 'transparent'
 	): string {
-		const duration = (frames.length / fps).toFixed(2);
+		const totalDurationMs = frameDurations.reduce((a, b) => a + b, 0);
+		const totalDurationSec = (totalDurationMs / 1000).toFixed(3);
+
 		let svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}" shape-rendering="crispEdges">`;
 
 		if (bgColor !== 'transparent') {
 			svg += `<rect width="${width}" height="${height}" fill="${bgColor}" />`;
 		}
 
-		// Each frame becomes a group that is toggled via CSS animation
-		frames.forEach((data, i) => {
-			const delay = (i / fps).toFixed(2);
-			svg += `<g class="frame" style="animation: fade ${duration}s step-end infinite; animation-delay: ${delay}s; opacity: ${i === 0 ? 1 : 0}">`;
+		let elapsedMs = 0;
+		framesData.forEach((data, i) => {
+			const startPct = ((elapsedMs / totalDurationMs) * 100).toFixed(3);
+			const durationMs = frameDurations[i];
+			const endPct = (((elapsedMs + durationMs) / totalDurationMs) * 100).toFixed(3);
 
-			// Optimize each frame using Greedy Rect-Merging
-			const visited = new Array(data.length).fill(false);
-			for (let y = 0; y < height; y++) {
-				for (let x = 0; x < width; x++) {
-					const idx = y * width + x;
-					const color = data[idx];
+			const animName = `rupa-frame-${i}`;
+			svg += `<g class="${animName}" style="opacity: 0; visibility: hidden; animation: ${animName} ${totalDurationSec}s step-end infinite;">`;
 
-					if (color === null || visited[idx]) continue;
-
-					const cluster = this.findCluster(x, y, width, height, data, visited);
-					const rects = this.greedyRectMerge(cluster, width);
-
-					rects.forEach((r) => {
-						svg += `<rect x="${r.x}" y="${r.y}" width="${r.w}" height="${r.h}" fill="${color}" />`;
-					});
-				}
+			const clustersByColor: Map<string, Set<number>> = new Map();
+			for (let idx = 0; idx < data.length; idx++) {
+				const color = data[idx];
+				if (color === null) continue;
+				if (!clustersByColor.has(color)) clustersByColor.set(color, new Set());
+				clustersByColor.get(color)!.add(idx);
 			}
 
-			svg += `</g>`;
-		});
+			clustersByColor.forEach((indices, color) => {
+				const pathData = Path.traceCluster(indices, width);
+				if (pathData) {
+					svg += `<path d="${pathData}" fill="${color}" />`;
+				}
+			});
 
-		svg += `<style>
-            @keyframes fade {
-                0%, ${100 / frames.length}% { opacity: 1; }
-                ${100 / frames.length + 0.01}%, 100% { opacity: 0; }
-            }
-            .frame { pointer-events: none; }
-        </style>`;
+			svg += `</g>`;
+			svg += `<style>
+                @keyframes ${animName} {
+                    0%, ${startPct}% { opacity: 0; visibility: hidden; }
+                    ${startPct}%, ${endPct}% { opacity: 1; visibility: visible; }
+                    ${endPct}%, 100% { opacity: 0; visibility: hidden; }
+                }
+            </style>`;
+
+			elapsedMs += durationMs;
+		});
 
 		svg += '</svg>';
 		return svg;
 	}
 
 	/**
-	 * Renders a sequence of frames to a WebM video using MediaRecorder.
+	 * Renders a sequence of frames to a video Blob using MediaRecorder.
+	 * Uses per-frame durations and ensures a valid video stream is produced.
 	 */
-	static async toWebM(
+	static async toVideo(
 		width: number,
 		height: number,
-		frames: (string | null)[][],
+		framesData: (string | null)[][],
+		frameDurations: number[],
 		scale: number,
-		fps: number,
+		format: 'webm' | 'mp4' = 'webm',
 		bgColor: string | 'transparent' = 'transparent'
 	): Promise<Blob> {
 		const canvas = document.createElement('canvas');
@@ -237,39 +244,49 @@ export class ExportEngine {
 		const finalHeight = Math.round(height * scale);
 		canvas.width = finalWidth;
 		canvas.height = finalHeight;
-		const ctx = canvas.getContext('2d')!;
+
+		const ctx = canvas.getContext('2d', { alpha: false })!;
 		ctx.imageSmoothingEnabled = false;
 
-		const stream = canvas.captureStream(fps);
-		const recorder = new MediaRecorder(stream, { mimeType: 'video/webm' });
+		// High-compatibility settings
+		const mimeType =
+			format === 'mp4' && MediaRecorder.isTypeSupported('video/mp4;codecs=h264')
+				? 'video/mp4;codecs=h264'
+				: 'video/webm;codecs=vp8'; // VP8 is the most widely supported WebM codec
+
+		// Capture stream with a high enough FPS to ensure smooth playback
+		// but we will control the drawing manually.
+		const stream = canvas.captureStream(30);
+		const recorder = new MediaRecorder(stream, {
+			mimeType,
+			videoBitsPerSecond: 8000000
+		});
+
 		const chunks: Blob[] = [];
+		recorder.ondataavailable = (e) => {
+			if (e.data.size > 0) chunks.push(e.data);
+		};
 
-		recorder.ondataavailable = (e) => chunks.push(e.data);
+		return new Promise((resolve, reject) => {
+			recorder.onstop = () => {
+				const blob = new Blob(chunks, { type: mimeType });
+				resolve(blob);
+			};
+			recorder.onerror = (err) => reject(err);
 
-		return new Promise((resolve) => {
-			recorder.onstop = () => resolve(new Blob(chunks, { type: 'video/webm' }));
 			recorder.start();
 
-			let currentFrame = 0;
-			const renderNext = () => {
-				if (currentFrame >= frames.length) {
-					recorder.stop();
-					return;
-				}
+			// Pre-render first frame to "warm up" the stream
+			const drawFrame = (frameIndex: number) => {
+				ctx.fillStyle = bgColor === 'transparent' ? '#ffffff' : bgColor;
+				ctx.fillRect(0, 0, finalWidth, finalHeight);
 
-				// Draw background
-				if (bgColor !== 'transparent') {
-					ctx.fillStyle = bgColor;
-					ctx.fillRect(0, 0, finalWidth, finalHeight);
-				} else {
-					ctx.clearRect(0, 0, finalWidth, finalHeight);
-				}
-
-				// Draw frame
-				frames[currentFrame].forEach((color, i) => {
-					if (color === null) return;
-					const x = i % width;
-					const y = Math.floor(i / width);
+				const data = framesData[frameIndex];
+				for (let j = 0; j < data.length; j++) {
+					const color = data[j];
+					if (color === null) continue;
+					const x = j % width;
+					const y = Math.floor(j / width);
 					ctx.fillStyle = color;
 					ctx.fillRect(
 						Math.floor(x * scale),
@@ -277,13 +294,156 @@ export class ExportEngine {
 						Math.ceil(scale),
 						Math.ceil(scale)
 					);
-				});
-
-				currentFrame++;
-				setTimeout(renderNext, 1000 / fps);
+				}
 			};
 
-			renderNext();
+			(async () => {
+				// Wait for recorder to be active
+				await new Promise((r) => setTimeout(r, 200));
+
+				for (let i = 0; i < framesData.length; i++) {
+					drawFrame(i);
+					// Hold the frame for its specified duration
+					await new Promise((r) => setTimeout(r, frameDurations[i]));
+				}
+
+				// Final padding to ensure the last frame is captured
+				await new Promise((r) => setTimeout(r, 500));
+				recorder.stop();
+				stream.getTracks().forEach((t) => t.stop());
+			})();
 		});
+	}
+
+	/**
+	 * Generates a GIF using the lightweight omggif library.
+	 */
+	static async toGIF(
+		width: number,
+		height: number,
+		framesData: (string | null)[][],
+		frameDurations: number[],
+		scale: number,
+		bgColor: string | 'transparent' = 'transparent'
+	): Promise<Blob> {
+		const { GifWriter } = await import('./omggif.js');
+
+		const finalWidth = Math.round(width * scale);
+		const finalHeight = Math.round(height * scale);
+		const canvas = document.createElement('canvas');
+		canvas.width = finalWidth;
+		canvas.height = finalHeight;
+		const ctx = canvas.getContext('2d', { alpha: true })!;
+		ctx.imageSmoothingEnabled = false;
+
+		// Initialize buffer (Max 1MB per frame roughly estimated)
+		const buffer = new Uint8Array(framesData.length * finalWidth * finalHeight * 2);
+		const writer = new GifWriter(buffer, finalWidth, finalHeight, { loop: 0 }); // Loop forever
+
+		for (let i = 0; i < framesData.length; i++) {
+			// 1. Render frame to canvas
+			ctx.clearRect(0, 0, finalWidth, finalHeight);
+			if (bgColor !== 'transparent') {
+				ctx.fillStyle = bgColor;
+				ctx.fillRect(0, 0, finalWidth, finalHeight);
+			}
+
+			const frameData = framesData[i];
+			for (let j = 0; j < frameData.length; j++) {
+				const color = frameData[j];
+				if (color === null) continue;
+				const x = j % width;
+				const y = Math.floor(j / width);
+				ctx.fillStyle = color;
+				ctx.fillRect(
+					Math.floor(x * scale),
+					Math.floor(y * scale),
+					Math.ceil(scale),
+					Math.ceil(scale)
+				);
+			}
+
+			// 2. Extract pixels and quantize
+			const imageData = ctx.getImageData(0, 0, finalWidth, finalHeight).data;
+			const { indexedPixels, palette } = this.quantizeFrame(imageData);
+
+			// 3. Add to GIF (delay is in 10ms units)
+			writer.addFrame(0, 0, finalWidth, finalHeight, indexedPixels, {
+				palette: palette,
+				delay: Math.round(frameDurations[i] / 10)
+			});
+
+			// Yield to UI thread
+			await new Promise((r) => setTimeout(r, 0));
+		}
+
+		// Slice the buffer to the actual used size
+		const usedBuffer = buffer.slice(0, writer.end());
+		return new Blob([usedBuffer], { type: 'image/gif' });
+	}
+
+	/**
+	 * Simple color quantizer for GIF.
+	 * Maps RGBA pixels to a palette of up to 256 colors.
+	 */
+	private static quantizeFrame(data: Uint8ClampedArray): {
+		indexedPixels: number[];
+		palette: number[];
+	} {
+		const paletteMap = new Map<string, number>();
+		const palette: number[] = [];
+		const indexedPixels: number[] = new Array(data.length / 4);
+
+		// Always add transparent/background color at index 0
+		// We use 0 as the transparent index in this implementation if needed,
+		// but omggif handles it via options. For now, strict colors.
+		// A simple strategy: Build palette dynamically.
+
+		for (let i = 0; i < data.length; i += 4) {
+			const r = data[i];
+			const g = data[i + 1];
+			const b = data[i + 2];
+			const a = data[i + 3];
+
+			// Simple alpha threshold
+			if (a < 128) {
+				// Transparent
+				// We'll map transparency to index 0 (and ensure index 0 is reserved or handled)
+				// For this simple implementation, let's treat transparency as a specific color key
+				// or just map it to the background if no transparency support is requested.
+				// Here we map to magenta (magic pink) for now or handled by disposal.
+				// Let's assume solid background for this version to ensure stability.
+				const key = '0,0,0,0'; // Transparent
+				if (!paletteMap.has(key)) {
+					paletteMap.set(key, palette.length);
+					palette.push(0); // Placeholder
+				}
+				indexedPixels[i / 4] = paletteMap.get(key)!;
+				continue;
+			}
+
+			const colorInt = (r << 16) | (g << 8) | b;
+			const key = `${r},${g},${b}`;
+
+			if (!paletteMap.has(key)) {
+				// GIF limit
+				if (palette.length >= 256) {
+					// Simple fallback: map to index 0 (lossy)
+					indexedPixels[i / 4] = 0;
+					continue;
+				}
+				paletteMap.set(key, palette.length);
+				palette.push(colorInt);
+			}
+
+			indexedPixels[i / 4] = paletteMap.get(key)!;
+		}
+
+		// Ensure palette is power of 2 size (required by GIF spec)
+		while (palette.length < 2 || (palette.length & (palette.length - 1)) !== 0) {
+			palette.push(0);
+		}
+
+		return { indexedPixels, palette };
 	}
 }

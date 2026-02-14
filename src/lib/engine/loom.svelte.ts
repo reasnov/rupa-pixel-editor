@@ -6,6 +6,7 @@ import { shuttle } from './shuttle.js';
 import { ambient } from './ambient.js';
 import { chronos } from './chronos.svelte.ts';
 import { studioAudio } from './audioContext.js';
+import { shuttlepoint } from './shuttlepoint.svelte.js';
 
 /**
  * TheLoom: The primary orchestrator of action execution.
@@ -20,6 +21,9 @@ export class TheLoom {
 	 */
 	mount(linenElement: HTMLElement | null = null) {
 		this.backupInterval = setInterval(() => shuttle.persistence.backup(), 10 * 60 * 1000);
+
+		// Safely mount studio state observers within the component's effect scope
+		atelier.studio.mount();
 
 		// Start generative background music
 		ambient.start();
@@ -103,12 +107,10 @@ export class TheLoom {
 
 			case 'ESCAPE':
 				// Priority 1: Cancel active drawing/tracking
-				import('./shuttlepoint.svelte.js').then(({ shuttlepoint }) => {
-					if ((shuttlepoint as any).isPointerDown) {
-						shuttlepoint.cancel();
-						return;
-					}
-				});
+				if ((shuttlepoint as any).isPointerDown) {
+					shuttlepoint.cancel();
+					return;
+				}
 
 				// Priority 2: Clear selection
 				if (atelier.selection.isActive) {

@@ -62,4 +62,71 @@ export class Path {
 		}
 		return result;
 	}
+
+	/**
+	 * Trace the perimeter of a color cluster to create a single SVG path.
+	 * (Pure mathematical algorithm for the Logic Layer)
+	 */
+	static traceCluster(indices: Set<number>, width: number): string {
+		const edges = new Set<string>();
+
+		// 1. Identify all boundary edges
+		for (const idx of indices) {
+			const x = idx % width;
+			const y = Math.floor(idx / width);
+
+			const neighbors = [
+				{ x: x, y: y - 1, id: 'top' },
+				{ x: x + 1, y: y, id: 'right' },
+				{ x: x, y: y + 1, id: 'bottom' },
+				{ x: x - 1, y: y, id: 'left' }
+			];
+
+			neighbors.forEach((n) => {
+				const nIdx = n.y * width + n.x;
+				const isBoundary = n.x < 0 || n.x >= width || n.y < 0 || !indices.has(nIdx);
+
+				if (isBoundary) {
+					// Edge represented as (x1,y1)-(x2,y2)
+					let edge;
+					if (n.id === 'top') edge = `${x},${y}-${x + 1},${y}`;
+					else if (n.id === 'right') edge = `${x + 1},${y}-${x + 1},${y + 1}`;
+					else if (n.id === 'bottom') edge = `${x + 1},${y + 1}-${x},${y + 1}`;
+					else edge = `${x},${y + 1}-${x},${y}`;
+					edges.add(edge);
+				}
+			});
+		}
+
+		// 2. Chain edges into loops
+		const pathParts: string[] = [];
+		while (edges.size > 0) {
+			const startEdge = edges.values().next().value;
+			if (!startEdge) break;
+
+			edges.delete(startEdge);
+			const [start, end] = startEdge.split('-');
+			let current = end;
+			let path = `M ${start.replace(',', ' ')} L ${end.replace(',', ' ')}`;
+
+			let found = true;
+			while (found) {
+				found = false;
+				for (const edge of edges) {
+					if (edge.startsWith(current + '-')) {
+						const [_, nextEnd] = edge.split('-');
+						path += ` L ${nextEnd.replace(',', ' ')}`;
+						current = nextEnd;
+						edges.delete(edge);
+						found = true;
+						break;
+					}
+				}
+			}
+			path += ' Z';
+			pathParts.push(path);
+		}
+
+		return pathParts.join(' ');
+	}
 }

@@ -1,0 +1,13 @@
+{
+	"managed": [
+		"showDyeBasin",
+		"showAudioBasin",
+		"showPatternCatalog",
+		"showArtisanGuide",
+		"showArtisanCodex",
+		"showArtifactCrate",
+		"showLinenSettings",
+		"showArchivePattern",
+		"showGoTo"
+	]
+}

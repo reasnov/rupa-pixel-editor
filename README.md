@@ -2,18 +2,18 @@
 
 **Rupa** is a professional-grade, meditative pixel art editor designed for digital artisans. It combines a keyboard-first workflow with a "Cottagecore" aesthetic, turning pixel art into a tactile craft of digital stitching.
 
-[![Version](https://img.shields.io/badge/version-0.6.0-magenta.svg)](./docs/pubs/releases/v0.6.0.md)
+[![Version](https://img.shields.io/badge/version-0.6.1-magenta.svg)](./docs/pubs/releases/v0.6.1.md)
 [![Architecture](https://img.shields.io/badge/architecture-Modular%20Layered%20Monolith-teal.svg)](./docs/developers/architecture.md)
 [![Framework](https://img.shields.io/badge/framework-Svelte%205-orange.svg)](https://svelte.dev)
 
 ---
 
-## ✨ Features (v0.6.0: The Logic of Loom)
+## ✨ Features (v0.6.1: The High-Performance Linen)
 
+- **Canvas-Powered Grid**: High-speed HTML5 Canvas rendering for limitless pixel creativity.
 - **Quick Shape Correction**: Snap rough strokes into perfect lines, arcs, and circles with a 600ms hold.
-- **Precision Drawing Engine**: High-performance batch rendering with Bresenham interpolation and marching ants feedback.
+- **Adaptive Pixel Ruler**: Intelligent coordinate labels and GPU-accelerated markers.
 - **The Spindle (Kinetic Mode)**: Professional temporal sequence management for pixel animations.
-- **Global & Inclusive**: Full i18n support (global `__()`) and ARIA-compliant accessibility standards.
 - **Artisan Ecosystem**: A sun-drenched sanctuary with generative piano soundscapes and tactile feedback.
 
 ## 🏗️ Architectural Sovereignty
@@ -49,7 +49,7 @@ npm run dev:all
 - [User Guide](./docs/USER_GUIDE.md)
 - [Artisan Codex](./docs/wiki/terminology.md)
 - [Developer Specs](./docs/developers/specs.md)
-- [Latest Release Notes](./docs/pubs/releases/v0.6.0.md)
+- [Latest Release Notes](./docs/pubs/releases/v0.6.1.md)
 
 ---
 

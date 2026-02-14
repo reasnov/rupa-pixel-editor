@@ -12,30 +12,32 @@
 		height: number;
 		opacity?: number;
 	}>();
+
+	let canvasEl = $state<HTMLCanvasElement | null>(null);
+
+	$effect(() => {
+		const ctx = canvasEl?.getContext('2d');
+		if (!ctx || !canvasEl) return;
+
+		ctx.imageSmoothingEnabled = false;
+		ctx.clearRect(0, 0, width, height);
+		
+		for (let i = 0; i < stitches.length; i++) {
+			const color = stitches[i];
+			if (color) {
+				ctx.fillStyle = color;
+				const x = i % width;
+				const y = Math.floor(i / width);
+				ctx.fillRect(x, y, 1, 1);
+			}
+		}
+	});
 </script>
 
-<div
-	class="ghost-frame pointer-events-none absolute inset-0 z-0"
-	style="
-        display: grid;
-        grid-template-columns: repeat({width}, 1fr); 
-        grid-template-rows: repeat({height}, 1fr);
-        opacity: {opacity};
-    "
->
-	{#each stitches as color, i (i)}
-		{#if color}
-			<div
-				style="grid-column: {(i % width) + 1}; grid-row: {Math.floor(i / width) +
-					1}; background-color: {color};"
-			></div>
-		{/if}
-	{/each}
-</div>
-
-<style>
-	.ghost-frame {
-		/* Optimized rendering for pixel art ghosts */
-		image-rendering: pixelated;
-	}
-</style>
+<canvas
+	bind:this={canvasEl}
+	width={width}
+	height={height}
+	class="pointer-events-none absolute inset-0 z-0 h-full w-full"
+	style="opacity: {opacity}; image-rendering: pixelated;"
+></canvas>

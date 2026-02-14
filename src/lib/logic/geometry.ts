@@ -159,4 +159,20 @@ export class Geometry {
 		if (dx === 0 && dy === 0) return Math.sqrt((p.x - a.x) ** 2 + (p.y - a.y) ** 2);
 		return Math.abs(dy * p.x - dx * p.y + b.x * a.y - b.y * a.x) / Math.sqrt(dx * dx + dy * dy);
 	}
+
+	/**
+	 * Converts internal grid coordinates to artisan Cartesian labels (Center-relative).
+	 */
+	static toCartesianLabel(pos: number, size: number, invert = false): number {
+		const mid = Math.floor(size / 2);
+		const val = size % 2 === 0 ? (pos < mid ? pos - mid : pos - mid + 1) : pos - mid;
+		return invert ? -val : val;
+	}
+
+	/**
+	 * Calculates the percentage position for canvas rhythmic guides.
+	 */
+	static getGuidePosition(offset: number, size: number): number {
+		return 50 + (offset / size) * 100;
+	}
 }

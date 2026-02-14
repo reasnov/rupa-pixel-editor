@@ -4,9 +4,6 @@
 </script>
 
 <div class="flex flex-col items-end px-4">
-	<h2 class="font-serif text-sm font-bold tracking-[0.1em] text-studio-text/60 uppercase">
-		{atelier.project.name || __({ key: 'project.untitled' })}
-	</h2>
 	{#if atelier.project.lastSaved}
 		<span
 			transition:fade

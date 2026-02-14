@@ -1,3 +1,6 @@
+import { untrack } from 'svelte';
+import overlaysData from '../config/overlays.json' with { type: 'json' };
+
 /**
  * StudioState: Manages the environment, UI flags, and viewport.
  */
@@ -19,6 +22,7 @@ export class StudioState {
 	fps = $state(10); // Default 10 FPS
 	isKineticMode = $state(false);
 	showGhostThreads = $state(false);
+	timelineZoom = $state(1); // 1x = 0.25px/ms, 2x = 0.5px/ms, etc.
 
 	// Session Tracking
 	sessionStartTime = Date.now();
@@ -56,10 +60,46 @@ export class StudioState {
 	exportBgColor = $state<string | 'transparent'>('transparent');
 
 	private escapeStack: (() => void)[] = [];
+	private _overlayStack = $state<string[]>([]);
+
+	// The registry of all global overlay flags that should be handled by ESC automatically
+	// Data-Driven: Loaded from src/lib/config/overlays.json
+	private _managedOverlays = overlaysData.managed;
+
+	constructor() {
+		// Initialize session heartbeat
+		setInterval(() => {
+			const elapsed = Date.now() - this.sessionStartTime;
+			this.usageMinutes = Math.floor(elapsed / 60000);
+			this.usageSeconds = Math.floor(elapsed / 1000);
+		}, 1000);
+	}
+
+	/**
+	 * Mount the reactive observers for the studio.
+	 * Must be called within a Svelte effect scope (e.g. from a component).
+	 */
+	mount() {
+		// Global Observer: Maintain the stack order based on which flags become true
+		$effect(() => {
+			for (const flag of this._managedOverlays) {
+				const isActive = (this as any)[flag];
+				if (isActive) {
+					if (!untrack(() => this._overlayStack.includes(flag))) {
+						this._overlayStack = [...untrack(() => this._overlayStack), flag];
+					}
+				} else {
+					if (untrack(() => this._overlayStack.includes(flag))) {
+						this._overlayStack = untrack(() => this._overlayStack.filter((f) => f !== flag));
+					}
+				}
+			}
+		});
+	}
 
 	setZoom(delta: number) {
 		const newZoom = this.zoomLevel + delta;
-		this.zoomLevel = Math.max(0.5, Math.min(5, Number(newZoom.toFixed(1))));
+		this.zoomLevel = Math.max(0.1, Math.min(10, Number(newZoom.toFixed(1))));
 	}
 
 	resetZoom() {
@@ -79,11 +119,21 @@ export class StudioState {
 	}
 
 	handleEscape() {
+		// 1. Try explicitly registered custom actions first (legacy/local components)
 		const lastAction = this.escapeStack.pop();
 		if (lastAction) {
 			lastAction();
 			return true;
 		}
+
+		// 2. Global Managed Stack: Close the last opened overlay
+		const lastOverlay = this._overlayStack[this._overlayStack.length - 1];
+		if (lastOverlay) {
+			(this as any)[lastOverlay] = false;
+			// The effect will automatically remove it from _overlayStack
+			return true;
+		}
+
 		return false;
 	}
 }

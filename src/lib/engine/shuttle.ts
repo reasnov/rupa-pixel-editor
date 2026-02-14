@@ -119,43 +119,43 @@ export class ShuttleEngine {
 			// Check if we have multiple frames for animation
 			if (atelier.project.frames.length > 1) {
 				const framesData = atelier.project.frames.map((f) => f.compositeStitches);
-				const svg = ExportEngine.toAnimatedSVG(
-					width,
-					height,
-					framesData,
-					atelier.studio.fps,
-					bgColor
-				);
+				const durations = atelier.project.frames.map((f) => f.duration);
+				const svg = ExportEngine.toAnimatedSVG(width, height, framesData, durations, bgColor);
 				const blob = new Blob([svg], { type: 'image/svg+xml' });
-				this.download(URL.createObjectURL(blob), `${atelier.project.name}-kinetic.svg`);
+				this.download(URL.createObjectURL(blob), `rupa-kinetic.svg`);
 			} else {
 				const svg = ExportEngine.toSVG(width, height, compositeStitches, bgColor);
 				const blob = new Blob([svg], { type: 'image/svg+xml' });
-				this.download(URL.createObjectURL(blob), `${atelier.project.name}.svg`);
+				this.download(URL.createObjectURL(blob), `rupa-motif.svg`);
 			}
 		} else if (actualFormat === 'webm' || actualFormat === 'mp4') {
 			const framesData = atelier.project.frames.map((f) => f.compositeStitches);
-			const videoBlob = await ExportEngine.toWebM(
+			const durations = atelier.project.frames.map((f) => f.duration);
+			const videoBlob = await ExportEngine.toVideo(
 				width,
 				height,
 				framesData,
+				durations,
 				scale,
-				atelier.studio.fps,
+				actualFormat as 'webm' | 'mp4',
 				bgColor
 			);
-			this.download(URL.createObjectURL(videoBlob), `${atelier.project.name}.${actualFormat}`);
+
+			// Download the raw blob returned by the engine (it already has the correct mimeType)
+			const extension = videoBlob.type.includes('mp4') ? 'mp4' : 'webm';
+			this.download(URL.createObjectURL(videoBlob), `rupa-stitch.${extension}`);
 		} else if (actualFormat === 'gif') {
-			// GIF logic placeholder - for now using first frame as fallback
-			// or will implement gif.js if preferred.
-			const dataUrl = await ExportEngine.toRaster(
+			const framesData = atelier.project.frames.map((f) => f.compositeStitches);
+			const durations = atelier.project.frames.map((f) => f.duration);
+			const gifBlob = await ExportEngine.toGIF(
 				width,
 				height,
-				compositeStitches,
+				framesData,
+				durations,
 				scale,
-				'png',
 				bgColor
 			);
-			this.download(dataUrl, `${atelier.project.name}.gif`);
+			this.download(URL.createObjectURL(gifBlob), `rupa-weave.gif`);
 		} else {
 			const dataUrl = await ExportEngine.toRaster(
 				width,
@@ -165,7 +165,7 @@ export class ShuttleEngine {
 				actualFormat as any,
 				bgColor
 			);
-			this.download(dataUrl, `${atelier.project.name}.${actualFormat}`);
+			this.download(dataUrl, `rupa-artifact.${actualFormat}`);
 		}
 		atelier.studio.showArtifactCrate = false;
 	}

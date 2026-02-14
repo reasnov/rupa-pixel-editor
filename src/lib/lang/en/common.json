@@ -44,8 +44,7 @@
 		"technical_ledger": "Technical Ledger"
 	},
 	"project": {
-		"archived": "Archived {{time}}",
-		"untitled": "Untitled Weave"
+		"archived": "Archived {{time}}"
 	},
 	"splash": {
 		"welcome": "Welcome home, artisan.",
@@ -179,7 +178,6 @@
 	"settings": {
 		"title": "Linen Settings",
 		"subtitle": "Configure the Weaver's Frame",
-		"project_name": "Project Name",
 		"width": "Width",
 		"height": "Height",
 		"weave_pace": "Weave Pace (FPS)",

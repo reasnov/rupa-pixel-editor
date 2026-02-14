@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { atelier } from '../../state/atelier.svelte.js';
+	import { Geometry } from '../../logic/geometry.js';
 </script>
 
 <div class="pointer-events-none absolute inset-0 z-20 overflow-hidden">
@@ -10,7 +11,7 @@
 
 	<!-- 8-Bit Rhythmic Guides -->
 	{#each [-24, -16, -8, 8, 16, 24] as offset}
-		{@const pos = 50 + (offset / atelier.linen.width) * 100}
+		{@const pos = Geometry.getGuidePosition(offset, atelier.linen.width)}
 		{#if pos > 0 && pos < 100}
 			<div
 				class="absolute top-0 bottom-0 w-px -translate-x-1/2 bg-studio-text/10"
@@ -19,7 +20,7 @@
 		{/if}
 	{/each}
 	{#each [-24, -16, -8, 8, 16, 24] as offset}
-		{@const pos = 50 + (offset / atelier.linen.height) * 100}
+		{@const pos = Geometry.getGuidePosition(offset, atelier.linen.height)}
 		{#if pos > 0 && pos < 100}
 			<div
 				class="absolute right-0 left-0 h-px -translate-y-1/2 bg-studio-text/10"

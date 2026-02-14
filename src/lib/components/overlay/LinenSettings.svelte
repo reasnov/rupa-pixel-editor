@@ -31,25 +31,6 @@
 >
 	<div class="flex flex-col gap-8" role="form">
 		<div class="flex flex-col gap-6 rounded-xl border border-black/5 bg-white/40 p-8">
-			<!-- Project Name -->
-			<div class="flex flex-col gap-2">
-				<label
-					for="project-name"
-					class="font-serif text-[10px] font-bold tracking-widest text-studio-text/40 uppercase"
-				>
-					{__({ key: 'settings.project_name' })}
-				</label>
-				<input
-					id="project-name"
-					type="text"
-					bind:value={atelier.project.name}
-					placeholder="Unnamed Pattern"
-					class="rounded-xl border border-black/10 bg-white px-4 py-3 font-serif text-lg text-studio-text focus:border-brand focus:outline-none"
-				/>
-			</div>
-
-			<div class="h-px w-full bg-black/5" aria-hidden="true"></div>
-
 			<!-- Dimensions -->
 			<div class="grid grid-cols-2 gap-8">
 				<div class="flex flex-col gap-2">

@@ -150,13 +150,6 @@ export class AtelierState {
 		this.needle.isVisible = v;
 	}
 
-	get projectName() {
-		return this.project.name;
-	}
-	set projectName(v) {
-		this.project.name = v;
-	}
-
 	get currentFilePath() {
 		return this.project.currentFilePath;
 	}
@@ -271,6 +264,22 @@ export class AtelierState {
 
 	// --- Derived Projections ---
 
+	/**
+	 * Numeric ratios of the linen fitting within the viewport.
+	 * Matches the CSS min(fitWidth, calc(fitHeight * ratio)) logic.
+	 */
+	fitRatios = $derived.by(() => {
+		const w = this.linen.width;
+		const h = this.linen.height;
+		const rw = w / (w + 2);
+		const rh = h / (h + 2);
+
+		return {
+			x: Math.min(rw, rh * (w / h)),
+			y: Math.min(rh, rw * (h / w))
+		};
+	});
+
 	usedColors = $derived.by(() => {
 		const colors = new Set<string>();
 		this.linen.compositeStitches.forEach((color) => {
@@ -291,7 +300,7 @@ export class AtelierState {
 	});
 
 	cameraTransform = $derived.by(() => {
-		const effectiveZoom = this.studio.zoomLevel * 0.5;
+		const effectiveZoom = this.studio.zoomLevel;
 
 		// Overview Mode (100% zoom or less)
 		if (this.studio.zoomLevel <= 1) {
@@ -306,6 +315,24 @@ export class AtelierState {
 		// By translating by negative xPct/yPct, we move that specific point to the
 		// origin (which we will set to the center of the viewport).
 		return `translate(-${xPct}%, -${yPct}%) scale(${effectiveZoom})`;
+	});
+
+	/**
+	 * Calculates the needle's position in percentage of the viewport.
+	 */
+	needleViewportPct = $derived.by(() => {
+		if (this.studio.zoomLevel > 1) {
+			return { x: 50, y: 50 }; // Always centered in follow mode
+		}
+		
+		const zoom = this.studio.zoomLevel;
+		const nx = ((this.needle.pos.x + 0.5) / this.linen.width) * 100;
+		const ny = ((this.needle.pos.y + 0.5) / this.linen.height) * 100;
+		
+		return {
+			x: 50 + (nx - 50) * zoom * this.fitRatios.x,
+			y: 50 + (ny - 50) * zoom * this.fitRatios.y
+		};
 	});
 
 	// --- Passthrough Methods ---

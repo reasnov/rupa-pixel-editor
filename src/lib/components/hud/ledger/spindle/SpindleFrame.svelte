@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { atelier } from '../../../../state/atelier.svelte.js';
-	import { shuttle } from '../../../../engine/shuttle.js';
+	import { ChronosLogic } from '../../../../logic/chronos.js';
 	import type { FrameState } from '../../../../state/frame.svelte.js';
 
 	let { frame, index, isActive, isDragged, isDropTarget } = $props<{
@@ -12,77 +12,91 @@
 	}>();
 
 	let previewStitches = $derived(frame.compositeStitches);
-	// Scale width: 1ms = 0.5px (Default 100ms = 50px)
-	let blockWidth = $derived(Math.max(40, frame.duration * 0.6));
+	
+	// Dynamic scale reactive to studio zoom
+	let pxPerMs = $derived(0.25 * atelier.studio.timelineZoom);
+	const MIN_BLOCK_WIDTH = 50;
+	let blockWidth = $derived(Math.max(MIN_BLOCK_WIDTH, frame.duration * pxPerMs));
+
+	// Duration Stretching Logic
+	let isResizing = $state(false);
+	let startX = 0;
+	let startDuration = 0;
+
+	function startResize(e: MouseEvent) {
+		e.stopPropagation();
+		e.preventDefault();
+		isResizing = true;
+		startX = e.clientX;
+		startDuration = frame.duration;
+		
+		window.addEventListener('mousemove', handleResize);
+		window.addEventListener('mouseup', stopResize);
+		document.body.style.cursor = 'col-resize';
+	}
+
+	function handleResize(e: MouseEvent) {
+		if (!isResizing) return;
+		const deltaX = e.clientX - startX;
+		// Use the current reactive pxPerMs for duration calculation
+		const deltaDuration = Math.round(deltaX / pxPerMs);
+		const newDuration = Math.max(10, startDuration + deltaDuration);
+		frame.duration = Math.round(newDuration / 10) * 10; // Snap to 10ms increments
+	}
+
+	function stopResize() {
+		isResizing = false;
+		window.removeEventListener('mousemove', handleResize);
+		window.removeEventListener('mouseup', stopResize);
+		document.body.style.cursor = '';
+	}
 </script>
 
 <div
-	class="relative h-12 flex-shrink-0 transition-all {isDragged ? 'opacity-20' : ''}"
+	class="relative h-full flex-shrink-0 select-none transition-transform duration-200 {isDragged
+		? 'scale-95 opacity-40'
+		: ''} {isDropTarget ? 'translate-x-4' : ''}"
 	style="width: {blockWidth}px;"
 >
 	<div
-		class="group relative h-full w-full cursor-pointer overflow-hidden border-r border-black/10 transition-all {isActive
-			? 'bg-brand/5 shadow-[inset_0_0_0_1px_rgba(211,54,130,0.3)]'
-			: 'bg-black/5 hover:bg-white/40'} {isDropTarget ? 'border-l-2 border-l-brand' : ''}"
+		class="group relative h-full w-full cursor-pointer overflow-hidden rounded-md border border-black/10 transition-all {isActive
+			? 'border-brand bg-white shadow-lg ring-2 ring-brand/20'
+			: 'bg-white/60 hover:bg-white/90 hover:shadow-md'}"
 		onclick={() => (atelier.project.activeFrameIndex = index)}
 		role="button"
 		tabindex="0"
 		onkeydown={(e) => e.key === 'Enter' && (atelier.project.activeFrameIndex = index)}
 	>
-		<!-- Preview Area (Fill the block background subtly) -->
+		<!-- Solid Professional Block (No more grid preview) -->
 		<div
-			class="absolute inset-0 grid opacity-10 group-hover:opacity-30"
-			style="grid-template-columns: repeat({frame.width}, 1fr); grid-template-rows: repeat({frame.height}, 1fr);"
+			class="absolute inset-1 rounded-sm shadow-inner transition-colors {isActive
+				? 'bg-brand/10'
+				: 'bg-black/5'}"
+		></div>
+
+		<!-- Top Label: Index (Badge style) -->
+		<div
+			class="absolute top-1 left-1 flex h-4 min-w-4 items-center justify-center rounded-sm bg-black/40 px-1 backdrop-blur-sm"
 		>
-			{#each previewStitches as color, i}
-				{#if color}
-					<div style="background-color: {color};"></div>
-				{:else}
-					<div></div>
-				{/if}
-			{/each}
+			<span class="font-mono text-[9px] font-black text-white">{index + 1}</span>
 		</div>
 
-		<!-- Top Label: Index -->
-		<div class="absolute top-1 left-1.5 flex items-center gap-1.5">
-			<span class="font-mono text-[9px] font-black italic opacity-30">{index + 1}</span>
-			{#if isActive}
-				<div class="h-1 w-1 animate-pulse rounded-full bg-brand"></div>
-			{/if}
-		</div>
-
-		<!-- Bottom Label: Duration -->
+		<!-- Duration Badge (More prominent) -->
 		<div
-			class="absolute right-1.5 bottom-1 flex items-center gap-0.5 opacity-30 transition-opacity group-hover:opacity-100"
+			class="absolute right-1 bottom-1 rounded bg-white/80 px-1.5 py-0.5 font-mono text-[9px] font-bold text-black/50 shadow-sm"
 		>
-			<input
-				type="number"
-				bind:value={frame.duration}
-				step="10"
-				min="10"
-				class="w-7 bg-transparent text-right font-mono text-[8px] font-bold focus:outline-none"
-			/>
-			<span class="font-serif text-[7px] font-black text-brand uppercase">ms</span>
+			{frame.duration}ms
 		</div>
+	</div>
 
-		<!-- Action Overlay (Quick Tools) -->
+	<!-- Resize Handle (The professional way to set duration) -->
+	<!-- svelte-ignore a11y_no_static_element_interactions -->
+	<div
+		class="absolute top-0 right-0 bottom-0 z-30 w-2 cursor-col-resize rounded-r-md transition-colors hover:bg-brand/40 active:bg-brand"
+		onmousedown={startResize}
+	>
 		<div
-			class="absolute inset-0 flex items-center justify-center gap-2 bg-white/95 opacity-0 transition-opacity group-hover:opacity-100"
-		>
-			<button
-				class="p-1 transition-transform hover:scale-125"
-				onclick={(e) => {
-					e.stopPropagation();
-					shuttle.folio.duplicateFrame(index);
-				}}>📋</button
-			>
-			<button
-				class="p-1 transition-transform hover:scale-125"
-				onclick={(e) => {
-					e.stopPropagation();
-					shuttle.folio.removeFrame(index);
-				}}>🗑️</button
-			>
-		</div>
+			class="absolute top-1/2 left-1/2 h-6 w-0.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-black/10 group-hover:bg-white/60"
+		></div>
 	</div>
 </div>

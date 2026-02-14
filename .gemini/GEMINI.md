@@ -31,8 +31,9 @@ To maintain the high standards of the **Rupa Pixel Editor** (Atelier), adhering 
 ## 1. Architectural Sovereignty
 
 - **Read First, Code Later**: Before implementing any feature, ALWAYS consult `docs/developers/architecture.md` and `docs/developers/conventions.md`.
-- **Modular Monolith**: Respect the strict separation between `UI Layer` (Components), `State Layer` (Runes), and `Service Layer` (Business Logic).
+- **5-Layer Modular Monolith**: Respect the strict separation between `UI` (Components), `State` (Runes), `Service` (Logic), `Engine` (IO), and `Logic` (Pure Math).
 - **Service-Oriented**: Never write complex logic inside `.svelte` components. Delegate to `shuttle` or specific services.
+- **Pure Calculation**: Mathematical algorithms must reside in the `Logic Layer` (`src/lib/logic/`) and remain stateless.
 
 ## 2. Inclusive & Global Standards
 
@@ -47,6 +48,7 @@ To maintain the high standards of the **Rupa Pixel Editor** (Atelier), adhering 
 
 ## 3. Documentation Integrity
 
+- **English Only**: All code, comments, and documentation must be authored strictly in **English**.
 - **Sync or Sink**: Code changes without documentation updates are considered incomplete.
 - **Update Protocols**: When adding features or modifying system behavior, update ALL relevant documentation (including `architecture.md`, `specs.md`, `ui-ux.md`, and `conventions.md`) immediately to ensure alignment.
 

@@ -91,15 +91,17 @@ The internationalization layer for the studio.
 - **Global Helper**: Provides the `__()` global function for component-level translations without imports.
 - **Artisan Lexicon**: Manages localized strings for tools, metadata, and ambiance descriptions.
 
-+### 4.7 The Logic Layer (`src/lib/logic/`)
+### 4.7 The Logic Layer (`src/lib/logic/`)
 
-- +The "Brain" of the studio. This layer contains pure, side-effect-free algorithms.
-- +- **Geometry Module**: Handles line interpolation (Bresenham) and arc fitting for shape correction.
-  +- **Path Module**: Manages smoothing and simplification (Douglas-Peucker) of artisan strokes.
-  +- **Computational Sovereignty**: Logic modules must never import from State, Services, or UI layers. They receive raw data and return calculated results.
-- ***
+The "Brain" of the studio. This layer contains pure, side-effect-free algorithms.
 
-  ## 5. UI & Rendering Strategy
+- **Geometry Module**: Handles line interpolation (Bresenham) and arc fitting for shape correction.
+- **Path Module**: Manages smoothing and simplification (Douglas-Peucker) of artisan strokes.
+- **Computational Sovereignty**: Logic modules must never import from State, Services, or UI layers. They receive raw data and return calculated results.
+
+---
+
+## 5. UI & Rendering Strategy
 
 ### 5.1 Professional Workspace Layout
 

@@ -40,7 +40,8 @@
 			max="60"
 			class="w-10 bg-transparent text-center font-mono text-sm font-bold text-studio-text focus:outline-none"
 		/>
-		<span class="font-serif text-[10px] font-black text-studio-text/30" aria-hidden="true">FPS</span>
+		<span class="font-serif text-[10px] font-black text-studio-text/30" aria-hidden="true">FPS</span
+		>
 	</div>
 
 	<!-- Ghost Threads Toggle -->
@@ -48,7 +49,7 @@
 		class="flex items-center gap-2 rounded-xl px-3 py-1.5 transition-all {atelier.studio
 			.showGhostThreads
 			? 'bg-brand/10 text-brand ring-1 ring-brand/20'
-			: 'bg-black/5 opacity-40 hover:opacity-100 hover:bg-white/60 shadow-sm'}"
+			: 'bg-black/5 opacity-40 shadow-sm hover:bg-white/60 hover:opacity-100'}"
 		onclick={() => (atelier.studio.showGhostThreads = !atelier.studio.showGhostThreads)}
 		title={__({ key: 'shortcuts.labels.TOGGLE_GHOST_THREADS' }) + ' (Alt+G)'}
 		aria-label={__({ key: 'shortcuts.labels.TOGGLE_GHOST_THREADS' })}
@@ -71,7 +72,7 @@
 			class="artisan-range w-20"
 			title="Timeline Zoom"
 		/>
-		<span class="font-mono text-[10px] font-bold text-studio-text/40 w-8"
+		<span class="w-8 font-mono text-[10px] font-bold text-studio-text/40"
 			>{Math.round(atelier.studio.timelineZoom * 100)}%</span
 		>
 	</div>

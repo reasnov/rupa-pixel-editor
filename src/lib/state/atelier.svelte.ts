@@ -324,11 +324,11 @@ export class AtelierState {
 		if (this.studio.zoomLevel > 1) {
 			return { x: 50, y: 50 }; // Always centered in follow mode
 		}
-		
+
 		const zoom = this.studio.zoomLevel;
 		const nx = ((this.needle.pos.x + 0.5) / this.linen.width) * 100;
 		const ny = ((this.needle.pos.y + 0.5) / this.linen.height) * 100;
-		
+
 		return {
 			x: 50 + (nx - 50) * zoom * this.fitRatios.x,
 			y: 50 + (ny - 50) * zoom * this.fitRatios.y

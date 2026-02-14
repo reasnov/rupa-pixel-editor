@@ -7,7 +7,9 @@
 	let w = $derived(atelier.linen.width);
 	let h = $derived(atelier.linen.height);
 	let size = $derived(orientation === 'horizontal' ? w : h);
-	let needlePos = $derived(orientation === 'horizontal' ? atelier.needle.pos.x : atelier.needle.pos.y);
+	let needlePos = $derived(
+		orientation === 'horizontal' ? atelier.needle.pos.x : atelier.needle.pos.y
+	);
 
 	// Adaptive Interval based on Zoom
 	let majorInterval = $derived.by(() => {
@@ -37,7 +39,7 @@
 		const posPct = ((needlePos + 0.5) / size) * 100;
 
 		if (atelier.studio.zoomLevel <= 1) {
-			return orientation === 'horizontal' 
+			return orientation === 'horizontal'
 				? `translate(-50%, 0) scale(${effectiveZoom})`
 				: `translate(0, -50%) scale(${effectiveZoom})`;
 		} else {
@@ -72,21 +74,29 @@
 	>
 		<!-- Ticks (CSS Gradients) -->
 		<div
-			class="absolute opacity-10 {orientation === 'horizontal' ? 'bottom-0 left-0 right-0 h-1/2' : 'right-0 top-0 bottom-0 w-1/2'}"
+			class="absolute opacity-10 {orientation === 'horizontal'
+				? 'right-0 bottom-0 left-0 h-1/2'
+				: 'top-0 right-0 bottom-0 w-1/2'}"
 			style="
 				background-image: linear-gradient({orientation === 'horizontal' ? 'to right' : 'to bottom'}, 
 					rgba(0,0,0,1) 1px, transparent 1px);
-				background-size: {orientation === 'horizontal' ? `calc(100% / ${size}) 100%` : `100% calc(100% / ${size})`};
+				background-size: {orientation === 'horizontal'
+				? `calc(100% / ${size}) 100%`
+				: `100% calc(100% / ${size})`};
 			"
 		></div>
 
 		<!-- Major Ticks -->
 		<div
-			class="absolute opacity-20 {orientation === 'horizontal' ? 'bottom-0 left-0 right-0 h-3/4' : 'right-0 top-0 bottom-0 w-3/4'}"
+			class="absolute opacity-20 {orientation === 'horizontal'
+				? 'right-0 bottom-0 left-0 h-3/4'
+				: 'top-0 right-0 bottom-0 w-3/4'}"
 			style="
 				background-image: linear-gradient({orientation === 'horizontal' ? 'to right' : 'to bottom'}, 
 					rgba(0,0,0,1) 1.5px, transparent 1.5px);
-				background-size: {orientation === 'horizontal' ? `calc(100% / ${size} * ${majorInterval}) 100%` : `100% calc(100% / ${size} * ${majorInterval})`};
+				background-size: {orientation === 'horizontal'
+				? `calc(100% / ${size} * ${majorInterval}) 100%`
+				: `100% calc(100% / ${size} * ${majorInterval})`};
 			"
 		></div>
 
@@ -100,10 +110,12 @@
 					{orientation === 'horizontal' ? 'height' : 'width'}: 100%;
 				"
 			>
-				<div style="transform: scale({counterScale}) {orientation === 'vertical' ? 'rotate(-90deg)' : ''};">
-					<span
-						class="font-mono text-[12px] font-medium text-black/50 whitespace-nowrap"
-					>
+				<div
+					style="transform: scale({counterScale}) {orientation === 'vertical'
+						? 'rotate(-90deg)'
+						: ''};"
+				>
+					<span class="font-mono text-[12px] font-medium whitespace-nowrap text-black/50">
 						{marker.label}
 					</span>
 				</div>
@@ -117,17 +129,19 @@
 		<div
 			class="absolute z-20 transition-all duration-75 ease-out {orientation === 'horizontal'
 				? 'top-0 bottom-0 bg-brand shadow-[0_0_8px_rgba(211,54,130,0.5)]'
-				: 'left-0 right-0 bg-brand shadow-[0_0_8px_rgba(211,54,130,0.5)]'}"
+				: 'right-0 left-0 bg-brand shadow-[0_0_8px_rgba(211,54,130,0.5)]'}"
 			style="
 				{orientation === 'horizontal' ? 'left' : 'top'}: {((needlePos + 0.5) / size) * 100}%;
 				{orientation === 'horizontal' ? 'width' : 'height'}: calc(1px * {counterScale});
 			"
 		>
-			<div 
-				class="absolute top-1/2 left-1/2 bg-brand/90 backdrop-blur-sm px-1.5 py-0.5 rounded-sm shadow-lg border border-white/20"
-				style="transform: translate(-50%, -50%) scale({counterScale}) {orientation === 'vertical' ? 'rotate(-90deg)' : ''};"
+			<div
+				class="absolute top-1/2 left-1/2 rounded-sm border border-white/20 bg-brand/90 px-1.5 py-0.5 shadow-lg backdrop-blur-sm"
+				style="transform: translate(-50%, -50%) scale({counterScale}) {orientation === 'vertical'
+					? 'rotate(-90deg)'
+					: ''};"
 			>
-				<span class="font-mono text-[12px] font-bold text-white leading-none">
+				<span class="font-mono text-[12px] leading-none font-bold text-white">
 					{Geometry.toCartesianLabel(needlePos, size, orientation === 'vertical')}
 				</span>
 			</div>

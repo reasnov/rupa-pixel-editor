@@ -96,7 +96,13 @@ export class Geometry {
 	static fitArc(
 		points: Array<{ x: number; y: number }>,
 		circularityThreshold: number
-	): { cx: number; cy: number; r: number; isFull: boolean; points: Array<{ x: number; y: number }> } | null {
+	): {
+		cx: number;
+		cy: number;
+		r: number;
+		isFull: boolean;
+		points: Array<{ x: number; y: number }>;
+	} | null {
 		if (points.length < 10) return null;
 
 		let sumX = 0,

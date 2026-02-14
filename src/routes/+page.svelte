@@ -92,7 +92,7 @@
 			<div
 				class="artisan-frame flex h-full w-full items-center justify-center overflow-hidden shadow-2xl transition-all duration-700 ease-out {atelier
 					.project.isPlaying && atelier.project.frames.length > 1
-					? 'ring-8 ring-palette-0 ring-inset animate-pulse'
+					? 'animate-pulse ring-8 ring-palette-0 ring-inset'
 					: ''}"
 			>
 				<Linen />

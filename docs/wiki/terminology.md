@@ -75,16 +75,14 @@ To maintain the meditative and creative atmosphere of the project, we use termin
 
 ## 4. Navigation & View
 
-| Technical Term    | Artisan Term        | Description                                                                |
-| :---------------- | :------------------ | :------------------------------------------------------------------------- |
-| **Zoom**          | **Loom Zoom**       | Adjusting the proximity to the linen for fine detail work.                 |
-| **Switch Frame**  | **Turn Page**       | Navigating between different frames in the Folio.                          |
-| **Pan / Offset**  | **Camera Protocol** | The automated system that keeps the needle centered in the artisan's view. |
-| **Jump**         | **Go To**           | Instantly moving the Needle to a specific coordinate.                      |
-| **Guidelines**   | **Rhythmic Guides** | Visual markers that help maintain symmetry and 8-bit proportions.          |
+| Technical Term   | Artisan Term               | Description                                                                   |
+| :--------------- | :------------------------- | :---------------------------------------------------------------------------- |
+| **Zoom**         | **Loom Zoom**              | Adjusting the proximity to the linen for fine detail work.                    |
+| **Switch Frame** | **Turn Page**              | Navigating between different frames in the Folio.                             |
+| **Pan / Offset** | **Camera Protocol**        | The automated system that keeps the needle centered in the artisan's view.    |
+| **Jump**         | **Go To**                  | Instantly moving the Needle to a specific coordinate.                         |
+| **Guidelines**   | **Rhythmic Guides**        | Visual markers that help maintain symmetry and 8-bit proportions.             |
 | **Snapping**     | **Quick Shape Correction** | Intelligent geometric correction that snaps rough strokes into perfect forms. |
-
-
 
 ---
 

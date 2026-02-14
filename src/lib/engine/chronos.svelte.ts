@@ -31,7 +31,7 @@ export class ChronosEngine {
 		atelier.project.isPlaying = true;
 		// Reset elapsed time to the start of current frame
 		this.elapsedTime = 0;
-		for(let i=0; i<atelier.project.activeFrameIndex; i++) {
+		for (let i = 0; i < atelier.project.activeFrameIndex; i++) {
 			this.elapsedTime += atelier.project.frames[i].duration;
 		}
 
@@ -64,7 +64,7 @@ export class ChronosEngine {
 		this.interval = setTimeout(() => {
 			// Advance to next thread of time
 			atelier.project.activeFrameIndex = nextIndex;
-			
+
 			// Loop elapsed time if wrapping
 			if (nextIndex === 0) this.elapsedTime = 0;
 			else this.elapsedTime += currentFrame.duration;

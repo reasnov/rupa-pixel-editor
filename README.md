@@ -19,6 +19,7 @@
 ## 🏗️ Architectural Sovereignty
 
 Rupa follows a strict **5-Layer Modular Monolith** pattern:
+
 1. **UI Layer**: Pure presentational Svelte components.
 2. **State Layer**: Reactive source of truth using Svelte 5 Runes.
 3. **Service Layer**: Business logic and state orchestration.
@@ -28,10 +29,12 @@ Rupa follows a strict **5-Layer Modular Monolith** pattern:
 ## 🚀 Getting Started
 
 ### Prerequisites
+
 - Node.js & npm
 - [Bun](https://bun.sh/) (recommended for speed)
 
 ### Installation
+
 ```bash
 git clone https://github.com/reasnov/rupa-pixel-editor.git
 cd rupa-pixel-editor
@@ -39,6 +42,7 @@ npm install
 ```
 
 ### Development
+
 ```bash
 # Start Vite and Electron simultaneously
 npm run dev:all

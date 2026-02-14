@@ -12,7 +12,7 @@
 
 	// Scale constants (Now reactive to studio zoom)
 	// Base scale: 0.25px per ms
-	let pxPerMs = $derived(0.25 * atelier.studio.timelineZoom); 
+	let pxPerMs = $derived(0.25 * atelier.studio.timelineZoom);
 	const MIN_BLOCK_WIDTH = 50;
 
 	function handleScroll(e: Event) {
@@ -39,12 +39,14 @@
 	}
 
 	// Calculate playhead position
-	let playheadOffset = $derived(ChronosLogic.getFrameOffset(
-		atelier.project.frames, 
-		atelier.project.activeFrameIndex, 
-		pxPerMs, 
-		MIN_BLOCK_WIDTH
-	));
+	let playheadOffset = $derived(
+		ChronosLogic.getFrameOffset(
+			atelier.project.frames,
+			atelier.project.activeFrameIndex,
+			pxPerMs,
+			MIN_BLOCK_WIDTH
+		)
+	);
 
 	// Auto-scroll effect
 	$effect(() => {
@@ -59,7 +61,9 @@
 	// Time ruler
 	let totalDuration = $derived(atelier.project.frames.reduce((acc, f) => acc + f.duration, 0));
 	let rulerMarks = $derived(ChronosLogic.getRulerMarks(totalDuration, atelier.studio.timelineZoom));
-	let trackWidth = $derived(ChronosLogic.getTrackWidth(atelier.project.frames, pxPerMs, MIN_BLOCK_WIDTH));
+	let trackWidth = $derived(
+		ChronosLogic.getTrackWidth(atelier.project.frames, pxPerMs, MIN_BLOCK_WIDTH)
+	);
 	let maxRulerWidth = $derived(rulerMarks[rulerMarks.length - 1] * pxPerMs + 100);
 
 	// Ruler Scrubbing
@@ -109,7 +113,7 @@
 			{#each rulerMarks as ms}
 				<div class="absolute flex flex-col items-start" style="left: {ms * pxPerMs}px;">
 					<div class="h-2 w-px bg-black/30"></div>
-					<span class="ml-1 -mt-0.5 font-mono text-[9px] font-bold text-black/50 whitespace-nowrap"
+					<span class="-mt-0.5 ml-1 font-mono text-[9px] font-bold whitespace-nowrap text-black/50"
 						>{ChronosLogic.formatTimeLabel(ms)}</span
 					>
 				</div>
@@ -126,10 +130,7 @@
 		aria-label="Spindle Timeline"
 	>
 		<!-- The Track -->
-		<div 
-			class="flex h-full items-center bg-black/5 py-2 pl-1"
-			style="width: {maxRulerWidth}px;"
-		>
+		<div class="flex h-full items-center bg-black/5 py-2 pl-1" style="width: {maxRulerWidth}px;">
 			{#each atelier.project.frames as frame, i (frame.id)}
 				<div
 					draggable="true"
@@ -170,7 +171,7 @@
 			>
 				<span class="text-xl leading-none">＋</span>
 			</button>
-			
+
 			<!-- Spacer -->
 			<div class="w-40 shrink-0"></div>
 		</div>

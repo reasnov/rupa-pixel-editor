@@ -77,7 +77,7 @@ export class StitchService {
 		const stab = atelier.studio.stabilization;
 		const smoothed = FiberEngine.smoothPath(rawPoints, stab / 10);
 		const arcData = FiberEngine.fitArc(smoothed, stab);
-		
+
 		atelier.linen.clearBuffer();
 		let finalPixels: Array<{ x: number; y: number }> = [];
 		let visualPoints: Array<{ x: number; y: number }> = [];
@@ -88,12 +88,12 @@ export class StitchService {
 			finalPixels = FiberEngine.getCirclePoints(arcData.cx, arcData.cy, arcData.r);
 		} else {
 			const simplified = FiberEngine.simplifyPath(smoothed, (stab / 100) * 2.0);
-			
+
 			if (simplified.length === 2) {
 				// 2. PERFECT LINES (H, V, 45D)
 				let p1 = { ...simplified[0] };
 				let p2 = { ...simplified[simplified.length - 1] };
-				
+
 				const dx = Math.abs(p2.x - p1.x);
 				const dy = Math.abs(p2.y - p1.y);
 				const snapThreshold = 3.0; // Leniency for special curves
@@ -116,21 +116,29 @@ export class StitchService {
 				// 3. PERFECT ARC
 				visualPoints = arcData.points;
 				for (let i = 0; i < visualPoints.length - 1; i++) {
-					finalPixels.push(...FiberEngine.getLinePoints(
-						visualPoints[i].x, visualPoints[i].y, 
-						visualPoints[i+1].x, visualPoints[i+1].y, 
-						stab / 100
-					));
+					finalPixels.push(
+						...FiberEngine.getLinePoints(
+							visualPoints[i].x,
+							visualPoints[i].y,
+							visualPoints[i + 1].x,
+							visualPoints[i + 1].y,
+							stab / 100
+						)
+					);
 				}
 			} else {
 				// 4. GENERAL SMOOTHING
 				visualPoints = simplified;
 				for (let i = 0; i < visualPoints.length - 1; i++) {
-					finalPixels.push(...FiberEngine.getLinePoints(
-						visualPoints[i].x, visualPoints[i].y, 
-						visualPoints[i+1].x, visualPoints[i+1].y, 
-						stab / 100
-					));
+					finalPixels.push(
+						...FiberEngine.getLinePoints(
+							visualPoints[i].x,
+							visualPoints[i].y,
+							visualPoints[i + 1].x,
+							visualPoints[i + 1].y,
+							stab / 100
+						)
+					);
 				}
 			}
 		}

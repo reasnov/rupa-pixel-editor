@@ -12,7 +12,7 @@
 	}>();
 
 	let previewStitches = $derived(frame.compositeStitches);
-	
+
 	// Dynamic scale reactive to studio zoom
 	let pxPerMs = $derived(0.25 * atelier.studio.timelineZoom);
 	const MIN_BLOCK_WIDTH = 50;
@@ -29,7 +29,7 @@
 		isResizing = true;
 		startX = e.clientX;
 		startDuration = frame.duration;
-		
+
 		window.addEventListener('mousemove', handleResize);
 		window.addEventListener('mouseup', stopResize);
 		document.body.style.cursor = 'col-resize';
@@ -53,7 +53,7 @@
 </script>
 
 <div
-	class="relative h-full flex-shrink-0 select-none transition-transform duration-200 {isDragged
+	class="relative h-full flex-shrink-0 transition-transform duration-200 select-none {isDragged
 		? 'scale-95 opacity-40'
 		: ''} {isDropTarget ? 'translate-x-4' : ''}"
 	style="width: {blockWidth}px;"

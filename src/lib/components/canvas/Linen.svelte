@@ -40,9 +40,7 @@
 	let isSnapped = $derived(shuttlepoint.isSnappedState);
 
 	// High-performance track string
-	let polylinePoints = $derived(
-		atelier.linen.strokePoints.map((p) => `${p.x},${p.y}`).join(' ')
-	);
+	let polylinePoints = $derived(atelier.linen.strokePoints.map((p) => `${p.x},${p.y}`).join(' '));
 
 	function handleWheel(e: WheelEvent) {
 		if (e.ctrlKey) {
@@ -63,10 +61,10 @@
 
 		// Use crisp pixel rendering
 		ctx.imageSmoothingEnabled = false;
-		
+
 		// Clear and draw
 		ctx.clearRect(0, 0, w, h);
-		
+
 		for (let i = 0; i < stitches.length; i++) {
 			const color = stitches[i];
 			if (color) {
@@ -152,7 +150,7 @@
 
 				<!-- Needle is now an overlay instead of being inside each stitch -->
 				<div class="pointer-events-none absolute inset-0 z-30 overflow-hidden">
-					<div 
+					<div
 						class="absolute transition-all duration-75 ease-out"
 						style="
 							left: {(atelier.needle.pos.x / w) * 100}%; 

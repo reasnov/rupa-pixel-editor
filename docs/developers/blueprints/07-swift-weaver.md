@@ -23,11 +23,11 @@ Rupa operates in two distinct operational states:
 
 ### 3.1 Advanced Rendering
 
-| Technical Term | Artisan Term     | Action                                                                   |
-| :------------- | :--------------- | :----------------------------------------------------------------------- |
-| **QuickShape** | **Quick Shape Correction** | Hold pointer to snap rough paths into perfect geometric forms. |
-| **Batch Fill** | **Atomic Stitch** | Fill all pixels in a stroke simultaneously on release.                  |
-| **Interpolation** | **Fiber Flow** | Seamless pixel connectivity via Bresenham's algorithm.                  |
+| Technical Term    | Artisan Term               | Action                                                         |
+| :---------------- | :------------------------- | :------------------------------------------------------------- |
+| **QuickShape**    | **Quick Shape Correction** | Hold pointer to snap rough paths into perfect geometric forms. |
+| **Batch Fill**    | **Atomic Stitch**          | Fill all pixels in a stroke simultaneously on release.         |
+| **Interpolation** | **Fiber Flow**             | Seamless pixel connectivity via Bresenham's algorithm.         |
 
 ---
 

@@ -21,7 +21,7 @@
 
 		ctx.imageSmoothingEnabled = false;
 		ctx.clearRect(0, 0, width, height);
-		
+
 		for (let i = 0; i < stitches.length; i++) {
 			const color = stitches[i];
 			if (color) {
@@ -36,8 +36,8 @@
 
 <canvas
 	bind:this={canvasEl}
-	width={width}
-	height={height}
+	{width}
+	{height}
 	class="pointer-events-none absolute inset-0 z-0 h-full w-full"
 	style="opacity: {opacity}; image-rendering: pixelated;"
 ></canvas>

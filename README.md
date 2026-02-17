@@ -1,6 +1,6 @@
-# Rupa Pixel Editor (Atelier) 🪡
+# Rupa Pixel Editor (Editor) ☕
 
-**Rupa** is a professional-grade, meditative pixel art editor designed for digital artisans. It combines a keyboard-first workflow with a "Cottagecore" aesthetic, turning pixel art into a tactile craft of digital stitching.
+**Rupa** is a professional-grade, meditative pixel art editor designed for digital baristas. It combines a keyboard-first workflow with a "Cottagecore" aesthetic, turning pixel art into a tactile craft of digital brewing.
 
 [![Version](https://img.shields.io/badge/version-0.6.1-magenta.svg)](./docs/pubs/releases/v0.6.1.md)
 [![Architecture](https://img.shields.io/badge/architecture-Modular%20Layered%20Monolith-teal.svg)](./docs/developers/architecture.md)
@@ -8,13 +8,13 @@
 
 ---
 
-## ✨ Features (v0.6.1: The High-Performance Linen)
+## ✨ Features (v0.6.1: The High-Performance Canvas)
 
 - **Canvas-Powered Grid**: High-speed HTML5 Canvas rendering for limitless pixel creativity.
 - **Quick Shape Correction**: Snap rough strokes into perfect lines, arcs, and circles with a 600ms hold.
 - **Adaptive Pixel Ruler**: Intelligent coordinate labels and GPU-accelerated markers.
-- **The Spindle (Kinetic Mode)**: Professional temporal sequence management for pixel animations.
-- **Artisan Ecosystem**: A sun-drenched sanctuary with generative piano soundscapes and tactile feedback.
+- **The Timeline (Kinetic Mode)**: Professional temporal sequence management for pixel animations.
+- **Barista Ecosystem**: A sun-drenched sanctuary with generative piano soundscapes and tactile feedback.
 
 ## 🏗️ Architectural Sovereignty
 
@@ -51,10 +51,10 @@ npm run dev:all
 ## 📖 Documentation
 
 - [User Guide](./docs/USER_GUIDE.md)
-- [Artisan Codex](./docs/wiki/terminology.md)
+- [Barista Codex](./docs/wiki/terminology.md)
 - [Developer Specs](./docs/developers/specs.md)
 - [Latest Release Notes](./docs/pubs/releases/v0.6.1.md)
 
 ---
 
-_"We do not just paint pixels; we weave light into the fabric of time."_
+_"We do not just paint pixels; we etch moments into the crema of time."_

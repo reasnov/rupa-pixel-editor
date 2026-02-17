@@ -1,18 +1,18 @@
 <script lang="ts">
-	import { atelier } from '../../state/atelier.svelte.js';
-	import { stance } from '../../engine/stance.svelte.js';
+	import { editor } from '../../state/editor.svelte.js';
+	import { mode } from '../../engine/mode.svelte.js';
 
-	let edges = $derived(atelier.selection.getBoundaryEdges(atelier.linen.width));
-	let vertices = $derived(atelier.selection.vertices);
-	let isLooming = $derived(stance.current.type === 'LOOMING');
+	let edges = $derived(editor.selection.getBoundaryEdges(editor.canvas.width));
+	let vertices = $derived(editor.selection.vertices);
+	let isSelecting = $derived(mode.current.type === 'SELECT');
 </script>
 
-{#if atelier.selection.isActive}
+{#if editor.selection.isActive}
 	<!-- Motif Boundary Marching Ants (SVG Overlay) -->
 	<svg
 		class="pointer-events-none absolute inset-0 z-40 h-full w-full overflow-visible"
 		style="grid-column: 1 / -1; grid-row: 1 / -1;"
-		viewBox="0 0 {atelier.linen.width} {atelier.linen.height}"
+		viewBox="0 0 {editor.canvas.width} {editor.canvas.height}"
 		shape-rendering="crispEdges"
 	>
 		<defs>
@@ -35,7 +35,7 @@
 				y1={edge.y1}
 				x2={edge.x2}
 				y2={edge.y2}
-				stroke={isLooming ? 'var(--color-brand)' : 'rgba(211, 54, 130, 0.8)'}
+				stroke={isSelecting ? 'var(--color-brand)' : 'rgba(211, 54, 130, 0.8)'}
 				stroke-width={0.08}
 				stroke-dasharray="0.2, 0.2"
 				class="marching-ants-svg"
@@ -66,12 +66,12 @@
 	<svg
 		class="pointer-events-none absolute inset-0 z-[39] h-full w-full overflow-visible"
 		style="grid-column: 1 / -1; grid-row: 1 / -1;"
-		viewBox="0 0 {atelier.linen.width} {atelier.linen.height}"
+		viewBox="0 0 {editor.canvas.width} {editor.canvas.height}"
 		shape-rendering="crispEdges"
 	>
 		<path
-			d={atelier.selection
-				.getPoints(atelier.linen.width)
+			d={editor.selection
+				.getPoints(editor.canvas.width)
 				.map((p) => `M${p.x},${p.y}h1v1h-1z`)
 				.join(' ')}
 			fill="var(--color-brand)"

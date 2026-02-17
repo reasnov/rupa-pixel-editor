@@ -1,5 +1,5 @@
 import { sfx } from './audio.js';
-import { atelier } from '../state/atelier.svelte.js';
+import { editor } from '../state/editor.svelte.js';
 
 type FeedbackType = 'TACTILE' | 'AUDITORY' | 'VISUAL';
 
@@ -18,7 +18,7 @@ export class ResonanceEngine {
 
 	/**
 	 * Play a feedback effect.
-	 * @param event The semantic name of the event (e.g., 'STITCH', 'ERROR', 'SUCCESS')
+	 * @param event The semantic name of the event (e.g., 'DRAW', 'ERROR', 'SUCCESS')
 	 */
 	emit(event: string) {
 		if (!this.isEnabled) return;
@@ -37,11 +37,11 @@ export class ResonanceEngine {
 
 	private playAudio(event: string) {
 		switch (event) {
-			case 'STITCH':
-				sfx.playStitch();
+			case 'DRAW':
+				sfx.playDraw();
 				break;
-			case 'UNSTITCH':
-				sfx.playUnstitch();
+			case 'ERASE':
+				sfx.playErase();
 				break;
 			case 'MOVE':
 				sfx.playMove();
@@ -63,7 +63,7 @@ export class ResonanceEngine {
 
 	private triggerVisual(event: string) {
 		// Example: Screen shake on large deletions
-		if (event === 'CLEAR_LINEN') {
+		if (event === 'CLEAR_CANVAS') {
 			this.screenShake = true;
 			setTimeout(() => (this.screenShake = false), 200);
 		}
@@ -76,8 +76,8 @@ export class ResonanceEngine {
 
 	private triggerHaptic(event: string) {
 		// Future proofing for Touch devices
-		if (event === 'STITCH') navigator.vibrate(5); // Light tap
-		if (event === 'UNSTITCH') navigator.vibrate(10); // Heavier rub
+		if (event === 'DRAW') navigator.vibrate(5); // Light tap
+		if (event === 'ERASE') navigator.vibrate(10); // Heavier rub
 	}
 }
 

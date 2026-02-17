@@ -24,9 +24,9 @@ After completing the code, ask the user if they want a playground link. Only cal
 
 ---
 
-# Rupa Studio Professional Guidelines
+# Rupa Café Professional Guidelines
 
-To maintain the high standards of the **Rupa Pixel Editor** (Atelier), adhering to the following behavior protocols is mandatory:
+To maintain the high standards of the **Rupa Pixel Editor** (Editor), adhering to the following behavior protocols is mandatory:
 
 ## 1. Architectural Sovereignty
 
@@ -40,10 +40,10 @@ To maintain the high standards of the **Rupa Pixel Editor** (Atelier), adhering 
 - **Internationalization (i18n)**:
   - NEVER hardcode strings in the UI.
   - ALWAYS use the global `__({ key: '...' })` function.
-  - Create semantic, artisan-themed keys in `src/lib/lang/en/common.json`.
+  - Create semantic, barista-themed keys in `src/lib/lang/en/common.json`.
 - **Accessibility (A11y)**:
-  - Ensure every interactive element is reachable via keyboard (LoomPad).
-  - Use `aria-label` with descriptive artisan terminology.
+  - Ensure every interactive element is reachable via keyboard.
+  - Use `aria-label` with descriptive barista terminology.
   - Verify color contrast against the `#fdf6e3` Paper background.
 
 ## 3. Documentation Integrity
@@ -56,4 +56,4 @@ To maintain the high standards of the **Rupa Pixel Editor** (Atelier), adhering 
 
 - **Svelte 5 Runes**: Exclusively use Runes syntax (`$state`, `$derived`, `$effect`).
 - **Type Safety**: No `any`. Use defined interfaces in `src/lib/types/`.
-- **Global Objects**: Utilize the globally registered `shuttle`, `atelier`, and `__` helpers to keep imports clean.
+- **Global Objects**: Utilize the globally registered `shuttle`, `editor`, and `__` helpers to keep imports clean.

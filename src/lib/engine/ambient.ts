@@ -1,4 +1,4 @@
-import { atelier } from '../state/atelier.svelte.js';
+import { editor } from '../state/editor.svelte.js';
 import { studioAudio } from './audioContext.js';
 import audioConfig from '../config/audio.json' with { type: 'json' };
 
@@ -42,7 +42,7 @@ export class AmbientEngine {
 	}
 
 	private scheduler() {
-		if (!this.isPlaying || atelier.studio.isMuted || !atelier.studio.isAmbientPlaying) {
+		if (!this.isPlaying || editor.studio.isMuted || !editor.studio.isAmbientPlaying) {
 			this.timer = setTimeout(() => this.scheduler(), 100);
 			return;
 		}
@@ -85,7 +85,7 @@ export class AmbientEngine {
 	private pianoPluck(freq: number, time: number, volume = 0.06) {
 		// --- Generative Volume Logic (Data Driven) ---
 		const { startMins, fullMins } = audioConfig.ambient.fade;
-		const minutes = atelier.usageMinutes;
+		const minutes = editor.usageMinutes;
 		let fadeScale = 0;
 
 		if (minutes >= startMins && minutes < fullMins) {
@@ -95,7 +95,7 @@ export class AmbientEngine {
 		}
 
 		// Combined effective volume: (Base Volume * Fade Scale * User Settings)
-		const effectiveVolume = volume * fadeScale * atelier.bgmVolume;
+		const effectiveVolume = volume * fadeScale * editor.bgmVolume;
 
 		// Skip rendering if volume is negligible
 		if (effectiveVolume < 0.001) return;

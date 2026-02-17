@@ -1,89 +1,88 @@
-import { atelier } from '../../state/atelier.svelte.js';
+import { editor } from '../../state/editor.svelte.js';
 import { sfx } from '../audio.js';
 import { history } from '../history.js';
 
 export class ManipulationService {
 	resize(newWidth: number, newHeight: number) {
-		const newStitches = Array(newWidth * newHeight).fill('#eee8d5');
-		for (let y = 0; y < Math.min(atelier.linen.height, newHeight); y++) {
-			for (let x = 0; x < Math.min(atelier.linen.width, newWidth); x++) {
-				const oldIdx = y * atelier.linen.width + x;
+		const newPixels = Array(newWidth * newHeight).fill('#eee8d5');
+		for (let y = 0; y < Math.min(editor.canvas.height, newHeight); y++) {
+			for (let x = 0; x < Math.min(editor.canvas.width, newWidth); x++) {
+				const oldIdx = y * editor.canvas.width + x;
 				const newIdx = y * newWidth + x;
-				newStitches[newIdx] = atelier.linen.stitches[oldIdx];
+				newPixels[newIdx] = editor.canvas.pixels[oldIdx];
 			}
 		}
-		atelier.linen.reset(newWidth, newHeight, newStitches);
+		editor.canvas.reset(newWidth, newHeight, newPixels);
 		history.clear();
-		sfx.playStitch();
+		sfx.playDraw();
 	}
 
 	flip(axis: 'horizontal' | 'vertical') {
-		const { width, height, stitches } = atelier.linen;
-		const newStitches = [...stitches];
+		const { width, height, pixels } = editor.canvas;
+		const newPixels = [...pixels];
 
 		if (axis === 'horizontal') {
 			for (let y = 0; y < height; y++) {
-				const row = stitches.slice(y * width, (y + 1) * width);
+				const row = pixels.slice(y * width, (y + 1) * width);
 				row.reverse();
-				for (let x = 0; x < width; x++) newStitches[y * width + x] = row[x];
+				for (let x = 0; x < width; x++) newPixels[y * width + x] = row[x];
 			}
 		} else {
 			for (let y = 0; y < height; y++) {
 				for (let x = 0; x < width; x++) {
 					const oldIdx = y * width + x;
 					const newIdx = (height - 1 - y) * width + x;
-					newStitches[newIdx] = stitches[oldIdx];
+					newPixels[newIdx] = pixels[oldIdx];
 				}
 			}
 		}
-		atelier.linen.stitches = newStitches;
+		editor.canvas.pixels = newPixels;
 		history.clear();
-		sfx.playStitch();
+		sfx.playDraw();
 	}
 
 	rotate() {
-		const { width, height, stitches } = atelier.linen;
+		const { width, height, pixels } = editor.canvas;
 		if (width !== height) return;
 
-		const newStitches = Array(width * height).fill('#eee8d5');
+		const newPixels = Array(width * height).fill('#eee8d5');
 		for (let y = 0; y < height; y++) {
 			for (let x = 0; x < width; x++) {
 				const oldIdx = y * width + x;
 				const newIdx = x * width + (height - 1 - y);
-				newStitches[newIdx] = stitches[oldIdx];
+				newPixels[newIdx] = pixels[oldIdx];
 			}
 		}
-		atelier.linen.stitches = newStitches;
+		editor.canvas.pixels = newPixels;
 		history.clear();
-		sfx.playStitch();
+		sfx.playDraw();
 	}
 
 	clearAll() {
-		if (confirm('Are you sure you want to unravel the entire project?')) {
-			atelier.linen.clear();
+		if (confirm('Are you sure you want to clear the entire canvas?')) {
+			editor.canvas.clear();
 			history.clear();
-			sfx.playUnstitch();
+			sfx.playErase();
 		}
 	}
 
 	/**
-	 * Fiber Bleach (Recoloring): Replaces all occurrences of a color with the active dye.
+	 * Color Bleach (Recoloring): Replaces all occurrences of a color with the active one.
 	 */
 	bleach() {
-		const { x, y } = atelier.needle.pos;
-		const targetColor = atelier.linen.getColor(x, y);
-		const replacementColor = atelier.activeDye;
+		const { x, y } = editor.cursor.pos;
+		const targetColor = editor.canvas.getColor(x, y);
+		const replacementColor = editor.activeColor;
 
 		if (targetColor === replacementColor) return;
 
-		const { stitches } = atelier.linen;
+		const { pixels } = editor.canvas;
 		const changes: { index: number; oldColor: string | null; newColor: string | null }[] = [];
 
-		// Selection check
-		const hasSelection = atelier.selection.isActive;
-		const selectionIndices = atelier.selection.indices;
+		const hasSelection = editor.selection.isActive;
+		const selectionIndices = editor.selection.indices;
 
-		stitches.forEach((color, index) => {
+		pixels.forEach((color, index) => {
 			const isCorrectColor = color === targetColor;
 			const isInsideSelection = !hasSelection || selectionIndices.includes(index);
 
@@ -93,7 +92,7 @@ export class ManipulationService {
 					oldColor: targetColor,
 					newColor: replacementColor
 				});
-				atelier.linen.stitches[index] = replacementColor;
+				editor.canvas.pixels[index] = replacementColor;
 			}
 		});
 
@@ -101,7 +100,7 @@ export class ManipulationService {
 			history.beginBatch();
 			changes.forEach((c) => history.push(c));
 			history.endBatch();
-			sfx.playStitch();
+			sfx.playDraw();
 		}
 	}
 }

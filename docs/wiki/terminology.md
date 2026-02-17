@@ -1,89 +1,63 @@
-# Rupa Studio Terminology
+# Rupa Café Terminology
 
-To maintain the meditative and creative atmosphere of the project, we use terminology inspired by traditional weaving and textile arts. This guide maps technical software terms to their Artisan counterparts.
+To maintain the professional yet meditative atmosphere of the project, we use terminology that balances industry-standard graphic design terms with a "Barista Cafe" storytelling layer. This guide maps the technical environment to its Barista-themed counterparts.
 
 ---
 
 ## 1. Core Environment
 
-| Technical Term      | Artisan Term    | Description                                                           |
-| :------------------ | :-------------- | :-------------------------------------------------------------------- |
-| **Workspace / App** | **The Atelier** | The creative studio where digital weaving takes place.                |
-| **Project Bundle**  | **The Folio**   | A collection of multiple frames within a single artisan's work.       |
-| **Canvas / Tab**    | **The Frame**   | A single unique composition or "page" in the Folio.                   |
-| **Layer**           | **The Veil**    | A thin, transparent layer that adds depth to the Motif.               |
-| **Canvas / Grid**   | **The Linen**   | The digital fabric upon which stitches are placed (Composite View).   |
-| **Cursor**          | **The Needle**  | The tool of precision that tracks the active focus on the linen.      |
-| **Pixel / Tile**    | **Stitch**      | A single unit of color on the linen (The fundamental unit).           |
-| **Shape / Object**  | **Motif**       | A collection of stitches forming a distinct visual element or design. |
-| **Color**           | **Dye**         | The pigment used to create patterns.                                  |
-| **Hex Code**        | **Dye Code**    | The unique formula for a specific dye.                                |
-| **Key Combination** | **Chord**       | A set of modifiers and keys played together to create an intent.      |
+| Industry Term       | Barista Storytelling | Description                                                        |
+| :------------------ | :------------------- | :----------------------------------------------------------------- |
+| **Workspace / App** | **The Café**         | The creative space where digital brewing and etching takes place.  |
+| **Project / File**  | **The Order**        | A specific piece of work being prepared for a client.              |
+| **Collection**      | **The Recipe Book**  | A collection of multiple frames within a single project.           |
+| **Frame**           | **The Cup**          | A single unique composition or "page" in the sequence.             |
+| **Layer**           | **The Infusion**     | A transparent layer that adds depth and flavor to the composition. |
+| **Canvas**          | **The Foam**         | The surface upon which pixels are placed.                          |
+| **Cursor**          | **The Etcher**       | The precision tool used to track active focus.                     |
+| **Pixel**           | **Etch**             | A single unit of color (the fundamental building block).           |
+| **Color**           | **Flavor**           | The pigment or ingredient used to create designs.                  |
+| **Palette**         | **Ingredients**      | A collection of colors available for the barista.                  |
+| **Shortcuts**       | **The Rhythm**       | Keyboard combinations used to maintain flow.                       |
 
 ---
 
 ## 2. Interaction & Tools
 
-| Technical Term       | Artisan Term            | Description                                                            |
-| :------------------- | :---------------------- | :--------------------------------------------------------------------- |
-| **Draw / Paint**     | **Stitch**              | To apply dye to a single point on the linen.                           |
-| **Erase**            | **Unstitch**            | To remove dye and return the linen to its natural state.               |
-| **Continuous Draw**  | **Threading**           | Pulling a continuous line of dye across the linen (Hold Ctrl).         |
-| **Continuous Erase** | **Unravelling**         | Removing a continuous line of stitches (Hold Ctrl + Shift).            |
-| **Selection Mode**   | **Looming**             | Defining a rectangular area for mass manipulation (Hold Shift).        |
-| **Selected Area**    | **Active Loom**         | The region currently defined for stitching or capturing.               |
-| **Opacity**          | **Density**             | The thickness of a Veil's fibers, determining its transparency.        |
-| **Merge Layers**     | **Entwine**             | Permanently joining two Veils into a single fiber.                     |
-| **Copied Object**    | **Swatch**              | A fragment of a Motif captured in the Active Loom for later placement. |
-| **Eyedropper**       | **Pick Dye**            | Identifying a dye already present on the linen to reuse it.            |
-| **Mouse Input**      | **ShuttlePoint**        | The engine that translates fluid pointer movement into stitches.       |
-| **Freehand Draw**    | **Fluid Stitching**     | Drawing organic motifs effortlessly using the mouse or stylus.         |
-| **Image Mode**       | **Stitch Mode**         | The operational state for static image and motif creation.             |
-| **Motion Mode**      | **Kinetic Mode**        | The operational state for temporal sequence and animation weaving.     |
-| **User Guide**       | **Artisan Codex**       | The sacred scroll containing all studio knowledge and techniques.      |
-| **Command Palette**  | **Pattern Catalog**     | A searchable directory of all studio actions and patterns.             |
-| **Color Picker**     | **Natural Dye Basin**   | The interface for mixing and creating custom dyes.                     |
-| **Audio Settings**   | **Audio Basin**         | The interface for tuning harmony (SFX) and atmosphere (BGM).           |
-| **Status Bar**       | **TechLedger**          | The technical ledger at the studio's base tracking chords and state.   |
-| **Background Music** | **Atmosphere Protocol** | Generative piano melodies that weave into the studio over time.        |
-| **Session Time**     | **Working Time**        | The duration of the artisan's current creative session.                |
-| **HSLA Data**        | **Fiber**               | Raw, unspun color data (Hue, Saturation, Lightness, Alpha).            |
+| Industry Term        | Barista Storytelling | Description                                                |
+| :------------------- | :------------------- | :--------------------------------------------------------- |
+| **Draw / Paint**     | **Pour / Etch**      | Applying color to a point on the canvas.                   |
+| **Erase**            | **Clear**            | Removing color and returning the canvas to its base state. |
+| **Path / Line**      | **Streaming**        | Drawing a continuous sequence of pixels.                   |
+| **Selection**        | **Focus Area**       | Defining a region for batch operations.                    |
+| **Eyedropper**       | **Taste Color**      | Picking a color already present on the canvas.             |
+| **Animation Mode**   | **Flow Mode**        | The operational state for motion and temporal sequences.   |
+| **Command Palette**  | **Menu**             | A searchable directory of all café actions.                |
+| **Color Picker**     | **Flavor Basin**     | The interface for mixing and creating custom colors.       |
+| **Background Music** | **Café Ambience**    | Generative piano melodies that evolve over time.           |
 
 ---
 
-## 3. Inclusivity & Global Reach
+## 3. Storage & Artifacts
 
-| Technical Term           | Artisan Term         | Description                                                             |
-| :----------------------- | :------------------- | :---------------------------------------------------------------------- |
-| **Internationalization** | **Global Craft**     | The system for translating the studio's language to artisans worldwide. |
-| **Accessibility**        | **Inclusive Studio** | Ensuring the atelier is reachable and welcoming for every artisan.      |
-| **Translation Key**      | **Lore Key**         | A unique identifier mapping a concept to its localized name.            |
-| **Screen Reader**        | **Echo Thread**      | Assistive technology that speaks the studio's state for artisans.       |
-
----
-
-## 4. Storage & Artifacts
-
-| Technical Term           | Artisan Term         | Description                                                         |
-| :----------------------- | :------------------- | :------------------------------------------------------------------ |
-| **Export**               | **Create Artifact**  | Transforming the digital work into a permanent file (PNG/SVG).      |
-| **Save Project**         | **Archive Pattern**  | Storing the current state of the linen for future weaving.          |
-| **Project File (.rupa)** | **The Pattern Book** | A file containing all data and history of a specific work.          |
-| **Auto-save**            | **Linen Backup**     | The studio's automated safety rhythm to protect the artisan's work. |
+| Industry Term    | Barista Storytelling | Description                                                    |
+| :--------------- | :------------------- | :------------------------------------------------------------- |
+| **Export**       | **Serve**            | Transforming the digital work into a permanent file (PNG/SVG). |
+| **Save**         | **Store Recipe**     | Saving the current state of the project.                       |
+| **Project File** | **Recipe File**      | A `.rupa` file containing all data and history.                |
+| **Auto-save**    | **Safe Brew**        | The automated backup system.                                   |
 
 ---
 
 ## 4. Navigation & View
 
-| Technical Term   | Artisan Term               | Description                                                                   |
-| :--------------- | :------------------------- | :---------------------------------------------------------------------------- |
-| **Zoom**         | **Loom Zoom**              | Adjusting the proximity to the linen for fine detail work.                    |
-| **Switch Frame** | **Turn Page**              | Navigating between different frames in the Folio.                             |
-| **Pan / Offset** | **Camera Protocol**        | The automated system that keeps the needle centered in the artisan's view.    |
-| **Jump**         | **Go To**                  | Instantly moving the Needle to a specific coordinate.                         |
-| **Guidelines**   | **Rhythmic Guides**        | Visual markers that help maintain symmetry and 8-bit proportions.             |
-| **Snapping**     | **Quick Shape Correction** | Intelligent geometric correction that snaps rough strokes into perfect forms. |
+| Industry Term  | Barista Storytelling | Description                                         |
+| :------------- | :------------------- | :-------------------------------------------------- |
+| **Zoom**       | **Focus**            | Adjusting proximity to the canvas.                  |
+| **Pan**        | **View Shift**       | Moving the viewport around the canvas.              |
+| **Guidelines** | **Barista Grid**     | Visual markers for symmetry and proportion.         |
+| **Smoothing**  | **Latte Correction** | Intelligent geometric correction for rough strokes. |
 
 ---
 
-_"We speak the language of craft, so our tools may feel like home."_
+_"Crafting every pixel with the care of a master barista."_

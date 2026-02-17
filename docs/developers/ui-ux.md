@@ -1,6 +1,6 @@
-# UI/UX Guidelines: The Artisan's Sanctuary
+# UI/UX Guidelines: The Barista's Sanctuary
 
-This document defines the principles for creating a meditative, cozy, and game-like experience within the **Rupa Pixel Editor** (Atelier). Every interface element and interaction must contribute to the feeling of a peaceful sanctuary for digital artisans.
+This document defines the principles for creating a meditative, cozy, and game-like experience within the **Rupa Pixel Editor** (Editor). Every interface element and interaction must contribute to the feeling of a peaceful sanctuary for digital baristas.
 
 ---
 
@@ -9,8 +9,8 @@ This document defines the principles for creating a meditative, cozy, and game-l
 Rupa is not just a tool; it is a space for mindfulness. The UI should encourage a slow, intentional pace of creation.
 
 - **Non-Aggressive Feedback**: Avoid harsh alerts or flashing red errors. Use soft chimes, paper rustles, and gentle magenta glows.
-- **Structural Calmness**: Maintain a clean, balanced layout. High information density should be tucked away in sidebars (Ledgers) or overlays (Basins) to keep the central Linen focused.
-- **Intentionality**: Every "stitch" (pixel) should feel like a deliberate act of craft, mirroring the rhythm of knitting or weaving.
+- **Structural Calmness**: Maintain a clean, balanced layout. High information density should be tucked away in sidebars (Ledgers) or overlays (Basins) to keep the central Canvas focused.
+- **Intentionality**: Every "pixel" (pixel) should feel like a deliberate act of craft, mirroring the rhythm of knitting or brewing.
 
 ---
 
@@ -18,10 +18,10 @@ Rupa is not just a tool; it is a space for mindfulness. The UI should encourage 
 
 Interaction in Rupa should feel less like operating software and more like playing a cozy simulation game (e.g., _Stardew Valley_ or _Townscaper_).
 
-- **The Playhead as an Avatar**: Treat the **Needle** not just as a cursor, but as the artisan's representative on the linen. It should have weight and personality through smooth transitions.
+- **The Playhead as an Avatar**: Treat the **Cursor** not just as a cursor, but as the barista's representative on the canvas. It should have weight and personality through smooth transitions.
 - **Physicality**: Elements should feel "tangible." Modals (Basins) should feel like scrolls or drawers opening. Frames should feel like pages of a physical sketchbook being turned.
-- **Rewarding Actions**: Applying a dye should produce a satisfying tactile sound. Completing a frame or an artifact should feel like a small victory.
-- **Exploration**: Use "Easter Eggs" in the Pattern Catalog and hidden keyboard shortcuts to encourage artisans to discover the studio's depth.
+- **Rewarding Actions**: Applying a color should produce a satisfying tactile sound. Completing a frame or an artifact should feel like a small victory.
+- **Exploration**: Use "Easter Eggs" in the Pattern Catalog and hidden keyboard shortcuts to encourage baristas to discover the studio's depth.
 
 ---
 
@@ -29,7 +29,7 @@ Interaction in Rupa should feel less like operating software and more like playi
 
 The aesthetic is "Analog-Digital"—a digital grid with the warmth of natural materials.
 
-- **The Palette**: Strictly adhere to the **Solarized** base colors with **Artisan Magenta** as the primary focus.
+- **The Palette**: Strictly adhere to the **Solarized** base colors with **Barista Magenta** as the primary focus.
   - _Background_: Natural Paper (`#fdf6e3`).
   - _Borders_: Studio Cream / Grid Wood (`#eee8d5`).
   - _Acent_: Botanical Pink / Magenta (`#d33682`).
@@ -43,25 +43,25 @@ The aesthetic is "Analog-Digital"—a digital grid with the warmth of natural ma
 
 ## 4. Auditory Environment: The Atmosphere Protocol
 
-Sound is 50% of the Rupa experience. It anchors the artisan in the meditative state.
+Sound is 50% of the Rupa experience. It anchors the barista in the meditative state.
 
 - **Generative Soundscapes**: The **Ambient Engine** produces real-time piano melodies that evolve with the user's activity.
 - **Tactile SFX**:
-  - _Stitch_: A soft wooden "clack."
-  - _Unstitch_: A paper-like "rub."
+  - _Pixel_: A soft wooden "clack."
+  - _Unpixel_: A paper-like "rub."
   - _Move_: A light "tap" or "slide."
 - **Silence as a Feature**: Respect the silence. SFX should be subdued and never overwhelm the generative music.
 
 ---
 
-## 5. Interaction Design: Hybrid Weaving
+## 5. Interaction Design: Hybrid Brewing
 
 Rupa follows a **"Keyboard-First, Mouse-Friendly"** model. This hybrid approach balances the precision of keyboard-row navigation with the organic flow of mouse-guided drawing.
 
-- **The Keyboard (LoomPad)**: Provides the structural "Metronome." Perfect for geometric patterns, precise navigational jumps, and bulk folio manipulations.
-- **The Mouse (ShuttlePoint)**: Provides **"Fluid Stitching."** Enables artisans to draw freehand curves and organic motifs that would be physically exhausting via keyboard.
-- **Seamless Hand-off**: The Needle follows both inputs instantly. An artisan can move with arrow keys and immediately start a freehand line with the mouse without changing modes.
-- **Context Sovereignty**: UI overlays (Basins) respond to both keyboard shortcuts and mouse clicks, ensuring no artisan is forced into a single input method.
+- **The Keyboard (Keyboard)**: Provides the structural "Metronome." Perfect for geometric patterns, precise navigational jumps, and bulk project manipulations.
+- **The Mouse (ShuttlePoint)**: Provides **"Fluid Pixeling."** Enables baristas to draw freehand curves and organic patterns that would be physically exhausting via keyboard.
+- **Seamless Hand-off**: The Cursor follows both inputs instantly. An barista can move with arrow keys and immediately start a freehand line with the mouse without changing modes.
+- **Context Sovereignty**: UI overlays (Basins) respond to both keyboard shortcuts and mouse clicks, ensuring no barista is forced into a single input method.
 
 ---
 
@@ -82,12 +82,12 @@ When adding a new feature, ask:
 
 Accessibility in Rupa is not just about compliance, but about ensuring the "Sanctuary" is open to everyone.
 
-- **The Keyboard as an Assistive Tool**: Since Rupa is keyboard-first, most accessibility for motor-impaired users is built into the **LoomPad**. Ensure all chords are remappable and logical.
+- **The Keyboard as an Assistive Tool**: Since Rupa is keyboard-first, most accessibility for motor-impaired users is built into the **Keyboard**. Ensure all chords are remappable and logical.
 - **Semantic ARIA with Craft Terminology**:
-  - Use `aria-label` to describe actions in the artisan metaphor (e.g., `aria-label="Soak the linen with dye"` instead of `aria-label="Flood fill"`).
-  - The **Linen** must be treated as a `role="grid"` or `role="img"` with an alt-description of the pattern being woven.
-- **Focus Management**: The **Needle** acts as the primary focus anchor. When moving between panels (Ledgers), the focus should be clearly visible with a soft magenta outline.
-- **Color Contrast**: All text must meet WCAG AA standards against the Paper (`#fdf6e3`) background. Use Artisan Magenta for high-contrast highlights.
+  - Use `aria-label` to describe actions in the barista metaphor (e.g., `aria-label="Soak the canvas with color"` instead of `aria-label="Flood fill"`).
+  - The **Canvas** must be treated as a `role="grid"` or `role="img"` with an alt-description of the pattern being woven.
+- **Focus Management**: The **Cursor** acts as the primary focus anchor. When moving between panels (Ledgers), the focus should be clearly visible with a soft magenta outline.
+- **Color Contrast**: All text must meet WCAG AA standards against the Paper (`#fdf6e3`) background. Use Barista Magenta for high-contrast highlights.
 
 ---
 
@@ -96,8 +96,8 @@ Accessibility in Rupa is not just about compliance, but about ensuring the "Sanc
 Rupa uses **i18next** to translate the "language of craft" for a global audience.
 
 - **Source of Truth**: All strings must live in `src/lib/lang/en/` (as the initial standard).
-- **Artisan-Centric Keys**: Use semantic keys that reflect the studio's lore.
+- **Barista-Centric Keys**: Use semantic keys that reflect the studio's lore.
   - _Bad_: `ui.button.save`, `ui.modal.header`
-  - _Good_: `hud.actions.preserve_weave`, `hud.basin.dye_title`
-- **Interpolation**: Use i18next's interpolation for dynamic stats (e.g., `{{count}} stitches applied`).
+  - _Good_: `hud.actions.preserve_weave`, `hud.basin.color_title`
+- **Interpolation**: Use i18next's interpolation for dynamic stats (e.g., `{{count}} pixels applied`).
 - **Implementation Rule**: Never hardcode text in Svelte components. Use the `$t` (translate) function provided by the i18n store.

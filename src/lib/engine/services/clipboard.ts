@@ -1,17 +1,17 @@
-import { atelier } from '../../state/atelier.svelte.js';
+import { editor } from '../../state/editor.svelte.js';
 import { history } from '../history.js';
 import { sfx } from '../audio.js';
 
 export class ClipboardService {
 	copy() {
-		const width = atelier.linen.width;
-		const points = atelier.selection.getPoints(width);
-		const bounds = atelier.selection.getEffectiveBounds(width);
+		const width = editor.canvas.width;
+		const points = editor.selection.getPoints(width);
+		const bounds = editor.selection.getEffectiveBounds(width);
 
 		if (!bounds || points.length === 0) return;
 
 		const swatchData = new Array(bounds.width * bounds.height).fill(null);
-		const source = atelier.linen.compositeStitches; // Layer-Agnostic: Use merged image
+		const source = editor.canvas.compositePixels; // Layer-Agnostic: Use merged image
 
 		points.forEach((p) => {
 			const sourceIndex = p.y * width + p.x;
@@ -21,41 +21,41 @@ export class ClipboardService {
 			swatchData[targetIndex] = source[sourceIndex];
 		});
 
-		atelier.project.clipboard = {
+		editor.project.clipboard = {
 			width: bounds.width,
 			height: bounds.height,
 			data: swatchData
 		};
 
-		sfx.playStitch();
+		sfx.playDraw();
 	}
 
 	cut() {
 		this.copy();
-		const width = atelier.linen.width;
-		const points = atelier.selection.getPoints(width);
+		const width = editor.canvas.width;
+		const points = editor.selection.getPoints(width);
 
 		if (points.length === 0) return;
 
 		history.beginBatch();
 		points.forEach((p) => {
 			const index = p.y * width + p.x;
-			const oldColor = atelier.linen.stitches[index];
+			const oldColor = editor.canvas.pixels[index];
 			history.push({ index, oldColor, newColor: null });
-			atelier.linen.stitches[index] = null;
+			editor.canvas.pixels[index] = null;
 		});
 		history.endBatch();
 
-		sfx.playUnstitch();
-		atelier.selection.clear();
+		sfx.playErase();
+		editor.selection.clear();
 	}
 
 	paste() {
-		const cb = atelier.project.clipboard;
+		const cb = editor.project.clipboard;
 		if (!cb) return;
 
-		const { x: nx, y: ny } = atelier.needle.pos;
-		const { width: lw, height: lh } = atelier.linen;
+		const { x: nx, y: ny } = editor.cursor.pos;
+		const { width: lw, height: lh } = editor.canvas;
 
 		history.beginBatch();
 		for (let y = 0; y < cb.height; y++) {
@@ -69,14 +69,14 @@ export class ClipboardService {
 
 					if (color !== null) {
 						const lIdx = ty * lw + tx;
-						const oldColor = atelier.linen.stitches[lIdx];
+						const oldColor = editor.canvas.pixels[lIdx];
 						history.push({ index: lIdx, oldColor, newColor: color });
-						atelier.linen.stitches[lIdx] = color;
+						editor.canvas.pixels[lIdx] = color;
 					}
 				}
 			}
 		}
 		history.endBatch();
-		sfx.playStitch();
+		sfx.playDraw();
 	}
 }

@@ -1,297 +1,297 @@
 {
 	"navigation": {
 		"MOVE_UP": {
-			"label": "Step the Needle Up",
+			"label": "Move Up",
 			"keys": ["ArrowUp"],
-			"group": "The Needle"
+			"group": "Navigation"
 		},
 		"MOVE_DOWN": {
-			"label": "Step the Needle Down",
+			"label": "Move Down",
 			"keys": ["ArrowDown"],
-			"group": "The Needle"
+			"group": "Navigation"
 		},
 		"MOVE_LEFT": {
-			"label": "Step the Needle Left",
+			"label": "Move Left",
 			"keys": ["ArrowLeft"],
-			"group": "The Needle"
+			"group": "Navigation"
 		},
 		"MOVE_RIGHT": {
-			"label": "Step the Needle Right",
+			"label": "Move Right",
 			"keys": ["ArrowRight"],
-			"group": "The Needle"
+			"group": "Navigation"
 		},
 		"GOTO": {
 			"label": "Jump to Coordinate",
 			"keys": ["g"],
-			"group": "The Needle"
+			"group": "Navigation"
 		},
 		"JUMP_HOME": {
 			"label": "Return to Center",
 			"keys": ["Ctrl+h"],
-			"group": "The Needle"
+			"group": "Navigation"
 		}
 	},
-	"stitching": {
-		"STITCH": {
-			"label": "Stitch (Apply Active Dye)",
+	"painting": {
+		"PAINT": {
+			"label": "Paint (Apply Color)",
 			"keys": ["Space", "Enter"],
-			"group": "The Hand"
+			"group": "Tools"
 		},
-		"UNSTITCH": {
-			"label": "Clear Fiber (Unstitch)",
+		"ERASE": {
+			"label": "Erase Pixel",
 			"keys": ["Backspace", "Delete"],
-			"group": "The Hand"
+			"group": "Tools"
 		},
-		"PICK_DYE": {
-			"label": "Sample Fiber (Eyedropper)",
+		"PICK_COLOR": {
+			"label": "Sample Color",
 			"keys": ["i", "Alt+Space"],
-			"group": "The Hand"
+			"group": "Tools"
 		},
 		"SOAK": {
-			"label": "Dye Soak (Flood Fill)",
+			"label": "Color Fill",
 			"keys": ["f"],
-			"group": "Artisan Magic"
+			"group": "Magic"
 		},
-		"BLEACH": {
-			"label": "Fiber Bleach (Recolor All)",
+		"RECOLOR": {
+			"label": "Recolor All",
 			"keys": ["Alt+r"],
-			"group": "Artisan Magic"
+			"group": "Magic"
 		},
-		"SPIRIT_PICK": {
-			"label": "Spirit Pick (Magic Selection)",
+		"SELECT_SAME": {
+			"label": "Magic Wand",
 			"keys": ["w"],
-			"group": "Artisan Magic"
+			"group": "Magic"
 		}
 	},
 	"flows": {
-		"FLOW_STITCH": {
-			"label": "Continuous Threading",
+		"FLOW_PAINT": {
+			"label": "Continuous Painting",
 			"keys": ["Ctrl"],
-			"group": "Continuous Weaving"
+			"group": "Flow"
 		},
-		"FLOW_UNSTITCH": {
-			"label": "Continuous Unravelling",
+		"FLOW_ERASE": {
+			"label": "Continuous Erasing",
 			"keys": ["Ctrl+Shift"],
-			"group": "Continuous Weaving"
+			"group": "Flow"
 		},
 		"FLOW_SELECT": {
-			"label": "Define Selection (Loom)",
+			"label": "Define Selection",
 			"keys": ["Shift"],
-			"group": "Continuous Weaving"
+			"group": "Flow"
 		}
 	},
 	"manipulation": {
 		"COPY": {
-			"label": "Capture to Swatch (Copy)",
+			"label": "Copy",
 			"keys": ["Ctrl+c"],
-			"group": "The Loom"
+			"group": "Edit"
 		},
 		"CUT": {
-			"label": "Snip to Swatch (Cut)",
+			"label": "Cut",
 			"keys": ["Ctrl+x"],
-			"group": "The Loom"
+			"group": "Edit"
 		},
 		"PASTE": {
-			"label": "Weave from Clipboard (Paste)",
+			"label": "Paste",
 			"keys": ["Ctrl+v"],
-			"group": "The Loom"
+			"group": "Edit"
 		},
-		"CLEAR_LINEN": {
-			"label": "Strip the Linen (Clear All)",
+		"CLEAR_CANVAS": {
+			"label": "Clear All",
 			"keys": ["Ctrl+l"],
-			"group": "The Loom"
+			"group": "Edit"
 		}
 	},
 	"transform": {
 		"FLIP_H": {
 			"label": "Flip Horizontally",
 			"keys": ["h"],
-			"group": "Dimensions & Forms"
+			"group": "Transform"
 		},
 		"FLIP_V": {
 			"label": "Flip Vertically",
 			"keys": ["v"],
-			"group": "Dimensions & Forms"
+			"group": "Transform"
 		},
 		"ROTATE": {
 			"label": "Rotate 90° Clockwise",
 			"keys": ["r"],
-			"group": "Dimensions & Forms"
+			"group": "Transform"
 		},
 		"ZOOM_IN": {
-			"label": "Loom Zoom In",
+			"label": "Zoom In",
 			"keys": ["+", "="],
-			"group": "Dimensions & Forms"
+			"group": "View"
 		},
 		"ZOOM_OUT": {
-			"label": "Loom Zoom Out",
+			"label": "Zoom Out",
 			"keys": ["-"],
-			"group": "Dimensions & Forms"
+			"group": "View"
 		},
 		"RESET_ZOOM": {
-			"label": "Reset Loom Zoom",
+			"label": "Reset Zoom",
 			"keys": ["Ctrl+0"],
-			"group": "Dimensions & Forms"
+			"group": "View"
 		}
 	},
-	"kinetic": {
+	"animation": {
 		"NEW_FRAME": {
-			"label": "New Time Thread (Frame)",
+			"label": "New Frame",
 			"keys": ["Alt+n"],
-			"group": "The Spindle"
+			"group": "Timeline"
 		},
 		"DUPLICATE_FRAME": {
-			"label": "Clone Current Thread",
+			"label": "Duplicate Frame",
 			"keys": ["Ctrl+d"],
-			"group": "The Spindle"
+			"group": "Timeline"
 		},
 		"DELETE_FRAME": {
-			"label": "Dissolve Thread",
+			"label": "Remove Frame",
 			"keys": ["Alt+d"],
-			"group": "The Spindle"
+			"group": "Timeline"
 		},
 		"NEXT_FRAME": {
-			"label": "Next Page (Frame)",
+			"label": "Next Frame",
 			"keys": ["Alt+PageDown", "Tab"],
-			"group": "The Spindle"
+			"group": "Timeline"
 		},
 		"PREV_FRAME": {
-			"label": "Previous Page (Frame)",
+			"label": "Previous Frame",
 			"keys": ["Alt+PageUp", "Shift+Tab"],
-			"group": "The Spindle"
+			"group": "Timeline"
 		},
-		"PLAY_PULSE": {
-			"label": "Toggle Playback",
+		"PLAY_PAUSE": {
+			"label": "Play/Pause",
 			"keys": ["p"],
-			"group": "The Spindle"
+			"group": "Timeline"
 		},
-		"TOGGLE_GHOST_THREADS": {
-			"label": "See Ghost Threads (Onion Skin)",
+		"TOGGLE_GHOST_LAYERS": {
+			"label": "Onion Skinning",
 			"keys": ["Alt+g"],
-			"group": "The Spindle"
+			"group": "Timeline"
 		}
 	},
 	"layering": {
-		"NEW_VEIL": {
-			"label": "Add New Veil (Layer)",
+		"NEW_LAYER": {
+			"label": "Add New Layer",
 			"keys": ["Alt+Shift+n"],
-			"group": "The Veils"
+			"group": "Layers"
 		},
-		"DUPLICATE_VEIL": {
-			"label": "Clone Active Veil",
+		"DUPLICATE_LAYER": {
+			"label": "Duplicate Layer",
 			"keys": ["Ctrl+d"],
-			"group": "The Veils"
+			"group": "Layers"
 		},
-		"DELETE_VEIL": {
-			"label": "Remove Active Veil",
+		"DELETE_LAYER": {
+			"label": "Remove Layer",
 			"keys": ["Alt+d"],
-			"group": "The Veils"
+			"group": "Layers"
 		},
-		"MOVE_VEIL_UP": {
-			"label": "Lift Veil Up",
+		"MOVE_LAYER_UP": {
+			"label": "Move Layer Up",
 			"keys": ["["],
-			"group": "The Veils"
+			"group": "Layers"
 		},
-		"MOVE_VEIL_DOWN": {
-			"label": "Lower Veil Down",
+		"MOVE_LAYER_DOWN": {
+			"label": "Move Layer Down",
 			"keys": ["]"],
-			"group": "The Veils"
+			"group": "Layers"
 		},
-		"TOGGLE_VEIL_VISIBILITY": {
-			"label": "Reveal/Hide Veil",
+		"TOGGLE_LAYER_VISIBILITY": {
+			"label": "Show/Hide Layer",
 			"keys": ["Alt+h"],
-			"group": "The Veils"
+			"group": "Layers"
 		},
-		"TOGGLE_VEIL_LOCK": {
-			"label": "Seal/Unseal Veil",
+		"TOGGLE_LAYER_LOCK": {
+			"label": "Lock/Unlock Layer",
 			"keys": ["Alt+l"],
-			"group": "The Veils"
+			"group": "Layers"
 		}
 	},
-	"studio": {
-		"OPEN_PALETTE": {
-			"label": "Consult the Pattern Catalog",
+	"system": {
+		"OPEN_MENU": {
+			"label": "Command Palette",
 			"keys": ["Ctrl+k"],
-			"group": "The Pattern Book"
+			"group": "System"
 		},
 		"OPEN_EXPORT": {
-			"label": "Open the Artifact Crate",
+			"label": "Export",
 			"keys": ["Ctrl+e"],
-			"group": "The Pattern Book"
+			"group": "System"
 		},
-		"OPEN_ARCHIVE": {
-			"label": "Archive Pattern (Save)",
+		"SAVE": {
+			"label": "Save",
 			"keys": ["Ctrl+s"],
-			"group": "The Pattern Book"
+			"group": "System"
 		},
 		"OPEN_SETTINGS": {
-			"label": "Studio Settings",
+			"label": "Settings",
 			"keys": ["Ctrl+,"],
-			"group": "The Pattern Book"
+			"group": "System"
 		},
-		"OPEN_CODEX": {
-			"label": "Open Artisan Codex",
+		"OPEN_MANUAL": {
+			"label": "Barista Manual",
 			"keys": ["F1"],
-			"group": "The Pattern Book"
+			"group": "System"
 		},
-		"OPEN_DYES": {
-			"label": "Open Natural Dye Basin",
+		"OPEN_PALETTE": {
+			"label": "Color Picker",
 			"keys": ["b"],
-			"group": "The Pattern Book"
+			"group": "System"
 		},
 		"OPEN_HELP": {
 			"label": "Quick Guide",
 			"keys": ["F2"],
-			"group": "The Pattern Book"
+			"group": "System"
 		},
 		"OPEN_AUDIO": {
-			"label": "Open Audio Basin",
+			"label": "Audio Settings",
 			"keys": ["Ctrl+Shift+a"],
-			"group": "Atmosphere & Tuning"
+			"group": "System"
 		},
 		"TOGGLE_MUTE": {
-			"label": "Silence the Studio",
+			"label": "Mute Audio",
 			"keys": ["Ctrl+m"],
-			"group": "Atmosphere & Tuning"
+			"group": "System"
 		},
 		"UNDO": {
-			"label": "Rewind Last Stitch",
+			"label": "Undo",
 			"keys": ["Ctrl+z"],
-			"group": "Atmosphere & Tuning"
+			"group": "System"
 		},
 		"REDO": {
-			"label": "Fast-Forward last Stitch",
+			"label": "Redo",
 			"keys": ["Ctrl+Shift+z", "Ctrl+y"],
-			"group": "Atmosphere & Tuning"
+			"group": "System"
 		},
 		"ESCAPE": {
-			"label": "Clear Focus / Dismiss Overlays",
+			"label": "Close/Cancel",
 			"keys": ["Escape"],
-			"group": "Basic Rhythms"
+			"group": "System"
 		}
 	},
-	"palette": {
-		"SELECT_DYE_1": { "label": "Select Dye 1", "keys": ["1"], "group": "The Hand" },
-		"SELECT_DYE_2": { "label": "Select Dye 2", "keys": ["2"], "group": "The Hand" },
-		"SELECT_DYE_3": { "label": "Select Dye 3", "keys": ["3"], "group": "The Hand" },
-		"SELECT_DYE_4": { "label": "Select Dye 4", "keys": ["4"], "group": "The Hand" },
-		"SELECT_DYE_5": { "label": "Select Dye 5", "keys": ["5"], "group": "The Hand" },
-		"SELECT_DYE_6": { "label": "Select Dye 6", "keys": ["6"], "group": "The Hand" },
-		"SELECT_DYE_7": { "label": "Select Dye 7", "keys": ["7"], "group": "The Hand" },
-		"SELECT_DYE_8": { "label": "Select Dye 8", "keys": ["8"], "group": "The Hand" },
-		"SELECT_DYE_9": { "label": "Select Dye 9", "keys": ["9"], "group": "The Hand" },
-		"SELECT_DYE_0": { "label": "Select Dye 0", "keys": ["0"], "group": "The Hand" }
+	"colors": {
+		"SELECT_COLOR_1": { "label": "Select Color 1", "keys": ["1"], "group": "Colors" },
+		"SELECT_COLOR_2": { "label": "Select Color 2", "keys": ["2"], "group": "Colors" },
+		"SELECT_COLOR_3": { "label": "Select Color 3", "keys": ["3"], "group": "Colors" },
+		"SELECT_COLOR_4": { "label": "Select Color 4", "keys": ["4"], "group": "Colors" },
+		"SELECT_COLOR_5": { "label": "Select Color 5", "keys": ["5"], "group": "Colors" },
+		"SELECT_COLOR_6": { "label": "Select Color 6", "keys": ["6"], "group": "Colors" },
+		"SELECT_COLOR_7": { "label": "Select Color 7", "keys": ["7"], "group": "Colors" },
+		"SELECT_COLOR_8": { "label": "Select Color 8", "keys": ["8"], "group": "Colors" },
+		"SELECT_COLOR_9": { "label": "Select Color 9", "keys": ["9"], "group": "Colors" },
+		"SELECT_COLOR_0": { "label": "Select Color 0", "keys": ["0"], "group": "Colors" }
 	},
 	"tabs": {
-		"TAB_FRAMES": {
-			"label": "Focus Spindle Tab",
+		"TAB_TIMELINE": {
+			"label": "Focus Timeline",
 			"keys": ["Alt+1"],
-			"group": "The Spindle"
+			"group": "System"
 		},
-		"TAB_VEILS": {
-			"label": "Focus Veils Tab",
+		"TAB_LAYERS": {
+			"label": "Focus Layers",
 			"keys": ["Alt+2"],
-			"group": "The Veils"
+			"group": "System"
 		}
 	}
 }

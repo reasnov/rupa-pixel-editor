@@ -1,34 +1,27 @@
-import { loompad, type LoomIntent } from './loompad.svelte.js';
-import { shuttlepoint } from './shuttlepoint.svelte.js';
-import { atelier } from '../state/atelier.svelte.js';
+import { keyboard, type ActionIntent } from './keyboard.svelte.js';
+import { pointer } from './pointer.svelte.js';
+import { editor } from '../state/editor.svelte.js';
 
 type InputSource = 'KEYBOARD' | 'MOUSE' | 'TOUCH' | 'PEN' | 'GAMEPAD';
 
 interface NormalizedSignal {
-	intent: LoomIntent;
+	intent: ActionIntent;
 	source: InputSource;
-	meta?: any; // For pressure data (pen) or coordinates (mouse)
+	meta?: any;
 }
 
 /**
  * SynapseEngine: The central nervous system for Input I/O.
- * It normalizes signals from all physical devices (LoomPad, ShuttlePoint, future Pen/Touch)
- * into a single stream of semantic intents for The Loom.
+ * It normalizes signals from all physical devices (Keyboard, Pointer)
+ * into a single stream of semantic intents for the Editor.
  */
 export class SynapseEngine {
-	// The current active input method (used for UI hints)
 	activeSource = $state<InputSource>('KEYBOARD');
 
-	// Event Bus for normalized intents
 	private listeners: ((signal: NormalizedSignal) => void)[] = [];
 
-	constructor() {
-		// We will hook up device listeners in the mount phase
-	}
+	constructor() {}
 
-	/**
-	 * Subscribe to the normalized intent stream.
-	 */
 	subscribe(fn: (signal: NormalizedSignal) => void) {
 		this.listeners.push(fn);
 		return () => {
@@ -36,23 +29,16 @@ export class SynapseEngine {
 		};
 	}
 
-	/**
-	 * Broadcast a normalized signal to the system.
-	 */
-	emit(intent: LoomIntent, source: InputSource, meta?: any) {
+	emit(intent: ActionIntent, source: InputSource, meta?: any) {
 		this.activeSource = source;
 		const signal: NormalizedSignal = { intent, source, meta };
 		this.listeners.forEach((fn) => fn(signal));
 	}
 
-	/**
-	 * Main integration point. Should be called by TheLoom.
-	 */
-	mount(window: Window, linenElement: HTMLElement | null) {
-		// 1. Keyboard (LoomPad)
+	mount(window: Window, canvasElement: HTMLElement | null) {
+		// 1. Keyboard
 		const onKey = (e: KeyboardEvent) => {
-			if (!atelier.studio.isAppReady) return;
-			// Skip input fields
+			if (!editor.isAppReady) return;
 			const target = e.target as HTMLElement;
 			if (
 				target instanceof HTMLInputElement ||
@@ -62,51 +48,49 @@ export class SynapseEngine {
 				return;
 			}
 
-			loompad.updatePhysicalState(e, 'down');
-			const intent = loompad.getIntent(e);
+			keyboard.updatePhysicalState(e, 'down');
+			const intent = keyboard.getIntent(e);
 			if (intent) {
 				e.preventDefault();
 				this.emit(intent, 'KEYBOARD');
 			}
 		};
 
-		// 2. Pointer (ShuttlePoint) - Only if Linen is available
-		if (linenElement) {
+		const onKeyUp = (e: KeyboardEvent) => {
+			keyboard.updatePhysicalState(e, 'up');
+		};
+
+		// 2. Pointer
+		if (canvasElement) {
 			const onPointerDown = (e: PointerEvent) => {
 				const source =
 					e.pointerType === 'pen' ? 'PEN' : e.pointerType === 'touch' ? 'TOUCH' : 'MOUSE';
-				shuttlepoint.handleStart(e, linenElement);
-				// Note: ShuttlePoint currently executes directly.
-				// Future Refactor: ShuttlePoint should return an Intent to be emitted here.
+				pointer.handleStart(e, canvasElement);
 				this.activeSource = source;
 			};
 
 			const onPointerMove = (e: PointerEvent) => {
-				shuttlepoint.handleMove(e, linenElement);
+				pointer.handleMove(e, canvasElement);
 			};
 
 			const onPointerUp = (e: PointerEvent) => {
-				shuttlepoint.handleEnd();
+				pointer.handleEnd();
 			};
 
-			linenElement.addEventListener('pointerdown', onPointerDown);
+			canvasElement.addEventListener('pointerdown', onPointerDown);
 			window.addEventListener('pointermove', onPointerMove);
 			window.addEventListener('pointerup', onPointerUp);
-
-			// Cleanup function
-			const cleanupPointer = () => {
-				linenElement.removeEventListener('pointerdown', onPointerDown);
-				window.removeEventListener('pointermove', onPointerMove);
-				window.removeEventListener('pointerup', onPointerUp);
-			};
 		}
 
 		window.addEventListener('keydown', onKey);
-		window.addEventListener('keyup', (e) => loompad.updatePhysicalState(e, 'up'));
+		window.addEventListener('keyup', onKeyUp);
 
 		return () => {
 			window.removeEventListener('keydown', onKey);
-			// window.removeEventListener('keyup', ...);
+			window.removeEventListener('keyup', onKeyUp);
+			if (canvasElement) {
+				// Potential cleanup for pointer listeners would go here
+			}
 		};
 	}
 }

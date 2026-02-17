@@ -1,0 +1,31 @@
+<script lang="ts">
+	import { editor } from '../../state/editor.svelte.js';
+	import { Geometry } from '../../logic/geometry.js';
+</script>
+
+<div class="pointer-events-none absolute inset-0 z-20 overflow-hidden">
+	<!-- Vertical Center (Modern Neutral) -->
+	<div class="absolute top-0 bottom-0 left-1/2 w-px -translate-x-1/2 bg-charcoal/40"></div>
+	<!-- Horizontal Center (Modern Neutral) -->
+	<div class="absolute top-1/2 right-0 left-0 h-px -translate-y-1/2 bg-charcoal/40"></div>
+
+	<!-- 8-Bit Rhythmic Guides (Subtle Stone) -->
+	{#each [-24, -16, -8, 8, 16, 24] as offset}
+		{@const pos = Geometry.getGuidePosition(offset, editor.canvas.width)}
+		{#if pos > 0 && pos < 100}
+			<div
+				class="absolute top-0 bottom-0 w-px -translate-x-1/2 bg-charcoal/20"
+				style="left: {pos}%"
+			></div>
+		{/if}
+	{/each}
+	{#each [-24, -16, -8, 8, 16, 24] as offset}
+		{@const pos = Geometry.getGuidePosition(offset, editor.canvas.height)}
+		{#if pos > 0 && pos < 100}
+			<div
+				class="absolute right-0 left-0 h-px -translate-y-1/2 bg-charcoal/20"
+				style="top: {pos}%"
+			></div>
+		{/if}
+	{/each}
+</div>

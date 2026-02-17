@@ -18,11 +18,11 @@ export class StudioState {
 	bgmVolume = $state(0.5);
 	sfxVolume = $state(0.5);
 
-	// Kinetic Settings
-	fps = $state(10); // Default 10 FPS
+	// Timeline Settings
+	fps = $state(10);
 	isKineticMode = $state(false);
-	showGhostThreads = $state(false);
-	timelineZoom = $state(1); // 1x = 0.25px/ms, 2x = 0.5px/ms, etc.
+	showGhostLayers = $state(false);
+	timelineZoom = $state(1);
 
 	// Session Tracking
 	sessionStartTime = Date.now();
@@ -38,36 +38,34 @@ export class StudioState {
 		return `${h > 0 ? h + ':' : ''}${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
 	});
 
-	// Overlay Flags
-	showDyeBasin = $state(false);
-	showAudioBasin = $state(false);
-	showPatternCatalog = $state(false);
-	showArtisanGuide = $state(false);
-	showArtisanCodex = $state(false);
-	showArtifactCrate = $state(false);
-	showLinenSettings = $state(false);
-	showArchivePattern = $state(false);
+	// Overlay Flags (Professional terminology)
+	showColorPicker = $state(false);
+	showAudioSettings = $state(false);
+	showCommandPalette = $state(false);
+	showGuideMenu = $state(false);
+	showGuideBook = $state(false);
+	showExportMenu = $state(false);
+	showCanvasSettings = $state(false);
+	showPersistenceMenu = $state(false);
 	showGoTo = $state(false);
 
 	// Tab States
-	folioActiveTab = $state<'frames' | 'veils'>('veils');
+	projectActiveTab = $state<'frames' | 'layers'>('layers');
 
 	// Environment Settings
-	canvasBgColor = $state('#eee8d5'); // Studio Cream (Default)
+	backgroundColor = $state('#eee8d5');
 
 	// Export Settings
 	exportScale = $state(10);
 	exportBgColor = $state<string | 'transparent'>('transparent');
+	includePixelBorders = $state(false);
 
 	private escapeStack: (() => void)[] = [];
 	private _overlayStack = $state<string[]>([]);
 
-	// The registry of all global overlay flags that should be handled by ESC automatically
-	// Data-Driven: Loaded from src/lib/config/overlays.json
 	private _managedOverlays = overlaysData.managed;
 
 	constructor() {
-		// Initialize session heartbeat
 		setInterval(() => {
 			const elapsed = Date.now() - this.sessionStartTime;
 			this.usageMinutes = Math.floor(elapsed / 60000);
@@ -75,12 +73,7 @@ export class StudioState {
 		}, 1000);
 	}
 
-	/**
-	 * Mount the reactive observers for the studio.
-	 * Must be called within a Svelte effect scope (e.g. from a component).
-	 */
 	mount() {
-		// Global Observer: Maintain the stack order based on which flags become true
 		$effect(() => {
 			for (const flag of this._managedOverlays) {
 				const isActive = (this as any)[flag];
@@ -119,18 +112,15 @@ export class StudioState {
 	}
 
 	handleEscape() {
-		// 1. Try explicitly registered custom actions first (legacy/local components)
 		const lastAction = this.escapeStack.pop();
 		if (lastAction) {
 			lastAction();
 			return true;
 		}
 
-		// 2. Global Managed Stack: Close the last opened overlay
 		const lastOverlay = this._overlayStack[this._overlayStack.length - 1];
 		if (lastOverlay) {
 			(this as any)[lastOverlay] = false;
-			// The effect will automatically remove it from _overlayStack
 			return true;
 		}
 

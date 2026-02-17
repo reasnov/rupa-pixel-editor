@@ -1,16 +1,16 @@
 # Rupa Pixel Editor - Documentation Index
 
-Welcome to the **Rupa Pixel Editor** (Atelier) documentation. This repository contains the complete guide to the project's vision, usage, and technical architecture.
+Welcome to the **Rupa Pixel Editor** (Editor) documentation. This repository contains the complete guide to the project's vision, usage, and technical architecture.
 
 ## 📖 Table of Contents
 
-### 1. [The Artisan's Vision](./wiki/overview.md)
+### 1. [The Barista's Vision](./wiki/overview.md)
 
 _Core philosophy, project identity, and the "Cottagecore" aesthetic._
 
 ### 2. [User Guide](./USER_GUIDE.md)
 
-_How to use the Atelier: Navigation, Stitching, and Artifact Creation._
+_How to use the Café: Navigation, Pixeling, and Artifact Creation._
 
 ### 3. [Terminology](./wiki/terminology.md)
 
@@ -18,7 +18,7 @@ _Mapping software concepts to the language of craft._
 
 ### 4. [Technical Architecture](./developers/architecture.md)
 
-_System design, state management with Svelte 5 Runes, and the LoomPad engine._
+_System design, state management with Svelte 5 Runes, and the Keyboard engine._
 
 ### 5. [Technical Specifications](./developers/specs.md)
 
@@ -30,10 +30,10 @@ _Historical and future development roadmaps._
 
 - [01: Project Genesis](./developers/blueprints/01-project-genesis.md)
 - [02: Palette & Export Engine](./developers/blueprints/02-palette-and-export.md)
-- [03: Persistence & Linen Manipulation](./developers/blueprints/03-persistence-and-manipulation.md)
-- [04: The LoomPad Engine](./developers/blueprints/04-loompad-engine.md)
-- [05: The Artisan's Stance](./developers/blueprints/05-artisan-stance.md)
-- [06: The Master's Folio](./developers/blueprints/06-masters-folio.md)
+- [03: Persistence & Canvas Manipulation](./developers/blueprints/03-persistence-and-manipulation.md)
+- [04: The EditorPad Engine](./developers/blueprints/04-enginepad-engine.md)
+- [05: The Barista's Stance](./developers/blueprints/05-barista-stance.md)
+- [06: The Master's Project](./developers/blueprints/06-masters-project.md)
 
 ### 7. [Release Notes](./pubs/releases/v0.6.1.md)
 

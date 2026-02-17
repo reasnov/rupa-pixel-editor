@@ -57,7 +57,7 @@ Application state must be centralized within `src/lib/state/` using Svelte 5 Run
 
 ### 5.2 Styling Aesthetic
 
-The visual identity must be established in `src/routes/layout.css`, focusing on a professional dark-theme that reinforces the "stitching" aesthetic. Pixel rendering must be configured to disable anti-aliasing (image-rendering: pixelated) to maintain visual sharpness.
+The visual identity must be established in `src/routes/layout.css`, focusing on a professional dark-theme that reinforces the "pixeling" aesthetic. Pixel rendering must be configured to disable anti-aliasing (image-rendering: pixelated) to maintain visual sharpness.
 
 ### 5.3 Build & Distribution
 
@@ -67,4 +67,4 @@ The project must be configured to output a static site via `adapter-static` to b
 
 ## 6. Project Sovereignty
 
-As an Open Source project, Rupa Pixel Editor encourages external contributions while maintaining the core philosophy of "Digital Stitching." All code must be authored in English to ensure global accessibility for contributors.
+As an Open Source project, Rupa Pixel Editor encourages external contributions while maintaining the core philosophy of "Digital Pixeling." All code must be authored in English to ensure global accessibility for contributors.

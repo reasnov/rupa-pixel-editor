@@ -1,6 +1,6 @@
-# Security Policy: Protecting the Atelier
+# Security Policy: Protecting the Café
 
-The security of the **Rupa Pixel Editor** and the privacy of our artisans are of utmost importance. While Rupa is an offline-first desktop application, we take potential vulnerabilities seriously.
+The security of the **Rupa Pixel Editor** and the privacy of our baristas are of utmost importance. While Rupa is an offline-first desktop application, we take potential vulnerabilities seriously.
 
 ## 🛡️ Supported Versions
 
@@ -27,7 +27,7 @@ Instead, please send a detailed report to our secure channel:
 
 - A description of the vulnerability.
 - A proof-of-concept or steps to reproduce the issue.
-- Potential impact on the artisan's environment.
+- Potential impact on the barista's environment.
 - Any suggested remediations.
 
 ---
@@ -36,8 +36,8 @@ Instead, please send a detailed report to our secure channel:
 
 We will acknowledge receipt of your report within 48 hours and provide a timeline for resolution. We ask that you follow **responsible disclosure** practices, giving us adequate time to fix the issue before sharing any information publicly.
 
-Thank you for helping us keep the Atelier a safe sanctuary for digital craft.
+Thank you for helping us keep the Café a safe sanctuary for digital craft.
 
 ---
 
-_"Strength in every stitch, security in every pattern."_
+_"Strength in every pixel, security in every pattern."_

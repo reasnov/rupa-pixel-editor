@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { atelier } from '../../state/atelier.svelte.js';
+	import { editor } from '../../state/editor.svelte.js';
 
 	let { format, scale, bgColor } = $props<{
 		format: 'svg' | 'png' | 'jpg' | 'webp' | 'webm' | 'gif' | 'mp4';
@@ -14,9 +14,11 @@
 		const ctx = canvasEl.getContext('2d');
 		if (!ctx) return;
 
-		const width = atelier.linen.width;
-		const height = atelier.linen.height;
-		const data = atelier.linen.compositeStitches;
+		const width = editor.canvas.width;
+		const height = editor.canvas.height;
+		const data = editor.canvas.compositePixels;
+		// Make it fully reactive to the Studio State
+		const includeBorders = editor.studio.includePixelBorders;
 
 		// Preview scale: fit into a reasonable area (max 400px)
 		const maxPreviewSize = 400;
@@ -34,25 +36,32 @@
 			ctx.fillRect(0, 0, canvasEl.width, canvasEl.height);
 		}
 
-		// Draw stitches
+		// Draw pixels
 		data.forEach((color, i) => {
 			if (color === null) return;
 			const x = i % width;
 			const y = Math.floor(i / width);
+			const px = Math.floor(x * previewScale);
+			const py = Math.floor(y * previewScale);
+			const pw = Math.ceil(previewScale);
+			const ph = Math.ceil(previewScale);
+
 			ctx.fillStyle = color;
-			ctx.fillRect(
-				Math.floor(x * previewScale),
-				Math.floor(y * previewScale),
-				Math.ceil(previewScale),
-				Math.ceil(previewScale)
-			);
+			ctx.fillRect(px, py, pw, ph);
+
+			// Draw border if enabled
+			if (includeBorders) {
+				ctx.strokeStyle = 'rgba(0, 0, 0, 0.15)';
+				ctx.lineWidth = 1;
+				ctx.strokeRect(px + 0.5, py + 0.5, pw - 1, ph - 1);
+			}
 		});
 	});
 </script>
 
 <div class="flex flex-col items-center gap-3">
 	<div
-		class="artisan-checker-small flex items-center justify-center overflow-hidden rounded-xl border-4 border-white bg-white/10 p-2 shadow-inner"
+		class="editor-checker-small flex items-center justify-center overflow-hidden rounded-xl border-4 border-white bg-white/10 p-2 shadow-inner"
 	>
 		<canvas bind:this={canvasEl} class="rounded-sm shadow-sm"></canvas>
 	</div>
@@ -62,7 +71,7 @@
 			>{format} Artifact</span
 		>
 		<span class="font-mono text-[8px] font-bold tracking-tighter opacity-30">
-			{Math.round(atelier.linen.width * scale)} × {Math.round(atelier.linen.height * scale)} pixels
+			{Math.round(editor.canvas.width * scale)} × {Math.round(editor.canvas.height * scale)} pixels
 		</span>
 	</div>
 </div>

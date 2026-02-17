@@ -1,10 +1,10 @@
-# Contributing to the Atelier: An Artisan's Guide
+# Contributing to the Café: An Barista's Guide
 
-First and foremost, thank you for your interest in contributing to the **Rupa Pixel Editor** (The Atelier). Our project thrives on the collective craftsmanship of digital artisans like you. Whether you are fixing a loose thread (bug) or weaving a new pattern (feature), your contributions are highly valued.
+First and foremost, thank you for your interest in contributing to the **Rupa Pixel Editor** (The Café). Our project thrives on the collective craftsmanship of digital baristas like you. Whether you are fixing a loose thread (bug) or brewing a new pattern (feature), your contributions are highly valued.
 
 ---
 
-## 📜 The Artisan's Code (Code of Conduct)
+## 📜 The Barista's Code (Code of Conduct)
 
 By participating in this project, you agree to maintain a professional, respectful, and meditative environment. We value kindness, clarity, and the shared pursuit of digital craft.
 
@@ -20,7 +20,7 @@ If you encounter an issue that disrupts the rhythm of the studio:
 - If not, open a new issue.
 - Provide a clear, descriptive title and detailed steps to reproduce the behavior.
 - Include your operating system and environment details.
-- Describe the expected vs. actual behavior within the context of the "Digital Stitching" experience.
+- Describe the expected vs. actual behavior within the context of the "Digital Pixeling" experience.
 
 ### 2. Suggesting New Patterns (Enhancements)
 
@@ -30,7 +30,7 @@ Have an idea to improve the studio?
 - Describe the proposed change and, most importantly, explain how it aligns with the project's **Keyboard-First** and **Cottagecore** philosophy.
 - Consider how the feature would feel—is it tactile? Does it add to the meditative flow?
 
-### 3. Weaving Code (Pull Requests)
+### 3. Brewing Code (Pull Requests)
 
 1. **Fork the Repository:** Create your own branch from `main`.
 2. **Adhere to the Blueprint:** Ensure your changes follow the established [Technical Architecture](./docs/developers/architecture.md).
@@ -39,17 +39,17 @@ Have an idea to improve the studio?
    - Run `npm run check` to verify TypeScript and Svelte integrity.
    - Run `npm run format` to ensure the code matches the studio's aesthetic (Prettier).
 5. **Documentation:** If you introduce new logic or intents, update the relevant files in the `docs/` directory.
-6. **The Final Stitch:** Submit your PR with a clear description of what has changed and why.
+6. **The Final Pixel:** Submit your PR with a clear description of what has changed and why.
 
 ---
 
-## 🎨 Design Principles for Artisans
+## 🎨 Design Principles for Baristas
 
 Every contribution must respect the core pillars of Rupa:
 
-- **Keyboard-First (The Loom):** No feature should ever _require_ a mouse. The keyboard is the primary instrument of the artisan.
+- **Keyboard-First (The Editor):** No feature should ever _require_ a mouse. The keyboard is the primary instrument of the barista.
 - **Minimalist Aesthetic (The Sanctuary):** Keep the UI clean, warm, and free of clinical clutter. Use Solarized tones and organic textures.
-- **Tactile Feedback (The Rhythm):** Every action should have a visual or auditory response (SFX). The artisan must "feel" the work.
+- **Tactile Feedback (The Rhythm):** Every action should have a visual or auditory response (SFX). The barista must "feel" the work.
 - **Svelte 5 Runes (The Thread):** Utilize `$state`, `$derived`, and `$effect` for precise, fine-grained reactivity.
 
 ---
@@ -78,4 +78,4 @@ By contributing to Rupa Pixel Editor, you agree that your work will be licensed 
 
 ---
 
-_"Happy weaving, Artisan."_
+_"Happy brewing, Barista."_

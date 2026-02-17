@@ -1,10 +1,10 @@
 <script lang="ts">
-	import { atelier } from '../../../state/atelier.svelte';
+	import { editor } from '../../../state/editor.svelte';
 </script>
 
-<div class="flex items-center gap-1.5" title={__({ key: 'ledger.timer' })}>
-	<span class="text-[9px] opacity-40" aria-hidden="true">⏳</span>
-	<span class="font-mono text-[9px] font-bold text-brand/60 tabular-nums">
-		{atelier.studio.sessionTimeLabel}
+<div class="flex items-center gap-1.5" title={__({ key: 'timeline.duration' })}>
+	<span class="text-[9px] opacity-40" aria-hidden="true">⏱️</span>
+	<span class="font-mono text-[9px] font-bold text-charcoal/80 tabular-nums">
+		{editor.studio.sessionTimeLabel}
 	</span>
 </div>

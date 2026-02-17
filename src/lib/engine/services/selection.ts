@@ -1,4 +1,4 @@
-import { atelier } from '../../state/atelier.svelte.js';
+import { editor } from '../../state/editor.svelte.js';
 import { history } from '../history.js';
 import { sfx } from '../audio.js';
 
@@ -8,59 +8,59 @@ import { sfx } from '../audio.js';
  */
 export class SelectionService {
 	begin(x: number, y: number) {
-		atelier.selection.begin(x, y);
+		editor.selection.begin(x, y);
 	}
 
 	update(x: number, y: number) {
-		if (atelier.selection.isActive) {
-			atelier.selection.update(x, y);
+		if (editor.selection.isActive) {
+			editor.selection.update(x, y);
 		}
 	}
 
 	clear() {
-		atelier.selection.clear();
+		editor.selection.clear();
 	}
 
 	/**
 	 * Batch Fill: Fills the entire active selection (Loom or Motif) with the active dye.
 	 */
 	commit() {
-		const points = atelier.selection.getPoints(atelier.linen.width);
+		const points = editor.selection.getPoints(editor.canvas.width);
 		if (points.length === 0) return;
 
-		const activeDye = atelier.paletteState.activeDye;
-		const width = atelier.linen.width;
+		const activeColor = editor.paletteState.activeColor;
+		const width = editor.canvas.width;
 
 		history.beginBatch();
 		let changed = false;
 
 		points.forEach((p) => {
 			const index = p.y * width + p.x;
-			const oldColor = atelier.linen.stitches[index];
-			if (oldColor !== activeDye) {
-				history.push({ index, oldColor, newColor: activeDye });
-				atelier.linen.stitches[index] = activeDye;
+			const oldColor = editor.canvas.pixels[index];
+			if (oldColor !== activeColor) {
+				history.push({ index, oldColor, newColor: activeColor });
+				editor.canvas.pixels[index] = activeColor;
 				changed = true;
 			}
 		});
 
 		history.endBatch();
-		if (changed) sfx.playStitch();
+		if (changed) sfx.playDraw();
 	}
 
 	/**
 	 * Spirit Pick (Magic Wand): Selects all connected stitches of the same color.
 	 */
 	spiritPick() {
-		const { x, y } = atelier.needle.pos;
-		const targetColor = atelier.linen.getColor(x, y);
-		const width = atelier.linen.width;
-		const height = atelier.linen.height;
+		const { x, y } = editor.cursor.pos;
+		const targetColor = editor.canvas.getColor(x, y);
+		const width = editor.canvas.width;
+		const height = editor.canvas.height;
 
 		const queue: [number, number][] = [[x, y]];
 		const visited = new Set<string>();
 
-		atelier.selection.clear();
+		editor.selection.clear();
 
 		while (queue.length > 0) {
 			const [cx, cy] = queue.shift()!;
@@ -70,8 +70,8 @@ export class SelectionService {
 			if (visited.has(key)) continue;
 			visited.add(key);
 
-			if (atelier.linen.getColor(cx, cy) === targetColor) {
-				atelier.selection.indices.push(index);
+			if (editor.canvas.getColor(cx, cy) === targetColor) {
+				editor.selection.indices.push(index);
 
 				const neighbors: [number, number][] = [
 					[cx + 1, cy],
@@ -88,7 +88,7 @@ export class SelectionService {
 			}
 		}
 
-		if (atelier.selection.indices.length > 0) {
+		if (editor.selection.indices.length > 0) {
 			sfx.playScale(4); // Play a specific harmonic note
 		}
 	}
@@ -97,19 +97,19 @@ export class SelectionService {
 	 * Binding Thread: Add a vertex to the current polygon selection.
 	 */
 	addVertex(x: number, y: number) {
-		atelier.selection.vertices.push({ x, y });
-		sfx.playStitch();
+		editor.selection.vertices.push({ x, y });
+		sfx.playDraw();
 	}
 
 	/**
 	 * Seal the Binding: Convert the polygon vertices into a pixel selection.
 	 */
 	sealBinding() {
-		const vertices = atelier.selection.vertices;
+		const vertices = editor.selection.vertices;
 		if (vertices.length < 3) return;
 
-		const width = atelier.linen.width;
-		const height = atelier.linen.height;
+		const width = editor.canvas.width;
+		const height = editor.canvas.height;
 		const indices: number[] = [];
 
 		// Ray casting algorithm for point-in-polygon
@@ -122,8 +122,8 @@ export class SelectionService {
 		}
 
 		if (indices.length > 0) {
-			atelier.selection.indices = indices;
-			atelier.selection.vertices = [];
+			editor.selection.indices = indices;
+			editor.selection.vertices = [];
 			sfx.playScale(6);
 		}
 	}

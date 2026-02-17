@@ -1,101 +1,100 @@
 <script lang="ts">
-	import { atelier } from '$lib/state/atelier.svelte.js';
+	import { editor } from '$lib/state/editor.svelte.js';
 	import { shuttle } from '$lib/engine/shuttle.js';
-	import { loom } from '$lib/engine/loom.svelte.js';
+	import { editor as engine } from '$lib/engine/editor.svelte.js';
 
 	// Layout Containers
-	import AtelierHeader from '$lib/components/hud/AtelierHeader.svelte';
-	import FolioSidebar from '$lib/components/hud/FolioSidebar.svelte';
+	import EditorHeader from '$lib/components/hud/EditorHeader.svelte';
+	import FrameSidebar from '$lib/components/hud/FrameSidebar.svelte';
 	import InspectorSidebar from '$lib/components/hud/InspectorSidebar.svelte';
 	import StatusFooter from '$lib/components/hud/StatusFooter.svelte';
 
 	// Canvas
-	import Linen from '$lib/components/canvas/Linen.svelte';
+	import Canvas from '$lib/components/canvas/Canvas.svelte';
 	import SplashScreen from '$lib/components/brand/SplashScreen.svelte';
 
 	// Overlay Modules
-	import DyeBasin from '$lib/components/overlay/DyeBasin.svelte';
-	import PatternCatalog from '$lib/components/overlay/PatternCatalog.svelte';
-	import ArtifactCrate from '$lib/components/overlay/ArtifactCrate.svelte';
-	import ArtisanGuide from '$lib/components/overlay/ArtisanGuide.svelte';
-	import ArchivePattern from '$lib/components/overlay/ArchivePattern.svelte';
-	import LinenSettings from '$lib/components/overlay/LinenSettings.svelte';
+	import ColorPicker from '$lib/components/overlay/ColorPicker.svelte';
+	import CommandPalette from '$lib/components/overlay/CommandPalette.svelte';
+	import ExportMenu from '$lib/components/overlay/ExportMenu.svelte';
+	import GuideMenu from '$lib/components/overlay/GuideMenu.svelte';
+	import PersistenceMenu from '$lib/components/overlay/PersistenceMenu.svelte';
+	import CanvasSettings from '$lib/components/overlay/CanvasSettings.svelte';
 	import GoToModal from '$lib/components/overlay/GoToModal.svelte';
-	import AudioBasin from '$lib/components/overlay/AudioBasin.svelte';
-	import ArtisanCodex from '$lib/components/overlay/ArtisanCodex.svelte';
+	import AudioSettings from '$lib/components/overlay/AudioSettings.svelte';
+	import GuideBook from '$lib/components/overlay/GuideBook.svelte';
 
 	import { onMount } from 'svelte';
 
 	onMount(() => {
-		// Delegate all input and heartbeats to the Loom Engine
-		return loom.mount();
+		return engine.mount();
 	});
 </script>
 
 <SplashScreen />
 
-{#if atelier.studio.showArtisanGuide}
-	<ArtisanGuide onClose={() => (atelier.studio.showArtisanGuide = false)} />
+{#if editor.showGuideBook}
+	<GuideBook onClose={() => (editor.showGuideBook = false)} />
 {/if}
 
-{#if atelier.studio.showPatternCatalog}
-	<PatternCatalog onClose={() => (atelier.studio.showPatternCatalog = false)} />
+{#if editor.showCommandPalette}
+	<CommandPalette onClose={() => (editor.showCommandPalette = false)} />
 {/if}
 
-{#if atelier.studio.showDyeBasin}
-	<DyeBasin
-		bind:value={atelier.paletteState.activeDye}
-		onClose={() => (atelier.studio.showDyeBasin = false)}
+{#if editor.showColorPicker}
+	<ColorPicker
+		bind:value={editor.paletteState.activeColor}
+		onClose={() => (editor.showColorPicker = false)}
 	/>
 {/if}
 
-{#if atelier.studio.showArtifactCrate}
-	<ArtifactCrate
+{#if editor.showExportMenu}
+	<ExportMenu
 		onExport={(format, scale, bgColor) => shuttle.createArtifact(format, scale, bgColor)}
-		onClose={() => (atelier.studio.showArtifactCrate = false)}
+		onClose={() => (editor.showExportMenu = false)}
 	/>
 {/if}
 
-{#if atelier.studio.showArchivePattern}
-	<ArchivePattern onClose={() => (atelier.studio.showArchivePattern = false)} />
+{#if editor.showPersistenceMenu}
+	<PersistenceMenu onClose={() => (editor.showPersistenceMenu = false)} />
 {/if}
 
-{#if atelier.studio.showLinenSettings}
-	<LinenSettings onClose={() => (atelier.studio.showLinenSettings = false)} />
+{#if editor.showCanvasSettings}
+	<CanvasSettings onClose={() => (editor.showCanvasSettings = false)} />
 {/if}
 
-{#if atelier.studio.showGoTo}
-	<GoToModal onClose={() => (atelier.studio.showGoTo = false)} />
+{#if editor.showGoTo}
+	<GoToModal onClose={() => (editor.showGoTo = false)} />
 {/if}
 
-{#if atelier.studio.showAudioBasin}
-	<AudioBasin onClose={() => (atelier.studio.showAudioBasin = false)} />
+{#if editor.showAudioSettings}
+	<AudioSettings onClose={() => (editor.showAudioSettings = false)} />
 {/if}
 
-{#if atelier.studio.showArtisanCodex}
-	<ArtisanCodex onClose={() => (atelier.studio.showArtisanCodex = false)} />
+{#if editor.showGuideMenu}
+	<GuideMenu onClose={() => (editor.showGuideMenu = false)} />
 {/if}
 
 <!-- HUD Layout -->
 <div class="flex h-screen w-screen flex-col overflow-hidden bg-canvas-bg selection:bg-brand/20">
-	<AtelierHeader />
+	<EditorHeader />
 
 	<div class="flex flex-1 overflow-hidden">
 		<!-- Left Sidebar -->
 		<aside class="flex w-64 flex-col overflow-hidden">
-			<FolioSidebar />
+			<FrameSidebar />
 		</aside>
 
 		<main
 			class="relative flex flex-1 items-center justify-center overflow-hidden bg-grid-border/20 p-6"
 		>
 			<div
-				class="artisan-frame flex h-full w-full items-center justify-center overflow-hidden shadow-2xl transition-all duration-700 ease-out {atelier
-					.project.isPlaying && atelier.project.frames.length > 1
+				class="editor-frame flex h-full w-full items-center justify-center overflow-hidden shadow-2xl transition-all duration-700 ease-out {editor
+					.project.isPlaying && editor.project.frames.length > 1
 					? 'animate-pulse ring-8 ring-palette-0 ring-inset'
 					: ''}"
 			>
-				<Linen />
+				<Canvas />
 			</div>
 		</main>
 

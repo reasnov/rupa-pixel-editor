@@ -1,32 +1,32 @@
 import { MovementService } from './services/movement.js';
-import { StitchService } from './services/stitch.js';
+import { DrawService } from './services/draw.js';
 import { ManipulationService } from './services/manipulation.js';
 import { ClipboardService } from './services/clipboard.js';
 import { PersistenceService } from './services/persistence.js';
-import { FolioService } from './services/folio.js';
+import { ProjectService } from './services/project.js';
 import { SelectionService } from './services/selection.js';
-import { DyeService } from './services/dye.js';
-import { atelier } from '../state/atelier.svelte.js';
+import { ColorService } from './services/color.js';
+import { editor } from '../state/editor.svelte.js';
 import { history } from './history.js';
 import { sfx } from './audio.js';
 
 /**
- * ShuttleEngine: The unified service coordinator for atelier operations.
- * It provides a clean API for the UI/Loom while delegating to specialized services.
+ * ShuttleEngine: The unified service coordinator for café operations.
+ * It provides a clean API for the UI while delegating to specialized services.
  */
 export class ShuttleEngine {
 	readonly movement = new MovementService();
-	readonly stitching = new StitchService();
+	readonly draw = new DrawService();
 	readonly manipulation = new ManipulationService();
 	readonly clipboard = new ClipboardService();
 	readonly persistence = new PersistenceService();
-	readonly folio = new FolioService();
+	readonly project = new ProjectService();
 	readonly selection = new SelectionService();
-	readonly dye = new DyeService();
+	readonly color = new ColorService();
 
 	// --- Navigation Aliases ---
 
-	moveNeedle(dx: number, dy: number) {
+	moveCursor(dx: number, dy: number) {
 		return this.movement.move(dx, dy);
 	}
 
@@ -38,40 +38,40 @@ export class ShuttleEngine {
 		this.movement.jumpHome();
 	}
 
-	// --- Stitching & Dye Aliases ---
+	// --- Drawing & Color Aliases ---
 
-	stitch() {
-		this.stitching.stitch();
+	paint() {
+		this.draw.draw();
 	}
-	unstitch() {
-		this.stitching.unstitch();
+	erase() {
+		this.draw.erase();
 	}
-	pickDye() {
-		this.dye.pickFromLinen();
+	pickColor() {
+		this.color.pickFromCanvas();
 	}
 
 	// --- Selection & Manipulation ---
 
 	startSelection() {
-		this.selection.begin(atelier.needle.pos.x, atelier.needle.pos.y);
+		this.selection.begin(editor.cursor.pos.x, editor.cursor.pos.y);
 	}
 	updateSelection() {
-		this.selection.update(atelier.needle.pos.x, atelier.needle.pos.y);
+		this.selection.update(editor.cursor.pos.x, editor.cursor.pos.y);
 	}
 	commitSelection() {
 		this.selection.commit();
 	}
 
-	clearLinen() {
+	clearCanvas() {
 		this.manipulation.clearAll();
 	}
-	resizeLinen(w: number, h: number) {
+	resizeCanvas(w: number, h: number) {
 		this.manipulation.resize(w, h);
 	}
-	flipLinen(axis: 'horizontal' | 'vertical') {
+	flipCanvas(axis: 'horizontal' | 'vertical') {
 		this.manipulation.flip(axis);
 	}
-	rotateLinen() {
+	rotateCanvas() {
 		this.manipulation.rotate();
 	}
 
@@ -85,7 +85,7 @@ export class ShuttleEngine {
 	}
 	paste() {
 		this.clipboard.paste();
-		atelier.selection.clear();
+		editor.selection.clear();
 	}
 
 	// --- Persistence & Backup ---
@@ -109,28 +109,34 @@ export class ShuttleEngine {
 		bgColor: string | 'transparent' = 'transparent'
 	) {
 		const { ExportEngine } = await import('./export.js');
-		const { width, height, compositeStitches } = atelier.linen;
+		const { width, height, compositePixels } = editor.canvas;
+		const includeBorders = editor.studio.includePixelBorders;
 
-		// Fallback for kinetic formats with single frames
 		const isKinetic = ['webm', 'gif', 'mp4'].includes(format);
-		const actualFormat = atelier.project.frames.length <= 1 && isKinetic ? 'png' : format;
+		const actualFormat = editor.project.frames.length <= 1 && isKinetic ? 'png' : format;
 
 		if (actualFormat === 'svg') {
-			// Check if we have multiple frames for animation
-			if (atelier.project.frames.length > 1) {
-				const framesData = atelier.project.frames.map((f) => f.compositeStitches);
-				const durations = atelier.project.frames.map((f) => f.duration);
-				const svg = ExportEngine.toAnimatedSVG(width, height, framesData, durations, bgColor);
+			if (editor.project.frames.length > 1) {
+				const framesData = editor.project.frames.map((f) => f.compositePixels);
+				const durations = editor.project.frames.map((f) => f.duration);
+				const svg = ExportEngine.toAnimatedSVG(
+					width,
+					height,
+					framesData,
+					durations,
+					bgColor,
+					includeBorders
+				);
 				const blob = new Blob([svg], { type: 'image/svg+xml' });
-				this.download(URL.createObjectURL(blob), `rupa-kinetic.svg`);
+				this.download(URL.createObjectURL(blob), `rupa-flow.svg`);
 			} else {
-				const svg = ExportEngine.toSVG(width, height, compositeStitches, bgColor);
+				const svg = ExportEngine.toSVG(width, height, compositePixels, bgColor, includeBorders);
 				const blob = new Blob([svg], { type: 'image/svg+xml' });
-				this.download(URL.createObjectURL(blob), `rupa-motif.svg`);
+				this.download(URL.createObjectURL(blob), `rupa-etch.svg`);
 			}
 		} else if (actualFormat === 'webm' || actualFormat === 'mp4') {
-			const framesData = atelier.project.frames.map((f) => f.compositeStitches);
-			const durations = atelier.project.frames.map((f) => f.duration);
+			const framesData = editor.project.frames.map((f) => f.compositePixels);
+			const durations = editor.project.frames.map((f) => f.duration);
 			const videoBlob = await ExportEngine.toVideo(
 				width,
 				height,
@@ -138,36 +144,38 @@ export class ShuttleEngine {
 				durations,
 				scale,
 				actualFormat as 'webm' | 'mp4',
-				bgColor
+				bgColor,
+				includeBorders
 			);
 
-			// Download the raw blob returned by the engine (it already has the correct mimeType)
 			const extension = videoBlob.type.includes('mp4') ? 'mp4' : 'webm';
-			this.download(URL.createObjectURL(videoBlob), `rupa-stitch.${extension}`);
+			this.download(URL.createObjectURL(videoBlob), `rupa-brew.${extension}`);
 		} else if (actualFormat === 'gif') {
-			const framesData = atelier.project.frames.map((f) => f.compositeStitches);
-			const durations = atelier.project.frames.map((f) => f.duration);
+			const framesData = editor.project.frames.map((f) => f.compositePixels);
+			const durations = editor.project.frames.map((f) => f.duration);
 			const gifBlob = await ExportEngine.toGIF(
 				width,
 				height,
 				framesData,
 				durations,
 				scale,
-				bgColor
+				bgColor,
+				includeBorders
 			);
-			this.download(URL.createObjectURL(gifBlob), `rupa-weave.gif`);
+			this.download(URL.createObjectURL(gifBlob), `rupa-flow.gif`);
 		} else {
 			const dataUrl = await ExportEngine.toRaster(
 				width,
 				height,
-				compositeStitches,
+				compositePixels,
 				scale,
 				actualFormat as any,
-				bgColor
+				bgColor,
+				includeBorders
 			);
-			this.download(dataUrl, `rupa-artifact.${actualFormat}`);
+			this.download(dataUrl, `rupa-cup.${actualFormat}`);
 		}
-		atelier.studio.showArtifactCrate = false;
+		editor.studio.showExportMenu = false;
 	}
 
 	private download(url: string, filename: string) {

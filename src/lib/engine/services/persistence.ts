@@ -1,29 +1,29 @@
-import { atelier } from '../../state/atelier.svelte.js';
+import { editor } from '../../state/editor.svelte.js';
 import { sfx } from '../../engine/audio.js';
 import { history } from '../../engine/history.js';
 import { FrameState } from '../../state/frame.svelte.js';
-import { VeilState } from '../../state/veil.svelte.js';
+import { LayerState } from '../../state/layer.svelte.js';
 
 export class PersistenceService {
 	private serialize() {
-		// New v0.4.0 Folio Structure
+		// Professional Structure
 		return JSON.stringify({
-			version: atelier.version,
+			version: editor.version,
 			metadata: {
-				name: 'Artisan Pattern',
+				name: 'Rupa Project',
 				lastModified: new Date().toISOString()
 			},
-			palette: atelier.paletteState.swatches,
-			folio: {
-				frames: atelier.project.frames.map((f) => ({
+			palette: editor.paletteState.swatches,
+			project: {
+				frames: editor.project.frames.map((f) => ({
 					name: f.name,
 					width: f.width,
 					height: f.height,
-					veils: f.veils.map((v) => ({
+					layers: f.layers.map((v) => ({
 						name: v.name,
 						isVisible: v.isVisible,
 						isLocked: v.isLocked,
-						stitches: v.stitches
+						pixels: v.pixels
 					}))
 				}))
 			}
@@ -39,11 +39,11 @@ export class PersistenceService {
 
 		const res = await window.electronAPI.saveFile(
 			data,
-			atelier.project.currentFilePath || undefined
+			editor.project.currentFilePath || undefined
 		);
 		if (res) {
-			atelier.project.setMetadata(res);
-			sfx.playStitch();
+			editor.project.setMetadata(res);
+			sfx.playDraw();
 		}
 	}
 
@@ -52,7 +52,7 @@ export class PersistenceService {
 		const url = URL.createObjectURL(blob);
 		const a = document.createElement('a');
 		a.href = url;
-		a.download = `rupa-motif.rupa`;
+		a.download = `rupa-project.rupa`;
 		a.click();
 	}
 
@@ -65,8 +65,8 @@ export class PersistenceService {
 		const res = await window.electronAPI.openFile();
 		if (res) {
 			this.deserialize(res.content);
-			atelier.project.setMetadata(res.filePath);
-			sfx.playStitch();
+			editor.project.setMetadata(res.filePath);
+			sfx.playDraw();
 		}
 	}
 
@@ -89,7 +89,7 @@ export class PersistenceService {
 		const data = this.serialize();
 		if (window.electronAPI) {
 			await window.electronAPI.autoSave(data);
-			atelier.project.lastSaved = new Date();
+			editor.project.lastSaved = new Date();
 		} else {
 			localStorage.setItem('rupa_auto_backup', data);
 		}
@@ -100,33 +100,36 @@ export class PersistenceService {
 			const d = JSON.parse(json);
 
 			// 1. Restore Palette
-			atelier.paletteState.swatches = d.palette;
+			if (d.palette) editor.paletteState.swatches = d.palette;
 
-			// 2. Restore Folio Structure (with Backward Compatibility)
-			if (d.folio) {
-				// Modern v0.4.0+ format
-				atelier.project.frames = d.folio.frames.map((fd: any) => {
+			// 2. Restore Project Structure (with Backward Compatibility)
+			const projectData = d.project || d.folio;
+			if (projectData) {
+				// Professional format
+				editor.project.frames = projectData.frames.map((fd: any) => {
 					const frame = new FrameState(fd.name, fd.width, fd.height);
-					frame.veils = fd.veils.map((vd: any) => {
-						const veil = new VeilState(vd.name, fd.width, fd.height);
-						veil.isVisible = vd.isVisible;
-						veil.isLocked = vd.isLocked;
-						veil.stitches = vd.stitches;
-						return veil;
+					// Fallback for old "veils" key if it exists in the file
+					const layersData = fd.layers || fd.veils || [];
+					frame.layers = layersData.map((vd: any) => {
+						const layer = new LayerState(vd.name, fd.width, fd.height);
+						layer.isVisible = vd.isVisible;
+						layer.isLocked = vd.isLocked;
+						layer.pixels = vd.pixels || vd.stitches || [];
+						return layer;
 					});
 					return frame;
 				});
 			} else if (d.pixelData) {
 				// Legacy v0.3.0 format
-				const frame = new FrameState('Restored Motif', d.dimensions.width, d.dimensions.height);
-				frame.veils[0].stitches = d.pixelData;
-				atelier.project.frames = [frame];
+				const frame = new FrameState('Restored Project', d.dimensions.width, d.dimensions.height);
+				frame.layers[0].pixels = d.pixelData;
+				editor.project.frames = [frame];
 			}
 
-			atelier.project.activeFrameIndex = 0;
+			editor.project.activeFrameIndex = 0;
 			history.clear();
 		} catch (e) {
-			console.error('Failed to restore pattern book:', e);
+			console.error('Failed to restore project:', e);
 		}
 	}
 }

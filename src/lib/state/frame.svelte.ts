@@ -1,63 +1,60 @@
-import { VeilState } from './veil.svelte.js';
+import { LayerState } from './layer.svelte.js';
 
 /**
- * FrameState: Represents a single canvas/composition (Frame) in the Folio.
- * It manages dimensions and a stack of Veils (Layers).
+ * FrameState: Represents a single cup/composition (Frame) in the Recipe Book.
+ * It manages dimensions and a stack of Layers (Infusions).
  */
 export class FrameState {
 	id = crypto.randomUUID();
-	name = $state('Untitled Frame');
+	name = $state('Untitled Cup');
 	width = $state(32);
 	height = $state(32);
 	duration = $state(100); // Duration in ms (Default 100ms = 10 FPS)
 
 	// The stack of layers. Order: [Background, ..., Foreground]
-	veils = $state<VeilState[]>([]);
-	activeVeilIndex = $state(0);
+	layers = $state<LayerState[]>([]);
+	activeLayerIndex = $state(0);
 
 	constructor(name: string, width = 32, height = 32) {
 		this.name = name;
 		this.width = width;
 		this.height = height;
-		// Always start with one base veil
-		this.veils = [new VeilState('Base Veil', width, height)];
+		// Always start with one base layer
+		this.layers = [new LayerState('Base Layer', width, height)];
 	}
 
-	get activeVeil() {
-		return this.veils[this.activeVeilIndex];
+	get activeLayer() {
+		return this.layers[this.activeLayerIndex];
 	}
 
-	addVeil(name?: string) {
-		const newName = name || `Veil ${this.veils.length + 1}`;
-		const veil = new VeilState(newName, this.width, this.height);
-		this.veils.push(veil);
-		this.activeVeilIndex = this.veils.length - 1; // Auto-focus new layer
-		return veil;
+	addLayer(name?: string) {
+		const newName = name || `Layer ${this.layers.length + 1}`;
+		const layer = new LayerState(newName, this.width, this.height);
+		this.layers.push(layer);
+		this.activeLayerIndex = this.layers.length - 1; // Auto-focus new layer
+		return layer;
 	}
 
-	removeVeil(index: number) {
-		if (this.veils.length <= 1) return; // Cannot delete the last veil
-		this.veils.splice(index, 1);
-		if (this.activeVeilIndex >= this.veils.length) {
-			this.activeVeilIndex = this.veils.length - 1;
+	removeLayer(index: number) {
+		if (this.layers.length <= 1) return; // Cannot delete the last layer
+		this.layers.splice(index, 1);
+		if (this.activeLayerIndex >= this.layers.length) {
+			this.activeLayerIndex = this.layers.length - 1;
 		}
 	}
 
 	// Composite projection for rendering (flattening layers)
-	// This is computationally expensive, so use with care in tight loops.
-	// Ideally, the renderer should iterate veils directly.
-	get compositeStitches() {
+	get compositePixels() {
 		const result = new Array(this.width * this.height).fill(null);
 
 		// Render from bottom to top
-		for (const veil of this.veils) {
-			if (!veil.isVisible) continue;
+		for (const layer of this.layers) {
+			if (!layer.isVisible) continue;
 
 			for (let i = 0; i < result.length; i++) {
-				const stitch = veil.stitches[i];
-				if (stitch !== null) {
-					result[i] = stitch; // Simple painter's algorithm (top covers bottom)
-					// TODO: Implement alpha blending if we support semi-transparent dyes
+				const pixel = layer.pixels[i];
+				if (pixel !== null) {
+					result[i] = pixel; // Simple painter's algorithm (top covers bottom)
 				}
 			}
 		}

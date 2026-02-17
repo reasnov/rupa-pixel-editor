@@ -1,14 +1,14 @@
 <script lang="ts">
-	import { atelier } from '../../state/atelier.svelte.js';
+	import { editor } from '../../state/editor.svelte.js';
 	import { shuttle } from '../../engine/shuttle.js';
 	import Modal from '../ui/Modal.svelte';
 	import { onMount } from 'svelte';
 
-	let { onClose = () => (atelier.studio.showGoTo = false) } = $props<{ onClose: () => void }>();
+	let { onClose = () => (editor.studio.showGoTo = false) } = $props<{ onClose: () => void }>();
 
 	// We use Cartesian coordinates for input as they match the HUD
-	let targetX = $state(atelier.displayCoords.x);
-	let targetY = $state(atelier.displayCoords.y);
+	let targetX = $state(editor.displayCoords.x);
+	let targetY = $state(editor.displayCoords.y);
 
 	function jump() {
 		shuttle.jumpTo(targetX, targetY);
@@ -68,12 +68,12 @@
 			<p class="font-serif text-[10px] leading-relaxed text-studio-text/40 italic">
 				{__({
 					key: 'goto.current',
-					replace: { x: atelier.displayCoords.x, y: atelier.displayCoords.y }
+					replace: { x: editor.displayCoords.x, y: editor.displayCoords.y }
 				})}
 			</p>
 		</div>
 
-		<button class="artisan-primary-btn w-full py-4 text-lg" onclick={jump}>
+		<button class="editor-primary-btn w-full py-4 text-lg" onclick={jump}>
 			{__({ key: 'goto.action' })}
 		</button>
 	</div>

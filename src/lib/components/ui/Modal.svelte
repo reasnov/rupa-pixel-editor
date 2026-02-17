@@ -1,8 +1,7 @@
 <script lang="ts">
-	import { atelier } from '../../state/atelier.svelte';
+	import { editor } from '../../state/editor.svelte.js';
 	import { fade, scale } from 'svelte/transition';
 	import { quintOut } from 'svelte/easing';
-	import { untrack } from 'svelte';
 
 	let {
 		title = '',
@@ -26,20 +25,21 @@
 
 	// Register this modal to the global Escape handler
 	$effect(() => {
-		atelier.pushEscapeAction(onClose);
-		return () => atelier.popEscapeAction(onClose);
+		editor.pushEscapeAction(onClose);
+		return () => editor.popEscapeAction(onClose);
 	});
 
-	// Custom "Paper Roll" Transition
-	function paperRoll(node: HTMLElement, { duration = 600 }) {
+	/**
+	 * Minimalist Neutral Transition: A clean scale & fade combo.
+	 */
+	function modalTransition(node: HTMLElement, { duration = 300 }) {
 		return {
 			duration,
 			css: (t: number) => {
 				const eased = quintOut(t);
 				return `
 					opacity: ${t};
-					transform: scaleX(${0.9 + eased * 0.1}) scaleY(${0.4 + eased * 0.6});
-					clip-path: inset(0 ${(1 - eased) * 50}% 0 ${(1 - eased) * 50}%);
+					transform: scale(${0.95 + eased * 0.05});
 				`;
 			}
 		};
@@ -49,29 +49,32 @@
 <!-- svelte-ignore a11y_no_static_element_interactions -->
 <!-- svelte-ignore a11y_click_events_have_key_events -->
 <div
-	transition:fade={{ duration: 200 }}
-	class="fixed inset-0 z-[1100] flex items-center justify-center bg-black/25 backdrop-blur-md"
+	transition:fade={{ duration: 150 }}
+	class="fixed inset-0 z-[1100] flex items-center justify-center bg-charcoal/20 backdrop-blur-md"
 	onmousedown={(e) => {
 		e.stopPropagation();
 		if (e.target === e.currentTarget) onClose();
 	}}
 >
 	<div
-		in:paperRoll={{ duration: 500 }}
+		in:modalTransition={{ duration: 300 }}
 		out:fade={{ duration: 150 }}
-		class="flex flex-col gap-8 overflow-hidden rounded-xl border-8 border-white bg-[#fdf6e3] p-10 shadow-2xl ring-1 ring-black/5"
+		class="flex flex-col gap-6 overflow-hidden rounded-xl border border-charcoal/10 bg-foam-white p-8 shadow-2xl"
 		style="width: {width}; max-height: {maxHeight};"
 		onmousedown={(e) => e.stopPropagation()}
+		role="dialog"
+		aria-modal="true"
+		tabindex="-1"
 	>
-		<!-- Header -->
-		<div class="flex items-center justify-between border-b border-studio-text/5 pb-6">
+		<!-- Minimalist Header -->
+		<div class="flex items-center justify-between border-b border-charcoal/5 pb-4">
 			<div class="flex items-center gap-4">
-				{#if icon}<span class="text-3xl">{icon}</span>{/if}
+				{#if icon}<span class="text-2xl opacity-40">{icon}</span>{/if}
 				<div class="flex flex-col">
-					<h2 class="font-tiny5 text-3xl leading-none text-brand">{title}</h2>
+					<h2 class="font-tiny5 text-2xl leading-none text-charcoal">{title}</h2>
 					{#if subtitle}
 						<span
-							class="mt-1 font-serif text-[10px] font-bold tracking-[0.2em] uppercase opacity-30"
+							class="mt-1 font-serif text-[9px] font-black tracking-[0.2em] uppercase text-charcoal/30"
 							>{subtitle}</span
 						>
 					{/if}
@@ -79,7 +82,7 @@
 			</div>
 			<button
 				onclick={onClose}
-				class="rounded-xl border border-black/5 bg-white/50 px-4 py-2 text-[10px] font-bold tracking-widest uppercase opacity-40 transition-all hover:opacity-100"
+				class="rounded-lg border border-charcoal/10 bg-stone-light/50 px-4 py-1.5 text-[9px] font-bold tracking-widest uppercase text-charcoal/40 transition-all hover:bg-brand hover:text-white hover:border-brand"
 			>
 				Close
 			</button>
@@ -104,7 +107,7 @@
 		background: transparent;
 	}
 	.custom-scrollbar::-webkit-scrollbar-thumb {
-		background: rgba(211, 54, 130, 0.1);
+		background: rgba(0, 0, 0, 0.05);
 		border-radius: 10px;
 	}
 </style>

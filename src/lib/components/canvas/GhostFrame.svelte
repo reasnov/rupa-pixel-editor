@@ -2,12 +2,12 @@
 	import { type ColorHex } from '../../types/index.js';
 
 	let {
-		stitches,
+		pixels,
 		width,
 		height,
 		opacity = 0.2
 	} = $props<{
-		stitches: (ColorHex | null)[];
+		pixels: (ColorHex | null)[];
 		width: number;
 		height: number;
 		opacity?: number;
@@ -22,8 +22,8 @@
 		ctx.imageSmoothingEnabled = false;
 		ctx.clearRect(0, 0, width, height);
 
-		for (let i = 0; i < stitches.length; i++) {
-			const color = stitches[i];
+		for (let i = 0; i < pixels.length; i++) {
+			const color = pixels[i];
 			if (color) {
 				ctx.fillStyle = color;
 				const x = i % width;

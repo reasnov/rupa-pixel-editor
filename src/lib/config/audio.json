@@ -4,7 +4,7 @@
 	},
 	"tones": {
 		"move": { "freq": 450, "duration": 0.08, "volume": 0.15 },
-		"stitch": { "freq": 1200, "duration": 0.15, "volume": 0.03 },
+		"draw": { "freq": 1200, "duration": 0.15, "volume": 0.03 },
 		"startup": { "freq": 220, "duration": 0.8, "volume": 0.1 },
 		"ready": [523.25, 659.25, 783.99, 1046.5]
 	},

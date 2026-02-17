@@ -1,46 +1,49 @@
-# Technical Specifications: Rupa Pixel Editor (Atelier)
+# Technical Specifications: Rupa Pixel Editor (Editor)
 
 ## 1. Grid Mechanics
 
-- **Linen Size:** Default 32x32.
+- **Canvas Size:** Default 32x32.
 - **Coordinate System:**
   - **Internal:** Zero-indexed flat array (`y * width + x`).
   - **Display (HUD):** Center-relative (Cartesian).
     - For even dimensions, there is no zero-row/column (jumps from -1 to 1).
     - For odd dimensions, the center is (0,0).
-- **Stitch Data:** Hex color strings (`ColorHex`).
+- **Pixel Data:** Hex color strings (`ColorHex`).
 - **Empty State:** Studio-specific cream `#eee8d5`.
 
 ## 2. Intent Schema
 
-Every interaction is mapped to a `LoomIntent` to ensure semantic consistency. Intents are triggered by the **LoomPad** (Keyboard chords) or the **ShuttlePoint** (Mouse/Pointer gestures).
+Every interaction is mapped to a `ActionIntent` to ensure semantic consistency. Intents are triggered by the **Keyboard** (Keyboard chords) or the **ShuttlePoint** (Mouse/Pointer gestures).
 
 ### 2.1 Navigation & Positioning
 
 - `MOVE_UP`, `MOVE_DOWN`, `MOVE_LEFT`, `MOVE_RIGHT`: Keyboard-driven step movement.
-- `SET_POSITION`: ShuttlePoint-driven absolute positioning (Screen-to-Linen mapping).
+- `SET_POSITION`: ShuttlePoint-driven absolute positioning (Screen-to-Canvas mapping).
 - `JUMP_HOME`: Reset position to center.
 
 ### 2.2 Action Intents
 
-- `STITCH`: Apply dye (Space/Click).
-- `UNSTITCH`: Remove dye (Backspace/Right-click).
+- `PAINT`: Apply color (Space/Enter/Click).
+- `ERASE`: Remove color (Backspace/Delete/Right-click).
 - `UNDO`, `REDO`: History traversal.
+- `SOAK`: Flood fill.
+- `RECOLOR`: Global color replacement.
+- `SELECT_SAME`: Magic wand selection.
 
-### 2.3 Flow Intents (Sustained)
+### 2.3 Flow Intents (Sustained Modifiers)
 
-- `FLOW_THREAD`: Enable threading (Draw Flow - Ctrl/Drag).
-- `FLOW_UNRAVEL`: Enable unravelling (Erase Flow - Ctrl+Shift/Right-drag).
-- `FLOW_LOOM`: Enable looming (Selection - Shift/Drag).
-- `FLOW_PICK`: Enable dye picking (Eyedropper).
+- `FLOW_PAINT`: Continuous drawing (Ctrl + Movement/Drag).
+- `FLOW_ERASE`: Continuous erasing (Ctrl + Shift + Movement/Right-drag).
+- `FLOW_SELECT`: Area selection (Shift + Movement/Drag).
 
 ### 2.4 UI Intents
 
-- `OPEN_PALETTE`: Show Command Palette (Pattern Catalog).
-- `OPEN_BASIN`: Show Color Picker (Natural Dye Basin).
-- `OPEN_AUDIO`: Show Audio Settings (Audio Basin).
-- `OPEN_CRATE`: Show Export Menu (Artifact Crate).
-- `OPEN_CODEX`: Show User Guide (Artisan Codex).
+- `OPEN_MENU`: Show Command Palette (Ctrl+K).
+- `OPEN_PALETTE`: Show Color Picker (b).
+- `OPEN_AUDIO`: Show Audio Settings (Ctrl+Shift+A).
+- `OPEN_EXPORT`: Show Export Menu (Ctrl+E).
+- `OPEN_MANUAL`: Show Barista Manual (F1).
+- `OPEN_HELP`: Show Quick Guide (F2).
 
 ### 2.5 Convention: Reserved Shortcuts
 
@@ -50,14 +53,14 @@ To maintain cross-platform integrity, the following chord patterns are reserved 
 
 ## 3. Visual Identity & Design System
 
-- **Core Aesthetic:** Cottagecore / Retro-Artisan.
-- **Primary Brand Color:** Artisan Magenta `#D33682`.
+- **Core Aesthetic:** Cottagecore / Retro-Barista.
+- **Primary Brand Color:** Barista Magenta `#D33682`.
 - **Background:** Natural Paper texture with Solarized Base 3 (`#fdf6e3`).
 - **Typography:**
   - **Brand/Headers:** Tiny5 (Pixel-art font).
   - **Serif/Display:** EB Garamond.
   - **Body/System:** Lora.
-- **Rendering:** `image-rendering: pixelated` must be applied to all linen views to maintain sharpness.
+- **Rendering:** `image-rendering: pixelated` must be applied to all canvas views to maintain sharpness.
 
 ## 4. Performance Requirements
 
@@ -69,18 +72,18 @@ To maintain cross-platform integrity, the following chord patterns are reserved 
 
 ## 5. Accessibility (A11y) Standards
 
-- **Keyboard Sovereignty**: 100% of UI functionality must be accessible via LoomPad shortcuts.
+- **Keyboard Sovereignty**: 100% of UI functionality must be accessible via Keyboard shortcuts.
 - **Contrast**: Text and iconic elements must maintain a contrast ratio of 4.5:1 (WCAG AA) against the Paper background.
 - **Screen Reading**:
-  - The Linen uses `role="grid"` with coordinate-based labels.
-  - Interactive elements must have descriptive `aria-label` attributes using artisan terminology.
-- **Focus Indicators**: All focusable elements must display a `2px` solid Artisan Magenta outline when active.
+  - The Canvas uses `role="grid"` with coordinate-based labels.
+  - Interactive elements must have descriptive `aria-label` attributes using barista terminology.
+- **Focus Indicators**: All focusable elements must display a `2px` solid Barista Magenta outline when active.
 
 ## 6. File Formats
 
 - **Pattern Book (.rupa):** JSON-based schema storing:
   - Version metadata.
-  - Linen dimensions.
+  - Canvas dimensions.
   - Palette array.
-  - Flat stitch array.
+  - Flat pixel array.
   - Creation/Modification timestamps.

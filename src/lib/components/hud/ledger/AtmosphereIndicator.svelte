@@ -1,19 +1,19 @@
 <script lang="ts">
-	import { atelier } from '../../../state/atelier.svelte';
+	import { editor } from '../../../state/editor.svelte';
 </script>
 
-<div class="flex items-center gap-1.5" title={__({ key: 'ledger.atmosphere.title' })}>
+<div class="flex items-center gap-1.5" title={__({ key: 'timeline.audio_status.title' })}>
 	<span
-		class="text-[9px] {atelier.usageMinutes >= 30 ? 'animate-pulse' : 'opacity-20 grayscale'}"
+		class="text-[9px] {editor.usageMinutes >= 30 ? 'animate-pulse' : 'opacity-40 grayscale'}"
 		aria-hidden="true">🎹</span
 	>
-	<span class="font-serif text-[8px] font-bold tracking-wider text-brand/40 uppercase italic">
-		{#if atelier.usageMinutes < 30}
-			{__({ key: 'ledger.atmosphere.silent' })}
-		{:else if atelier.usageMinutes < 60}
-			{__({ key: 'ledger.atmosphere.weaving' })}
+	<span class="font-serif text-[8px] font-black tracking-widest text-charcoal/50 uppercase italic">
+		{#if editor.usageMinutes < 30}
+			{__({ key: 'timeline.audio_status.silent' })}
+		{:else if editor.usageMinutes < 60}
+			{__({ key: 'timeline.audio_status.brewing' })}
 		{:else}
-			{__({ key: 'ledger.atmosphere.resonance' })}
+			{__({ key: 'timeline.audio_status.resonant' })}
 		{/if}
 	</span>
 </div>

@@ -12,29 +12,29 @@ _The foundational contract: Repository structure, technology stack, and core pro
 
 _Expanding to color: Palette management, viewport zooming, and the export engine (SVG/PNG)._
 
-### [03: Persistence & Linen Manipulation](./03-persistence-and-manipulation.md)
+### [03: Persistence & Canvas Manipulation](./03-persistence-and-manipulation.md)
 
 _The shift to a professional workspace: `.rupa` file format, auto-backups, and grid manipulation._
 
-### [04: The LoomPad Engine](./04-loompad-engine.md)
+### [04: The EditorPad Engine](./04-enginepad-engine.md)
 
 _The nervous system: Intent-based input, chord parsing, and context sovereignty._
 
-### [05: The Artisan's Stance](./05-artisan-stance.md)
+### [05: The Barista's Stance](./05-barista-stance.md)
 
-_Behavioral orchestration: Managing modes (Threading, Looming, Unravelling) and synchronization._
+_Behavioral orchestration: Managing modes (Threading, Selection, Unravelling) and synchronization._
 
-### [06: The Master's Folio](./06-masters-folio.md)
+### [06: The Master's Project](./06-masters-project.md)
 
 _Multi-frame and multi-layer orchestration: Managing complex projects and hierarchical data._
 
-### [07: The Swift Weaver](./07-swift-weaver.md)
+### [07: The Swift Barista](./07-swift-barista.md)
 
 _Efficiency and automation: Flood fill, smart selection, and keyboard-centric drawing speed._
 
-### [08: The Spindle of Time](./08-spindle-of-time.md)
+### [08: The Timeline of Time](./08-spindle-of-time.md)
 
-_Bringing stitches to life: Timeline management, onion skinning, and animation playback._
+_Bringing pixels to life: Timeline management, onion skinning, and animation playback._
 
 ---
 

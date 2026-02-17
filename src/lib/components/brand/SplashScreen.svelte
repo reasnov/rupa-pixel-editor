@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { atelier } from '../../state/atelier.svelte.js';
+	import { editor } from '../../state/editor.svelte.js';
 	import Brand from './Brand.svelte';
 	import { resonance } from '../../engine/resonance.svelte.js';
 	import { onMount } from 'svelte';
@@ -12,40 +12,36 @@
 	let phaseIndex = $state(0);
 	let isReadyToEnter = $state(false);
 
-	// Get phases from i18n system
-	// Note: __ returns a string, but i18next can return objects/arrays if requested.
-	// For simplicity, we'll fetch them individually or use the JSON as a fallback structure.
-	const phasesCount = 5;
+	const PHASES_COUNT = 5;
 
 	/**
-	 * startStudio: Finalizes the loading sequence and enters the atelier.
+	 * initializeWorkspace: Finalizes the loading sequence and enters the café.
 	 */
-	function startStudio() {
+	function initializeWorkspace() {
 		resonance.emit('READY');
 		visible = false;
 		setTimeout(() => {
-			atelier.isAppReady = true;
-			atelier.showArtisanCodex = true;
+			editor.isAppReady = true;
+			editor.showGuideBook = true;
 		}, 800);
 	}
 
 	onMount(() => {
 		resonance.emit('STARTUP');
 
-		// Simulated "Artisanal" Loading Sequence
-		// We use a variable interval to simulate the organic nature of craft.
+		// Simulated "Natural" Loading Sequence
 		const interval = setInterval(() => {
 			if (progress < 100) {
 				const jump = Math.random() * 15;
 				progress = Math.min(100, progress + jump);
 
 				// Update phase based on progress
-				phaseIndex = Math.min(phasesCount - 1, Math.floor((progress / 100) * phasesCount));
+				phaseIndex = Math.min(PHASES_COUNT - 1, Math.floor((progress / 100) * PHASES_COUNT));
 			} else {
 				clearInterval(interval);
 				setTimeout(() => {
 					isReadyToEnter = true;
-					startStudio();
+					initializeWorkspace();
 				}, 600);
 			}
 		}, 400);
@@ -64,60 +60,60 @@
 		role="dialog"
 		aria-modal="true"
 		aria-busy={!isReadyToEnter}
-		aria-label={__({ key: 'codex.title' })}
+		aria-label={__({ key: 'manual.title' })}
 	>
-		<!-- Background Glow -->
+		<!-- Minimalist Neutral Glow -->
 		<div
-			class="absolute h-[500px] w-[500px] animate-pulse rounded-full bg-brand/5 blur-[120px]"
+			class="absolute h-[500px] w-[500px] animate-pulse rounded-full bg-charcoal/5 blur-[120px]"
 			aria-hidden="true"
 		></div>
 
 		<div class="relative flex flex-col items-center gap-2">
-			<!-- Logo Animation -->
+			<!-- Restored Bouncing Logo Animation -->
 			<div
 				in:scale={{ duration: 1500, start: 0.9, easing: quintOut }}
 				class="mb-8 flex animate-bounce items-center justify-center"
 			>
 				<img
 					src={icon}
-					alt="Rupa Artisan Icon"
+					alt="Rupa Café Logo"
 					class="h-32 w-auto drop-shadow-2xl transition-transform duration-[3s] ease-in-out"
-					style="transform: scale({1 + Math.sin(Date.now() / 1000) * 0.05});"
+					style="transform: scale({1 + Math.sin(Date.now() / 1500) * 0.05});"
 				/>
 			</div>
 
-			<div in:fly={{ y: 20, duration: 1000, delay: 400 }}>
+			<div in:fly={{ y: 15, duration: 1000, delay: 400, easing: quintOut }}>
 				<Brand size="lg" />
 			</div>
 		</div>
 
 		<div class="absolute bottom-24 flex flex-col items-center gap-8">
-			<!-- Loading Bar -->
+			<!-- Professional Neutral Progress Bar -->
 			<div class="flex flex-col items-center gap-4">
 				<div
-					class="h-1.5 w-64 overflow-hidden rounded-full bg-studio-text/5 ring-1 ring-studio-text/10"
+					class="h-1 w-48 overflow-hidden rounded-full bg-charcoal/5 ring-1 ring-charcoal/10"
 					role="progressbar"
 					aria-valuenow={progress}
 					aria-valuemin="0"
 					aria-valuemax="100"
 				>
 					<div
-						class="h-full bg-brand/60 transition-all duration-500 ease-out {isReadyToEnter
-							? 'opacity-0'
+						class="h-full bg-charcoal/20 transition-all duration-500 ease-out {isReadyToEnter
+							? 'bg-brand/40'
 							: ''}"
 						style="width: {progress}%"
 					></div>
 				</div>
 				<div class="flex flex-col items-center gap-1 text-center">
-					<span class="h-4 font-serif text-[12px] text-studio-text/60 italic">
+					<span class="h-4 font-serif text-[11px] tracking-wide text-charcoal/60 italic">
 						{isReadyToEnter
-							? __({ key: 'common:splash.welcome' })
-							: __({ key: `common:splash.phases.${phaseIndex}` })}
+							? __({ key: 'splash.welcome' })
+							: __({ key: `splash.phases.${phaseIndex}` })}
 					</span>
 					<span
-						class="font-mono text-[9px] font-bold tracking-widest text-studio-text/20 uppercase"
+						class="font-mono text-[8px] font-bold tracking-[0.3em] text-charcoal/20 uppercase"
 					>
-						{__({ key: 'common:splash.version', replace: { version: atelier.version } })}
+						{__({ key: 'splash.version', replace: { version: editor.version } })}
 					</span>
 				</div>
 			</div>

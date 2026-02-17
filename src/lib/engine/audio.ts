@@ -1,4 +1,4 @@
-import { atelier } from '../state/atelier.svelte';
+import { editor } from '../state/editor.svelte';
 import { studioAudio } from './audioContext.js';
 import audioConfig from '../config/audio.json' with { type: 'json' };
 
@@ -14,7 +14,7 @@ export class AudioEngine {
 		volume = 0.1,
 		rampTo = 0.0001
 	) {
-		if (atelier.isMuted) return;
+		if (editor.isMuted) return;
 
 		const osc = this.ctx.createOscillator();
 		const gain = this.ctx.createGain();
@@ -23,7 +23,7 @@ export class AudioEngine {
 		osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
 
 		// Apply global SFX volume
-		const effectiveVolume = volume * atelier.sfxVolume;
+		const effectiveVolume = volume * editor.sfxVolume;
 
 		gain.gain.setValueAtTime(effectiveVolume, this.ctx.currentTime);
 		gain.gain.exponentialRampToValueAtTime(rampTo, this.ctx.currentTime + duration);
@@ -40,8 +40,8 @@ export class AudioEngine {
 		this.playTone(freq, duration, 'sine', volume);
 	}
 
-	playStitch() {
-		const { freq, duration, volume } = audioConfig.tones.stitch;
+	playDraw() {
+		const { freq, duration, volume } = audioConfig.tones.draw;
 		this.playTone(freq, duration, 'sine', volume);
 		setTimeout(() => this.playTone(freq * 1.25, duration * 0.6, 'sine', volume * 0.6), 50);
 	}
@@ -52,9 +52,8 @@ export class AudioEngine {
 		this.playTone(freq, 0.15, 'sine', 0.12);
 	}
 
-	playUnstitch() {
-		// Audible brush/paper rustle
-		if (atelier.isMuted) return;
+	playErase() {
+		if (editor.isMuted) return;
 
 		const duration = 0.25;
 		const bufferSize = this.ctx.sampleRate * duration;
@@ -74,7 +73,7 @@ export class AudioEngine {
 		filter.frequency.exponentialRampToValueAtTime(400, this.ctx.currentTime + duration);
 
 		const gain = this.ctx.createGain();
-		const effectiveVolume = 0.1 * atelier.sfxVolume;
+		const effectiveVolume = 0.1 * editor.sfxVolume;
 		gain.gain.setValueAtTime(effectiveVolume, this.ctx.currentTime);
 		gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + duration);
 

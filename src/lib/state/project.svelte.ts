@@ -2,13 +2,13 @@ import { type ColorHex } from '../types/index.js';
 import { FrameState } from './frame.svelte.js';
 
 /**
- * ProjectState (The Folio): Manages metadata, clipboard data, and the collection of Frames.
+ * ProjectState (The Recipe Book): Manages metadata, clipboard data, and the collection of Frames (Cups).
  */
 export class ProjectState {
 	currentFilePath = $state<string | null>(null);
 	lastSaved = $state<Date | null>(null);
 
-	// Folio Structure
+	// Recipe Book Structure
 	frames = $state<FrameState[]>([]);
 	activeFrameIndex = $state(0);
 	isPlaying = $state(false);
@@ -17,7 +17,7 @@ export class ProjectState {
 
 	constructor() {
 		// Initialize with one default frame
-		this.frames = [new FrameState('Main Motif')];
+		this.frames = [new FrameState('Main Art')];
 	}
 
 	get activeFrame() {
@@ -25,7 +25,7 @@ export class ProjectState {
 	}
 
 	addFrame(name?: string) {
-		const newName = name || `Frame ${this.frames.length + 1}`;
+		const newName = name || `Cup ${this.frames.length + 1}`;
 		const frame = new FrameState(newName);
 		this.frames.push(frame);
 		this.activeFrameIndex = this.frames.length - 1;

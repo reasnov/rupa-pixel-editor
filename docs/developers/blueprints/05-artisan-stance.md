@@ -1,8 +1,8 @@
-# Blueprint 05: The Artisan's Stance (Mode Orchestration)
+# Blueprint 05: The Barista's Stance (Mode Orchestration)
 
 ## 1. Executive Summary
 
-The **StanceEngine** is the behavioral governor of Rupa Pixel Editor. It consolidates raw modifier states and interaction flags into a single, high-level **Artisan Stance**. This ensures that the application's logic, visual feedback, and auditory response are always perfectly synchronized.
+The **StanceEngine** is the behavioral governor of Rupa Pixel Editor. It consolidates raw modifier states and interaction flags into a single, high-level **Barista Stance**. This ensures that the application's logic, visual feedback, and auditory response are always perfectly synchronized.
 
 ---
 
@@ -33,7 +33,7 @@ Every Stance must provide a standardized descriptor for the HUD:
 
 - **State Sequestration**: Components and engines must not check `isShiftPressed` directly. They must query `stanceEngine.currentStance`.
 - **Atomic Transitions**: Changing a Stance should trigger a clean transition, clearing any temporary buffers (like selection paths) from the previous Stance.
-- **LoomPad Integration**: The StanceEngine consumes `LoomIntents` and outputs the resolved **Stance**.
+- **Keyboard Integration**: The StanceEngine consumes `ActionIntents` and outputs the resolved **Stance**.
 
 ---
 

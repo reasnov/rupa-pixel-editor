@@ -14,6 +14,7 @@
 		"electron:dev": "electron . --no-sandbox --disable-vulkan --disable-gpu-sandbox --ozone-platform-hint=auto",
 		"electron:start": "npm run build && electron . --no-sandbox --disable-vulkan --disable-gpu-sandbox --ozone-platform-hint=auto",
 		"dev:all": "vite dev & sleep 15 && npm run electron:dev",
+		"test": "vitest run",
 		"deploy": "npm run build && gh-pages -d build --dotfiles"
 	},
 	"files": [
@@ -44,6 +45,7 @@
 		"@tailwindcss/vite": "^4.1.18",
 		"electron": "^40.3.0",
 		"gh-pages": "^6.3.0",
+		"jsdom": "^28.1.0",
 		"prettier": "^3.8.1",
 		"prettier-plugin-svelte": "^3.4.1",
 		"prettier-plugin-tailwindcss": "^0.7.2",
@@ -52,7 +54,8 @@
 		"svelte-check": "^4.3.6",
 		"tailwindcss": "^4.1.18",
 		"typescript": "^5.9.3",
-		"vite": "^7.3.1"
+		"vite": "^7.3.1",
+		"vitest": "^4.0.18"
 	},
 	"keywords": [
 		"svelte"

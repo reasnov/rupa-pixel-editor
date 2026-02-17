@@ -2,7 +2,7 @@
 
 ## 1. Objective
 
-This blueprint serves as the technical contract for expanding **Rupa Pixel Editor** from a monochrome environment to a multi-color workspace. It defines the protocols for palette management and the implementation of high-fidelity export engines (SVG and Raster), ensuring the "Digital Stitching" output is professional and versatile.
+This blueprint serves as the technical contract for expanding **Rupa Pixel Editor** from a monochrome environment to a multi-color workspace. It defines the protocols for palette management and the implementation of high-fidelity export engines (SVG and Raster), ensuring the "Digital Pixeling" output is professional and versatile.
 
 ---
 
@@ -27,7 +27,7 @@ To facilitate work on high-resolution grids, the application must provide a resp
   - `-` : Decrease Zoom Level.
   - `0` (with modifier) : Reset Zoom to Default (1:1).
 - **Implementation:** Zooming should be handled via CSS transformations or dynamic cell-size scaling. Regardless of the method, the `image-rendering: pixelated` property must be preserved to ensure the grid remains sharp at all magnification levels.
-- **Boundaries:** Define a minimum zoom (to fit the screen) and a maximum zoom (for micro-stitching precision).
+- **Boundaries:** Define a minimum zoom (to fit the screen) and a maximum zoom (for micro-pixeling precision).
 
 ---
 
@@ -43,7 +43,7 @@ To ensure the application maintains its "Aesthetic Retro" identity and game-like
 
 ## 5. Interaction Hierarchy Protocol
 
-The application strictly follows a **Keyboard-Primary, Mouse-Optional** hierarchy to preserve the "Digital Stitching" intent while allowing for user flexibility.
+The application strictly follows a **Keyboard-Primary, Mouse-Optional** hierarchy to preserve the "Digital Pixeling" intent while allowing for user flexibility.
 
 - **Keyboard Priority:** All new features must be implemented with a dedicated keyboard shortcut before any mouse-driven UI is developed.
 - **Optional Mouse Support:** Mouse interactions (click, drag, scroll) are treated as supplemental overlays to the core keyboard engine. They must stay synchronized with the `cursorPos` but should never be the _exclusive_ way to access a feature.
@@ -93,7 +93,7 @@ The export system must transform the internal reactive grid data into standard i
 ## 5. Visual Standards
 
 - **Contrast Preservation:** The UI must ensure that the palette selection is visible regardless of the background color.
-- **Export Fidelity:** The final output must exactly match the visual state of the grid, including all "stitched" pixels, while excluding the "Active Cell" cursor from the final render.
+- **Export Fidelity:** The final output must exactly match the visual state of the grid, including all "pixeled" pixels, while excluding the "Active Cell" cursor from the final render.
 
 ---
 

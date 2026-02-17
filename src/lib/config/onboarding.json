@@ -1,61 +1,61 @@
 {
 	"splash": {
 		"phases": [
-			"Spinning the threads...",
-			"Warming the pigments...",
-			"Stretching the digital linen...",
-			"Polishing the needle...",
-			"Studio is quiet and ready."
+			"Roasting the beans...",
+			"Frothing the milk...",
+			"Polishing the cups...",
+			"Heating the etcher...",
+			"Café is ready for service."
 		]
 	},
-	"codex": {
-		"title": "The Artisan's Codex",
-		"subtitle": "Volume I: The Sacred Weave",
+	"manual": {
+		"title": "The Barista's Manual",
+		"subtitle": "Edition I: The Art of Crema",
 		"philosophy": {
-			"title": "The Philosophy of Form",
+			"title": "The Way of the Pour",
 			"paragraphs": [
-				"In the beginning, there was only the Linen—a vast, untouched cream void. Then came the Needle, guided by the artisan's intent, bringing the first spark of color to the fiber.",
-				"Rupa is not merely an editor; it is a sanctuary where digital threads are woven into motifs. We believe that every pixel is a Stitch, a deliberate act of creation that requires focus, rhythm, and a peaceful heart.",
-				"\"We do not paint pixels; we weave light into the fabric of time.\""
+				"In the beginning, there was only the Foam—a pristine, untouched cream void. Then came the Etcher, guided by your rhythm, bringing the first drop of flavor to the surface.",
+				"Rupa is more than a tool; it is your sanctuary. Here, pixels aren't just data points—they are Drops. Every mark you make is a deliberate act of brewing that requires flow, focus, and a peaceful heart.",
+				"\"We do not just paint pixels; we etch moments into the crema of time.\""
 			]
 		},
 		"pillars": [
 			{
-				"icon": "🪡",
-				"title": "The Needle",
-				"description": "Your focal point. Controlled by the Arrow Keys, it moves with the precision of a master weaver."
+				"icon": "🖋️",
+				"title": "The Etcher",
+				"description": "Your voice on the foam. Move it with the Arrow Keys to guide your patterns with barista precision."
 			},
 			{
-				"icon": "🏺",
-				"title": "The Dyes",
-				"description": "Pigments of life. Apply them with Space. Use the Number Keys to switch between resonant tones."
+				"icon": "☕",
+				"title": "The Flavors",
+				"description": "Rich extracts and syrups. Apply them with Space and switch flavors using the numbers on your keyboard."
 			},
 			{
-				"icon": "🛡️",
-				"title": "The Veils",
-				"description": "Layers of depth. Manage them via the Folio Sidebar. Each veil adds a new dimension to your motif."
+				"icon": "🍶",
+				"title": "The Infusions",
+				"description": "Layers of depth. Like stacking fine flavors, each infusion adds a new dimension to your cup."
 			}
 		],
 		"techniques": [
 			{
-				"icon": "🧵",
-				"title": "Threading",
-				"description": "Hold Ctrl to pull a continuous line of dye. Flow with the rhythm of the grid."
+				"icon": "🌊",
+				"title": "Continuous Flow",
+				"description": "Hold Ctrl while moving to stream flavor across the foam. Flow with the rhythm of the bar."
 			},
 			{
 				"icon": "🪄",
-				"title": "Spirit Pick",
-				"description": "Press W to resonate with connected colors. A magical way to select complex motifs."
+				"title": "Spirit Selection",
+				"description": "Press W to select all connected drops of the same tone. A magical way to move patterns."
 			},
 			{
 				"icon": "⏳",
 				"title": "The Spindle",
-				"description": "The axis of time. Create frames to see your work in motion. Press P to feel the pulse."
+				"description": "The axis of time. Create sequences of cups to see your work in motion. Press P to feel the pulse."
 			},
 			{
 				"icon": "🎹",
 				"title": "Resonance",
-				"description": "Listen. The studio breathes with you. Music will emerge once your focus reaches its peak."
+				"description": "Listen. The café responds to your focus with piano melodies that grow as you work."
 			}
 		]
 	}

@@ -1,4 +1,4 @@
-import { atelier } from '../../state/atelier.svelte.js';
+import { editor } from '../../state/editor.svelte.js';
 import { sfx } from '../audio.js';
 
 /**
@@ -9,11 +9,11 @@ export class MovementService {
 	 * Move the needle by a delta.
 	 */
 	move(dx: number, dy: number): boolean {
-		const newX = Math.max(0, Math.min(atelier.linen.width - 1, atelier.needle.pos.x + dx));
-		const newY = Math.max(0, Math.min(atelier.linen.height - 1, atelier.needle.pos.y + dy));
+		const newX = Math.max(0, Math.min(editor.canvas.width - 1, editor.cursor.pos.x + dx));
+		const newY = Math.max(0, Math.min(editor.canvas.height - 1, editor.cursor.pos.y + dy));
 
-		if (newX !== atelier.needle.pos.x || newY !== atelier.needle.pos.y) {
-			atelier.needle.setPos(newX, newY);
+		if (newX !== editor.cursor.pos.x || newY !== editor.cursor.pos.y) {
+			editor.cursor.setPos(newX, newY);
 			sfx.playMove();
 			return true;
 		}
@@ -68,8 +68,8 @@ export class MovementService {
 	 * Jump the needle to a specific Cartesian coordinate.
 	 */
 	jumpTo(tx: number, ty: number) {
-		const { x, y } = this.cartesianToInternal(tx, ty, atelier.linen.width, atelier.linen.height);
-		atelier.needle.setPos(x, y);
+		const { x, y } = this.cartesianToInternal(tx, ty, editor.canvas.width, editor.canvas.height);
+		editor.cursor.setPos(x, y);
 	}
 
 	/**

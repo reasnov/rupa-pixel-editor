@@ -1,273 +1,272 @@
 {
 	"hud": {
 		"actions": {
-			"preserve_weave": "Preserve the Weave",
-			"clear_linen": "Clear the Linen",
-			"mute_ambient": "Mute Ambient",
-			"unmute_ambient": "Unmute Ambient",
-			"add_frame": "Add Frame",
-			"add_veil": "Add Veil",
-			"duplicate": "Duplicate",
-			"delete": "Delete"
+			"save_project": "Store the Recipe",
+			"clear_canvas": "Clear the Foam",
+			"mute_audio": "Mute Ambience",
+			"unmute_audio": "Unmute Ambience",
+			"add_frame": "New Cup",
+			"add_layer": "New Infusion",
+			"duplicate": "Clone",
+			"delete": "Spill"
 		},
-		"basin": {
-			"dye_title": "Natural Dye Basin",
-			"catalog_title": "The Pattern Book",
-			"catalog_search": "Search for a pattern or studio action...",
-			"catalog_no_results": "No patterns found for \"{{query}}\"",
-			"catalog_footer": "Use Arrows to Navigate • Enter to Weave",
-			"catalog_count": "{{count}} Actions Available"
+		"menu": {
+			"color_title": "Flavor Station",
+			"catalog_title": "Café Menu",
+			"catalog_search": "Search recipes or barista skills...",
+			"catalog_no_results": "No orders found for \"{{query}}\"",
+			"catalog_footer": "Use Arrows to Navigate • Enter to Brew",
+			"catalog_count": "{{count}} Skills Available"
 		},
-		"atmosphere": {
-			"title": "Audio Basin"
+		"audio": {
+			"title": "Audio Bar"
 		},
-		"ledger": {
-			"frames": "Frames",
-			"veils": "Veils",
-			"visibility": "Toggle Visibility",
-			"lock": "Toggle Lock",
-			"active": "Active"
+		"project_panel": {
+			"frames": "Cups",
+			"layers": "Infusions",
+			"visibility": "Show/Hide Infusion",
+			"lock": "Seal/Unseal Infusion",
+			"active": "In Service"
 		},
 		"stats": {
-			"stitch_count": "{{count}} stitches applied",
-			"stitch_count_plural": "{{count}} stitches applied"
+			"pixel_count": "{{count}} drops poured",
+			"pixel_count_plural": "{{count}} drops poured"
 		}
 	},
-	"needle": {
-		"position": "Needle at {{x}}, {{y}}"
+	"cursor": {
+		"position": "Etcher at {{x}}, {{y}}"
 	},
 	"stats": {
-		"needle_focus": "Needle Focus",
-		"linen_size": "Linen Size",
-		"zoom_level": "Zoom Level",
-		"active_motif": "Motif: {{count}} Stitches",
-		"technical_ledger": "Technical Ledger"
+		"cursor_focus": "Etcher Focus",
+		"canvas_size": "Milk Foam Size",
+		"zoom_level": "Focus Level",
+		"active_pattern": "Art: {{count}} Drops",
+		"technical_details": "Technical Ledger"
 	},
 	"project": {
-		"archived": "Archived {{time}}"
+		"saved": "Recipe Saved {{time}}"
 	},
 	"splash": {
-		"welcome": "Welcome home, artisan.",
-		"version": "Version {{version}}",
+		"welcome": "The Café is open, Barista.",
+		"version": "Blend {{version}}",
 		"phases": [
-			"Spinning the threads...",
-			"Warming the pigments...",
-			"Stretching the digital linen...",
-			"Polishing the needle...",
-			"Studio is quiet and ready."
+			"Roasting the beans...",
+			"Frothing the milk...",
+			"Polishing the cups...",
+			"Heating the etcher...",
+			"Café is ready for service."
 		]
 	},
-	"codex": {
-		"title": "The Artisan's Codex",
-		"subtitle": "Volume I: The Sacred Weave",
+	"manual": {
+		"title": "The Barista's Manual",
+		"subtitle": "Edition I: The Art of Crema",
 		"philosophy": {
-			"title": "The Way of the Stitch",
-			"p1": "In the beginning, there was only the Linen—a vast, untouched cream void. Then came the Needle, guided by your intent, bringing the first spark of color to the fiber.",
-			"p2": "Rupa is more than a tool; it is your sanctuary. Here, pixels aren't just data points—they are Stitches. Every mark you make is a deliberate act of craft that requires rhythm, focus, and a peaceful heart.",
-			"p3": "\"We do not just paint pixels; we weave light into the fabric of time.\""
+			"title": "The Way of the Pour",
+			"p1": "In the beginning, there was only the Foam—a pristine, untouched cream void. Then came the Etcher, guided by your rhythm, bringing the first drop of flavor to the surface.",
+			"p2": "Rupa is more than a tool; it is your sanctuary. Here, pixels aren't just data points—they are Drops. Every mark you make is a deliberate act of brewing that requires flow, focus, and a peaceful heart.",
+			"p3": "\"We do not just paint pixels; we etch moments into the crema of time.\""
 		},
 		"pillars": {
-			"needle": {
-				"title": "The Needle",
-				"desc": "Your voice on the linen. Move it with the Arrow Keys to guide your patterns with precision."
+			"cursor": {
+				"title": "The Etcher",
+				"desc": "Your voice on the foam. Move it with the Arrow Keys to guide your patterns with barista precision."
 			},
-			"dyes": {
-				"title": "The Dyes",
-				"desc": "Pigments derived from nature. Apply them with Space and switch colors using the numbers on your loom."
+			"colors": {
+				"title": "The Flavors",
+				"desc": "Rich extracts and syrups. Apply them with Space and switch flavors using the numbers on your keyboard."
 			},
-			"veils": {
-				"title": "The Veils",
-				"desc": "Layers of depth. Like stacking fine silk, each veil adds a new dimension to your motif."
+			"layers": {
+				"title": "The Infusions",
+				"desc": "Layers of depth. Like stacking fine flavors, each infusion adds a new dimension to your cup."
 			}
 		},
 		"techniques": {
-			"title": "Artisan Techniques",
-			"threading": {
-				"title": "Continuous Threading",
-				"desc": "Hold Ctrl while moving to pull a continuous line of dye across the grid."
+			"title": "Barista Skills",
+			"continuous": {
+				"title": "Continuous Pouring",
+				"desc": "Hold Ctrl while moving to stream flavor across the foam."
 			},
-			"spirit_pick": {
-				"title": "Spirit Pick",
-				"desc": "Press W to select all connected fibers of the same tone. A magical way to move motifs."
+			"magic_select": {
+				"title": "Spirit Selection",
+				"desc": "Press W to select all connected drops of the same tone. A magical way to move patterns."
 			},
-			"spindle": {
-				"title": "The Spindle of Time",
-				"desc": "Create sequences of frames to breathe life into your work. Press P to feel the pulse."
+			"timeline": {
+				"title": "The Flow of Time",
+				"desc": "Create sequences of cups to breathe life into your work. Press P to feel the pulse."
 			},
-			"resonance": {
-				"title": "Melodic Resonance",
-				"desc": "Listen. The studio responds to your focus with generative melodies that grow as you work."
+			"audio": {
+				"title": "Café Resonance",
+				"desc": "Listen. The café responds to your focus with piano melodies that grow as you brew."
 			}
 		},
 		"footer": {
-			"quote": "May your needle be swift and your patterns ever-peaceful.",
-			"guild": "The Rupa Guild",
-			"all_shortcuts": "View All Shortcuts",
-			"enter": "Enter the Atelier"
+			"quote": "May your etcher be swift and your crema ever-smooth.",
+			"guild": "The Rupa Barista Guild",
+			"all_shortcuts": "Review the Menu",
+			"enter": "Step Behind the Bar"
 		}
 	},
-	"dye_basin": {
-		"title": "Natural Dye Basin",
-		"subtitle": "Mix your unique threads",
-		"hex_label": "FIBER COLOR (HEX)",
-		"seal": "Seal the Dye",
-		"eye_drop": "Pick from Linen",
+	"color_picker": {
+		"title": "Flavor Station",
+		"subtitle": "Mix your unique extracts",
+		"hex_label": "FLAVOR CODE (HEX)",
+		"apply": "Seal the Flavor",
+		"eyedropper": "Taste from Foam",
 		"sliders": {
-			"hue": "Hue",
-			"saturation": "Saturation",
-			"lightness": "Lightness",
-			"alpha": "Alpha"
+			"hue": "Roast (Hue)",
+			"saturation": "Body (Saturation)",
+			"lightness": "Brightness (Lightness)",
+			"alpha": "Opacity (Alpha)"
 		}
 	},
-	"ledger": {
-		"atmosphere": {
-			"title": "Atmosphere Status",
-			"silent": "Silent",
-			"weaving": "Weaving",
-			"resonance": "Resonance"
+	"timeline": {
+		"audio_status": {
+			"title": "Ambiance Flow",
+			"silent": "Quiet",
+			"brewing": "Brewing",
+			"resonant": "Resonant"
 		},
-		"stance": "Stance",
-		"chord": "Chord",
-		"none": "None",
-		"timer": "Session Time",
-		"spindle_title": "The Spindle",
-		"kinetic_track": "Kinetic Track",
-		"thread_count": "{{count}} Threads",
-		"thread_count_plural": "{{count}} Threads"
+		"mode": "Mode",
+		"rhythm": "Rhythm",
+		"waiting": "Waiting",
+		"duration": "Shift Duration",
+		"title": "The Flow",
+		"track": "Animated Stream",
+		"pixel_count": "{{count}} Drops",
+		"pixel_count_plural": "{{count}} Drops"
 	},
-	"goto": {
-		"title": "Go To Coordinate",
-		"subtitle": "Direct Needle Placement",
-		"label_x": "Cartesian X",
-		"label_y": "Cartesian Y",
-		"current": "Current Position: {{x}}, {{y}}",
-		"action": "Move Needle"
+	"navigation": {
+		"title": "Jump to Table",
+		"subtitle": "Direct Etcher Placement",
+		"label_x": "Column (X)",
+		"label_y": "Row (Y)",
+		"current": "Currently at: {{x}}, {{y}}",
+		"action": "Move Etcher"
 	},
-	"artifact": {
-		"title": "Artifact Crate",
-		"subtitle": "Prepare Artifacts for Export",
-		"static_title": "Static Stitches",
-		"kinetic_title": "Kinetic Weaves",
-		"requires_frames": "Requires multiple frames",
-		"scale_label": "Artifact Scale",
-		"scale_desc": "Multiplier for raster output size",
-		"fps_label": "Kinetic Pace (FPS)",
-		"fps_desc": "Frames per second",
-		"bg_label": "Background",
-		"bg_desc": "Fill empty stitches with color",
-		"match_linen": "Match Linen Backdrop",
-		"export_action": "Weave & Export Artifact",
+	"export": {
+		"title": "Serving Tray",
+		"subtitle": "Prepare Cups for Service",
+		"static_title": "Static Art",
+		"animated_title": "Animated Brews",
+		"requires_frames": "Requires multiple cups",
+		"scale_label": "Service Scale",
+		"scale_desc": "Multiplier for final output size",
+		"fps_label": "Brew Pace (FPS)",
+		"fps_desc": "Drops per second",
+		"bg_label": "Cup Base",
+		"bg_desc": "Fill empty foam with base color",
+		"match_background": "Match Counter Color",
+		"action": "Brew & Serve",
 		"formats": {
-			"png": "Raster PNG",
-			"webp": "WebP",
-			"jpg": "JPG",
-			"svg_static": "Vector SVG",
-			"svg_kinetic": "Animated SVG",
-			"webm": "Video WebM",
-			"gif": "Animated GIF",
-			"mp4": "Video MP4"
+			"png": "Polaroid PNG",
+			"webp": "WebP Extract",
+			"jpg": "Vintage JPG",
+			"svg_static": "Vector Blueprint",
+			"svg_animated": "Animated SVG",
+			"webm": "WebM Motion",
+			"gif": "Looping GIF",
+			"mp4": "MP4 Reel"
 		}
-	},
-	"guide": {
-		"title": "Artisan’s Guide",
-		"subtitle": "The Lexicon of Chords & Flows",
-		"header_title": "Mastering the Chords",
-		"header_desc": "In Rupa, we do not simply press buttons; we play chords. These combinations of keys create a flow state, allowing your needle to dance across the linen with professional precision.",
-		"footer_quote": "A master weaver knows every thread by heart."
-	},
-	"settings": {
-		"title": "Linen Settings",
-		"subtitle": "Configure the Weaver's Frame",
-		"width": "Width",
-		"height": "Height",
-		"weave_pace": "Weave Pace (FPS)",
-		"fps_desc": "Default frames per second",
-		"backdrop": "Linen Backdrop",
-		"backdrop_desc": "Visual background color",
-		"stabilization": "Line Stabilization",
-		"stabilization_desc": "Corrects jittery pointer movement",
-		"apply": "Re-stretch Linen",
-		"note": "Note: Resizing will center your current work on the new frame. Large dimensions may affect performance."
 	},
 	"shortcuts": {
-		"groups": {
-			"the_needle": "The Needle",
-			"the_hand": "The Hand",
-			"artisan_magic": "Artisan Magic",
-			"continuous_weaving": "Continuous Weaving",
-			"the_loom": "The Loom",
-			"dimensions_forms": "Dimensions & Forms",
-			"the_spindle": "The Spindle",
-			"the_veils": "The Veils",
-			"the_pattern_book": "The Pattern Book",
-			"atmosphere_tuning": "Atmosphere & Tuning",
-			"basic_rhythms": "Basic Rhythms",
-			"arrows": "Step the Needle",
-			"swatches": "Select Dye Swatches"
-		},
-		"labels": {
-			"MOVE_UP": "Step the Needle Up",
-			"MOVE_DOWN": "Step the Needle Down",
-			"MOVE_LEFT": "Step the Needle Left",
-			"MOVE_RIGHT": "Step the Needle Right",
-			"GOTO": "Jump to Coordinate",
-			"JUMP_HOME": "Return to Center",
-			"STITCH": "Stitch (Apply Active Dye)",
-			"UNSTITCH": "Clear Fiber (Unstitch)",
-			"PICK_DYE": "Sample Fiber (Eyedropper)",
-			"SOAK": "Dye Soak (Flood Fill)",
-			"BLEACH": "Fiber Bleach (Recolor All)",
-			"SPIRIT_PICK": "Spirit Pick (Magic Selection)",
-			"FLOW_STITCH": "Continuous Threading",
-			"FLOW_UNSTITCH": "Continuous Unravelling",
-			"FLOW_SELECT": "Define Selection (Loom)",
-			"COPY": "Capture to Swatch (Copy)",
-			"CUT": "Snip to Swatch (Cut)",
-			"PASTE": "Weave from Clipboard (Paste)",
-			"CLEAR_LINEN": "Strip the Linen (Clear All)",
-			"FLIP_H": "Flip Horizontally",
-			"FLIP_V": "Flip Vertically",
-			"ROTATE": "Rotate 90° Clockwise",
-			"ZOOM_IN": "Loom Zoom In",
-			"ZOOM_OUT": "Loom Zoom Out",
-			"RESET_ZOOM": "Reset Loom Zoom",
-			"NEW_FRAME": "New Time Thread (Frame)",
-			"DUPLICATE_FRAME": "Clone Current Thread",
-			"DELETE_FRAME": "Dissolve Thread",
-			"NEXT_FRAME": "Next Page (Frame)",
-			"PREV_FRAME": "Previous Page (Frame)",
-			"PLAY_PULSE": "Toggle Playback",
-			"TOGGLE_GHOST_THREADS": "See Ghost Threads (Onion Skin)",
-			"NEW_VEIL": "Add New Veil (Layer)",
-			"DUPLICATE_VEIL": "Clone Active Veil",
-			"DELETE_VEIL": "Remove Active Veil",
-			"MOVE_VEIL_UP": "Lift Veil Up",
-			"MOVE_VEIL_DOWN": "Lower Veil Down",
-			"TOGGLE_VEIL_VISIBILITY": "Reveal/Hide Veil",
-			"TOGGLE_VEIL_LOCK": "Seal/Unseal Veil",
-			"OPEN_PALETTE": "Consult the Pattern Catalog",
-			"OPEN_EXPORT": "Open the Artifact Crate",
-			"OPEN_ARCHIVE": "Archive Pattern (Save)",
-			"OPEN_SETTINGS": "Studio Settings",
-			"OPEN_CODEX": "Open Artisan Codex",
-			"OPEN_HELP": "Quick Guide",
-			"OPEN_AUDIO": "Open Audio Basin",
-			"TOGGLE_MUTE": "Silence the Studio",
-			"UNDO": "Rewind Last Stitch",
-			"REDO": "Fast-Forward last Stitch",
-			"ESCAPE": "Clear Focus / Dismiss Overlays",
-			"TAB_FRAMES": "Focus Spindle Tab",
-			"TAB_VEILS": "Focus Veils Tab",
-			"SELECT_DYE_1": "Select Dye 1",
-			"SELECT_DYE_2": "Select Dye 2",
-			"SELECT_DYE_3": "Select Dye 3",
-			"SELECT_DYE_4": "Select Dye 4",
-			"SELECT_DYE_5": "Select Dye 5",
-			"SELECT_DYE_6": "Select Dye 6",
-			"SELECT_DYE_7": "Select Dye 7",
-			"SELECT_DYE_8": "Select Dye 8",
-			"SELECT_DYE_9": "Select Dye 9",
-			"SELECT_DYE_0": "Select Dye 0"
-		}
+		"title": "Guide Book",
+		"subtitle": "Barista Rhythms & Flows",
+		"header_title": "Mastering the Bar",
+		"header_desc": "In Rupa, we play rhythms. These key combinations create a flow state, allowing your etcher to dance across the foam with professional precision.",
+		"footer_quote": "A master barista knows every flavor by heart."
+	},
+	"settings": {
+		"title": "Café Settings",
+		"subtitle": "Configure the Service Bar",
+		"width": "Cup Width",
+		"height": "Cup Height",
+		"fps_label": "Service Pace (FPS)",
+		"fps_desc": "Default frames per second",
+		"background": "Counter Color",
+		"background_desc": "Visual background for the bar",
+		"stabilization": "Pour Stability",
+		"stabilization_desc": "Corrects shaky hand movements",
+		"apply": "Reset Service Bar",
+		"note": "Note: Resizing will center your current art on the new foam. Large cups may slow down the pour."
+	},
+	"shortcut_groups": {
+		"cursor": "The Etcher",
+		"barista": "The Barista",
+		"magic": "Barista Magic",
+		"flow": "Continuous Flow",
+		"selection": "Selection",
+		"geometry": "Forms & Geometry",
+		"timeline": "Timeline",
+		"layers": "Infusions",
+		"menu": "The Menu",
+		"vibes": "Café Vibes",
+		"rhythms": "Core Rhythms",
+		"navigation": "Step the Etcher",
+		"colors": "Select Flavors"
+	},
+	"shortcut_labels": {
+		"MOVE_UP": "Move Etcher Up",
+		"MOVE_DOWN": "Move Etcher Down",
+		"MOVE_LEFT": "Move Etcher Left",
+		"MOVE_RIGHT": "Move Etcher Right",
+		"GOTO": "Jump to Spot",
+		"JUMP_HOME": "Return to Center",
+		"PAINT": "Pour (Apply Flavor)",
+		"ERASE": "Clear Drop",
+		"PICK_COLOR": "Taste Color (Eyedropper)",
+		"SOAK": "Flavor Soak (Flood Fill)",
+		"RECOLOR": "Change Brew (Recolor All)",
+		"SELECT_SAME": "Magic Select",
+		"FLOW_PAINT": "Stream Pouring",
+		"FLOW_ERASE": "Stream Clearing",
+		"FLOW_SELECT": "Define Area",
+		"COPY": "Copy Recipe",
+		"CUT": "Cut Extract",
+		"PASTE": "Paste from Clipboard",
+		"CLEAR_CANVAS": "Clean the Foam",
+		"FLIP_H": "Flip Horizontally",
+		"FLIP_V": "Flip Vertically",
+		"ROTATE": "Rotate Cup",
+		"ZOOM_IN": "Focus In",
+		"ZOOM_OUT": "Focus Out",
+		"RESET_ZOOM": "Reset Focus",
+		"NEW_FRAME": "New Cup",
+		"DUPLICATE_FRAME": "Clone Cup",
+		"DELETE_FRAME": "Spill Cup",
+		"NEXT_FRAME": "Next Cup",
+		"PREV_FRAME": "Previous Cup",
+		"PLAY_PAUSE": "Start/Stop Service",
+		"TOGGLE_GHOST_LAYERS": "See Ghost Infusions",
+		"NEW_LAYER": "Add Infusion",
+		"DUPLICATE_LAYER": "Clone Infusion",
+		"DELETE_LAYER": "Spill Infusion",
+		"MOVE_LAYER_UP": "Lift Infusion",
+		"MOVE_LAYER_DOWN": "Lower Infusion",
+		"TOGGLE_LAYER_VISIBILITY": "Reveal/Hide Infusion",
+		"TOGGLE_LAYER_LOCK": "Seal/Unseal Infusion",
+		"OPEN_MENU": "Open Menu",
+		"OPEN_EXPORT": "Serving Tray",
+		"SAVE": "Store Recipe (Save)",
+		"OPEN_SETTINGS": "Café Settings",
+		"OPEN_MANUAL": "Barista Manual",
+		"OPEN_PALETTE": "Flavor Station",
+		"OPEN_HELP": "Guide Book",
+		"OPEN_AUDIO": "Audio Settings",
+		"TOGGLE_MUTE": "Silence the Café",
+		"UNDO": "Rewind Action",
+		"REDO": "Fast-Forward Action",
+		"ESCAPE": "Clear Focus",
+		"TAB_TIMELINE": "Focus Timeline",
+		"TAB_LAYERS": "Focus Infusions",
+		"SELECT_COLOR_1": "Select Flavor 1",
+		"SELECT_COLOR_2": "Select Flavor 2",
+		"SELECT_COLOR_3": "Select Flavor 3",
+		"SELECT_COLOR_4": "Select Flavor 4",
+		"SELECT_COLOR_5": "Select Flavor 5",
+		"SELECT_COLOR_6": "Select Flavor 6",
+		"SELECT_COLOR_7": "Select Flavor 7",
+		"SELECT_COLOR_8": "Select Flavor 8",
+		"SELECT_COLOR_9": "Select Flavor 9",
+		"SELECT_COLOR_0": "Select Flavor 0"
 	}
 }

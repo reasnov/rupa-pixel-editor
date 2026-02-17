@@ -3,7 +3,7 @@ import { studioAudio } from './audioContext.js';
 import audioConfig from '../config/audio.json' with { type: 'json' };
 
 /**
- * AmbientEngine: A generative music engine that composes and plays
+ * AmbientEngine: A generative music engine that generates and plays
  * a soft, meditative piano-like soundscape.
  */
 export class AmbientEngine {

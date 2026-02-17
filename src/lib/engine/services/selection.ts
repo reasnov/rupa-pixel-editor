@@ -3,7 +3,7 @@ import { history } from '../history.js';
 import { sfx } from '../audio.js';
 
 /**
- * SelectionService: Handles the logic for defining regions (Looming)
+ * SelectionService: Handles the logic for defining selection regions
  * and performing mass manipulation on those regions (Batch Fill).
  */
 export class SelectionService {
@@ -22,7 +22,7 @@ export class SelectionService {
 	}
 
 	/**
-	 * Batch Fill: Fills the entire active selection (Loom or Motif) with the active dye.
+	 * Batch Fill: Fills the entire active selection with the active color.
 	 */
 	commit() {
 		const points = editor.selection.getPoints(editor.canvas.width);
@@ -49,7 +49,7 @@ export class SelectionService {
 	}
 
 	/**
-	 * Spirit Pick (Magic Wand): Selects all connected stitches of the same color.
+	 * Magic Wand: Selects all connected pixels of the same color.
 	 */
 	spiritPick() {
 		const { x, y } = editor.cursor.pos;
@@ -94,7 +94,7 @@ export class SelectionService {
 	}
 
 	/**
-	 * Binding Thread: Add a vertex to the current polygon selection.
+	 * Polygon Selection: Add a vertex to the current polygon selection.
 	 */
 	addVertex(x: number, y: number) {
 		editor.selection.vertices.push({ x, y });
@@ -102,7 +102,7 @@ export class SelectionService {
 	}
 
 	/**
-	 * Seal the Binding: Convert the polygon vertices into a pixel selection.
+	 * Seal the Polygon: Convert the polygon vertices into a pixel selection.
 	 */
 	sealBinding() {
 		const vertices = editor.selection.vertices;

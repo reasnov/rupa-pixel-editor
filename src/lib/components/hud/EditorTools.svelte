@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { editor } from '../../state/editor.svelte.js';
+	import { editor as state } from '../../state/editor.svelte.js';
 	import { editor } from '../../engine/editor.svelte.js';
 	import StateIndicator from './StateIndicator.svelte';
 </script>
@@ -35,11 +35,11 @@
 		<div class="flex gap-2" role="group" aria-label={__({ key: 'shortcut_groups.magic' })}>
 			<button
 				class="editor-tool-btn"
-				onclick={() => editor.handleIntent('SOAK')}
-				title={__({ key: 'shortcut_labels.SOAK' }) + ' (F)'}
+				onclick={() => editor.handleIntent('FLOOD_FILL')}
+				title={__({ key: 'shortcut_labels.FLOOD_FILL' }) + ' (F)'}
 			>
 				<span aria-hidden="true">💧</span>
-				{__({ key: 'shortcut_labels.SOAK' })}
+				{__({ key: 'shortcut_labels.FLOOD_FILL' })}
 			</button>
 			<button
 				class="editor-tool-btn"
@@ -75,8 +75,8 @@
 				onclick={() => editor.handleIntent('TOGGLE_MUTE')}
 				title={__({ key: 'shortcut_labels.TOGGLE_MUTE' }) + ' (Ctrl+M)'}
 			>
-				<span aria-hidden="true">{editor.isMuted ? '🔇' : '🔊'}</span>
-				{editor.isMuted
+				<span aria-hidden="true">{state.isMuted ? '🔇' : '🔊'}</span>
+				{state.isMuted
 					? __({ key: 'hud.actions.unmute_audio' })
 					: __({ key: 'hud.actions.mute_audio' })}
 			</button>

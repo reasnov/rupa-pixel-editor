@@ -11,10 +11,10 @@ import { history } from './history.js';
 import { sfx } from './audio.js';
 
 /**
- * ShuttleEngine: The unified service coordinator for café operations.
+ * ServiceCoordinator: Unified access point for application services.
  * It provides a clean API for the UI while delegating to specialized services.
  */
-export class ShuttleEngine {
+export class ServiceCoordinator {
 	readonly movement = new MovementService();
 	readonly draw = new DrawService();
 	readonly manipulation = new ManipulationService();
@@ -40,7 +40,7 @@ export class ShuttleEngine {
 
 	// --- Drawing & Color Aliases ---
 
-	paint() {
+	draw() {
 		this.draw.draw();
 	}
 	erase() {
@@ -73,6 +73,10 @@ export class ShuttleEngine {
 	}
 	rotateCanvas() {
 		this.manipulation.rotate();
+	}
+
+	mergeLayerDown() {
+		this.project.mergeLayerDown();
 	}
 
 	// --- Clipboard Aliases ---
@@ -112,8 +116,8 @@ export class ShuttleEngine {
 		const { width, height, compositePixels } = editor.canvas;
 		const includeBorders = editor.studio.includePixelBorders;
 
-		const isKinetic = ['webm', 'gif', 'mp4'].includes(format);
-		const actualFormat = editor.project.frames.length <= 1 && isKinetic ? 'png' : format;
+		const isAnimated = ['webm', 'gif', 'mp4'].includes(format);
+		const actualFormat = editor.project.frames.length <= 1 && isAnimated ? 'png' : format;
 
 		if (actualFormat === 'svg') {
 			if (editor.project.frames.length > 1) {
@@ -128,11 +132,11 @@ export class ShuttleEngine {
 					includeBorders
 				);
 				const blob = new Blob([svg], { type: 'image/svg+xml' });
-				this.download(URL.createObjectURL(blob), `rupa-flow.svg`);
+				this.download(URL.createObjectURL(blob), `rupa-image.svg`);
 			} else {
 				const svg = ExportEngine.toSVG(width, height, compositePixels, bgColor, includeBorders);
 				const blob = new Blob([svg], { type: 'image/svg+xml' });
-				this.download(URL.createObjectURL(blob), `rupa-etch.svg`);
+				this.download(URL.createObjectURL(blob), `rupa-image.svg`);
 			}
 		} else if (actualFormat === 'webm' || actualFormat === 'mp4') {
 			const framesData = editor.project.frames.map((f) => f.compositePixels);
@@ -149,7 +153,7 @@ export class ShuttleEngine {
 			);
 
 			const extension = videoBlob.type.includes('mp4') ? 'mp4' : 'webm';
-			this.download(URL.createObjectURL(videoBlob), `rupa-brew.${extension}`);
+			this.download(URL.createObjectURL(videoBlob), `rupa-video.${extension}`);
 		} else if (actualFormat === 'gif') {
 			const framesData = editor.project.frames.map((f) => f.compositePixels);
 			const durations = editor.project.frames.map((f) => f.duration);
@@ -162,7 +166,7 @@ export class ShuttleEngine {
 				bgColor,
 				includeBorders
 			);
-			this.download(URL.createObjectURL(gifBlob), `rupa-flow.gif`);
+			this.download(URL.createObjectURL(gifBlob), `rupa-animation.gif`);
 		} else {
 			const dataUrl = await ExportEngine.toRaster(
 				width,
@@ -173,7 +177,7 @@ export class ShuttleEngine {
 				bgColor,
 				includeBorders
 			);
-			this.download(dataUrl, `rupa-cup.${actualFormat}`);
+			this.download(dataUrl, `rupa-image.${actualFormat}`);
 		}
 		editor.studio.showExportMenu = false;
 	}
@@ -186,4 +190,4 @@ export class ShuttleEngine {
 	}
 }
 
-export const shuttle = new ShuttleEngine();
+export const services = new ServiceCoordinator();

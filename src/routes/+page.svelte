@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { editor } from '$lib/state/editor.svelte.js';
-	import { shuttle } from '$lib/engine/shuttle.js';
+	import { services } from '$lib/engine/services.js';
 	import { editor as engine } from '$lib/engine/editor.svelte.js';
 
 	// Layout Containers
@@ -50,7 +50,7 @@
 
 {#if editor.showExportMenu}
 	<ExportMenu
-		onExport={(format, scale, bgColor) => shuttle.createArtifact(format, scale, bgColor)}
+		onExport={(format, scale, bgColor) => services.createArtifact(format, scale, bgColor)}
 		onClose={() => (editor.showExportMenu = false)}
 	/>
 {/if}
@@ -91,7 +91,7 @@
 			<div
 				class="editor-frame flex h-full w-full items-center justify-center overflow-hidden shadow-2xl transition-all duration-700 ease-out {editor
 					.project.isPlaying && editor.project.frames.length > 1
-					? 'animate-pulse ring-8 ring-palette-0 ring-inset'
+					? 'ring-palette-0 animate-pulse ring-8 ring-inset'
 					: ''}"
 			>
 				<Canvas />

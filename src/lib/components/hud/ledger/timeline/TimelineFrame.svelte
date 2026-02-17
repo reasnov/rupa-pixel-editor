@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { editor } from '../../../../state/editor.svelte.js';
-	import { ChronosLogic } from '../../../../logic/chronos.js';
+	import { AnimationLogic } from '../../../../logic/animation.js';
 	import type { FrameState } from '../../../../state/frame.svelte.js';
 
 	let { frame, index, isActive, isDragged, isDropTarget } = $props<{

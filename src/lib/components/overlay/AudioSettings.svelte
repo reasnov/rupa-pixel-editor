@@ -9,7 +9,13 @@
 	}>();
 </script>
 
-<Modal title="Audio Settings" subtitle="Harmony & Ambiance Tuning" icon="🔊" {onClose} width="450px">
+<Modal
+	title="Audio Settings"
+	subtitle="Harmony & Ambiance Tuning"
+	icon="🔊"
+	{onClose}
+	width="450px"
+>
 	<div class="flex flex-col gap-8">
 		<!-- Master Mute Toggle -->
 		<div

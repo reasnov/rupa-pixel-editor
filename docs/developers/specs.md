@@ -1,4 +1,4 @@
-# Technical Specifications: Rupa Pixel Editor (Editor)
+# Technical Specifications: Rupa Pixel Editor
 
 ## 1. Grid Mechanics
 
@@ -13,12 +13,12 @@
 
 ## 2. Intent Schema
 
-Every interaction is mapped to a `ActionIntent` to ensure semantic consistency. Intents are triggered by the **Keyboard** (Keyboard chords) or the **ShuttlePoint** (Mouse/Pointer gestures).
+Every interaction is mapped to a `ActionIntent` to ensure semantic consistency. Intents are triggered by the **Keyboard** or the **Pointer Engine**.
 
 ### 2.1 Navigation & Positioning
 
 - `MOVE_UP`, `MOVE_DOWN`, `MOVE_LEFT`, `MOVE_RIGHT`: Keyboard-driven step movement.
-- `SET_POSITION`: ShuttlePoint-driven absolute positioning (Screen-to-Canvas mapping).
+- `SET_POSITION`: Pointer-driven absolute positioning (Screen-to-Canvas mapping).
 - `JUMP_HOME`: Reset position to center.
 
 ### 2.2 Action Intents
@@ -26,11 +26,11 @@ Every interaction is mapped to a `ActionIntent` to ensure semantic consistency. 
 - `PAINT`: Apply color (Space/Enter/Click).
 - `ERASE`: Remove color (Backspace/Delete/Right-click).
 - `UNDO`, `REDO`: History traversal.
-- `SOAK`: Flood fill.
+- `FLOOD_FILL`: Connected color fill.
 - `RECOLOR`: Global color replacement.
 - `SELECT_SAME`: Magic wand selection.
 
-### 2.3 Flow Intents (Sustained Modifiers)
+### 2.3 Continuous Flow Intents (Sustained Modifiers)
 
 - `FLOW_PAINT`: Continuous drawing (Ctrl + Movement/Drag).
 - `FLOW_ERASE`: Continuous erasing (Ctrl + Shift + Movement/Right-drag).
@@ -47,7 +47,7 @@ Every interaction is mapped to a `ActionIntent` to ensure semantic consistency. 
 
 ### 2.5 Convention: Reserved Shortcuts
 
-To maintain cross-platform integrity, the following chord patterns are reserved for the OS/Browser and must not be mapped to studio intents:
+To maintain cross-platform integrity, the following chord patterns are reserved for the OS/Browser:
 
 - `Ctrl+W` (Close), `Ctrl+Q` (Quit), `Ctrl+N` (New Window), `Ctrl+R` (Reload), `Ctrl+P` (Print), `F11` (Fullscreen), `F12` (DevTools).
 
@@ -66,24 +66,24 @@ To maintain cross-platform integrity, the following chord patterns are reserved 
 
 - **Frame Budget:** < 16.6ms per frame (60 FPS) for all UI updates and movements.
 - **Export Fidelity:**
-  - **SVG:** Recursive rect-merging required to minimize path count.
+  - **SVG:** Optimized path-merging required to minimize path count.
   - **PNG:** Scaling must use nearest-neighbor interpolation (no blurring).
 - **History:** Command Pattern stack depth of 500 actions.
 
 ## 5. Accessibility (A11y) Standards
 
 - **Keyboard Sovereignty**: 100% of UI functionality must be accessible via Keyboard shortcuts.
-- **Contrast**: Text and iconic elements must maintain a contrast ratio of 4.5:1 (WCAG AA) against the Paper background.
+- **Contrast**: Text and iconic elements must maintain a contrast ratio of 4.5:1 (WCAG AA).
 - **Screen Reading**:
   - The Canvas uses `role="grid"` with coordinate-based labels.
-  - Interactive elements must have descriptive `aria-label` attributes using barista terminology.
+  - Interactive elements must have descriptive `aria-label` attributes.
 - **Focus Indicators**: All focusable elements must display a `2px` solid Barista Magenta outline when active.
 
 ## 6. File Formats
 
-- **Pattern Book (.rupa):** JSON-based schema storing:
+- **Recipe Book (.rupa):** JSON-based schema storing:
   - Version metadata.
   - Canvas dimensions.
   - Palette array.
-  - Flat pixel array.
+  - Hierarchical Frame/Layer data.
   - Creation/Modification timestamps.

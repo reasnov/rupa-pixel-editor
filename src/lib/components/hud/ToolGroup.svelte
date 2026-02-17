@@ -13,7 +13,7 @@
 			<span aria-hidden="true">📖</span>
 			<span class="hidden xl:inline">{__({ key: 'hud.menu.catalog_title' })}</span>
 		</button>
-		
+
 		<button
 			class="editor-tool-btn"
 			onclick={() => (editor.showExportMenu = true)}
@@ -28,17 +28,17 @@
 
 	<!-- System Control -->
 	<div class="flex gap-1.5" role="group">
-		<button 
-			class="editor-tool-btn" 
+		<button
+			class="editor-tool-btn"
 			onclick={() => editor.clearCanvas()}
 			title="{__({ key: 'hud.actions.clear_canvas' })} (Ctrl+L)"
 		>
 			<span aria-hidden="true">🧼</span>
 			<span class="hidden xl:inline">{__({ key: 'hud.actions.clear_canvas' })}</span>
 		</button>
-		
-		<button 
-			class="editor-tool-btn" 
+
+		<button
+			class="editor-tool-btn"
 			onclick={() => (editor.showAudioSettings = true)}
 			title="{__({ key: 'hud.audio.title' })} (Ctrl+Shift+A)"
 		>
@@ -51,17 +51,17 @@
 
 	<!-- Knowledge & Help -->
 	<div class="flex gap-1.5" role="group">
-		<button 
-			class="editor-tool-btn" 
+		<button
+			class="editor-tool-btn"
 			onclick={() => (editor.showGuideBook = true)}
 			title="{__({ key: 'manual.title' })} (F1)"
 		>
 			<span aria-hidden="true">📜</span>
 			<span class="hidden xl:inline">{__({ key: 'manual.title' })}</span>
 		</button>
-		
-		<button 
-			class="editor-tool-btn" 
+
+		<button
+			class="editor-tool-btn"
 			onclick={() => (editor.showGuideMenu = true)}
 			title="{__({ key: 'shortcuts.title' })} (F2)"
 		>

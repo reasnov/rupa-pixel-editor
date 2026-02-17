@@ -4,11 +4,10 @@ import { editor } from '../state/editor.svelte.js';
 type FeedbackType = 'TACTILE' | 'AUDITORY' | 'VISUAL';
 
 /**
- * ResonanceEngine: The Feedback Orchestrator.
- * Manages all sensory output (SFX, Haptics, Visual Glows) in response to system events.
+ * FeedbackEngine: Orchestrates sensory feedback (SFX, Haptics, Visual Glows).
  * Implements the Observer pattern to decouple logic from effects.
  */
-export class ResonanceEngine {
+export class FeedbackEngine {
 	// Master toggle for sensory feedback
 	isEnabled = $state(true);
 
@@ -26,10 +25,10 @@ export class ResonanceEngine {
 		// 1. Auditory Layer
 		this.playAudio(event);
 
-		// 2. Visual Layer (can be expanded for screen shakes/flashes)
+		// 2. Visual Layer
 		this.triggerVisual(event);
 
-		// 3. Tactile Layer (Future: Vibration API for mobile/tablets)
+		// 3. Tactile Layer
 		if (typeof navigator.vibrate === 'function') {
 			this.triggerHaptic(event);
 		}
@@ -52,12 +51,6 @@ export class ResonanceEngine {
 			case 'READY':
 				sfx.playReady();
 				break;
-			case 'SUCCESS':
-				// sfx.playSuccess(); // Placeholder
-				break;
-			case 'ERROR':
-				// sfx.playError(); // Placeholder
-				break;
 		}
 	}
 
@@ -75,10 +68,9 @@ export class ResonanceEngine {
 	}
 
 	private triggerHaptic(event: string) {
-		// Future proofing for Touch devices
 		if (event === 'DRAW') navigator.vibrate(5); // Light tap
 		if (event === 'ERASE') navigator.vibrate(10); // Heavier rub
 	}
 }
 
-export const resonance = new ResonanceEngine();
+export const feedback = new FeedbackEngine();

@@ -17,7 +17,7 @@ export class ModeEngine {
 		if (flow.isActive) {
 			return {
 				type: 'FLOW',
-				label: 'Brewing...',
+				label: __({ key: 'timeline.mode_labels.brewing' }),
 				icon: '📑',
 				color: 'var(--color-brand)',
 				isPulse: true
@@ -27,7 +27,7 @@ export class ModeEngine {
 		if (editor.isPicking) {
 			return {
 				type: 'PICK',
-				label: 'Tasting...',
+				label: __({ key: 'timeline.mode_labels.tasting' }),
 				icon: '📍',
 				color: 'var(--color-brand)',
 				isPulse: true
@@ -37,7 +37,7 @@ export class ModeEngine {
 		if (keyboard.isCtrlActive && keyboard.isShiftActive) {
 			return {
 				type: 'ERASE',
-				label: 'Clearing',
+				label: __({ key: 'timeline.mode_labels.clearing' }),
 				icon: '🧹',
 				color: 'var(--color-brand)',
 				isPulse: true
@@ -47,7 +47,7 @@ export class ModeEngine {
 		if (keyboard.isShiftActive) {
 			return {
 				type: 'SELECT',
-				label: 'Selecting',
+				label: __({ key: 'timeline.mode_labels.selecting' }),
 				icon: '✨',
 				color: 'var(--color-brand)',
 				isPulse: true
@@ -57,7 +57,7 @@ export class ModeEngine {
 		if (keyboard.isCtrlActive) {
 			return {
 				type: 'PAINT',
-				label: 'Pouring',
+				label: __({ key: 'timeline.mode_labels.pouring' }),
 				icon: '☕',
 				color: 'var(--color-green-leaves)',
 				isPulse: true
@@ -66,7 +66,7 @@ export class ModeEngine {
 
 		return {
 			type: 'READY',
-			label: 'Café Ready',
+			label: __({ key: 'timeline.mode_labels.ready' }),
 			icon: '',
 			color: 'var(--color-studio-text)',
 			isPulse: false

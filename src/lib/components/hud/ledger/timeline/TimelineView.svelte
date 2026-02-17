@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { editor } from '../../../../state/editor.svelte.js';
-	import { shuttle } from '../../../../engine/shuttle.js';
-	import { ChronosLogic } from '../../../../logic/chronos.js';
+	import { services } from '../../../../engine/services.js';
+	import { AnimationLogic } from '../../../../logic/animation.js';
 	import TimelineFrame from './TimelineFrame.svelte';
 
 	let draggedIndex = $state<number | null>(null);
@@ -30,14 +30,14 @@
 	function handleDrop(e: DragEvent, toIndex: number) {
 		e.preventDefault();
 		if (draggedIndex !== null && draggedIndex !== toIndex) {
-			shuttle.project.reorderFrame(draggedIndex, toIndex);
+			services.project.reorderFrame(draggedIndex, toIndex);
 		}
 		draggedIndex = null;
 		dropTargetIndex = null;
 	}
 
 	let playheadOffset = $derived(
-		ChronosLogic.getFrameOffset(
+		AnimationLogic.getFrameOffset(
 			editor.project.frames,
 			editor.project.activeFrameIndex,
 			pxPerMs,
@@ -55,9 +55,9 @@
 	});
 
 	let totalDuration = $derived(editor.project.frames.reduce((acc, f) => acc + f.duration, 0));
-	let rulerMarks = $derived(ChronosLogic.getRulerMarks(totalDuration, editor.studio.timelineZoom));
+	let rulerMarks = $derived(AnimationLogic.getRulerMarks(totalDuration, editor.studio.timelineZoom));
 	let trackWidth = $derived(
-		ChronosLogic.getTrackWidth(editor.project.frames, pxPerMs, MIN_BLOCK_WIDTH)
+		AnimationLogic.getTrackWidth(editor.project.frames, pxPerMs, MIN_BLOCK_WIDTH)
 	);
 	let maxRulerWidth = $derived(rulerMarks[rulerMarks.length - 1] * pxPerMs + 100);
 
@@ -105,8 +105,9 @@
 			{#each rulerMarks as ms}
 				<div class="absolute flex flex-col items-start" style="left: {ms * pxPerMs}px;">
 					<div class="h-1.5 w-px bg-charcoal/20"></div>
-					<span class="-mt-0.5 ml-1 font-mono text-[8px] font-bold whitespace-nowrap text-charcoal/30"
-						>{ChronosLogic.formatTimeLabel(ms)}</span
+					<span
+						class="-mt-0.5 ml-1 font-mono text-[8px] font-bold whitespace-nowrap text-charcoal/30"
+						>{AnimationLogic.formatTimeLabel(ms)}</span
 					>
 				</div>
 			{/each}
@@ -121,7 +122,10 @@
 		role="list"
 		aria-label="Timeline"
 	>
-		<div class="flex h-full items-center bg-transparent py-2 pl-1" style="width: {maxRulerWidth}px;">
+		<div
+			class="flex h-full items-center bg-transparent py-2 pl-1"
+			style="width: {maxRulerWidth}px;"
+		>
 			{#each editor.project.frames as frame, i (frame.id)}
 				<div
 					role="listitem"
@@ -155,7 +159,7 @@
 
 			<button
 				class="group ml-2 flex h-[50px] w-8 shrink-0 items-center justify-center rounded border border-dashed border-charcoal/20 bg-foam-white/40 text-charcoal/20 transition-all hover:border-brand/40 hover:bg-white hover:text-brand"
-				onclick={() => shuttle.project.addFrame()}
+				onclick={() => services.project.addFrame()}
 				title="Add Frame"
 			>
 				<span class="text-lg">＋</span>
@@ -169,9 +173,7 @@
 			class="pointer-events-none absolute top-0 bottom-0 z-20 w-px bg-brand transition-all duration-100 ease-out"
 			style="left: {playheadOffset}px;"
 		>
-			<div
-				class="absolute -top-0.5 -left-1 h-2 w-2 rotate-45 rounded-sm bg-brand shadow-sm"
-			></div>
+			<div class="absolute -top-0.5 -left-1 h-2 w-2 rotate-45 rounded-sm bg-brand shadow-sm"></div>
 		</div>
 	</div>
 </div>

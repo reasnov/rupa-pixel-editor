@@ -176,7 +176,7 @@ export class Geometry {
 	}
 
 	/**
-	 * Calculates the percentage position for canvas rhythmic guides.
+	 * Calculates the percentage position for canvas grid guides.
 	 */
 	static getGuidePosition(offset: number, size: number): number {
 		return 50 + (offset / size) * 100;

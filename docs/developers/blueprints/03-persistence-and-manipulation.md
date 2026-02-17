@@ -1,22 +1,22 @@
-# Blueprint 03: Persistence & Canvas Manipulation (v0.3.0)
+# Blueprint 03: Persistence & Manipulation
 
 ## 1. Goal
 
-To evolve the studio from a temporary sketchpad into a professional workspace by implementing native file handling, dynamic canvas resizing, and selection-based pattern manipulation.
+To evolve **Rupa Pixel Editor** from a temporary sketchpad into a professional workspace by implementing native file handling (Storage), dynamic canvas resizing (Foam Crafting), and selection-based manipulation.
 
 ---
 
-## 2. Editor Filing System (Persistence)
+## 2. File System (Persistence)
 
-### 2.1 The `.rupa` Format
+### 2.1 The `.rupa` Format (The Recipe)
 
-A dedicated JSON schema for saving project data.
+A dedicated JSON schema for project data.
 
 ```json
 {
 	"version": "0.3.0",
 	"metadata": {
-		"name": "Untitled Pixel",
+		"name": "Untitled Project",
 		"created": "ISO-TIMESTAMP",
 		"lastModified": "ISO-TIMESTAMP"
 	},
@@ -25,67 +25,46 @@ A dedicated JSON schema for saving project data.
 		"height": 32
 	},
 	"palette": ["#Hex", "..."],
-	"pixelData": ["#Hex", "..."]
+	"pixels": ["#Hex", "..."]
 }
 ```
 
-### 2.2 Electron Bridge (Native IO)
+### 2.2 Native IO
 
-- **Save/Open Dialogs**: Use Electron's `dialog.showSaveDialog` and `showOpenDialog` via a context bridge.
-- **File System**: The `fs` module will handle the actual writing/reading of `.rupa` files.
-
-### 2.3 Editor Auto-Backup (Temporary)
-
-- **Cadence**: Every 10 minutes.
-- **Mechanism**: Use `IndexedDB` (for web) and a hidden `temp.rupa` file in the app data directory (for Electron).
-- **UX**: A subtle "Threading backup..." message will appear momentarily in the status tag.
+- **Implementation:** Uses Electron IPC to bridge with the native file system.
+- **Service:** Managed by `PersistenceService` in `src/lib/engine/services/persistence.ts`.
 
 ---
 
-## 3. Canvas Resizing (Dynamic Grid)
+## 3. Canvas Manipulation (Dynamic Grid)
 
-### 3.1 Re-anchoring Logic
+### 3.1 Resizing Logic
 
-When resizing the canvas, the existing "pixels" must remain relative to their anchor point (default: Top-Left).
+When resizing the canvas (The Foam), existing pixels must remain relative to the anchor.
 
-- **Expansion**: Append new empty hex values to the array rows.
-- **Contraction (Cropping)**: Slice the array rows. A warning modal must appear if non-empty pixels are detected in the "cut zone."
+- **Implementation:** `ManipulationService.resize()` handles the array reallocation and coordinate mapping.
 
-### 3.2 Rotation & Symmetry
+### 3.2 Rotation & Reflection
 
-- **Flip**: Logic for Horizontal (reversing rows) and Vertical (reversing columns).
-- **Rotate**: 90-degree clockwise transformation of the flat `pixelData` array.
+- **Service:** `ManipulationService` provides `flip()` and `rotate()` methods.
 
 ---
 
-## 4. The Shifting Cursor (Pattern Manipulation)
+## 4. Pattern Manipulation (The Etcher's Skill)
 
 ### 4.1 Selection Translation
 
-While in **Block Mode (Shift)**, users can move the selected area using Arrow Keys.
+- **Mode:** Managed by `InputEngine` and `ModeEngine` (Stance).
+- **Technical Detail:** Users can define a selection (Focus Area) and move the pixels using the keyboard.
 
-- **Live Movement**: The selection outline moves instantly.
-- **Commit**: Pressing `Enter` or releasing the keys "re-pixels" the pattern at the new location, clearing the original source area.
+### 4.2 Clipboard
 
-### 4.2 Pattern Clipboard
-
-- **Copy (`Ctrl + C`)**: Capture the hex data within the current selection without altering the canvas.
-- **Cut (`Ctrl + X`)**: Capture the hex data within the current selection and immediately clear (unpixel) the source area.
-- **Paste (`Ctrl + V`)**: Place the captured pattern at the current cursor position.
+- **Implementation:** `ClipboardService` manages an internal `clipboard` state in the project.
+- **Technical Details:** Supports Copy, Cut, and Paste of pixel arrays with dimension data.
 
 ---
 
 ## 5. UI Requirements
 
-- **Project Metadata HUD**: Display the project name and "Last Saved" timestamp in the side panel.
-- **The Archives Modal**: A simple UI to see a list of recent files or backups.
-- **Resize Dialog**: A meditative modal for entering new dimensions with a "Engine Preview."
-
----
-
-## 6. Implementation Strategy
-
-1.  **Phase A**: Implement the Electron Context Bridge and the `.rupa` file schema.
-2.  **Phase B**: Integrate the 10-minute `setInterval` for Auto-Backup.
-3.  **Phase C**: Develop the `re-pixel` algorithms for resizing and rotation.
-4.  **Phase D**: Add Selection Translation (Moving blocks).
+- **Metadata HUD:** Display project name and save status.
+- **Modals:** Technical dialogs for resizing and file management, themed with Barista motifs.

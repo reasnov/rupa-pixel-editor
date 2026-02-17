@@ -1,11 +1,11 @@
-import { shuttle } from './shuttle.js';
+import { services } from './services.js';
 import { type ActionIntent } from './keyboard.svelte.js';
 
 /**
- * FlowEngine: Manages multi-key command sequences (Rhythms).
- * It identifies patterns in the input flow and translates them into Intents.
+ * SequenceEngine: Manages multi-key command sequences.
+ * It identifies patterns in the input sequence and translates them into Intents.
  */
-export class FlowEngine {
+export class SequenceEngine {
 	private buffer: string[] = [];
 	private timeout: any = null;
 
@@ -13,7 +13,7 @@ export class FlowEngine {
 	currentSequence = $state<string[]>([]);
 
 	/**
-	 * Process a key into the flow buffer.
+	 * Process a key into the buffer.
 	 * Returns an ActionIntent if a sequence is completed, otherwise null.
 	 */
 	process(key: string): ActionIntent | null {
@@ -56,4 +56,4 @@ export class FlowEngine {
 	}
 }
 
-export const flow = new FlowEngine();
+export const sequence = new SequenceEngine();

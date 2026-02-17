@@ -1,4 +1,4 @@
-# Blueprint: 01-Project Genesis
+# Blueprint 01: Core Architecture
 
 ## 1. Objective
 
@@ -16,9 +16,9 @@ The project is committed to an open-source philosophy, ensuring transparency and
 
 ---
 
-## 3. Mandatory Codebase Structure
+## 3. Codebase Structure (Industry Standard)
 
-The project must adhere to a modular architecture to separate the rendering layer from the core pixel-processing logic:
+The application must adhere to a modular architecture to separate the rendering layer from the core pixel-processing logic:
 
 ```text
 rupa-pixel-editor/
@@ -26,7 +26,7 @@ rupa-pixel-editor/
 ├── src/
 │   ├── lib/            # Encapsulated application logic
 │   │   ├── components/ # Atomic Svelte UI elements
-│   │   ├── engine/     # Pure TypeScript logic (Grid, Keyboard, Export)
+│   │   ├── engine/     # Pure TypeScript logic (Pixel, Keyboard, Export)
 │   │   ├── state/      # Reactive stores via Svelte 5 Runes
 │   │   └── types/      # Domain-specific TypeScript interfaces
 │   └── routes/         # Application shell and view-routing
@@ -42,9 +42,9 @@ rupa-pixel-editor/
 All implementations must utilize the following core technologies to ensure modern performance and long-term maintainability:
 
 - **Runtime:** Electron (Native Desktop Environment)
-- **UI Framework:** Svelte 5 (Utilizing Runes for fine-grained reaktivitas)
-- **Styling Engine:** Tailwind CSS 4.0 (Utilizing the Vite plugin for build-time optimization)
-- **Language:** TypeScript (Strict mode enabled for coordinate and state safety)
+- **UI Framework:** Svelte 5 (Utilizing Runes for fine-grained reactivity)
+- **Styling Engine:** Tailwind CSS 4.0
+- **Language:** TypeScript (Strict mode enabled)
 - **Build Tool:** Vite + SvelteKit (Configured with `adapter-static`)
 
 ---
@@ -53,18 +53,18 @@ All implementations must utilize the following core technologies to ensure moder
 
 ### 5.1 State Management (The Rune Protocol)
 
-Application state must be centralized within `src/lib/state/` using Svelte 5 Runes (`$state`, `$derived`). Direct manipulation of global variables outside this directory is prohibited. The state must provide a clean API for the `engine` to interact with pixel data.
+Application state must be centralized within `src/lib/state/` using Svelte 5 Runes (`$state`, `$derived`). The code must use technical terms (e.g., `pixels`, `frames`, `layers`). The Barista metaphors (e.g., `etches`, `cups`, `infusions`) are reserved for UI labels provided by the i18n system.
 
 ### 5.2 Styling Aesthetic
 
-The visual identity must be established in `src/routes/layout.css`, focusing on a professional dark-theme that reinforces the "pixeling" aesthetic. Pixel rendering must be configured to disable anti-aliasing (image-rendering: pixelated) to maintain visual sharpness.
+The visual identity must be established in `src/routes/layout.css`, focusing on a professional "Barista Cream" aesthetic for the user interface. Pixel rendering on the Canvas (Foam) must be configured to disable anti-aliasing (`image-rendering: pixelated`).
 
 ### 5.3 Build & Distribution
 
-The project must be configured to output a static site via `adapter-static` to be served locally by Electron. This ensures the application remains 100% offline-first and functional without a server environment.
+The application must be configured to output a static site via `adapter-static` to be served locally by Electron. This ensures the application remains 100% offline-first.
 
 ---
 
 ## 6. Project Sovereignty
 
-As an Open Source project, Rupa Pixel Editor encourages external contributions while maintaining the core philosophy of "Digital Pixeling." All code must be authored in English to ensure global accessibility for contributors.
+As an Open Source project, **Rupa Pixel Editor** encourages external contributions while maintaining the core philosophy of "Digital Brewing" in its user experience. All code, including variable names and comments, must be in English and use industry-standard terminology.

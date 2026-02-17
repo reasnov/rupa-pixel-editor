@@ -7,6 +7,7 @@
 			"unmute_audio": "Unmute Ambience",
 			"add_frame": "New Cup",
 			"add_layer": "New Infusion",
+			"merge_layers": "Merge Infusions",
 			"duplicate": "Clone",
 			"delete": "Spill"
 		},
@@ -127,6 +128,14 @@
 			"resonant": "Resonant"
 		},
 		"mode": "Mode",
+		"mode_labels": {
+			"brewing": "Brewing...",
+			"tasting": "Tasting...",
+			"clearing": "Clearing",
+			"selecting": "Selecting",
+			"pouring": "Pouring",
+			"ready": "Café Ready"
+		},
 		"rhythm": "Rhythm",
 		"waiting": "Waiting",
 		"duration": "Shift Duration",
@@ -214,7 +223,7 @@
 		"PAINT": "Pour (Apply Flavor)",
 		"ERASE": "Clear Drop",
 		"PICK_COLOR": "Taste Color (Eyedropper)",
-		"SOAK": "Flavor Soak (Flood Fill)",
+		"FLOOD_FILL": "Flavor Soak (Flood Fill)",
 		"RECOLOR": "Change Brew (Recolor All)",
 		"SELECT_SAME": "Magic Select",
 		"FLOW_PAINT": "Stream Pouring",
@@ -242,6 +251,7 @@
 		"DELETE_LAYER": "Spill Infusion",
 		"MOVE_LAYER_UP": "Lift Infusion",
 		"MOVE_LAYER_DOWN": "Lower Infusion",
+		"MERGE_LAYERS": "Merge Infusion Down",
 		"TOGGLE_LAYER_VISIBILITY": "Reveal/Hide Infusion",
 		"TOGGLE_LAYER_LOCK": "Seal/Unseal Infusion",
 		"OPEN_MENU": "Open Menu",

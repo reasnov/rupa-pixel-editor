@@ -10,7 +10,7 @@ export class PersistenceService {
 		return JSON.stringify({
 			version: editor.version,
 			metadata: {
-				name: 'Rupa Project',
+				name: 'Untitled Project',
 				lastModified: new Date().toISOString()
 			},
 			palette: editor.paletteState.swatches,

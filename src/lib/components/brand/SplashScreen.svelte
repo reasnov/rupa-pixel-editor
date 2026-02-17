@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { editor } from '../../state/editor.svelte.js';
 	import Brand from './Brand.svelte';
-	import { resonance } from '../../engine/resonance.svelte.js';
+	import { feedback } from '../../engine/feedback.svelte.js';
 	import { onMount } from 'svelte';
 	import { fade, scale, fly } from 'svelte/transition';
 	import { quintOut } from 'svelte/easing';
@@ -18,7 +18,7 @@
 	 * initializeWorkspace: Finalizes the loading sequence and enters the café.
 	 */
 	function initializeWorkspace() {
-		resonance.emit('READY');
+		feedback.emit('READY');
 		visible = false;
 		setTimeout(() => {
 			editor.isAppReady = true;
@@ -27,7 +27,7 @@
 	}
 
 	onMount(() => {
-		resonance.emit('STARTUP');
+		feedback.emit('STARTUP');
 
 		// Simulated "Natural" Loading Sequence
 		const interval = setInterval(() => {
@@ -110,9 +110,7 @@
 							? __({ key: 'splash.welcome' })
 							: __({ key: `splash.phases.${phaseIndex}` })}
 					</span>
-					<span
-						class="font-mono text-[8px] font-bold tracking-[0.3em] text-charcoal/20 uppercase"
-					>
+					<span class="font-mono text-[8px] font-bold tracking-[0.3em] text-charcoal/20 uppercase">
 						{__({ key: 'splash.version', replace: { version: editor.version } })}
 					</span>
 				</div>

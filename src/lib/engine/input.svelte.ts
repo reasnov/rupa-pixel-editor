@@ -11,11 +11,11 @@ interface NormalizedSignal {
 }
 
 /**
- * SynapseEngine: The central nervous system for Input I/O.
+ * InputEngine: The central nervous system for Input I/O.
  * It normalizes signals from all physical devices (Keyboard, Pointer)
- * into a single stream of semantic intents for the Editor.
+ * into a single stream of semantic intents.
  */
-export class SynapseEngine {
+export class InputEngine {
 	activeSource = $state<InputSource>('KEYBOARD');
 
 	private listeners: ((signal: NormalizedSignal) => void)[] = [];
@@ -88,11 +88,8 @@ export class SynapseEngine {
 		return () => {
 			window.removeEventListener('keydown', onKey);
 			window.removeEventListener('keyup', onKeyUp);
-			if (canvasElement) {
-				// Potential cleanup for pointer listeners would go here
-			}
 		};
 	}
 }
 
-export const synapse = new SynapseEngine();
+export const input = new InputEngine();

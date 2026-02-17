@@ -1,12 +1,12 @@
 import { LayerState } from './layer.svelte.js';
 
 /**
- * FrameState: Represents a single cup/composition (Frame) in the Recipe Book.
- * It manages dimensions and a stack of Layers (Infusions).
+ * FrameState: Represents a single frame in the Project.
+ * It manages dimensions and a stack of Layers.
  */
 export class FrameState {
 	id = crypto.randomUUID();
-	name = $state('Untitled Cup');
+	name = $state('Untitled Frame');
 	width = $state(32);
 	height = $state(32);
 	duration = $state(100); // Duration in ms (Default 100ms = 10 FPS)
@@ -44,20 +44,21 @@ export class FrameState {
 	}
 
 	// Composite projection for rendering (flattening layers)
-	get compositePixels() {
+	compositePixels = $derived.by(() => {
 		const result = new Array(this.width * this.height).fill(null);
 
 		// Render from bottom to top
 		for (const layer of this.layers) {
 			if (!layer.isVisible) continue;
 
+			const pixels = layer.pixels;
 			for (let i = 0; i < result.length; i++) {
-				const pixel = layer.pixels[i];
+				const pixel = pixels[i];
 				if (pixel !== null) {
 					result[i] = pixel; // Simple painter's algorithm (top covers bottom)
 				}
 			}
 		}
 		return result;
-	}
+	});
 }

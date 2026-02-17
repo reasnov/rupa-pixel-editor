@@ -8,9 +8,9 @@
 	<!-- Left Side: Brand & Quick Tools -->
 	<div class="flex items-center gap-12">
 		<Brand size="sm" />
-		
+
 		<div class="h-6 w-px bg-charcoal/10" aria-hidden="true"></div>
-		
+
 		<ToolGroup />
 	</div>
 

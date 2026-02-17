@@ -4,7 +4,9 @@
 	import ColorPalette from './ColorPalette.svelte';
 </script>
 
-<aside class="side-panel-right flex h-full w-full flex-col gap-4 p-3 border-l border-charcoal/10 bg-foam-white/50">
+<aside
+	class="side-panel-right flex h-full w-full flex-col gap-4 border-l border-charcoal/10 bg-foam-white/50 p-3"
+>
 	<!-- Active Color & Palette -->
 	<div class="flex flex-col gap-3">
 		<ColorInspector />

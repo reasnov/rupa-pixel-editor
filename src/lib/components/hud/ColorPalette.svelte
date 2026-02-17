@@ -1,24 +1,26 @@
 <script lang="ts">
 	import { editor } from '../../state/editor.svelte.js';
-	import { shuttle } from '../../engine/shuttle.js';
+	import { services } from '../../engine/services.js';
 </script>
 
 <div
-	class="editor-panel flex w-full flex-col gap-3 p-3 shadow-sm border-none bg-stone-light/30"
+	class="editor-panel flex w-full flex-col gap-3 border-none bg-stone-light/30 p-3 shadow-sm"
 	role="region"
 	aria-label="Color Palette"
 >
-	<span class="text-center font-serif text-[8px] font-black tracking-widest text-charcoal/30 uppercase"
-		>{__({ key: 'shortcut_groups.colors' })}</span>
+	<span
+		class="text-center font-serif text-[8px] font-black tracking-widest text-charcoal/30 uppercase"
+		>{__({ key: 'shortcut_groups.colors' })}</span
+	>
 
 	<div class="grid grid-cols-4 gap-2" role="radiogroup">
 		{#each editor.palette as color, i}
 			<button
 				class="editor-checker-small h-8 w-8 rounded transition-all {editor.activeColor === color
-					? 'scale-110 border-2 border-brand shadow-md z-10'
+					? 'z-10 scale-110 border-2 border-brand shadow-md'
 					: 'border border-charcoal/5 opacity-80 hover:scale-105 hover:opacity-100'}"
 				style="background-color: {color};"
-				onclick={() => shuttle.color.select(i)}
+				onclick={() => services.color.select(i)}
 				aria-label={__({ key: `shortcut_labels.SELECT_COLOR_${(i + 1) % 10}` })}
 				title={__({ key: `shortcut_labels.SELECT_COLOR_${(i + 1) % 10}` }) + ` (${(i + 1) % 10})`}
 				role="radio"

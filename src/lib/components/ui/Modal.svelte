@@ -74,7 +74,7 @@
 					<h2 class="font-tiny5 text-2xl leading-none text-charcoal">{title}</h2>
 					{#if subtitle}
 						<span
-							class="mt-1 font-serif text-[9px] font-black tracking-[0.2em] uppercase text-charcoal/30"
+							class="mt-1 font-serif text-[9px] font-black tracking-[0.2em] text-charcoal/30 uppercase"
 							>{subtitle}</span
 						>
 					{/if}
@@ -82,7 +82,7 @@
 			</div>
 			<button
 				onclick={onClose}
-				class="rounded-lg border border-charcoal/10 bg-stone-light/50 px-4 py-1.5 text-[9px] font-bold tracking-widest uppercase text-charcoal/40 transition-all hover:bg-brand hover:text-white hover:border-brand"
+				class="rounded-lg border border-charcoal/10 bg-stone-light/50 px-4 py-1.5 text-[9px] font-bold tracking-widest text-charcoal/40 uppercase transition-all hover:border-brand hover:bg-brand hover:text-white"
 			>
 				Close
 			</button>

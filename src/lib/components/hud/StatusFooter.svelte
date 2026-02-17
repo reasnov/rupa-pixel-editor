@@ -4,9 +4,7 @@
 	import TimelinePanel from './ledger/TimelinePanel.svelte';
 </script>
 
-<footer
-	class="hud-panel flex w-full flex-col border-t border-charcoal/10 bg-foam-white p-1"
->
+<footer class="hud-panel flex w-full flex-col border-t border-charcoal/10 bg-foam-white p-1">
 	<TimelinePanel />
 
 	<div class="flex h-7 w-full items-center justify-between px-4">

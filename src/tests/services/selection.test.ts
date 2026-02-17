@@ -2,22 +2,6 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { SelectionService } from '../../lib/engine/services/selection.js';
 import { ClipboardService } from '../../lib/engine/services/clipboard.js';
 
-// Fix AudioContext error
-vi.stubGlobal('AudioContext', vi.fn(() => ({
-	createOscillator: vi.fn(() => ({
-		connect: vi.fn(),
-		start: vi.fn(),
-		stop: vi.fn(),
-		frequency: { setValueAtTime: vi.fn() }
-	})),
-	createGain: vi.fn(() => ({
-		connect: vi.fn(),
-		gain: { setValueAtTime: vi.fn(), exponentialRampToValueAtTime: vi.fn() }
-	})),
-	currentTime: 0,
-	destination: {}
-})));
-
 // Mock Dependencies
 vi.mock('../../lib/state/editor.svelte.js', () => ({
 	editor: {
@@ -31,7 +15,9 @@ vi.mock('../../lib/state/editor.svelte.js', () => ({
 			getIndex: vi.fn((x, y) => y * 10 + x)
 		},
 		selection: {
-			get isActive() { return false; },
+			get isActive() {
+				return false;
+			},
 			begin: vi.fn(),
 			update: vi.fn(),
 			clear: vi.fn(),
@@ -70,7 +56,7 @@ describe('Selection & Clipboard Services', () => {
 		vi.spyOn(editor.selection, 'isActive', 'get').mockReturnValue(false);
 		editor.project.clipboard = null;
 		// Reset pixels
-		for(let i=0; i<100; i++) editor.canvas.pixels[i] = null;
+		for (let i = 0; i < 100; i++) editor.canvas.pixels[i] = null;
 	});
 
 	describe('SelectionService', () => {

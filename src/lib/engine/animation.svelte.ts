@@ -2,10 +2,9 @@ import { editor } from '../state/editor.svelte.js';
 import { sfx } from './audio.js';
 
 /**
- * ChronosEngine: The Temporal Broker.
- * Manages time, playback, and frame logic for the professional timeline.
+ * AnimationEngine: Orchestrates time, playback, and frame logic.
  */
-export class ChronosEngine {
+export class AnimationEngine {
 	private interval: any = null;
 	elapsedTime = $state(0);
 
@@ -61,4 +60,4 @@ export class ChronosEngine {
 	}
 }
 
-export const chronos = new ChronosEngine();
+export const animation = new AnimationEngine();

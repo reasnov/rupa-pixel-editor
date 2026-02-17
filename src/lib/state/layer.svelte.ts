@@ -1,7 +1,7 @@
 import { type ColorHex } from '../types/index.js';
 
 /**
- * LayerState: Represents a single layer (Infusion) of the digital cup.
+ * LayerState: Represents a single layer of the digital frame.
  * It holds the actual pixel data and visibility properties.
  */
 export class LayerState {

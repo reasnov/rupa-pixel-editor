@@ -1,7 +1,7 @@
 /**
- * Chronos Logic: Pure mathematical functions for temporal orchestration.
+ * Animation Logic: Pure mathematical functions for temporal orchestration.
  */
-export class ChronosLogic {
+export class AnimationLogic {
 	/**
 	 * Calculates ruler marks based on total duration and current scale.
 	 * Now ensures the ruler extends significantly beyond the frames.

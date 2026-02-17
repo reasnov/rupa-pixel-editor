@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { editor } from '../../state/editor.svelte.js';
-	import { shuttle } from '../../engine/shuttle.js';
+	import { services } from '../../engine/services.js';
 	import Modal from '../ui/Modal.svelte';
 
 	let { onClose = () => (editor.showPersistenceMenu = false) } = $props<{
@@ -23,7 +23,7 @@
 			<button
 				class="editor-primary-btn w-full"
 				onclick={() => {
-					shuttle.persistence.save();
+					services.persistence.save();
 					onClose();
 				}}
 			>
@@ -32,7 +32,7 @@
 			<button
 				class="editor-secondary-btn w-full"
 				onclick={() => {
-					shuttle.persistence.load();
+					services.persistence.load();
 					onClose();
 				}}
 			>

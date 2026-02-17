@@ -6,10 +6,10 @@ import { ProjectState } from './project.svelte.js';
 import { SelectionState } from './selection.svelte.js';
 import { history } from '../engine/history.js';
 import { sfx } from '../engine/audio.js';
-import { shuttle } from '../engine/shuttle.js';
+import { services } from '../engine/services.js';
 
 /**
- * The EditorState: The root orchestrator of the café editor.
+ * The EditorState: The root orchestrator of the application.
  * It delegates concerns to specialized sub-states.
  */
 export class EditorState {
@@ -23,7 +23,7 @@ export class EditorState {
 	studio = new StudioState();
 	selection = new SelectionState();
 
-	// --- Professional Logic Proxies ---
+	// --- Logic Proxies ---
 
 	get pixels() {
 		return this.canvas.pixels;
@@ -122,7 +122,7 @@ export class EditorState {
 		this.cursor.isVisible = v;
 	}
 
-	// UI Overlays (Professional Naming)
+	// UI Overlays
 	get showColorPicker() {
 		return this.studio.showColorPicker;
 	}
@@ -282,28 +282,28 @@ export class EditorState {
 	}
 
 	clearCanvas() {
-		shuttle.clearCanvas();
+		services.clearCanvas();
 	}
-	tasteColor() {
-		shuttle.pickColor();
+	pickColor() {
+		services.pickColor();
 	}
-	loadRecipe() {
-		shuttle.load();
+	loadProject() {
+		services.load();
 	}
 	copySelection() {
-		shuttle.copy();
+		services.copy();
 	}
 	cutSelection() {
-		shuttle.cut();
+		services.cut();
 	}
 	pasteSelection() {
-		shuttle.paste();
+		services.paste();
 	}
 	flipCanvas(axis: 'horizontal' | 'vertical') {
-		shuttle.flipCanvas(axis);
+		services.flipCanvas(axis);
 	}
 	rotateCanvas() {
-		shuttle.rotateCanvas();
+		services.rotateCanvas();
 	}
 }
 

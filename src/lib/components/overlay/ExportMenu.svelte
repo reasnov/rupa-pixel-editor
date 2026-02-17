@@ -321,12 +321,18 @@
 						</span>
 					</div>
 					<button
-						class="flex h-6 w-12 items-center rounded-full transition-colors {editor.studio.includePixelBorders ? 'bg-brand' : 'bg-charcoal/10'}"
+						class="flex h-6 w-12 items-center rounded-full transition-colors {editor.studio
+							.includePixelBorders
+							? 'bg-brand'
+							: 'bg-charcoal/10'}"
 						onclick={() => (editor.studio.includePixelBorders = !editor.studio.includePixelBorders)}
 						aria-label="Toggle Pixel Borders"
 					>
 						<div
-							class="h-4 w-4 rounded-full bg-white shadow-sm transition-transform {editor.studio.includePixelBorders ? 'translate-x-7' : 'translate-x-1'}"
+							class="h-4 w-4 rounded-full bg-white shadow-sm transition-transform {editor.studio
+								.includePixelBorders
+								? 'translate-x-7'
+								: 'translate-x-1'}"
 						></div>
 					</button>
 				</div>

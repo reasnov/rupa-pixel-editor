@@ -51,7 +51,6 @@ npm run dev:all
 ## 📖 Documentation
 
 - [User Guide](./docs/USER_GUIDE.md)
-- [Barista Codex](./docs/wiki/terminology.md)
 - [Developer Specs](./docs/developers/specs.md)
 - [Latest Release Notes](./docs/pubs/releases/v0.6.1.md)
 

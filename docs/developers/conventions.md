@@ -1,4 +1,4 @@
-# Development Conventions: Rupa Studio
+# Development Conventions: Rupa Pixel Editor
 
 To maintain the quality and consistency of the **Editor**, all developers must adhere to these established conventions.
 
@@ -6,9 +6,9 @@ To maintain the quality and consistency of the **Editor**, all developers must a
 
 ## 1. Architectural Integrity (SOC)
 
-Rupa follows a strict **Separation of Concerns (SOC)** across its layered monolith:
+Rupa Pixel Editor follows a strict **Separation of Concerns (SOC)** across its layered monolith:
 
-- **Components**: Must remain "dumb." They should only display data from state and call methods on the `shuttle` or `editor` objects. No complex logic should live in `.svelte` files.
+- **Components**: Must remain "dumb." They should only display data from state and call methods on the `services` or `editor` objects. No complex logic should live in `.svelte` files.
 - **State**: Classes in `src/lib/state/` should only contain `$state` and `$derived` properties. They are data holders.
 - **Services**: All business logic (loops, math, array manipulations) MUST live in `src/lib/engine/services/`.
 - **Engines**: Orchestrators that bridge hardware (Input, Audio) to application logic.
@@ -33,14 +33,14 @@ Rupa follows a strict **Separation of Concerns (SOC)** across its layered monoli
 
 - **State Modules**: Suffix with `State` (e.g., `CanvasState`).
 - **Services**: Suffix with `Service` (e.g., `ProjectService`).
-- **Components**: PascalCase (e.g., `ColorBasin.svelte`).
-- **Barista Terms**: Use barista terminology in UI labels but maintain technical clarity in variable names (e.g., `usageMinutes` vs "Working Time").
-- **i18n Keys**: Use semantic, hierarchical keys based on the studio's lore (e.g., `hud.basin.color_title`). Avoid generic technical keys.
+- **Components**: PascalCase (e.g., `ColorPalette.svelte`).
+- **Barista Terms**: Use barista terminology in UI labels (via i18n) but maintain technical clarity in variable names (e.g., `frames` vs "Cups", `layers` vs "Infusions").
+- **i18n Keys**: Use semantic, hierarchical keys based on the application's lore. Avoid generic technical keys.
 
 ### 2.4 Internationalization (i18n)
 
 - **No Hardcoded Strings**: All UI text must use the global `__({ key })` function.
-- **Global Availability**: The `__()` function is registered globally (via `globalThis`). **DO NOT** import it manually in Svelte components.
+- **Global Availability**: The `__()` function is registered globally. **DO NOT** import it manually in Svelte components.
 - **Translation Files**: Located in `src/lib/lang/{locale}/common.json`.
 - **Locale Standard**: The English (`en`) locale is the primary source of truth for all barista terminology.
 

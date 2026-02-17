@@ -1,5 +1,5 @@
 import shortcutsData from '../config/shortcuts.json' with { type: 'json' };
-import { flow } from './flow.svelte.js';
+import { sequence } from './sequence.svelte.js';
 
 export type ActionIntent =
 	| 'MOVE_UP'
@@ -11,7 +11,7 @@ export type ActionIntent =
 	| 'GOTO'
 	| 'PAINT'
 	| 'ERASE'
-	| 'SOAK'
+	| 'FLOOD_FILL'
 	| 'BIND_VERTEX'
 	| 'SEAL_BINDING'
 	| 'PICK_COLOR'
@@ -252,10 +252,10 @@ export class KeyboardEngine {
 		const key = e.key.toLowerCase();
 
 		if (!this.isCtrlActive && !this.isAltActive && !this.isShiftActive) {
-			const sequenceIntent = flow.process(key);
+			const sequenceIntent = sequence.process(key);
 			if (sequenceIntent) return sequenceIntent as ActionIntent;
 		} else {
-			flow.reset();
+			sequence.reset();
 		}
 
 		if (['arrowup', 'arrowdown', 'arrowleft', 'arrowright'].includes(key)) {

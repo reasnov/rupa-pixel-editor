@@ -124,10 +124,12 @@
 			Active Position Highlight
 		-->
 		<div
-			class="absolute z-20 transition-all duration-75 ease-out bg-brand"
+			class="absolute z-20 bg-brand transition-all duration-75 ease-out"
 			style="
 				{orientation === 'horizontal' ? 'left' : 'top'}: {((cursorCoord + 0.5) / size) * 100}%;
-				{orientation === 'horizontal' ? 'width: 1px; top: 0; bottom: 0;' : 'height: 1px; left: 0; right: 0;'}
+				{orientation === 'horizontal'
+				? 'width: 1px; top: 0; bottom: 0;'
+				: 'height: 1px; left: 0; right: 0;'}
 			"
 		>
 			<div

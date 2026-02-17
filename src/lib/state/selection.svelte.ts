@@ -1,3 +1,5 @@
+import { editor } from './editor.svelte.js';
+
 /**
  * SelectionState: Manages complex selections (Motifs).
  * Supports rectangular bounds, arbitrary pixel sets, and polygon vertices.
@@ -12,6 +14,30 @@ export class SelectionState {
 
 	// Polygon vertices for "Binding Thread" (Poly-Lasso)
 	vertices = $state<{ x: number; y: number }[]>([]);
+
+	/**
+	 * Returns the set of all currently selected pixel indices.
+	 * Optimized for O(1) lookup during drawing operations.
+	 */
+	activeIndicesSet = $derived.by(() => {
+		const set = new Set<number>();
+		const width = editor.canvas.width;
+
+		// Add points from arbitrary selection (Spirit Pick)
+		this.indices.forEach((idx) => set.add(idx));
+
+		// Add points from rectangular selection (Looming)
+		const b = this.rectangularBounds;
+		if (b) {
+			for (let y = b.y1; y <= b.y2; y++) {
+				for (let x = b.x1; x <= b.x2; x++) {
+					set.add(y * width + x);
+				}
+			}
+		}
+
+		return set;
+	});
 
 	get isActive(): boolean {
 		return this.indices.length > 0 || this.start !== null || this.vertices.length > 0;

@@ -12,7 +12,11 @@ vi.mock('../../state/frame.svelte.js', () => ({
 		addLayer = vi.fn();
 		removeLayer = vi.fn();
 		compositePixels = [];
-		constructor(public name: string, public width: number, public height: number) {}
+		constructor(
+			public name: string,
+			public width: number,
+			public height: number
+		) {}
 	}
 }));
 
@@ -23,10 +27,20 @@ vi.mock('../../state/layer.svelte.js', () => ({
 		isLocked = false;
 		opacity = 1.0;
 		pixels: any[] = [];
-		constructor(public name: string, public width: number, public height: number) {}
-		clone() { return this; }
-		clear() { this.pixels.fill(null); }
-		hasPixel(idx: number) { return this.pixels[idx] !== null; }
+		constructor(
+			public name: string,
+			public width: number,
+			public height: number
+		) {}
+		clone() {
+			return this;
+		}
+		clear() {
+			this.pixels.fill(null);
+		}
+		hasPixel(idx: number) {
+			return this.pixels[idx] !== null;
+		}
 	}
 }));
 
@@ -78,12 +92,24 @@ describe('PersistenceService', () => {
 				height: 32,
 				duration: 100,
 				activeLayerIndex: 0,
-				activeLayer: {},
+				activeLayer: {} as any,
 				addLayer: vi.fn(),
 				removeLayer: vi.fn(),
 				compositePixels: [],
-				layers: [{ id: '00000000-0000-0000-0000-000000000000', name: 'Layer 1', isVisible: true, isLocked: false, pixels: [null], opacity: 1.0, clone: vi.fn(), clear: vi.fn(), hasPixel: vi.fn() }]
-			}
+				layers: [
+					{
+						id: '00000000-0000-0000-0000-000000000000',
+						name: 'Layer 1',
+						isVisible: true,
+						isLocked: false,
+						pixels: [null],
+						opacity: 1.0,
+						clone: vi.fn(),
+						clear: vi.fn(),
+						hasPixel: vi.fn()
+					}
+				]
+			} as any
 		];
 
 		const json = (service as any).serialize();

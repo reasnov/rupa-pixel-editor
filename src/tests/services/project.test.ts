@@ -20,7 +20,17 @@ vi.mock('../../lib/state/editor.svelte.js', () => ({
 					width: 32,
 					height: 32,
 					duration: 100,
-					activeLayer: { id: '00000000-0000-0000-0000-000000000000', name: 'L1', pixels: [], isVisible: true, isLocked: false, opacity: 1.0, clone: vi.fn(), clear: vi.fn(), hasPixel: vi.fn() },
+					activeLayer: {
+						id: '00000000-0000-0000-0000-000000000000',
+						name: 'L1',
+						pixels: [],
+						isVisible: true,
+						isLocked: false,
+						opacity: 1.0,
+						clone: vi.fn(),
+						clear: vi.fn(),
+						hasPixel: vi.fn()
+					},
 					removeLayer: vi.fn(),
 					compositePixels: []
 				};
@@ -77,7 +87,17 @@ describe('ProjectService', () => {
 				width: 32,
 				height: 32,
 				duration: 100,
-				activeLayer: { id: '00000000-0000-0000-0000-000000000000', name: 'L1', pixels: [], isVisible: true, isLocked: false, opacity: 1.0, clone: vi.fn(), clear: vi.fn(), hasPixel: vi.fn() },
+				activeLayer: {
+					id: '00000000-0000-0000-0000-000000000000',
+					name: 'L1',
+					pixels: [],
+					isVisible: true,
+					isLocked: false,
+					opacity: 1.0,
+					clone: vi.fn(),
+					clear: vi.fn(),
+					hasPixel: vi.fn()
+				},
 				removeLayer: vi.fn(),
 				compositePixels: []
 			}

@@ -51,8 +51,8 @@ vi.mock('../../lib/engine/history.js', () => ({
 	}
 }));
 
-vi.mock('../../lib/engine/fiber.js', () => ({
-	FiberEngine: {
+vi.mock('../../lib/engine/pixel.js', () => ({
+	PixelEngine: {
 		getLinePoints: vi.fn(() => [])
 	}
 }));
@@ -88,6 +88,50 @@ describe('Services', () => {
 
 			expect(editor.canvas.pixels[3]).toBe(null);
 			expect(sfx.playErase).toHaveBeenCalled();
+		});
+
+		it('draw should respect selection mask', () => {
+			const service = new DrawService();
+			editor.cursor.pos = { x: 1, y: 1 }; // Index 3
+			editor.paletteState.activeColor = '#FF00FF';
+
+			// Activate selection that DOES NOT include index 3
+			(editor.selection as any).isActive = true;
+			(editor.selection as any).activeIndicesSet = new Set([0, 1, 2]);
+
+			service.draw();
+
+			// Should NOT have changed index 3
+			expect(editor.canvas.pixels[3]).not.toBe('#FF00FF');
+
+			// Activate selection that DOES include index 3
+			(editor.selection as any).activeIndicesSet.add(3);
+			service.draw();
+
+			// Should HAVE changed index 3
+			expect(editor.canvas.pixels[3]).toBe('#FF00FF');
+		});
+
+		it('erase should respect selection mask', () => {
+			const service = new DrawService();
+			editor.cursor.pos = { x: 0, y: 0 }; // Index 0
+			editor.canvas.pixels[0] = '#FF00FF';
+
+			// Activate selection that DOES NOT include index 0
+			(editor.selection as any).isActive = true;
+			(editor.selection as any).activeIndicesSet = new Set([1, 2, 3]);
+
+			service.erase();
+
+			// Should NOT have erased index 0
+			expect(editor.canvas.pixels[0]).toBe('#FF00FF');
+
+			// Activate selection that DOES include index 0
+			(editor.selection as any).activeIndicesSet.add(0);
+			service.erase();
+
+			// Should HAVE erased index 0
+			expect(editor.canvas.pixels[0]).toBe(null);
 		});
 	});
 

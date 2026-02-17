@@ -47,7 +47,7 @@
 			"keys": ["i", "Alt+Space"],
 			"group": "Tools"
 		},
-		"SOAK": {
+		"FLOOD_FILL": {
 			"label": "Color Fill",
 			"keys": ["f"],
 			"group": "Magic"
@@ -195,6 +195,11 @@
 		"MOVE_LAYER_DOWN": {
 			"label": "Move Layer Down",
 			"keys": ["]"],
+			"group": "Layers"
+		},
+		"MERGE_LAYERS": {
+			"label": "Merge Layer Down",
+			"keys": ["Ctrl+Alt+m"],
 			"group": "Layers"
 		},
 		"TOGGLE_LAYER_VISIBILITY": {

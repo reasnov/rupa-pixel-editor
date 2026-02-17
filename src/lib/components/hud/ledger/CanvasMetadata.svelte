@@ -23,7 +23,7 @@
 		<div class="h-3 w-px bg-charcoal/20" aria-hidden="true"></div>
 	{/if}
 
-	<div class="flex gap-3 font-mono text-[9px] font-bold tracking-tight uppercase text-charcoal/60">
+	<div class="flex gap-3 font-mono text-[9px] font-bold tracking-tight text-charcoal/60 uppercase">
 		<span>POS: {editor.cursor.pos.x},{editor.cursor.pos.y}</span>
 		<span>SIZE: {editor.canvas.width}x{editor.canvas.height}</span>
 		<span>ZOOM: {Math.round(editor.studio.zoomLevel * 100)}%</span>

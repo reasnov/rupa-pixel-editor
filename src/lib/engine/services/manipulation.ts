@@ -67,7 +67,7 @@ export class ManipulationService {
 	}
 
 	/**
-	 * Color Bleach (Recoloring): Replaces all occurrences of a color with the active one.
+	 * Recolor All: Replaces all occurrences of a color with the active one.
 	 */
 	bleach() {
 		const { x, y } = editor.cursor.pos;

@@ -1,7 +1,7 @@
 import { editor } from '../state/editor.svelte.js';
-import { synapse } from './synapse.svelte.js';
+import { input } from './input.svelte.js';
 import { mode } from './mode.svelte.js';
-import { shuttle } from './shuttle.js';
+import { services } from './services.js';
 
 /**
  * PointerEngine: Manages fluid pointer interactions.
@@ -41,7 +41,7 @@ export class PointerEngine {
 
 		const currentMode = mode.current.type;
 		if (this.buttonType === 'primary' && currentMode !== 'SELECT' && currentMode !== 'ERASE') {
-			shuttle.draw.beginStroke(pos.x, pos.y);
+			services.draw.beginStroke(pos.x, pos.y);
 			this.startHoldTimer();
 		}
 	}
@@ -57,7 +57,7 @@ export class PointerEngine {
 
 			if (this.buttonType === 'primary' && currentMode !== 'SELECT' && currentMode !== 'ERASE') {
 				if (!this.isSnapped) {
-					shuttle.draw.continueStroke(pos.x, pos.y, this.lastPosition.x, this.lastPosition.y);
+					services.draw.continueStroke(pos.x, pos.y, this.lastPosition.x, this.lastPosition.y);
 					this.resetHoldTimer();
 				}
 			}
@@ -78,7 +78,7 @@ export class PointerEngine {
 
 		const currentMode = mode.current.type;
 		if (this.buttonType === 'primary' && currentMode !== 'SELECT' && currentMode !== 'ERASE') {
-			shuttle.draw.endStroke();
+			services.draw.endStroke();
 		} else {
 			editor.canvas.clearBuffer();
 		}
@@ -100,7 +100,7 @@ export class PointerEngine {
 		this.lastPosition = { x: -1, y: -1 };
 		this.isSnapped = false;
 		this.isSnappedState = false;
-		shuttle.draw.cancelStroke();
+		services.draw.cancelStroke();
 	}
 
 	private startHoldTimer() {
@@ -124,7 +124,7 @@ export class PointerEngine {
 	private triggerSnap() {
 		this.isSnapped = true;
 		this.isSnappedState = true;
-		shuttle.draw.snapCurrentStroke();
+		services.draw.snapCurrentStroke();
 	}
 }
 

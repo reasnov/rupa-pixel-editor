@@ -1,36 +1,36 @@
 import { editor as state } from '../state/editor.svelte.js';
 import { keyboard, type ActionIntent } from './keyboard.svelte.js';
-import { synapse } from './synapse.svelte.js';
+import { input } from './input.svelte.js';
 import { mode } from './mode.svelte.js';
-import { shuttle } from './shuttle.js';
+import { services } from './services.js';
 import { ambient } from './ambient.js';
-import { chronos } from './chronos.svelte.js';
+import { animation } from './animation.svelte.js';
 import { studioAudio } from './audioContext.js';
 import { pointer } from './pointer.svelte.js';
 
 /**
  * EditorEngine: The primary orchestrator of action execution.
- * It listens to normalized signals from the SynapseEngine and executes ShuttleEngine operations.
+ * It listens to normalized signals from the InputEngine and executes ServiceManager operations.
  */
 export class EditorEngine {
 	private backupInterval: any = null;
-	private unsubscribeSynapse: (() => void) | null = null;
+	private unsubscribeInput: (() => void) | null = null;
 
 	mount(canvasElement: HTMLElement | null = null) {
-		this.backupInterval = setInterval(() => shuttle.persistence.backup(), 10 * 60 * 1000);
+		this.backupInterval = setInterval(() => services.persistence.backup(), 10 * 60 * 1000);
 
 		state.studio.mount();
 		ambient.start();
 
-		this.unsubscribeSynapse = synapse.subscribe((signal) => {
+		this.unsubscribeInput = input.subscribe((signal) => {
 			this.handleIntent(signal.intent as ActionIntent);
 		});
 
-		const cleanupSynapse = synapse.mount(window, canvasElement);
+		const cleanupInput = input.mount(window, canvasElement);
 
 		return () => {
-			if (this.unsubscribeSynapse) this.unsubscribeSynapse();
-			cleanupSynapse();
+			if (this.unsubscribeInput) this.unsubscribeInput();
+			cleanupInput();
 			clearInterval(this.backupInterval);
 		};
 	}
@@ -49,37 +49,37 @@ export class EditorEngine {
 			case 'MOVE_RIGHT':
 				return this.executeMove(1, 0);
 			case 'JUMP_HOME':
-				return shuttle.jumpHome();
+				return services.jumpHome();
 			case 'GOTO':
 				return (state.showGoTo = true);
 
 			case 'PAINT':
-				if (state.selection.isActive) return shuttle.commitSelection();
-				return shuttle.draw.draw();
+				if (state.selection.isActive) return services.commitSelection();
+				return services.draw.draw();
 
 			case 'ERASE':
-				return shuttle.draw.erase();
-			case 'SOAK':
-				return shuttle.color.soak();
+				return services.draw.erase();
+			case 'FLOOD_FILL':
+				return services.color.floodFill();
 			case 'BIND_VERTEX':
-				return shuttle.selection.addVertex(state.cursor.pos.x, state.cursor.pos.y);
+				return services.selection.addVertex(state.cursor.pos.x, state.cursor.pos.y);
 			case 'SEAL_BINDING':
 				if (state.selection.vertices.length >= 3) {
-					return shuttle.selection.sealBinding();
+					return services.selection.sealBinding();
 				}
-				if (state.selection.isActive) return shuttle.commitSelection();
-				return shuttle.draw.draw();
+				if (state.selection.isActive) return services.commitSelection();
+				return services.draw.draw();
 			case 'PICK_COLOR':
-				return shuttle.color.pickFromCanvas();
+				return services.color.pickFromCanvas();
 
 			case 'COPY':
-				return shuttle.clipboard.copy();
+				return services.clipboard.copy();
 			case 'CUT':
-				return shuttle.clipboard.cut();
+				return services.clipboard.cut();
 			case 'PASTE':
-				return shuttle.clipboard.paste();
+				return services.clipboard.paste();
 			case 'RECOLOR':
-				return shuttle.manipulation.bleach();
+				return services.manipulation.bleach();
 
 			case 'UNDO':
 				return state.undo();
@@ -88,7 +88,7 @@ export class EditorEngine {
 			case 'SAVE':
 				return (state.showPersistenceMenu = true);
 			case 'OPEN':
-				return shuttle.persistence.load();
+				return services.persistence.load();
 
 			case 'OPEN_MENU':
 				return (state.showCommandPalette = !state.showCommandPalette);
@@ -118,7 +118,7 @@ export class EditorEngine {
 			case 'OPEN_MANUAL':
 				return (state.showGuideBook = true);
 			case 'PLAY_PAUSE':
-				return chronos.togglePlayback();
+				return animation.togglePlayback();
 			case 'TOGGLE_GHOST_LAYERS':
 				return (state.showGhostLayers = !state.showGhostLayers);
 
@@ -130,70 +130,72 @@ export class EditorEngine {
 				return state.studio.resetZoom();
 
 			case 'CLEAR_CANVAS':
-				return shuttle.manipulation.clearAll();
+				return services.manipulation.clearAll();
 			case 'TOGGLE_MUTE':
 				return state.studio.toggleMute();
 			case 'SELECT_SAME':
-				return shuttle.selection.spiritPick();
+				return services.selection.spiritPick();
 
 			case 'FLIP_H':
-				return shuttle.manipulation.flip('horizontal');
+				return services.manipulation.flip('horizontal');
 			case 'FLIP_V':
-				return shuttle.manipulation.flip('vertical');
+				return services.manipulation.flip('vertical');
 			case 'ROTATE':
-				return shuttle.manipulation.rotate();
+				return services.manipulation.rotate();
 
 			case 'NEW_FRAME':
-				return shuttle.project.addFrame();
+				return services.project.addFrame();
 			case 'DUPLICATE_FRAME':
-				return shuttle.project.duplicateFrame(state.project.activeFrameIndex);
+				return services.project.duplicateFrame(state.project.activeFrameIndex);
 			case 'NEXT_FRAME':
-				return shuttle.project.nextFrame();
+				return services.project.nextFrame();
 			case 'PREV_FRAME':
-				return shuttle.project.prevFrame();
+				return services.project.prevFrame();
 			case 'DELETE_FRAME':
-				return shuttle.project.removeFrame(state.project.activeFrameIndex);
+				return services.project.removeFrame(state.project.activeFrameIndex);
 			case 'TAB_TIMELINE':
 				return (state.studio.projectActiveTab = 'frames');
 			case 'TAB_LAYERS':
 				return (state.studio.projectActiveTab = 'layers');
 
 			case 'NEW_LAYER':
-				return shuttle.project.addLayer();
+				return services.project.addLayer();
 			case 'DUPLICATE_LAYER':
-				return shuttle.project.duplicateLayer(state.project.activeFrame.activeLayerIndex);
+				return services.project.duplicateLayer(state.project.activeFrame.activeLayerIndex);
 			case 'NEXT_LAYER':
-				return shuttle.project.nextLayer();
+				return services.project.nextLayer();
 			case 'PREV_LAYER':
-				return shuttle.project.prevLayer();
+				return services.project.prevLayer();
 			case 'DELETE_LAYER':
-				return shuttle.project.removeLayer(state.project.activeFrame.activeLayerIndex);
+				return services.project.removeLayer(state.project.activeFrame.activeLayerIndex);
 			case 'TOGGLE_LAYER_LOCK':
-				return shuttle.project.toggleLock();
+				return services.project.toggleLock();
 			case 'TOGGLE_LAYER_VISIBILITY':
-				return shuttle.project.toggleVisibility();
+				return services.project.toggleVisibility();
 			case 'MOVE_LAYER_UP':
-				return shuttle.project.moveLayerUp();
+				return services.project.moveLayerUp();
 			case 'MOVE_LAYER_DOWN':
-				return shuttle.project.moveLayerDown();
+				return services.project.moveLayerDown();
+			case 'MERGE_LAYERS':
+				return services.project.mergeLayerDown();
 
 			default:
 				if (intent.startsWith('SELECT_COLOR_')) {
 					const num = parseInt(intent.split('_')[2]);
-					return shuttle.color.select(num === 0 ? 9 : num - 1);
+					return services.color.select(num === 0 ? 9 : num - 1);
 				}
 		}
 	}
 
 	private executeMove(dx: number, dy: number) {
-		if (shuttle.movement.move(dx, dy)) {
+		if (services.movement.move(dx, dy)) {
 			const currentMode = mode.current.type;
 			if (currentMode === 'SELECT') {
-				if (!state.selection.isActive) shuttle.startSelection();
-				shuttle.updateSelection();
+				if (!state.selection.isActive) services.startSelection();
+				services.updateSelection();
 			}
-			if (currentMode === 'PAINT') shuttle.draw.draw();
-			if (currentMode === 'ERASE') shuttle.draw.erase();
+			if (currentMode === 'PAINT') services.draw.draw();
+			if (currentMode === 'ERASE') services.draw.erase();
 		}
 	}
 }

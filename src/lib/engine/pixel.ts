@@ -3,10 +3,10 @@ import { Geometry } from '../logic/geometry.js';
 import { Path } from '../logic/path.js';
 
 /**
- * FiberEngine: Orchestrator for heavy pixel tasks.
- * It now delegates pure mathematical logic to the Logic Layer (src/lib/logic/).
+ * PixelEngine: Orchestrator for computationally expensive pixel operations.
+ * It delegates mathematical logic to the Logic Layer.
  */
-export class FiberEngine {
+export class PixelEngine {
 	// --- Delegation to Logic Layer ---
 
 	static getLinePoints(x0: number, y0: number, x1: number, y1: number, broadness = 0) {
@@ -34,7 +34,7 @@ export class FiberEngine {
 	// --- Pixel Manipulation Logic ---
 
 	/**
-	 * Flood Fill (Dye Soak): Fills a connected area of the same color.
+	 * Flood Fill: Fills a connected area of the same color.
 	 */
 	static floodFill(
 		data: (ColorHex | null)[],

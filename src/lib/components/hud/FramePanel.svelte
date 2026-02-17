@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { editor } from '../../state/editor.svelte.js';
-	import { shuttle } from '../../engine/shuttle.js';
+	import { services } from '../../engine/services.js';
 	import { fade } from 'svelte/transition';
 
 	let draggedIndex = $state<number | null>(null);
@@ -19,9 +19,9 @@
 		e.preventDefault();
 		if (draggedIndex !== null) {
 			if (editor.studio.projectActiveTab === 'layers') {
-				shuttle.project.reorderLayer(draggedIndex, toIndex);
+				services.project.reorderLayer(draggedIndex, toIndex);
 			} else {
-				shuttle.project.reorderFrame(draggedIndex, toIndex);
+				services.project.reorderFrame(draggedIndex, toIndex);
 			}
 		}
 		draggedIndex = null;
@@ -35,7 +35,7 @@
 </script>
 
 <div
-	class="flex w-full h-full flex-col overflow-hidden bg-transparent"
+	class="flex h-full w-full flex-col overflow-hidden bg-transparent"
 	role="region"
 	aria-label="Project Explorer"
 >
@@ -49,7 +49,7 @@
 			class="flex flex-1 items-center justify-center gap-2 py-2 text-[10px] font-bold tracking-widest uppercase transition-all {editor
 				.studio.projectActiveTab === 'frames'
 				? 'rounded bg-foam-white text-brand shadow-sm'
-				: 'opacity-40 hover:opacity-60 text-charcoal'}"
+				: 'text-charcoal opacity-40 hover:opacity-60'}"
 		>
 			<span aria-hidden="true">🖼️</span>
 			{__({ key: 'hud.project_panel.frames' })}
@@ -62,7 +62,7 @@
 			class="flex flex-1 items-center justify-center gap-2 py-2 text-[10px] font-bold tracking-widest uppercase transition-all {editor
 				.studio.projectActiveTab === 'layers'
 				? 'rounded bg-foam-white text-brand shadow-sm'
-				: 'opacity-40 hover:opacity-60 text-charcoal'}"
+				: 'text-charcoal opacity-40 hover:opacity-60'}"
 		>
 			<span aria-hidden="true">🧵</span>
 			{__({ key: 'hud.project_panel.layers' })}
@@ -94,15 +94,14 @@
 							onclick={() => (editor.project.activeFrameIndex = i)}
 						>
 							<span class="font-mono text-[10px] opacity-30" aria-hidden="true">{i + 1}</span>
-							<span class="truncate font-serif text-sm font-medium text-charcoal"
-								>{frame.name}</span
+							<span class="truncate font-serif text-sm font-medium text-charcoal">{frame.name}</span
 							>
 						</button>
 						<div class="flex items-center gap-2">
 							<button
 								onclick={(e) => {
 									e.stopPropagation();
-									shuttle.project.duplicateFrame(i);
+									services.project.duplicateFrame(i);
 								}}
 								class="text-[10px] opacity-0 transition-opacity group-hover:opacity-40 hover:text-brand"
 								title={__({ key: 'hud.actions.duplicate' })}
@@ -113,7 +112,7 @@
 								<button
 									onclick={(e) => {
 										e.stopPropagation();
-										shuttle.project.removeFrame(i);
+										services.project.removeFrame(i);
 									}}
 									class="text-[10px] opacity-0 transition-opacity group-hover:opacity-40 hover:text-brand"
 									title={__({ key: 'hud.actions.delete' })}
@@ -147,11 +146,9 @@
 							<button
 								onclick={(e) => {
 									e.stopPropagation();
-									shuttle.project.toggleVisibility(i);
+									services.project.toggleVisibility(i);
 								}}
-								class="text-xs transition-opacity {layer.isVisible
-									? 'opacity-100'
-									: 'opacity-20'}"
+								class="text-xs transition-opacity {layer.isVisible ? 'opacity-100' : 'opacity-20'}"
 								title={__({ key: 'hud.project_panel.visibility' })}
 							>
 								{layer.isVisible ? '👁️' : '🕶️'}
@@ -169,7 +166,7 @@
 							<button
 								onclick={(e) => {
 									e.stopPropagation();
-									shuttle.project.toggleLock(i);
+									services.project.toggleLock(i);
 								}}
 								class="text-[10px] transition-opacity {layer.isLocked
 									? 'opacity-100'
@@ -181,7 +178,7 @@
 							<button
 								onclick={(e) => {
 									e.stopPropagation();
-									shuttle.project.removeLayer(i);
+									services.project.removeLayer(i);
 								}}
 								class="text-[10px] opacity-0 transition-opacity group-hover:opacity-40 hover:text-brand"
 								title={__({ key: 'hud.actions.delete' })}
@@ -199,8 +196,8 @@
 	<div class="flex items-center justify-between border-t border-charcoal/5 bg-charcoal/5 px-4 py-2">
 		<button
 			onclick={() => {
-				if (editor.studio.projectActiveTab === 'frames') shuttle.project.addFrame();
-				else shuttle.project.addLayer();
+				if (editor.studio.projectActiveTab === 'frames') services.project.addFrame();
+				else services.project.addLayer();
 			}}
 			class="flex items-center gap-1 font-serif text-[9px] font-bold tracking-[0.1em] text-charcoal/40 uppercase hover:text-charcoal/80"
 		>

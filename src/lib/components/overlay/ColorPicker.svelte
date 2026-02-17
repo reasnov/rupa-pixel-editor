@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { editor } from '../../state/editor.svelte.js';
-	import { shuttle } from '../../engine/shuttle.js';
+	import { services } from '../../engine/services.js';
 	import { fade, scale } from 'svelte/transition';
 	import { untrack } from 'svelte';
-	import { SpinnerEngine } from '../../engine/spinner.js';
+	import { ColorEngine } from '../../engine/color.js';
 	import ColorSlider from './ColorSlider.svelte';
 
 	let { value = $bindable(), onClose } = $props<{ value: string; onClose: () => void }>();
@@ -15,7 +15,7 @@
 	let a = $state(1); // 0.0 to 1.0
 
 	$effect(() => {
-		const color = SpinnerEngine.unravel(value);
+		const color = ColorEngine.toHSLA(value);
 		untrack(() => {
 			h = color.h;
 			s = color.s;
@@ -25,7 +25,7 @@
 	});
 
 	$effect(() => {
-		const newColor = SpinnerEngine.spin({ h, s, l, a });
+		const newColor = ColorEngine.toHex({ h, s, l, a });
 		untrack(() => {
 			value = newColor;
 		});
@@ -48,7 +48,7 @@
 	>
 		<div class="flex items-center justify-between">
 			<div class="flex items-center gap-4">
-				<span class="text-3xl" aria-hidden="true">⛲</span>
+				<span class="text-3xl" aria-hidden="true"> Fountain </span>
 				<div class="flex flex-col">
 					<h2 id="flavor-basin-title" class="font-tiny5 text-3xl leading-none text-brand">
 						{__({ key: 'color_picker.title' })}
@@ -113,13 +113,13 @@
 				<button
 					class="editor-secondary-btn flex h-14 w-14 items-center justify-center p-0 text-xl"
 					onclick={() => {
-						shuttle.pickColor();
+						services.pickColor();
 						onClose();
 					}}
 					title={__({ key: 'color_picker.eye_drop' })}
 					aria-label={__({ key: 'color_picker.eye_drop' })}
 				>
-					<span aria-hidden="true">💉</span>
+					<span aria-hidden="true"> 🖌️ </span>
 				</button>
 				<button class="editor-primary-btn flex-1 py-4" onclick={onClose}>
 					{__({ key: 'color_picker.seal' })}

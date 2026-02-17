@@ -134,7 +134,7 @@
 				></canvas>
 
 				<!-- Grid Overlay (Now on top of pixels) -->
-				<div 
+				<div
 					class="pixel-grid-surface pointer-events-none absolute inset-0 z-10 h-full w-full"
 					style="--grid-cols: {w}; --grid-rows: {h};"
 				></div>

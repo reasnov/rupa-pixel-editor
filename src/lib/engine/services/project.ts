@@ -370,4 +370,49 @@ export class ProjectService {
 			this.reorderLayer(current, current - 1);
 		}
 	}
+
+	/**
+	 * Merge Layer Down: Combines the active layer with the one directly below it.
+	 */
+	mergeLayerDown() {
+		const frame = editor.project.activeFrame;
+		const topIdx = frame.activeLayerIndex;
+		if (topIdx <= 0) return;
+
+		const bottomIdx = topIdx - 1;
+		const topLayer = frame.layers[topIdx];
+		const bottomLayer = frame.layers[bottomIdx];
+
+		const oldBottomPixels = [...bottomLayer.pixels];
+		const topPixels = topLayer.pixels;
+		const mergedPixels = [...bottomLayer.pixels];
+
+		// Painter's algorithm: Top overwrites non-null bottom pixels
+		for (let i = 0; i < topPixels.length; i++) {
+			const p = topPixels[i];
+			if (p !== null) mergedPixels[i] = p;
+		}
+
+		// Apply merge
+		bottomLayer.pixels = mergedPixels;
+		frame.layers.splice(topIdx, 1);
+		frame.activeLayerIndex = bottomIdx;
+
+		history.push({
+			isStructural: true,
+			label: 'Merge Layer',
+			undo: () => {
+				bottomLayer.pixels = oldBottomPixels;
+				frame.layers.splice(topIdx, 0, topLayer);
+				frame.activeLayerIndex = topIdx;
+			},
+			redo: () => {
+				bottomLayer.pixels = mergedPixels;
+				frame.layers.splice(topIdx, 1);
+				frame.activeLayerIndex = bottomIdx;
+			}
+		});
+
+		sfx.playDraw();
+	}
 }

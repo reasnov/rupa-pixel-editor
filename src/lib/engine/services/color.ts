@@ -1,10 +1,10 @@
 import { editor } from '../../state/editor.svelte.js';
 import { sfx } from '../audio.js';
 import { history } from '../history.js';
-import { SpinnerEngine } from '../spinner.js';
+import { ColorEngine } from '../color.js';
 
 /**
- * ColorService: Manages the barista's flavors, palette manipulation,
+ * ColorService: Manages colors, palette manipulation,
  * and advanced color processing.
  */
 export class ColorService {
@@ -25,7 +25,7 @@ export class ColorService {
 	}
 
 	/**
-	 * Taste a color from the canvas at the current etcher position.
+	 * Pick a color from the canvas at the current cursor position.
 	 */
 	pickFromCanvas() {
 		const { x, y } = editor.cursor.pos;
@@ -41,11 +41,11 @@ export class ColorService {
 	}
 
 	/**
-	 * Weather the entire palette (Lighten/Darken).
+	 * Adjust the entire palette (Lighten/Darken).
 	 */
 	weatherPalette(amount: number) {
 		editor.paletteState.swatches = editor.paletteState.swatches.map((color) =>
-			SpinnerEngine.weather(color, amount)
+			ColorEngine.adjustBrightness(color, amount)
 		);
 		sfx.playDraw();
 	}
@@ -54,14 +54,14 @@ export class ColorService {
 	 * Mix the current active color with another color.
 	 */
 	mixActiveColor(otherHex: string, ratio = 0.5) {
-		const newColor = SpinnerEngine.entwine(editor.activeColor, otherHex, ratio);
+		const newColor = ColorEngine.mix(editor.activeColor, otherHex, ratio);
 		this.setColor(newColor);
 	}
 
 	/**
-	 * Color Soak (Flood Fill): Automatically fills connected pixels of the same color.
+	 * Flood Fill: Automatically fills connected pixels of the same color.
 	 */
-	soak() {
+	floodFill() {
 		const { x, y } = editor.cursor.pos;
 		const targetColor = editor.canvas.getColor(x, y);
 		const replacementColor = editor.activeColor;

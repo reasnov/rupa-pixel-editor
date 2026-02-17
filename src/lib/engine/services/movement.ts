@@ -2,11 +2,11 @@ import { editor } from '../../state/editor.svelte.js';
 import { sfx } from '../audio.js';
 
 /**
- * MovementService: Handles needle navigation and coordinate translations.
+ * MovementService: Handles cursor navigation and coordinate translations.
  */
 export class MovementService {
 	/**
-	 * Move the needle by a delta.
+	 * Move the cursor by a delta.
 	 */
 	move(dx: number, dy: number): boolean {
 		const newX = Math.max(0, Math.min(editor.canvas.width - 1, editor.cursor.pos.x + dx));
@@ -73,7 +73,7 @@ export class MovementService {
 	}
 
 	/**
-	 * Reset the needle to the artisan's home (1,1).
+	 * Reset the cursor to the center (1,1).
 	 */
 	jumpHome() {
 		this.jumpTo(1, 1);

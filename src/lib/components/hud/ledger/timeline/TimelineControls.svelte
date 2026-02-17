@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { editor } from '../../../../state/editor.svelte.js';
-	import { chronos } from '../../../../engine/chronos.svelte.js';
+	import { animation } from '../../../../engine/animation.svelte.js';
 </script>
 
 <div
@@ -14,7 +14,7 @@
 			.isPlaying
 			? 'bg-brand'
 			: 'bg-slate-700'}"
-		onclick={() => chronos.togglePlayback()}
+		onclick={() => animation.togglePlayback()}
 		title={__({ key: 'shortcut_labels.PLAY_PAUSE' }) + ' (P)'}
 		aria-label={__({ key: 'shortcut_labels.PLAY_PAUSE' })}
 	>

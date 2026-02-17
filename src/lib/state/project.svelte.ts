@@ -2,13 +2,13 @@ import { type ColorHex } from '../types/index.js';
 import { FrameState } from './frame.svelte.js';
 
 /**
- * ProjectState (The Recipe Book): Manages metadata, clipboard data, and the collection of Frames (Cups).
+ * ProjectState: Manages metadata, clipboard data, and the collection of Frames.
  */
 export class ProjectState {
 	currentFilePath = $state<string | null>(null);
 	lastSaved = $state<Date | null>(null);
 
-	// Recipe Book Structure
+	// Project Structure
 	frames = $state<FrameState[]>([]);
 	activeFrameIndex = $state(0);
 	isPlaying = $state(false);
@@ -25,7 +25,7 @@ export class ProjectState {
 	}
 
 	addFrame(name?: string) {
-		const newName = name || `Cup ${this.frames.length + 1}`;
+		const newName = name || `Frame ${this.frames.length + 1}`;
 		const frame = new FrameState(newName);
 		this.frames.push(frame);
 		this.activeFrameIndex = this.frames.length - 1;

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { editor } from '../../state/editor.svelte.js';
-	import { shuttle } from '../../engine/shuttle.js';
+	import { services } from '../../engine/services.js';
 	import Modal from '../ui/Modal.svelte';
 	import { onMount } from 'svelte';
 
@@ -11,7 +11,7 @@
 	let targetY = $state(editor.displayCoords.y);
 
 	function jump() {
-		shuttle.jumpTo(targetX, targetY);
+		services.jumpTo(targetX, targetY);
 		onClose();
 	}
 

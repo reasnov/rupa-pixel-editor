@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { editor } from '../../state/editor.svelte.js';
-	import { shuttle } from '../../engine/shuttle.js';
+	import { services } from '../../engine/services.js';
 	import Modal from '../ui/Modal.svelte';
 	import ColorPicker from './ColorPicker.svelte';
 
@@ -13,7 +13,7 @@
 	let showPicker = $state(false);
 
 	function apply() {
-		shuttle.manipulation.resize(width, height);
+		services.manipulation.resize(width, height);
 		onClose();
 	}
 </script>
@@ -83,8 +83,7 @@
 							{__({ key: 'settings.stabilization_desc' })}
 						</span>
 					</div>
-					<span class="font-mono text-sm font-bold text-brand">{editor.studio.stabilization}%</span
-					>
+					<span class="font-mono text-sm font-bold text-brand">{editor.studio.stabilization}%</span>
 				</div>
 				<input
 					id="stab-input"

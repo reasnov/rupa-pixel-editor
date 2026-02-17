@@ -2,7 +2,7 @@
 	import { editor } from '../../state/editor.svelte.js';
 </script>
 
-<div class="editor-panel w-full p-3 shadow-sm border-none bg-stone-light/50" role="status">
+<div class="editor-panel w-full border-none bg-stone-light/50 p-3 shadow-sm" role="status">
 	<div class="flex flex-col gap-3">
 		<div class="flex flex-col">
 			<span class="font-serif text-[8px] font-black tracking-widest text-charcoal/30 uppercase"

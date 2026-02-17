@@ -12,34 +12,32 @@ _Core philosophy, project identity, and the "Cottagecore" aesthetic._
 
 _How to use the Café: Navigation, Pixeling, and Artifact Creation._
 
-### 3. [Terminology](./wiki/terminology.md)
+### 3. [Technical Architecture](./developers/architecture.md)
 
-_Mapping software concepts to the language of craft._
+_System design, state management with Svelte 5 Runes, and core engines._
 
-### 4. [Technical Architecture](./developers/architecture.md)
-
-_System design, state management with Svelte 5 Runes, and the Keyboard engine._
-
-### 5. [Technical Specifications](./developers/specs.md)
+### 4. [Technical Specifications](./developers/specs.md)
 
 _Grid mechanics, intent schemas, visual identity, and performance requirements._
 
-### 6. [Development Blueprints](./developers/blueprints/README.md)
+### 5. [Development Blueprints](./developers/blueprints/README.md)
 
 _Historical and future development roadmaps._
 
-- [01: Project Genesis](./developers/blueprints/01-project-genesis.md)
+- [01: Core Architecture](./developers/blueprints/01-core-architecture.md)
 - [02: Palette & Export Engine](./developers/blueprints/02-palette-and-export.md)
-- [03: Persistence & Canvas Manipulation](./developers/blueprints/03-persistence-and-manipulation.md)
-- [04: The EditorPad Engine](./developers/blueprints/04-enginepad-engine.md)
-- [05: The Barista's Stance](./developers/blueprints/05-barista-stance.md)
-- [06: The Master's Project](./developers/blueprints/06-masters-project.md)
+- [03: Persistence & Manipulation](./developers/blueprints/03-persistence-and-manipulation.md)
+- [04: Input Engine](./developers/blueprints/04-input-engine.md)
+- [05: Mode Orchestration](./developers/blueprints/05-mode-orchestration.md)
+- [06: Project Management](./developers/blueprints/06-project-management.md)
+- [07: Geometric Logic](./developers/blueprints/07-geometric-logic.md)
+- [08: Timeline System](./developers/blueprints/08-timeline-system.md)
 
-### 7. [Release Notes](./pubs/releases/v0.6.1.md)
+### 6. [Release Notes](./pubs/releases/v0.6.1.md)
 
 _Latest milestone highlights and changes._
 
-### 8. [Security Policy](../SECURITY.md)
+### 7. [Security Policy](../SECURITY.md)
 
 _Guidelines for reporting vulnerabilities._
 

@@ -5,7 +5,7 @@
 
 <div class="flex items-center gap-4 px-4">
 	{#if editor.project.lastSaved}
-		<div 
+		<div
 			transition:fade
 			class="flex items-center gap-2 rounded-full border border-charcoal/10 bg-foam-white/50 px-3 py-1"
 		>

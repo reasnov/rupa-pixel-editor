@@ -15,7 +15,7 @@
 
 <div class="flex {direction} {current.gap} justify-center text-center select-none">
 	<h1 class="font-tiny5 leading-none text-brand {current.h1} tracking-tighter">Rupa</h1>
-	
+
 	{#if size === 'sm'}
 		<div class="h-3 w-px bg-brand/20" aria-hidden="true"></div>
 	{/if}

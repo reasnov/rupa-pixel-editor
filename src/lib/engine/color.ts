@@ -1,6 +1,6 @@
 import { type ColorHex } from '../types/index.js';
 
-export interface Fiber {
+export interface ColorHSLA {
 	h: number; // 0-360
 	s: number; // 0-100
 	l: number; // 0-100
@@ -8,15 +8,14 @@ export interface Fiber {
 }
 
 /**
- * SpinnerEngine: The specialized engine for processing colors (Dyes).
- * Analogous to spinning raw fibers into usable threads.
+ * ColorEngine: The specialized engine for processing colors.
  */
-export class SpinnerEngine {
+export class ColorEngine {
 	/**
-	 * Spin raw HSLA fiber into a Thread (HEX string).
+	 * Converts HSLA color to a HEX string.
 	 */
-	static spin(fiber: Fiber): ColorHex {
-		const { h, s, l, a } = fiber;
+	static toHex(hsla: ColorHSLA): ColorHex {
+		const { h, s, l, a } = hsla;
 		const h_norm = h / 360;
 		const s_norm = s / 100;
 		const l_norm = l / 100;
@@ -41,7 +40,7 @@ export class SpinnerEngine {
 			b = hue2rgb(h_norm - 1 / 3);
 		}
 
-		const toHex = (x: number) =>
+		const hexComponent = (x: number) =>
 			Math.round(x * 255)
 				.toString(16)
 				.padStart(2, '0');
@@ -50,20 +49,20 @@ export class SpinnerEngine {
 			.toString(16)
 			.padStart(2, '0');
 
-		const hex = `#${toHex(r)}${toHex(g)}${toHex(b)}`;
+		const hex = `#${hexComponent(r)}${hexComponent(g)}${hexComponent(b)}`;
 		return alphaHex === 'ff' ? hex : hex + alphaHex;
 	}
 
 	/**
-	 * Unravel a Thread (HEX string) back into raw HSLA fiber.
+	 * Converts a HEX string back to HSLA.
 	 */
-	static unravel(thread: ColorHex): Fiber {
+	static toHSLA(hexStr: ColorHex): ColorHSLA {
 		let r = 0,
 			g = 0,
 			b = 0,
 			a = 1;
 
-		const hex = thread.replace('#', '');
+		const hex = hexStr.replace('#', '');
 
 		if (hex.length === 3 || hex.length === 4) {
 			r = parseInt(hex[0] + hex[0], 16);
@@ -113,45 +112,44 @@ export class SpinnerEngine {
 	}
 
 	/**
-	 * Weathering: Lighten or darken a thread.
+	 * Adjust brightness.
+	 * @param hex HEX color string.
 	 * @param amount -1.0 to 1.0 (negative for darker, positive for lighter)
 	 */
-	static weather(thread: ColorHex, amount: number): ColorHex {
-		const fiber = this.unravel(thread);
-		fiber.l = Math.max(0, Math.min(100, fiber.l + amount * 100));
-		return this.spin(fiber);
+	static adjustBrightness(hex: ColorHex, amount: number): ColorHex {
+		const hsla = this.toHSLA(hex);
+		hsla.l = Math.max(0, Math.min(100, hsla.l + amount * 100));
+		return this.toHex(hsla);
 	}
 
 	/**
-	 * Pigment: Adjust saturation.
+	 * Adjust saturation.
+	 * @param hex HEX color string.
 	 * @param amount -1.0 to 1.0
 	 */
-	static pigment(thread: ColorHex, amount: number): ColorHex {
-		const fiber = this.unravel(thread);
-		fiber.s = Math.max(0, Math.min(100, fiber.s + amount * 100));
-		return this.spin(fiber);
+	static adjustSaturation(hex: ColorHex, amount: number): ColorHex {
+		const hsla = this.toHSLA(hex);
+		hsla.s = Math.max(0, Math.min(100, hsla.s + amount * 100));
+		return this.toHex(hsla);
 	}
 
 	/**
-	 * Strength: Adjust alpha.
+	 * Adjust opacity.
+	 * @param hex HEX color string.
 	 * @param a 0.0 to 1.0
 	 */
-	static strength(thread: ColorHex, a: number): ColorHex {
-		const fiber = this.unravel(thread);
-		fiber.a = Math.max(0, Math.min(1, a));
-		return this.spin(fiber);
+	static adjustOpacity(hex: ColorHex, a: number): ColorHex {
+		const hsla = this.toHSLA(hex);
+		hsla.a = Math.max(0, Math.min(1, a));
+		return this.toHex(hsla);
 	}
 
 	/**
-	 * Entwine: Mix two threads together.
+	 * Mix two colors together.
 	 */
-	static entwine(threadA: ColorHex, threadB: ColorHex, ratio = 0.5): ColorHex {
-		const fA = this.unravel(threadA);
-		const fB = this.unravel(threadB);
-
-		// We mix in RGB space for more natural results than HSL
-		const rA = this.hexToRgb(threadA);
-		const rB = this.hexToRgb(threadB);
+	static mix(colorA: ColorHex, colorB: ColorHex, ratio = 0.5): ColorHex {
+		const rA = this.hexToRgb(colorA);
+		const rB = this.hexToRgb(colorB);
 
 		const mixed = {
 			r: Math.round(rA.r * (1 - ratio) + rB.r * ratio),
@@ -164,9 +162,6 @@ export class SpinnerEngine {
 	}
 
 	private static hexToRgb(hexStr: string) {
-		const f = this.unravel(hexStr);
-		// Dummy implementation to get RGB from HEX via a simple way for now
-		// In a real scenario, we'd use a more robust RGB mixer
 		const hex = hexStr.replace('#', '');
 		let r = 0,
 			g = 0,

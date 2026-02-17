@@ -5,7 +5,7 @@
 </script>
 
 <div
-	class="flex h-32 w-full flex-col gap-1 overflow-hidden px-4 py-2 bg-transparent"
+	class="flex h-32 w-full flex-col gap-1 overflow-hidden bg-transparent px-4 py-2"
 	role="region"
 	aria-label="Timeline"
 >
@@ -24,9 +24,7 @@
 
 		<div class="flex items-center gap-4">
 			<div class="flex flex-col items-end">
-				<span
-					class="font-serif text-[7px] font-black tracking-widest text-charcoal/20 uppercase"
-				>
+				<span class="font-serif text-[7px] font-black tracking-widest text-charcoal/20 uppercase">
 					{__({ key: 'timeline.track' })}
 				</span>
 				<span class="font-mono text-[9px] font-bold text-brand/40">

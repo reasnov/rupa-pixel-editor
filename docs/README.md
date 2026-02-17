@@ -33,7 +33,7 @@ _Historical and future development roadmaps._
 - [07: Geometric Logic](./developers/blueprints/07-geometric-logic.md)
 - [08: Timeline System](./developers/blueprints/08-timeline-system.md)
 
-### 6. [Release Notes](./pubs/releases/v0.6.1.md)
+### 6. [Release Notes](./pubs/releases/v0.7.0.md)
 
 _Latest milestone highlights and changes._
 

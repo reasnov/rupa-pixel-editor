@@ -1,6 +1,6 @@
 import { editor } from '../state/editor.svelte';
 import { keyboard } from './keyboard.svelte.js';
-import { flow } from './flow.svelte.js';
+import { sequence } from './sequence.svelte.js';
 
 export type ModeType = 'READY' | 'PAINT' | 'ERASE' | 'SELECT' | 'PICK' | 'FLOW';
 
@@ -14,7 +14,7 @@ interface ModeDescriptor {
 
 export class ModeEngine {
 	current = $derived.by((): ModeDescriptor => {
-		if (flow.isActive) {
+		if (sequence.isActive) {
 			return {
 				type: 'FLOW',
 				label: __({ key: 'timeline.mode_labels.brewing' }),

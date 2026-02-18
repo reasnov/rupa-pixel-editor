@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { editor } from '../../state/editor.svelte.js';
+	import { editor as engine } from '../../engine/editor.svelte.js';
 	import { keyboard } from '../../engine/keyboard.svelte.js';
 	import { scale } from 'svelte/transition';
 	import { onMount, untrack } from 'svelte';
@@ -18,9 +19,7 @@
 		...a,
 		id: a.intent.toLowerCase().replace(/_/g, '-'),
 		action: () => {
-			import('../../engine/editor.svelte.js').then(({ editor }) => {
-				editor.handleIntent(a.intent);
-			});
+			engine.handleIntent(a.intent);
 		}
 	}));
 

@@ -40,7 +40,7 @@ export class ServiceCoordinator {
 
 	// --- Drawing & Color Aliases ---
 
-	draw() {
+	paint() {
 		this.draw.draw();
 	}
 	erase() {

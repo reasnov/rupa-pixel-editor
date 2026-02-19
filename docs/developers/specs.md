@@ -31,11 +31,13 @@ Every interaction is mapped to a `ActionIntent` to ensure semantic consistency. 
 - `ERASE`: Remove color (Backspace/Delete/Right-click).
 - `BRUSH_SIZE_INC`, `BRUSH_SIZE_DEC`: Adjust brush diameter (**`[`** and **`]`**).
 - `TOGGLE_BRUSH_SHAPE`: Switch between Square and Circle vessels (**`Alt + B`**).
+- `TOGGLE_AIRBRUSH`: Enable 'The Mist' spray mode (**`Alt + A`**).
 - `CYCLE_SYMMETRY`: Toggle Horizontal, Vertical, and Quadrant symmetry (**`S`**).
 - `TOGGLE_TILING`: Enable seamless coordinate wrapping (**`T`**).
 - `TOGGLE_PIXEL_PERFECT`: Automated line cleaning (**`Shift + P`**).
 - `SHADE_LIGHTEN`, `SHADE_DARKEN`, `SHADE_DITHER`: Real-time color modification modifiers (**`L`**, **`D`**, **`X`**).
 - `TOGGLE_ALPHA_LOCK`, `TOGGLE_COLOR_LOCK`: Pixel protection modes (**`A`**, **`Shift + A`**).
+- `BIND_VERTEX`, `SEAL_BINDING`: Polygon construction steps.
 
 ### 2.3 Manipulation & Magic
 
@@ -46,6 +48,8 @@ Every interaction is mapped to a `ActionIntent` to ensure semantic consistency. 
 - `TOOL_GRADIENT`: Linear ombre pouring.
 - `TOOL_RECTANGLE`, `TOOL_ELLIPSE`, `TOOL_POLYGON`: Geometric shape vessels.
 - `TOOL_TRANSFORM`: Nudge and reposition selected pixels.
+- `TOOL_SELECT`: Area focus tool (**`Shift + S`**).
+- `SYRUP_FLOW`: Selection propagation across frames (HUD Action).
 
 ### 2.4 Project & Layering (Order Management)
 

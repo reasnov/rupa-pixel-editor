@@ -131,7 +131,7 @@ export class ExportEngine {
 			const endPct = (((elapsedMs + durationMs) / totalDurationMs) * 100).toFixed(3);
 
 			const animName = `rupa-frame-${i}`;
-			svg += `<g class="${animName}" style="opacity: 0; visibility: hidden; animation: ${animName} ${totalDurationSec}s step-end infinite;">`;
+			svg += `<g class="${animName}" style="opacity: 0; visibility: hidden; display: none; animation: ${animName} ${totalDurationSec}s step-end infinite;">`;
 
 			if (includeBorders) {
 				data.forEach((val, idx) => {
@@ -162,9 +162,9 @@ export class ExportEngine {
 			svg += `</g>`;
 			svg += `<style>
                 @keyframes ${animName} {
-                    0%, ${startPct}% { opacity: 0; visibility: hidden; }
-                    ${startPct}%, ${endPct}% { opacity: 1; visibility: visible; }
-                    ${endPct}%, 100% { opacity: 0; visibility: hidden; }
+                    0%, ${startPct}% { opacity: 0; visibility: hidden; display: none; }
+                    ${startPct}%, ${endPct}% { opacity: 1; visibility: visible; display: block; }
+                    ${endPct}%, 100% { opacity: 0; visibility: hidden; display: none; }
                 }
             </style>`;
 
@@ -177,6 +177,7 @@ export class ExportEngine {
 
 	/**
 	 * Renders a sequence of frames to a video Blob.
+	 * Phase 1 of The Chronos Protocol: Deterministic Frame Assembly.
 	 */
 	static async toVideo(
 		width: number,
@@ -194,6 +195,12 @@ export class ExportEngine {
 		canvas.width = finalWidth;
 		canvas.height = finalHeight;
 
+		// Visible Buffer Strategy: Briefly attach to DOM to prevent throttling
+		canvas.style.position = 'fixed';
+		canvas.style.left = '-10000px';
+		canvas.style.top = '-10000px';
+		document.body.appendChild(canvas);
+
 		const ctx = canvas.getContext('2d', { alpha: false })!;
 		ctx.imageSmoothingEnabled = false;
 
@@ -202,7 +209,9 @@ export class ExportEngine {
 				? 'video/mp4;codecs=h264'
 				: 'video/webm;codecs=vp8';
 
-		const stream = canvas.captureStream(30);
+		// Chronos Protocol: captureStream(0) for manual frame requests
+		const stream = (canvas as any).captureStream(0);
+		const track = stream.getVideoTracks()[0];
 		const recorder = new MediaRecorder(stream, {
 			mimeType,
 			videoBitsPerSecond: 8000000
@@ -215,10 +224,14 @@ export class ExportEngine {
 
 		return new Promise((resolve, reject) => {
 			recorder.onstop = () => {
+				document.body.removeChild(canvas);
 				const blob = new Blob(chunks, { type: mimeType });
 				resolve(blob);
 			};
-			recorder.onerror = (err) => reject(err);
+			recorder.onerror = (err) => {
+				document.body.removeChild(canvas);
+				reject(err);
+			};
 
 			recorder.start();
 
@@ -247,25 +260,35 @@ export class ExportEngine {
 						ctx.strokeRect(px + 0.5, py + 0.5, pw - 1, ph - 1);
 					}
 				}
+				// Force GPU Flush
+				ctx.getImageData(0, 0, 1, 1);
 			};
 
 			(async () => {
+				// Warm-up delay
 				await new Promise((r) => setTimeout(r, 200));
 
 				for (let i = 0; i < framesData.length; i++) {
 					drawFrame(i);
+					// Explicitly request the frame
+					if (track && (track as any).requestFrame) {
+						(track as any).requestFrame();
+					}
+					// Wait for the duration of the frame
 					await new Promise((r) => setTimeout(r, frameDurations[i]));
 				}
 
+				// Finalization buffer
 				await new Promise((r) => setTimeout(r, 500));
 				recorder.stop();
-				stream.getTracks().forEach((t) => t.stop());
+				stream.getTracks().forEach((t: any) => t.stop());
 			})();
 		});
 	}
 
 	/**
 	 * Generates a GIF.
+	 * Phase 2 of The Chronos Protocol: Accumulated Error Correction.
 	 */
 	static async toGIF(
 		width: number,
@@ -288,6 +311,8 @@ export class ExportEngine {
 
 		const buffer = new Uint8Array(framesData.length * finalWidth * finalHeight * 2);
 		const writer = new GifWriter(buffer, finalWidth, finalHeight, { loop: 0 });
+
+		let timeDebt = 0;
 
 		for (let i = 0; i < framesData.length; i++) {
 			ctx.clearRect(0, 0, finalWidth, finalHeight);
@@ -321,9 +346,14 @@ export class ExportEngine {
 			const imageData = ctx.getImageData(0, 0, finalWidth, finalHeight).data;
 			const { indexedPixels, palette } = this.quantizeFrame(imageData);
 
+			// Calculate delay with time debt correction
+			const totalTargetMs = frameDurations[i] + timeDebt;
+			const delayCentiSec = Math.max(1, Math.round(totalTargetMs / 10));
+			timeDebt = totalTargetMs - delayCentiSec * 10;
+
 			writer.addFrame(0, 0, finalWidth, finalHeight, indexedPixels, {
 				palette: palette,
-				delay: Math.round(frameDurations[i] / 10)
+				delay: delayCentiSec
 			});
 
 			await new Promise((r) => setTimeout(r, 0));

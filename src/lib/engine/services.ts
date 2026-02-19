@@ -145,6 +145,7 @@ export class ServiceCoordinator {
 		scale: number = 10,
 		bgColor: string | 'transparent' = 'transparent'
 	) {
+		editor.studio.show('Preparing Cup...');
 		const { ExportEngine } = await import('./export.js');
 		const { width, height, compositePixels } = editor.canvas;
 		const includeBorders = editor.studio.includePixelBorders;

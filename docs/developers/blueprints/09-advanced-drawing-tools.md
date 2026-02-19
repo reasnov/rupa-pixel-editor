@@ -115,7 +115,93 @@ To maintain consistency and professional standards, the following mappings are f
 
 ---
 
-## 9. UX Performance Goals
+## 9. Wave II: Purity & Structure (Advanced Additions)
 
-- **Consistency:** Keyboard-driven `MOVE + PAINT` (holding `Ctrl + Arrows`) must feel as fluid as a Mouse drag.
-- **Resonance:** Each advanced tool should have a distinct, subtle "paper-click" sound provided by the **FeedbackEngine**.
+As the studio evolves, Wave II focuses on structural integrity and tracing precision.
+
+### 9.1 The Clean Pour (Pixel-Perfect Lines)
+
+A specialized drawing algorithm that prevents "double-pixel" corners during freehand strokes.
+
+- **Orchestration:** Toggle with **`P`**.
+- **Logic:** `PixelLogic.pixelPerfectFilter()` removes redundant pixels from a stroke buffer where a 2x2 cluster would be formed.
+- **Visual:** The TechLedger shows a "✨ PURE" indicator when active.
+
+### 9.2 Geometric Vessels (Box & Round Pouring)
+
+Keyboard-centric shape creation.
+
+- **Orchestration:**
+  - **Rectangle:** `Alt + R` (Enter to start, move Arrows, Enter to commit).
+  - **Ellipse:** `Alt + C` (Enter to start, move Arrows, Enter to commit).
+- **Stance:** The studio enters a "Geometric Stance" where the cursor shows a ghost outline of the shape before committing.
+
+### 9.3 The Underlay (Reference Trace)
+
+Support for background reference images to assist in tracing complex sketches.
+
+- **Orchestration:** `Alt + U` to open the Underlay Crate (Upload).
+- **Control:** `Ctrl + Alt + U` to toggle visibility; `Ctrl + Alt + Arrows` to nudge the underlay position.
+- **Rendering:** The image is rendered with a variable "Vapor Opacity" (Default 20%) behind the grid.
+
+---
+
+## 10. Updated Shortcut Migration Map
+
+| Feature             | New Intent             | Primary Key      | Group   |
+| :------------------ | :--------------------- | :--------------- | :------ |
+| **Pixel-Perfect**   | `TOGGLE_PIXEL_PERFECT` | `p`              | Etching |
+| **Rectangle Tool**  | `TOOL_RECTANGLE`       | `Alt + r`        | Magic   |
+| **Ellipse Tool**    | `TOOL_ELLIPSE`         | `Alt + c`        | Magic   |
+| **Underlay Toggle** | `TOGGLE_UNDERLAY`      | `Ctrl + Alt + u` | View    |
+| **Underlay Crate**  | `OPEN_UNDERLAY_MENU`   | `Alt + u`        | Crates  |
+
+---
+
+## 11. Wave III: Texture & Flow (Professional Mastery)
+
+Wave III introduces high-level manipulation and organic blending to the studio.
+
+### 11.1 The Ombre Pour (Gradient Fill)
+
+Advanced color blending across defined areas or the entire canvas.
+
+- **Orchestration:** `Alt + G` (Toggle Gradient Stance).
+- **Control:** Enter to set Start Color, Move to define Axis, Enter to set End Color.
+- **Algorithm:** Linear and Radial interpolation between two hex values.
+
+### 11.2 Pattern Etching (Custom Stencils)
+
+Use a copied selection as a brush tip for repeating complex motifs.
+
+- **Orchestration:** `Ctrl + Alt + B` to "Load Swatch into Vessel."
+- **Behavior:** The current clipboard data is used as the brush kernel, allowing for "stamp" style painting.
+
+### 11.3 Kinetic Transformation (Focus Manipulation)
+
+Move and scale selected pixels without using the clipboard.
+
+- **Orchestration:** `M` (Move Mode) while selection is active.
+- **Control:** Arrows to nudge selection; `Alt + Arrows` to stretch/scale.
+- **Visual:** A Magenta transform box with handles appears around the selection.
+
+---
+
+## 12. Updated Shortcut Migration Map (Wave I - III)
+
+| Feature             | New Intent             | Primary Key      | Group   |
+| :------------------ | :--------------------- | :--------------- | :------ |
+| **Pixel-Perfect**   | `TOGGLE_PIXEL_PERFECT` | `p`              | Etching |
+| **Rectangle Tool**  | `TOOL_RECTANGLE`       | `Alt + r`        | Magic   |
+| **Ellipse Tool**    | `TOOL_ELLIPSE`         | `Alt + c`        | Magic   |
+| **Underlay Toggle** | `TOGGLE_UNDERLAY`      | `Ctrl + Alt + u` | View    |
+| **Gradient Fill**   | `TOOL_GRADIENT`        | `Alt + g`        | Magic   |
+| **Pattern Brush**   | `TOGGLE_PATTERN_BRUSH` | `Ctrl + Alt + b` | Etching |
+| **Transform Mode**  | `TOOL_TRANSFORM`       | `m`              | Edit    |
+
+---
+
+## 13. UX Performance Goals
+
+- **Gradient Throughput:** Interpolation must be calculated using a fast bitwise operation or a lookup table to ensure large fills don't block the UI thread.
+- **Pattern Stability:** Pattern brushes with sizes > 32x32 must be automatically downscaled or warned to prevent memory spikes during high-speed painting.

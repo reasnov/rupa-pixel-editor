@@ -145,4 +145,43 @@ export class SelectionService {
 		}
 		return isInside;
 	}
+
+	/**
+	 * Nudge Selection: Moves the selected pixels by a delta.
+	 */
+	nudge(dx: number, dy: number) {
+		if (editor.selection.indices.length === 0) return;
+
+		const width = editor.canvas.width;
+		const height = editor.canvas.height;
+		const currentPixels = [...editor.canvas.pixels];
+		const selectedIndices = new Set(editor.selection.indices);
+
+		// 1. Capture current colors and clear them from canvas
+		const movedData: Map<number, string | null> = new Map();
+		editor.selection.indices.forEach((idx) => {
+			movedData.set(idx, currentPixels[idx]);
+			currentPixels[idx] = null;
+		});
+
+		// 2. Calculate new positions
+		const newIndices: number[] = [];
+		movedData.forEach((color, idx) => {
+			const x = idx % width;
+			const y = Math.floor(idx / width);
+			const nx = x + dx;
+			const ny = y + dy;
+
+			if (nx >= 0 && nx < width && ny >= 0 && ny < height) {
+				const nIdx = ny * width + nx;
+				currentPixels[nIdx] = color;
+				newIndices.push(nIdx);
+			}
+		});
+
+		// 3. Update state
+		editor.canvas.pixels = currentPixels;
+		editor.selection.indices = newIndices;
+		sfx.playMove();
+	}
 }

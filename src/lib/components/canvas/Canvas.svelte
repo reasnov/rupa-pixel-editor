@@ -157,6 +157,25 @@
 			>
 				<CanvasGuides />
 
+				{#if editor.studio.underlayImage && editor.studio.isUnderlayVisible}
+					<div
+						transition:fade
+						class="pointer-events-none absolute inset-0 z-[5] overflow-hidden"
+						style="opacity: {editor.studio.underlayOpacity}"
+					>
+						<img
+							src={editor.studio.underlayImage}
+							alt="Underlay"
+							class="absolute origin-top-left"
+							style="
+								transform: translate({editor.studio.underlayOffset.x}px, {editor.studio.underlayOffset
+								.y}px) scale({editor.studio.underlayScale});
+								image-rendering: auto;
+							"
+						/>
+					</div>
+				{/if}
+
 				{#if editor.showGhostLayers}
 					{#each ghosts as ghost, i (i)}
 						<GhostFrame pixels={ghost.pixels} width={w} height={h} opacity={ghost.opacity} />
@@ -171,6 +190,69 @@
 					class="pointer-events-none absolute inset-0 h-full w-full"
 					style="image-rendering: pixelated;"
 				></canvas>
+
+				<!-- Shape Preview Layer (Geometric Stance) -->
+				{#if editor.studio.activeTool !== 'NONE' && editor.studio.shapeAnchor}
+					<svg
+						class="pointer-events-none absolute inset-0 z-40 h-full w-full overflow-visible"
+						viewBox="0 0 {w} {h}"
+						preserveAspectRatio="none"
+					>
+						{@const anchor = editor.studio.shapeAnchor}
+						{@const cursor = editor.cursor.pos}
+						{@const x1 = Math.min(anchor.x, cursor.x)}
+						{@const y1 = Math.min(anchor.y, cursor.y)}
+						{@const x2 = Math.max(anchor.x, cursor.x)}
+						{@const y2 = Math.max(anchor.y, cursor.y)}
+						{@const rw = x2 - x1 + 1}
+						{@const rh = y2 - y1 + 1}
+
+						{#if editor.studio.activeTool === 'RECTANGLE'}
+							<rect
+								x={x1}
+								y={y1}
+								width={rw}
+								height={rh}
+								fill="none"
+								stroke="var(--color-brand)"
+								stroke-width="0.1"
+								stroke-dasharray="0.2, 0.2"
+								class="marching-ants"
+							/>
+						{:else if editor.studio.activeTool === 'ELLIPSE'}
+							<ellipse
+								cx={x1 + rw / 2}
+								cy={y1 + rh / 2}
+								rx={rw / 2}
+								ry={rh / 2}
+								fill="none"
+								stroke="var(--color-brand)"
+								stroke-width="0.1"
+								stroke-dasharray="0.2, 0.2"
+								class="marching-ants"
+							/>
+						{:else if editor.studio.activeTool === 'GRADIENT'}
+							<line
+								x1={anchor.x + 0.5}
+								y1={anchor.y + 0.5}
+								x2={cursor.x + 0.5}
+								y2={cursor.y + 0.5}
+								stroke="var(--color-brand)"
+								stroke-width="0.1"
+								class="shadow-sm"
+							/>
+							<circle cx={anchor.x + 0.5} cy={anchor.y + 0.5} r="0.3" fill="var(--color-brand)" />
+							<circle
+								cx={cursor.x + 0.5}
+								cy={cursor.y + 0.5}
+								r="0.3"
+								fill="none"
+								stroke="var(--color-brand)"
+								stroke-width="0.05"
+							/>
+						{/if}
+					</svg>
+				{/if}
 
 				<!-- Grid Overlay (Now on top of pixels) -->
 				<div

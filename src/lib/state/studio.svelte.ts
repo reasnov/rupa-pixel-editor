@@ -18,7 +18,15 @@ export class StudioState {
 	isTilingEnabled = $state(false);
 	isAlphaLocked = $state(false);
 	isColorLocked = $state(false);
+	isPixelPerfect = $state(false);
 	colorLockSource = $state<string | null>(null);
+
+	activeTool = $state<'NONE' | 'RECTANGLE' | 'ELLIPSE' | 'GRADIENT'>('NONE');
+	shapeAnchor = $state<{ x: number; y: number } | null>(null);
+
+	// Gradient (Wave III)
+	gradientStartColor = $state<string | null>(null);
+	gradientEndColor = $state<string | null>(null);
 
 	// Smoothing & Stabilization (0 to 100)
 	stabilization = $state(50);
@@ -56,7 +64,25 @@ export class StudioState {
 	showExportMenu = $state(false);
 	showCanvasSettings = $state(false);
 	showPersistenceMenu = $state(false);
+	showUnderlayMenu = $state(false);
 	showGoTo = $state(false);
+
+	// Underlay (Wave II)
+	underlayImage = $state<string | null>(null);
+	isUnderlayVisible = $state(true);
+	underlayOpacity = $state(0.2);
+	underlayOffset = $state({ x: 0, y: 0 });
+	underlayScale = $state(1.0);
+
+	isTransforming = $state(false);
+
+	// Pattern Brush (Wave III)
+	isPatternBrushActive = $state(false);
+	patternBrushData = $state<{
+		width: number;
+		height: number;
+		data: (string | null)[];
+	} | null>(null);
 
 	// Tab States
 	projectActiveTab = $state<'frames' | 'layers'>('layers');

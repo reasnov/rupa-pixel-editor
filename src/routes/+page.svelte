@@ -23,6 +23,7 @@
 	import GoToModal from '$lib/components/overlay/GoToModal.svelte';
 	import AudioSettings from '$lib/components/overlay/AudioSettings.svelte';
 	import GuideBook from '$lib/components/overlay/GuideBook.svelte';
+	import UnderlayMenu from '$lib/components/overlay/UnderlayMenu.svelte';
 
 	import { onMount } from 'svelte';
 
@@ -73,6 +74,10 @@
 
 {#if editor.showGuideMenu}
 	<GuideMenu onClose={() => (editor.showGuideMenu = false)} />
+{/if}
+
+{#if editor.studio.showUnderlayMenu}
+	<UnderlayMenu />
 {/if}
 
 <!-- HUD Layout -->

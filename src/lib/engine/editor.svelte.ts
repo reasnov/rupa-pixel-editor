@@ -39,6 +39,19 @@ export class EditorEngine {
 		studioAudio.resume();
 		state.cursor.resetInactivityTimer();
 
+		// Special Case: Underlay Nudging (Ctrl + Alt + Arrows)
+		if (
+			keyboard.isCtrlActive &&
+			keyboard.isAltActive &&
+			['MOVE_UP', 'MOVE_DOWN', 'MOVE_LEFT', 'MOVE_RIGHT'].includes(intent)
+		) {
+			const dx = intent === 'MOVE_LEFT' ? -1 : intent === 'MOVE_RIGHT' ? 1 : 0;
+			const dy = intent === 'MOVE_UP' ? -1 : intent === 'MOVE_DOWN' ? 1 : 0;
+			state.studio.underlayOffset.x += dx;
+			state.studio.underlayOffset.y += dy;
+			return;
+		}
+
 		switch (intent) {
 			case 'MOVE_UP':
 				return this.executeMove(0, -1);
@@ -55,6 +68,10 @@ export class EditorEngine {
 
 			case 'PAINT':
 				if (state.selection.isActive) return services.commitSelection();
+				if (state.studio.activeTool !== 'NONE') {
+					this.commitShape();
+					return;
+				}
 				return services.draw.draw();
 
 			case 'ERASE':
@@ -68,6 +85,10 @@ export class EditorEngine {
 					return services.selection.sealBinding();
 				}
 				if (state.selection.isActive) return services.commitSelection();
+				if (state.studio.activeTool !== 'NONE') {
+					this.commitShape();
+					return;
+				}
 				return services.draw.draw();
 			case 'PICK_COLOR':
 				return services.color.pickFromCanvas();
@@ -102,9 +123,20 @@ export class EditorEngine {
 				}
 
 				if (state.selection.isActive) {
+					if (state.studio.isTransforming) {
+						state.studio.isTransforming = false;
+						return;
+					}
 					state.selection.clear();
 					return;
 				}
+
+				if (state.studio.activeTool !== 'NONE') {
+					state.studio.activeTool = 'NONE';
+					state.studio.shapeAnchor = null;
+					return;
+				}
+
 				return state.handleEscape();
 
 			case 'OPEN_PALETTE':
@@ -185,6 +217,14 @@ export class EditorEngine {
 			case 'BRUSH_SIZE_DEC':
 				state.studio.brushSize = Math.max(1, state.studio.brushSize - 1);
 				return feedback.emit('READY');
+			case 'TOGGLE_PATTERN_BRUSH':
+				if (state.studio.isPatternBrushActive) {
+					state.studio.isPatternBrushActive = false;
+				} else if (state.project.clipboard) {
+					state.studio.patternBrushData = { ...state.project.clipboard };
+					state.studio.isPatternBrushActive = true;
+				}
+				return feedback.emit('READY');
 			case 'TOGGLE_BRUSH_SHAPE':
 				state.studio.brushShape = state.studio.brushShape === 'SQUARE' ? 'CIRCLE' : 'SQUARE';
 				return feedback.emit('READY');
@@ -204,6 +244,9 @@ export class EditorEngine {
 			case 'TOGGLE_ALPHA_LOCK':
 				state.studio.isAlphaLocked = !state.studio.isAlphaLocked;
 				return feedback.emit('READY');
+			case 'TOGGLE_PIXEL_PERFECT':
+				state.studio.isPixelPerfect = !state.studio.isPixelPerfect;
+				return feedback.emit('READY');
 			case 'TOGGLE_COLOR_LOCK':
 				if (state.studio.isColorLocked) {
 					state.studio.isColorLocked = false;
@@ -217,6 +260,39 @@ export class EditorEngine {
 				}
 				return feedback.emit('READY');
 
+			case 'TOGGLE_UNDERLAY':
+				state.studio.isUnderlayVisible = !state.studio.isUnderlayVisible;
+				return feedback.emit('READY');
+			case 'OPEN_UNDERLAY_MENU':
+				state.studio.showUnderlayMenu = !state.studio.showUnderlayMenu;
+				return feedback.emit('READY');
+
+			case 'TOOL_RECTANGLE':
+				state.studio.activeTool = 'RECTANGLE';
+				state.studio.shapeAnchor = { ...state.cursor.pos };
+				return feedback.emit('READY');
+			case 'TOOL_ELLIPSE':
+				state.studio.activeTool = 'ELLIPSE';
+				state.studio.shapeAnchor = { ...state.cursor.pos };
+				return feedback.emit('READY');
+			case 'TOOL_GRADIENT':
+				if (state.studio.activeTool === 'GRADIENT') {
+					state.studio.activeTool = 'NONE';
+					state.studio.shapeAnchor = null;
+					state.studio.gradientStartColor = null;
+				} else {
+					state.studio.activeTool = 'GRADIENT';
+					state.studio.shapeAnchor = { ...state.cursor.pos };
+					state.studio.gradientStartColor = state.paletteState.activeColor;
+				}
+				return feedback.emit('READY');
+			case 'TOOL_TRANSFORM':
+				if (state.selection.isActive) {
+					state.studio.isTransforming = !state.studio.isTransforming;
+					return feedback.emit('READY');
+				}
+				return;
+
 			default:
 				if (intent.startsWith('SELECT_COLOR_')) {
 					const num = parseInt(intent.split('_')[2]);
@@ -225,7 +301,96 @@ export class EditorEngine {
 		}
 	}
 
+	private commitShape() {
+		const anchor = state.studio.shapeAnchor;
+		if (!anchor) return;
+
+		const { x, y } = state.cursor.pos;
+		const tool = state.studio.activeTool;
+
+		if (tool === 'GRADIENT') {
+			const startColor = state.studio.gradientStartColor;
+			const endColor = state.paletteState.activeColor;
+			if (!startColor) return;
+
+			// If selection exists, fill selection. Otherwise fill whole frame.
+			const targetIndices = state.selection.isActive
+				? state.selection.indices
+				: Array.from({ length: state.canvas.width * state.canvas.height }, (_, i) => i);
+
+			const gradientMap = PixelLogic.getLinearGradientMap(
+				anchor.x,
+				anchor.y,
+				x,
+				y,
+				targetIndices,
+				state.canvas.width
+			);
+
+			const currentPixels = [...state.canvas.pixels];
+			const batch: Array<{ index: number; oldColor: string | null; newColor: string | null }> = [];
+
+			gradientMap.forEach((m) => {
+				const mixed = ColorEngine.mix(startColor, endColor, m.ratio);
+				const oldColor = currentPixels[m.index];
+				if (oldColor !== mixed) {
+					batch.push({ index: m.index, oldColor, newColor: mixed });
+					currentPixels[m.index] = mixed;
+				}
+			});
+
+			if (batch.length > 0) {
+				state.canvas.pixels = currentPixels;
+				history.push(batch);
+				feedback.emit('DRAW');
+			}
+
+			state.studio.activeTool = 'NONE';
+			state.studio.shapeAnchor = null;
+			state.studio.gradientStartColor = null;
+			return;
+		}
+
+		let points: Array<{ x: number; y: number }> = [];
+		if (tool === 'RECTANGLE') {
+			points = PixelLogic.getRectanglePoints(anchor.x, anchor.y, x, y);
+		} else if (tool === 'ELLIPSE') {
+			points = PixelLogic.getEllipsePoints(anchor.x, anchor.y, x, y);
+		}
+
+		if (points.length > 0) {
+			const activeColor = state.paletteState.activeColor;
+			const batch: Array<{ index: number; oldColor: string | null; newColor: string | null }> = [];
+			const currentPixels = [...state.canvas.pixels];
+
+			points.forEach((p) => {
+				if (state.canvas.isValidCoord(p.x, p.y)) {
+					const index = state.canvas.getIndex(p.x, p.y);
+					const oldColor = currentPixels[index];
+					if (oldColor !== activeColor) {
+						batch.push({ index, oldColor, newColor: activeColor });
+						currentPixels[index] = activeColor;
+					}
+				}
+			});
+
+			if (batch.length > 0) {
+				state.canvas.pixels = currentPixels;
+				history.push(batch);
+				feedback.emit('DRAW');
+			}
+		}
+
+		state.studio.activeTool = 'NONE';
+		state.studio.shapeAnchor = null;
+	}
+
 	private executeMove(dx: number, dy: number) {
+		if (state.studio.isTransforming && state.selection.isActive) {
+			services.selection.nudge(dx, dy);
+			return;
+		}
+
 		if (services.movement.move(dx, dy)) {
 			const currentMode = mode.current.type;
 			if (currentMode === 'SELECT') {

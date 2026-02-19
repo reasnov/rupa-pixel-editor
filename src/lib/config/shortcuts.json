@@ -22,7 +22,7 @@
 		},
 		"GOTO": {
 			"label": "Jump to Coordinate",
-			"keys": ["Alt+g"],
+			"keys": ["Alt+j"],
 			"group": "Navigation"
 		},
 		"JUMP_HOME": {
@@ -60,6 +60,11 @@
 		"SELECT_SAME": {
 			"label": "Magic Wand",
 			"keys": ["w"],
+			"group": "Magic"
+		},
+		"TOOL_GRADIENT": {
+			"label": "Gradient Fill",
+			"keys": ["Alt+g"],
 			"group": "Magic"
 		}
 	},
@@ -167,7 +172,7 @@
 		},
 		"TOGGLE_GHOST_LAYERS": {
 			"label": "Onion Skinning",
-			"keys": ["Alt+g"],
+			"keys": ["Alt+o"],
 			"group": "Timeline"
 		}
 	},
@@ -224,6 +229,11 @@
 			"keys": ["["],
 			"group": "Etching"
 		},
+		"TOGGLE_PATTERN_BRUSH": {
+			"label": "Pattern Brush",
+			"keys": ["Ctrl+Alt+b"],
+			"group": "Etching"
+		},
 		"TOGGLE_BRUSH_SHAPE": {
 			"label": "Toggle Brush Shape",
 			"keys": ["Alt+b"],
@@ -263,6 +273,36 @@
 			"label": "Shade: Dither",
 			"keys": ["x"],
 			"group": "Etching"
+		},
+		"TOGGLE_PIXEL_PERFECT": {
+			"label": "Toggle Pixel-Perfect Lines",
+			"keys": ["p"],
+			"group": "Etching"
+		},
+		"TOOL_RECTANGLE": {
+			"label": "Rectangle Tool",
+			"keys": ["Alt+r"],
+			"group": "Etching"
+		},
+		"TOOL_ELLIPSE": {
+			"label": "Ellipse Tool",
+			"keys": ["Alt+c"],
+			"group": "Etching"
+		},
+		"TOGGLE_UNDERLAY": {
+			"label": "Toggle Underlay Visibility",
+			"keys": ["Ctrl+Alt+u"],
+			"group": "View"
+		},
+		"OPEN_UNDERLAY_MENU": {
+			"label": "Underlay Menu",
+			"keys": ["Alt+u"],
+			"group": "View"
+		},
+		"TOOL_TRANSFORM": {
+			"label": "Transform Selection",
+			"keys": ["m"],
+			"group": "Edit"
 		}
 	},
 	"system": {

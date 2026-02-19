@@ -8,6 +8,7 @@
 		"showExportMenu",
 		"showCanvasSettings",
 		"showPersistenceMenu",
+		"showUnderlayMenu",
 		"showGoTo"
 	]
 }

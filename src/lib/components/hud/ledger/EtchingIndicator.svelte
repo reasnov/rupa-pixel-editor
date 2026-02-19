@@ -52,4 +52,48 @@
 			∞
 		</div>
 	{/if}
+
+	<!-- Pixel-Perfect -->
+	{#if studio.isPixelPerfect}
+		<div
+			transition:fade
+			class="bg-green-leaves/10 text-green-leaves flex items-center gap-1 rounded-sm px-1.5 py-0.5 font-bold"
+			title={__({ key: 'shortcut_labels.TOGGLE_PIXEL_PERFECT' })}
+		>
+			✨ PURE
+		</div>
+	{/if}
+
+	<!-- Transform -->
+	{#if studio.isTransforming}
+		<div
+			transition:fade
+			class="flex animate-pulse items-center gap-1 rounded-sm bg-brand/20 px-1.5 py-0.5 font-bold text-brand"
+			title={__({ key: 'shortcut_labels.TOOL_TRANSFORM' })}
+		>
+			🚚 MOVING
+		</div>
+	{/if}
+
+	<!-- Pattern Brush -->
+	{#if studio.isPatternBrushActive}
+		<div
+			transition:fade
+			class="flex items-center gap-1 rounded-sm bg-brand/10 px-1.5 py-0.5 font-bold text-brand"
+			title={__({ key: 'shortcut_labels.TOGGLE_PATTERN_BRUSH' })}
+		>
+			🎨 STENCIL
+		</div>
+	{/if}
+
+	<!-- Gradient -->
+	{#if studio.activeTool === 'GRADIENT'}
+		<div
+			transition:fade
+			class="flex items-center gap-1 rounded-sm bg-brand/10 px-1.5 py-0.5 font-bold text-brand"
+			title={__({ key: 'shortcut_labels.TOOL_GRADIENT' })}
+		>
+			🌈 GRADIENT
+		</div>
+	{/if}
 </div>

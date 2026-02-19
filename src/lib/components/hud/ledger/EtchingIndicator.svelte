@@ -53,6 +53,17 @@
 		</div>
 	{/if}
 
+	<!-- Airbrush (The Mist) -->
+	{#if studio.isAirbrushActive}
+		<div
+			transition:fade
+			class="flex items-center gap-1 rounded-sm bg-brand/10 px-1.5 py-0.5 font-bold text-brand"
+			title={__({ key: 'labels.TOGGLE_AIRBRUSH' })}
+		>
+			☁️ MIST
+		</div>
+	{/if}
+
 	<!-- Pixel-Perfect -->
 	{#if studio.isPixelPerfect}
 		<div

@@ -1,6 +1,7 @@
 import { editor } from '../../state/editor.svelte.js';
 import { history } from '../history.js';
 import { sfx } from '../audio.js';
+import { ColorLogic } from '../../logic/color.js';
 
 export class ClipboardService {
 	copy() {
@@ -10,7 +11,7 @@ export class ClipboardService {
 
 		if (!bounds || points.length === 0) return;
 
-		const swatchData = new Array(bounds.width * bounds.height).fill(null);
+		const swatchData = new Uint32Array(bounds.width * bounds.height);
 		const source = editor.canvas.compositePixels; // Layer-Agnostic: Use merged image
 
 		points.forEach((p) => {
@@ -38,16 +39,17 @@ export class ClipboardService {
 		if (points.length === 0) return;
 
 		history.beginBatch();
-		const currentPixels = [...editor.canvas.pixels];
+		const currentPixels = new Uint32Array(editor.canvas.pixels);
 
 		points.forEach((p) => {
 			const index = p.y * width + p.x;
-			const oldColor = currentPixels[index];
-			history.push({ index, oldColor, newColor: null });
-			currentPixels[index] = null;
+			const oldVal = currentPixels[index];
+			history.push({ index, oldColor: ColorLogic.uint32ToHex(oldVal), newColor: null });
+			currentPixels[index] = 0;
 		});
 
 		editor.canvas.pixels = currentPixels;
+		editor.canvas.triggerPulse();
 		history.endBatch();
 
 		sfx.playErase();
@@ -62,7 +64,7 @@ export class ClipboardService {
 		const { width: lw, height: lh } = editor.canvas;
 
 		history.beginBatch();
-		const currentPixels = [...editor.canvas.pixels];
+		const currentPixels = new Uint32Array(editor.canvas.pixels);
 		let changed = false;
 
 		for (let y = 0; y < cb.height; y++) {
@@ -72,13 +74,17 @@ export class ClipboardService {
 
 				if (tx >= 0 && tx < lw && ty >= 0 && ty < lh) {
 					const cbIdx = y * cb.width + x;
-					const color = cb.data[cbIdx];
+					const val = cb.data[cbIdx];
 
-					if (color !== null) {
+					if (val !== 0) {
 						const lIdx = ty * lw + tx;
-						const oldColor = currentPixels[lIdx];
-						history.push({ index: lIdx, oldColor, newColor: color });
-						currentPixels[lIdx] = color;
+						const oldVal = currentPixels[lIdx];
+						history.push({
+							index: lIdx,
+							oldColor: ColorLogic.uint32ToHex(oldVal),
+							newColor: ColorLogic.uint32ToHex(val)
+						});
+						currentPixels[lIdx] = val;
 						changed = true;
 					}
 				}
@@ -87,6 +93,7 @@ export class ClipboardService {
 
 		if (changed) {
 			editor.canvas.pixels = currentPixels;
+			editor.canvas.triggerPulse();
 			sfx.playDraw();
 		}
 		history.endBatch();

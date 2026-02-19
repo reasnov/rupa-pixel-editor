@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { type ColorHex } from '../../types/index.js';
+	import { ColorLogic } from '../../logic/color.js';
 
 	let {
 		pixels,
@@ -7,7 +7,7 @@
 		height,
 		opacity = 0.2
 	} = $props<{
-		pixels: (ColorHex | null)[];
+		pixels: Uint32Array;
 		width: number;
 		height: number;
 		opacity?: number;
@@ -23,8 +23,9 @@
 		ctx.clearRect(0, 0, width, height);
 
 		for (let i = 0; i < pixels.length; i++) {
-			const color = pixels[i];
-			if (color) {
+			const val = pixels[i];
+			if (val !== 0) {
+				const color = ColorLogic.uint32ToHex(val)!;
 				ctx.fillStyle = color;
 				const x = i % width;
 				const y = Math.floor(i / width);

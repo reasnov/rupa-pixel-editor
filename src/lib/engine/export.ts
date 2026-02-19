@@ -1,4 +1,5 @@
 import { Path } from '../logic/path.js';
+import { ColorLogic } from '../logic/color.js';
 
 export class ExportEngine {
 	/**
@@ -8,7 +9,7 @@ export class ExportEngine {
 	static toSVG(
 		width: number,
 		height: number,
-		data: (string | null)[],
+		data: Uint32Array,
 		bgColor: string | 'transparent' = 'transparent',
 		includeBorders = false
 	): string {
@@ -20,8 +21,9 @@ export class ExportEngine {
 
 		if (includeBorders) {
 			// Draw individual pixels with borders
-			data.forEach((color, i) => {
-				if (color === null) return;
+			data.forEach((val, i) => {
+				if (val === 0) return;
+				const color = ColorLogic.uint32ToHex(val);
 				const x = i % width;
 				const y = Math.floor(i / width);
 				svg += `<rect x="${x}" y="${y}" width="1" height="1" fill="${color}" stroke="rgba(0,0,0,0.15)" stroke-width="0.05" />`;
@@ -30,8 +32,9 @@ export class ExportEngine {
 			// Draw optimized clusters
 			const clustersByColor: Map<string, Set<number>> = new Map();
 			for (let i = 0; i < data.length; i++) {
-				const color = data[i];
-				if (color === null) continue;
+				const val = data[i];
+				if (val === 0) continue;
+				const color = ColorLogic.uint32ToHex(val)!;
 				if (!clustersByColor.has(color)) clustersByColor.set(color, new Set());
 				clustersByColor.get(color)!.add(i);
 			}
@@ -54,7 +57,7 @@ export class ExportEngine {
 	static async toRaster(
 		width: number,
 		height: number,
-		data: (string | null)[],
+		data: Uint32Array,
 		scale: number,
 		format: 'png' | 'jpg' | 'webp' = 'png',
 		bgColor: string | 'transparent' = 'transparent',
@@ -77,8 +80,9 @@ export class ExportEngine {
 			ctx.fillRect(0, 0, finalWidth, finalHeight);
 		}
 
-		data.forEach((color, i) => {
-			if (color === null) return;
+		data.forEach((val, i) => {
+			if (val === 0) return;
+			const color = ColorLogic.uint32ToHex(val)!;
 			const x = i % width;
 			const y = Math.floor(i / width);
 			const px = Math.floor(x * scale);
@@ -106,7 +110,7 @@ export class ExportEngine {
 	static toAnimatedSVG(
 		width: number,
 		height: number,
-		framesData: (string | null)[][],
+		framesData: Uint32Array[],
 		frameDurations: number[],
 		bgColor: string | 'transparent' = 'transparent',
 		includeBorders = false
@@ -130,8 +134,9 @@ export class ExportEngine {
 			svg += `<g class="${animName}" style="opacity: 0; visibility: hidden; animation: ${animName} ${totalDurationSec}s step-end infinite;">`;
 
 			if (includeBorders) {
-				data.forEach((color, idx) => {
-					if (color === null) return;
+				data.forEach((val, idx) => {
+					if (val === 0) return;
+					const color = ColorLogic.uint32ToHex(val);
 					const x = idx % width;
 					const y = Math.floor(idx / width);
 					svg += `<rect x="${x}" y="${y}" width="1" height="1" fill="${color}" stroke="rgba(0,0,0,0.15)" stroke-width="0.05" />`;
@@ -139,8 +144,9 @@ export class ExportEngine {
 			} else {
 				const clustersByColor: Map<string, Set<number>> = new Map();
 				for (let idx = 0; idx < data.length; idx++) {
-					const color = data[idx];
-					if (color === null) continue;
+					const val = data[idx];
+					if (val === 0) continue;
+					const color = ColorLogic.uint32ToHex(val)!;
 					if (!clustersByColor.has(color)) clustersByColor.set(color, new Set());
 					clustersByColor.get(color)!.add(idx);
 				}
@@ -175,7 +181,7 @@ export class ExportEngine {
 	static async toVideo(
 		width: number,
 		height: number,
-		framesData: (string | null)[][],
+		framesData: Uint32Array[],
 		frameDurations: number[],
 		scale: number,
 		format: 'webm' | 'mp4' = 'webm',
@@ -222,8 +228,9 @@ export class ExportEngine {
 
 				const data = framesData[frameIndex];
 				for (let j = 0; j < data.length; j++) {
-					const color = data[j];
-					if (color === null) continue;
+					const val = data[j];
+					if (val === 0) continue;
+					const color = ColorLogic.uint32ToHex(val)!;
 					const x = j % width;
 					const y = Math.floor(j / width);
 					const px = Math.floor(x * scale);
@@ -263,7 +270,7 @@ export class ExportEngine {
 	static async toGIF(
 		width: number,
 		height: number,
-		framesData: (string | null)[][],
+		framesData: Uint32Array[],
 		frameDurations: number[],
 		scale: number,
 		bgColor: string | 'transparent' = 'transparent',
@@ -291,8 +298,9 @@ export class ExportEngine {
 
 			const frameData = framesData[i];
 			for (let j = 0; j < frameData.length; j++) {
-				const color = frameData[j];
-				if (color === null) continue;
+				const val = frameData[j];
+				if (val === 0) continue;
+				const color = ColorLogic.uint32ToHex(val)!;
 				const x = j % width;
 				const y = Math.floor(j / width);
 				const px = Math.floor(x * scale);

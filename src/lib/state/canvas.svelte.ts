@@ -8,6 +8,14 @@ import type { ProjectState } from './project.svelte.js';
 export class CanvasState {
 	private project: ProjectState;
 
+	// --- The Pulse (v0.8.0) ---
+	// Incremented to signal the UI to refresh without deep-diffing pixels.
+	renderPulse = $state(0);
+
+	triggerPulse() {
+		this.renderPulse++;
+	}
+
 	// --- Batch Pixel Buffer (Reactive) ---
 	pixelBuffer = $state<number[]>([]);
 	strokePoints = $state<Array<{ x: number; y: number }>>([]);
@@ -15,6 +23,18 @@ export class CanvasState {
 
 	constructor(project: ProjectState) {
 		this.project = project;
+	}
+
+	mount() {
+		// Automatically trigger pulse when the visual source changes
+		// Only runs on the client
+		$effect(() => {
+			// Accessing these values makes the effect reactive to them
+			const _p = this.compositePixels;
+			const _f = this.project.activeFrameIndex;
+			const _l = this.project.activeFrame.activeLayerIndex;
+			this.triggerPulse();
+		});
 	}
 
 	// --- Proxies to Active Frame ---
@@ -43,7 +63,7 @@ export class CanvasState {
 		return this.project.activeFrame.compositePixels;
 	}
 
-	set pixels(v: (ColorHex | null)[]) {
+	set pixels(v: Uint32Array) {
 		this.project.activeFrame.activeLayer.pixels = v;
 	}
 
@@ -82,27 +102,29 @@ export class CanvasState {
 
 	// --- Utilities ---
 
-	reset(width: number, height: number, pixels: (ColorHex | null)[]) {
+	reset(width: number, height: number, pixels: Uint32Array) {
 		this.width = width;
 		this.height = height;
 		this.pixels = pixels;
+		this.triggerPulse();
 	}
 
 	clear() {
 		this.project.activeFrame.activeLayer.clear();
+		this.triggerPulse();
 	}
 
 	getIndex(x: number, y: number): number {
 		return y * this.width + x;
 	}
 
-	getColor(x: number, y: number): ColorHex | null {
+	getColor(x: number, y: number): number {
 		// Layer agnostic picking: use composite pixels
 		return this.compositePixels[this.getIndex(x, y)];
 	}
 
-	setColor(x: number, y: number, color: ColorHex | null) {
-		this.pixels[this.getIndex(x, y)] = color;
+	setColor(x: number, y: number, colorVal: number) {
+		this.pixels[this.getIndex(x, y)] = colorVal;
 	}
 
 	isValidCoord(x: number, y: number): boolean {

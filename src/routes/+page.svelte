@@ -24,6 +24,7 @@
 	import AudioSettings from '$lib/components/overlay/AudioSettings.svelte';
 	import GuideBook from '$lib/components/overlay/GuideBook.svelte';
 	import UnderlayMenu from '$lib/components/overlay/UnderlayMenu.svelte';
+	import Minimap from '$lib/components/hud/Minimap.svelte';
 	import Toast from '$lib/components/ui/Toast.svelte';
 
 	import { onMount } from 'svelte';
@@ -79,6 +80,10 @@
 
 {#if editor.studio.showUnderlayMenu}
 	<UnderlayMenu />
+{/if}
+
+{#if editor.studio.showMinimap}
+	<Minimap />
 {/if}
 
 <Toast />

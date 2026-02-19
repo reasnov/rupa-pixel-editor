@@ -3,7 +3,7 @@ import { editor } from '../state/editor.svelte';
 import { keyboard } from './keyboard.svelte.js';
 import { sequence } from './sequence.svelte.js';
 
-export type ModeType = 'READY' | 'PAINT' | 'ERASE' | 'SELECT' | 'PICK' | 'FLOW';
+export type ModeType = 'READY' | 'PAINT' | 'ERASE' | 'SELECT' | 'PICK' | 'FLOW' | 'PAN';
 
 interface ModeDescriptor {
 	type: ModeType;
@@ -15,6 +15,16 @@ interface ModeDescriptor {
 
 export class ModeEngine {
 	current = $derived.by((): ModeDescriptor => {
+		if (editor.studio.isHandToolActive || keyboard.activeKeys.includes('q')) {
+			return {
+				type: 'PAN',
+				label: __({ key: 'labels.PAN_VIEWPORT' }),
+				icon: '🤚',
+				color: 'var(--color-brand)',
+				isPulse: false
+			};
+		}
+
 		if (sequence.isActive) {
 			return {
 				type: 'FLOW',
@@ -48,7 +58,7 @@ export class ModeEngine {
 			};
 		}
 
-		if (keyboard.isShiftActive) {
+		if (keyboard.isShiftActive || editor.studio.activeTool === 'SELECT') {
 			return {
 				type: 'SELECT',
 				label: __({ key: 'timeline.mode_labels.selecting' }),
@@ -60,9 +70,6 @@ export class ModeEngine {
 
 		if (
 			keyboard.isCtrlActive ||
-			keyboard.isLDown ||
-			keyboard.isDDown ||
-			keyboard.isXDown ||
 			editor.studio.isShadingLighten ||
 			editor.studio.isShadingDarken ||
 			editor.studio.isShadingDither

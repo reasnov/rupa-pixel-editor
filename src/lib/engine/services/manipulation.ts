@@ -1,10 +1,15 @@
 import { editor } from '../../state/editor.svelte.js';
 import { sfx } from '../audio.js';
 import { history } from '../history.js';
+import { ColorLogic } from '../../logic/color.js';
 
 export class ManipulationService {
 	resize(newWidth: number, newHeight: number) {
-		const newPixels = Array(newWidth * newHeight).fill('#eee8d5');
+		const newPixels = new Uint32Array(newWidth * newHeight);
+		// Fill with default background color
+		const bgVal = ColorLogic.hexToUint32(editor.backgroundColor);
+		newPixels.fill(bgVal);
+
 		for (let y = 0; y < Math.min(editor.canvas.height, newHeight); y++) {
 			for (let x = 0; x < Math.min(editor.canvas.width, newWidth); x++) {
 				const oldIdx = y * editor.canvas.width + x;
@@ -18,43 +23,66 @@ export class ManipulationService {
 	}
 
 	flip(axis: 'horizontal' | 'vertical') {
-		const { width, height, pixels } = editor.canvas;
-		const newPixels = [...pixels];
+		const { width, height } = editor.canvas;
+		const frame = editor.project.activeFrame;
 
-		if (axis === 'horizontal') {
-			for (let y = 0; y < height; y++) {
-				const row = pixels.slice(y * width, (y + 1) * width);
-				row.reverse();
-				for (let x = 0; x < width; x++) newPixels[y * width + x] = row[x];
-			}
-		} else {
-			for (let y = 0; y < height; y++) {
-				for (let x = 0; x < width; x++) {
-					const oldIdx = y * width + x;
-					const newIdx = (height - 1 - y) * width + x;
-					newPixels[newIdx] = pixels[oldIdx];
+		history.beginBatch();
+		frame.layers.forEach((layer) => {
+			if (layer.type !== 'LAYER') return;
+			const pixels = layer.pixels;
+			const newPixels = new Uint32Array(pixels.length);
+
+			if (axis === 'horizontal') {
+				for (let y = 0; y < height; y++) {
+					const start = y * width;
+					const row = pixels.subarray(start, start + width);
+					const reversed = new Uint32Array(row).reverse();
+					newPixels.set(reversed, start);
+				}
+			} else {
+				for (let y = 0; y < height; y++) {
+					const oldStart = y * width;
+					const newStart = (height - 1 - y) * width;
+					newPixels.set(pixels.subarray(oldStart, oldStart + width), newStart);
 				}
 			}
-		}
-		editor.canvas.pixels = newPixels;
-		history.clear();
+			layer.pixels = newPixels;
+		});
+
+		editor.canvas.triggerPulse();
+		history.endBatch();
+		editor.studio.show(axis === 'horizontal' ? 'Flipped Horizontally' : 'Flipped Vertically');
 		sfx.playDraw();
 	}
 
 	rotate() {
-		const { width, height, pixels } = editor.canvas;
-		if (width !== height) return;
-
-		const newPixels = Array(width * height).fill(null);
-		for (let y = 0; y < height; y++) {
-			for (let x = 0; x < width; x++) {
-				const oldIdx = y * width + x;
-				const newIdx = x * width + (height - 1 - y);
-				newPixels[newIdx] = pixels[oldIdx];
-			}
+		const { width, height } = editor.canvas;
+		if (width !== height) {
+			editor.studio.show('Only square cups can be rotated');
+			return;
 		}
-		editor.canvas.pixels = newPixels;
-		history.clear();
+
+		const frame = editor.project.activeFrame;
+
+		history.beginBatch();
+		frame.layers.forEach((layer) => {
+			if (layer.type !== 'LAYER') return;
+			const pixels = layer.pixels;
+			const newPixels = new Uint32Array(width * height);
+
+			for (let y = 0; y < height; y++) {
+				for (let x = 0; x < width; x++) {
+					const oldIdx = y * width + x;
+					const newIdx = x * width + (height - 1 - y);
+					newPixels[newIdx] = pixels[oldIdx];
+				}
+			}
+			layer.pixels = newPixels;
+		});
+
+		editor.canvas.triggerPulse();
+		history.endBatch();
+		editor.studio.show('Rotated 90°');
 		sfx.playDraw();
 	}
 
@@ -62,6 +90,7 @@ export class ManipulationService {
 		if (confirm('Are you sure you want to clear the entire canvas?')) {
 			editor.canvas.clear();
 			history.clear();
+			editor.studio.show('Foam Cleared');
 			sfx.playErase();
 		}
 	}
@@ -71,10 +100,10 @@ export class ManipulationService {
 	 */
 	bleach() {
 		const { x, y } = editor.cursor.pos;
-		const targetColor = editor.canvas.getColor(x, y);
-		const replacementColor = editor.activeColor;
+		const targetVal = editor.canvas.getColor(x, y);
+		const replacementVal = ColorLogic.hexToUint32(editor.activeColor);
 
-		if (targetColor === replacementColor) return;
+		if (targetVal === replacementVal) return;
 
 		const { pixels } = editor.canvas;
 		const changes: { index: number; oldColor: string | null; newColor: string | null }[] = [];
@@ -82,24 +111,25 @@ export class ManipulationService {
 		const hasSelection = editor.selection.isActive;
 		const selectionSet = editor.selection.activeIndicesSet;
 
-		const currentPixels = [...pixels];
+		const currentPixels = new Uint32Array(pixels);
 
-		pixels.forEach((color, index) => {
-			const isCorrectColor = color === targetColor;
+		pixels.forEach((val, index) => {
+			const isCorrectColor = val === targetVal;
 			const isInsideSelection = !hasSelection || selectionSet.has(index);
 
 			if (isCorrectColor && isInsideSelection) {
 				changes.push({
 					index,
-					oldColor: targetColor,
-					newColor: replacementColor
+					oldColor: ColorLogic.uint32ToHex(targetVal),
+					newColor: ColorLogic.uint32ToHex(replacementVal)
 				});
-				currentPixels[index] = replacementColor;
+				currentPixels[index] = replacementVal;
 			}
 		});
 
 		if (changes.length > 0) {
 			editor.canvas.pixels = currentPixels;
+			editor.canvas.triggerPulse();
 			history.beginBatch();
 			changes.forEach((c) => history.push(c));
 			history.endBatch();

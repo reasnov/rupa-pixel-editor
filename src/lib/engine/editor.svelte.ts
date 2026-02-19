@@ -8,9 +8,8 @@ import { animation } from './animation.svelte.js';
 import { studioAudio } from './audioContext.js';
 import { pointer } from './pointer.svelte.js';
 import { feedback } from './feedback.svelte.js';
-import { PixelLogic } from '../logic/pixel.js';
-import { ColorEngine } from './color.js';
 import { history } from './history.js';
+import { ColorLogic } from '../logic/color.js';
 
 /**
  * EditorEngine: The primary orchestrator of action execution.
@@ -24,6 +23,7 @@ export class EditorEngine {
 		this.backupInterval = setInterval(() => services.persistence.backup(), 10 * 60 * 1000);
 
 		state.studio.mount();
+		state.canvas.mount();
 		ambient.start();
 
 		// Attempt to restore last session
@@ -78,7 +78,7 @@ export class EditorEngine {
 			case 'PAINT':
 				if (state.selection.isActive) return services.commitSelection();
 				if (state.studio.activeTool !== 'BRUSH') {
-					this.commitShape();
+					services.draw.commitShape();
 					return;
 				}
 				return services.draw.draw();
@@ -95,7 +95,7 @@ export class EditorEngine {
 				}
 				if (state.selection.isActive) return services.commitSelection();
 				if (state.studio.activeTool !== 'BRUSH') {
-					this.commitShape();
+					services.draw.commitShape();
 					return;
 				}
 				return services.draw.draw();
@@ -182,11 +182,18 @@ export class EditorEngine {
 				return state.studio.setZoom(-0.1);
 			case 'RESET_ZOOM':
 				return state.studio.resetZoom();
+			case 'RESET_VIEWPORT':
+				state.studio.resetZoom();
+				state.studio.resetPan();
+				return feedback.emit('READY');
 
 			case 'CLEAR_CANVAS':
 				return services.manipulation.clearAll();
 			case 'TOGGLE_MUTE':
 				return state.studio.toggleMute();
+			case 'TOGGLE_MINIMAP':
+				state.studio.showMinimap = !state.studio.showMinimap;
+				return feedback.emit('READY');
 			case 'SELECT_SAME':
 				return services.selection.spiritPick();
 
@@ -214,6 +221,8 @@ export class EditorEngine {
 
 			case 'NEW_LAYER':
 				return services.project.addLayer();
+			case 'NEW_LAYER_GROUP':
+				return services.project.addGroup();
 			case 'DUPLICATE_LAYER':
 				return services.project.duplicateLayer(state.project.activeFrame.activeLayerIndex);
 			case 'NEXT_LAYER':
@@ -234,7 +243,7 @@ export class EditorEngine {
 				return services.project.mergeLayerDown();
 
 			case 'BRUSH_SIZE_INC':
-				state.studio.brushSize = Math.min(5, state.studio.brushSize + 1);
+				state.studio.brushSize = Math.min(100, state.studio.brushSize + 1);
 				return feedback.emit('READY');
 			case 'BRUSH_SIZE_DEC':
 				state.studio.brushSize = Math.max(1, state.studio.brushSize - 1);
@@ -243,12 +252,24 @@ export class EditorEngine {
 				if (state.studio.isPatternBrushActive) {
 					state.studio.isPatternBrushActive = false;
 				} else if (state.project.clipboard) {
-					state.studio.patternBrushData = { ...state.project.clipboard };
+					const cb = state.project.clipboard;
+					const u32 = new Uint32Array(cb.data.length);
+					for (let i = 0; i < cb.data.length; i++) {
+						u32[i] = cb.data[i]; // Already Uint32Array in ProjectState
+					}
+					state.studio.patternBrushData = {
+						width: cb.width,
+						height: cb.height,
+						data: u32
+					};
 					state.studio.isPatternBrushActive = true;
 				}
 				return feedback.emit('READY');
 			case 'TOGGLE_BRUSH_SHAPE':
 				state.studio.brushShape = state.studio.brushShape === 'SQUARE' ? 'CIRCLE' : 'SQUARE';
+				return feedback.emit('READY');
+			case 'TOGGLE_HAND_TOOL':
+				state.studio.isHandToolActive = !state.studio.isHandToolActive;
 				return feedback.emit('READY');
 			case 'CYCLE_SYMMETRY':
 				const modes: Array<'OFF' | 'HORIZONTAL' | 'VERTICAL' | 'QUADRANT'> = [
@@ -262,6 +283,10 @@ export class EditorEngine {
 				return feedback.emit('READY');
 			case 'TOGGLE_TILING':
 				state.studio.isTilingEnabled = !state.studio.isTilingEnabled;
+				return feedback.emit('READY');
+			case 'TOGGLE_AIRBRUSH':
+				state.studio.isAirbrushActive = !state.studio.isAirbrushActive;
+				state.studio.show(state.studio.isAirbrushActive ? 'Mist Active' : 'Mist Off');
 				return feedback.emit('READY');
 			case 'TOGGLE_ALPHA_LOCK':
 				state.studio.isAlphaLocked = !state.studio.isAlphaLocked;
@@ -325,10 +350,8 @@ export class EditorEngine {
 					state.studio.colorLockSource = null;
 				} else {
 					state.studio.isColorLocked = true;
-					state.studio.colorLockSource = state.canvas.getColor(
-						state.cursor.pos.x,
-						state.cursor.pos.y
-					);
+					const val = state.canvas.getColor(state.cursor.pos.x, state.cursor.pos.y);
+					state.studio.colorLockSource = ColorLogic.uint32ToHex(val);
 				}
 				return feedback.emit('READY');
 
@@ -352,6 +375,9 @@ export class EditorEngine {
 				return feedback.emit('READY');
 			case 'TOOL_ERASER':
 				state.studio.activeTool = 'ERASER';
+				return feedback.emit('READY');
+			case 'TOOL_SELECT':
+				state.studio.activeTool = 'SELECT';
 				return feedback.emit('READY');
 			case 'TOOL_POLYGON':
 				state.studio.activeTool = 'POLYGON';
@@ -403,99 +429,6 @@ export class EditorEngine {
 					return services.color.select(num === 0 ? 9 : num - 1);
 				}
 		}
-	}
-
-	private commitShape() {
-		const anchor = state.studio.shapeAnchor;
-		if (!anchor) return;
-
-		const { x, y } = state.cursor.pos;
-		const tool = state.studio.activeTool;
-
-		if (tool === 'GRADIENT') {
-			const startColor = state.studio.gradientStartColor;
-			const endColor = state.paletteState.activeColor;
-			if (!startColor) return;
-
-			// If selection exists, fill selection. Otherwise fill whole frame.
-			const targetIndices = state.selection.isActive
-				? state.selection.indices
-				: Array.from({ length: state.canvas.width * state.canvas.height }, (_, i) => i);
-
-			const gradientMap = PixelLogic.getLinearGradientMap(
-				anchor.x,
-				anchor.y,
-				x,
-				y,
-				targetIndices,
-				state.canvas.width
-			);
-
-			const currentPixels = [...state.canvas.pixels];
-			const batch: Array<{ index: number; oldColor: string | null; newColor: string | null }> = [];
-
-			gradientMap.forEach((m: { index: number; ratio: number }) => {
-				const mixed = ColorEngine.mix(startColor, endColor, m.ratio);
-				const oldColor = currentPixels[m.index];
-				if (oldColor !== mixed) {
-					batch.push({ index: m.index, oldColor, newColor: mixed });
-					currentPixels[m.index] = mixed;
-				}
-			});
-
-			if (batch.length > 0) {
-				state.canvas.pixels = currentPixels;
-				history.push(batch);
-				feedback.emit('DRAW');
-			}
-
-			state.studio.activeTool = 'BRUSH';
-			state.studio.shapeAnchor = null;
-			state.studio.gradientStartColor = null;
-			return;
-		}
-
-		let points: Array<{ x: number; y: number }> = [];
-		if (tool === 'RECTANGLE') {
-			points = PixelLogic.getRectanglePoints(anchor.x, anchor.y, x, y);
-		} else if (tool === 'ELLIPSE') {
-			points = PixelLogic.getEllipsePoints(anchor.x, anchor.y, x, y);
-		} else if (tool === 'POLYGON') {
-			points = PixelLogic.getPolygonPoints(
-				anchor.x,
-				anchor.y,
-				x,
-				y,
-				state.studio.polygonSides,
-				state.studio.polygonIndentation
-			);
-		}
-
-		if (points.length > 0) {
-			const activeColor = state.paletteState.activeColor;
-			const batch: Array<{ index: number; oldColor: string | null; newColor: string | null }> = [];
-			const currentPixels = [...state.canvas.pixels];
-
-			points.forEach((p) => {
-				if (state.canvas.isValidCoord(p.x, p.y)) {
-					const index = state.canvas.getIndex(p.x, p.y);
-					const oldColor = currentPixels[index];
-					if (oldColor !== activeColor) {
-						batch.push({ index, oldColor, newColor: activeColor });
-						currentPixels[index] = activeColor;
-					}
-				}
-			});
-
-			if (batch.length > 0) {
-				state.canvas.pixels = currentPixels;
-				history.push(batch);
-				feedback.emit('DRAW');
-			}
-		}
-
-		state.studio.activeTool = 'BRUSH';
-		state.studio.shapeAnchor = null;
 	}
 
 	private executeMove(dx: number, dy: number) {

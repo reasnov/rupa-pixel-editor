@@ -3,6 +3,7 @@ import { sfx } from '../../engine/audio.js';
 import { history } from '../../engine/history.js';
 import { FrameState } from '../../state/frame.svelte.js';
 import { LayerState } from '../../state/layer.svelte.js';
+import { ColorLogic } from '../../logic/color.js';
 
 export class PersistenceService {
 	private serialize() {
@@ -23,7 +24,11 @@ export class PersistenceService {
 						name: v.name,
 						isVisible: v.isVisible,
 						isLocked: v.isLocked,
-						pixels: v.pixels
+						type: v.type,
+						parentId: v.parentId,
+						isCollapsed: v.isCollapsed,
+						// Convert TypedArray to normal array for JSON
+						pixels: Array.from(v.pixels)
 					}))
 				}))
 			}
@@ -134,13 +139,27 @@ export class PersistenceService {
 				// Professional format
 				editor.project.frames = projectData.frames.map((fd: any) => {
 					const frame = new FrameState(fd.name, fd.width, fd.height);
-					// Fallback for old "veils" key if it exists in the file
 					const layersData = fd.layers || fd.veils || [];
 					frame.layers = layersData.map((vd: any) => {
-						const layer = new LayerState(vd.name, fd.width, fd.height);
+						const layer = new LayerState(vd.name, fd.width, fd.height, vd.type || 'LAYER');
 						layer.isVisible = vd.isVisible;
 						layer.isLocked = vd.isLocked;
-						layer.pixels = vd.pixels || vd.stitches || [];
+						layer.parentId = vd.parentId || null;
+						layer.isCollapsed = vd.isCollapsed || false;
+
+						const pixelData = vd.pixels || vd.stitches || [];
+						if (layer.type === 'LAYER') {
+							// Handle legacy string array or new numeric array
+							if (pixelData.length > 0 && typeof pixelData[0] === 'string') {
+								const u32 = new Uint32Array(pixelData.length);
+								for (let i = 0; i < pixelData.length; i++) {
+									u32[i] = ColorLogic.hexToUint32(pixelData[i]);
+								}
+								layer.pixels = u32;
+							} else {
+								layer.pixels = new Uint32Array(pixelData);
+							}
+						}
 						return layer;
 					});
 					return frame;
@@ -148,11 +167,16 @@ export class PersistenceService {
 			} else if (d.pixelData) {
 				// Legacy v0.3.0 format
 				const frame = new FrameState('Restored Project', d.dimensions.width, d.dimensions.height);
-				frame.layers[0].pixels = d.pixelData;
+				const u32 = new Uint32Array(d.pixelData.length);
+				for (let i = 0; i < d.pixelData.length; i++) {
+					u32[i] = ColorLogic.hexToUint32(d.pixelData[i]);
+				}
+				frame.layers[0].pixels = u32;
 				editor.project.frames = [frame];
 			}
 
 			editor.project.activeFrameIndex = 0;
+			editor.canvas.triggerPulse();
 			history.clear();
 		} catch (e) {
 			console.error('Failed to restore project:', e);

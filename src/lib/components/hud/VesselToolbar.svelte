@@ -10,10 +10,12 @@
 	const tools = [
 		{ id: 'BRUSH', icon: '🖋️', intent: 'TOOL_BRUSH' as const, label: 'TOOL_BRUSH' },
 		{ id: 'ERASER', icon: '🧹', intent: 'TOOL_ERASER' as const, label: 'TOOL_ERASER' },
+		{ id: 'SELECT', icon: '✨', intent: 'TOOL_SELECT' as const, label: 'TOOL_SELECT' },
 		{ id: 'RECTANGLE', icon: '📦', intent: 'TOOL_RECTANGLE' as const, label: 'TOOL_RECTANGLE' },
 		{ id: 'ELLIPSE', icon: '⭕', intent: 'TOOL_ELLIPSE' as const, label: 'TOOL_ELLIPSE' },
 		{ id: 'POLYGON', icon: '⭐', intent: 'TOOL_POLYGON' as const, label: 'TOOL_POLYGON' },
-		{ id: 'GRADIENT', icon: '🌈', intent: 'TOOL_GRADIENT' as const, label: 'TOOL_GRADIENT' }
+		{ id: 'GRADIENT', icon: '🌈', intent: 'TOOL_GRADIENT' as const, label: 'TOOL_GRADIENT' },
+		{ id: 'HAND', icon: '🤚', intent: 'TOGGLE_HAND_TOOL' as const, label: 'TOGGLE_HAND_TOOL' }
 	];
 
 	const shading = [

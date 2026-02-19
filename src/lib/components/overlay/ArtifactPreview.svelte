@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { editor } from '../../state/editor.svelte.js';
+	import { ColorLogic } from '../../logic/color.js';
 
 	let { format, scale, bgColor } = $props<{
 		format: 'svg' | 'png' | 'jpg' | 'webp' | 'webm' | 'gif' | 'mp4';
@@ -37,8 +38,9 @@
 		}
 
 		// Draw pixels
-		data.forEach((color, i) => {
-			if (color === null) return;
+		data.forEach((val, i) => {
+			if (val === 0) return;
+			const color = ColorLogic.uint32ToHex(val)!;
 			const x = i % width;
 			const y = Math.floor(i / width);
 			const px = Math.floor(x * previewScale);

@@ -7,6 +7,8 @@ import { SelectionState } from './selection.svelte.js';
 import { history } from '../engine/history.js';
 import { sfx } from '../engine/audio.js';
 import { services } from '../engine/services.js';
+import { ColorLogic } from '../logic/color.js';
+import { Geometry } from '../logic/geometry.js';
 
 /**
  * The EditorState: The root orchestrator of the application.
@@ -196,33 +198,27 @@ export class EditorState {
 	// --- Derived Projections ---
 
 	displayCoords = $derived.by(() => {
-		const calc = (pos: number, size: number) => {
-			const mid = Math.floor(size / 2);
-			return size % 2 === 0 ? (pos < mid ? pos - mid : pos - mid + 1) : pos - mid;
-		};
 		return {
-			x: calc(this.cursor.pos.x, this.canvas.width),
-			y: -calc(this.cursor.pos.y, this.canvas.height)
+			x: Geometry.toCartesianLabel(this.cursor.pos.x, this.canvas.width),
+			y: Geometry.toCartesianLabel(this.cursor.pos.y, this.canvas.height, true)
 		};
 	});
 
 	cameraTransform = $derived.by(() => {
-		const effectiveZoom = this.studio.zoomLevel;
-
-		if (this.studio.zoomLevel <= 1) {
-			return `translate(-50%, -50%) scale(${effectiveZoom})`;
-		}
-
-		const xPct = ((this.cursor.pos.x + 0.5) / this.canvas.width) * 100;
-		const yPct = ((this.cursor.pos.y + 0.5) / this.canvas.height) * 100;
-
-		return `translate(-${xPct}%, -${yPct}%) scale(${effectiveZoom})`;
+		return Geometry.calculateCameraTransform(
+			this.studio.zoomLevel,
+			this.studio.panOffset,
+			this.cursor.pos,
+			this.canvas.width,
+			this.canvas.height
+		);
 	});
 
 	usedColors = $derived.by(() => {
 		const colors = new Set<string>();
-		this.canvas.compositePixels.forEach((color) => {
-			if (color !== null) colors.add(color);
+		this.canvas.compositePixels.forEach((val) => {
+			const hex = ColorLogic.uint32ToHex(val);
+			if (hex !== null) colors.add(hex);
 		});
 		return Array.from(colors);
 	});
@@ -249,17 +245,19 @@ export class EditorState {
 				entry.undo();
 				sfx.playErase();
 			} else if (Array.isArray(entry)) {
-				const currentPixels = [...this.canvas.pixels];
+				const currentPixels = new Uint32Array(this.canvas.pixels);
 				for (let i = entry.length - 1; i >= 0; i--) {
 					const action = entry[i];
-					currentPixels[action.index] = action.oldColor;
+					currentPixels[action.index] = ColorLogic.hexToUint32(action.oldColor);
 				}
 				this.canvas.pixels = currentPixels;
+				this.canvas.triggerPulse();
 				sfx.playErase();
 			} else {
-				const currentPixels = [...this.canvas.pixels];
-				currentPixels[entry.index] = entry.oldColor;
+				const currentPixels = new Uint32Array(this.canvas.pixels);
+				currentPixels[entry.index] = ColorLogic.hexToUint32(entry.oldColor);
 				this.canvas.pixels = currentPixels;
+				this.canvas.triggerPulse();
 				sfx.playErase();
 			}
 		}
@@ -273,16 +271,18 @@ export class EditorState {
 				entry.redo();
 				sfx.playDraw();
 			} else if (Array.isArray(entry)) {
-				const currentPixels = [...this.canvas.pixels];
+				const currentPixels = new Uint32Array(this.canvas.pixels);
 				for (const action of entry) {
-					currentPixels[action.index] = action.newColor;
+					currentPixels[action.index] = ColorLogic.hexToUint32(action.newColor);
 				}
 				this.canvas.pixels = currentPixels;
+				this.canvas.triggerPulse();
 				sfx.playDraw();
 			} else {
-				const currentPixels = [...this.canvas.pixels];
-				currentPixels[entry.index] = entry.newColor;
+				const currentPixels = new Uint32Array(this.canvas.pixels);
+				currentPixels[entry.index] = ColorLogic.hexToUint32(entry.newColor);
 				this.canvas.pixels = currentPixels;
+				this.canvas.triggerPulse();
 				sfx.playDraw();
 			}
 		}

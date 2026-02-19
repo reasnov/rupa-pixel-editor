@@ -11,29 +11,41 @@ export class LayerState {
 	isLocked = $state(false);
 	opacity = $state(1.0); // 0.0 to 1.0 (Density)
 
-	// The actual pixel data for this layer
-	pixels = $state.raw<(ColorHex | null)[]>([]);
+	// --- Folder System (v0.8.0 Archive) ---
+	type = $state<'LAYER' | 'FOLDER'>('LAYER');
+	parentId = $state<string | null>(null);
+	isCollapsed = $state(false);
 
-	constructor(name: string, width: number, height: number) {
+	// The actual pixel data for this layer (ABGR Uint32)
+	pixels = $state.raw<Uint32Array>(new Uint32Array(0));
+
+	constructor(name: string, width: number, height: number, type: 'LAYER' | 'FOLDER' = 'LAYER') {
 		this.name = name;
-		this.pixels = Array(width * height).fill(null);
+		this.type = type;
+		if (type === 'LAYER') {
+			this.pixels = new Uint32Array(width * height);
+		}
 	}
 
 	clone(width: number, height: number) {
-		const newLayer = new LayerState(this.name, width, height);
-		newLayer.pixels = [...this.pixels];
+		const newLayer = new LayerState(this.name, width, height, this.type);
+		newLayer.pixels = this.type === 'LAYER' ? new Uint32Array(this.pixels) : new Uint32Array(0);
 		newLayer.isVisible = this.isVisible;
 		newLayer.isLocked = this.isLocked;
 		newLayer.opacity = this.opacity;
+		newLayer.parentId = this.parentId;
+		newLayer.isCollapsed = this.isCollapsed;
 		return newLayer;
 	}
 
 	clear() {
-		this.pixels.fill(null);
+		const newPixels = new Uint32Array(this.pixels.length);
+		newPixels.fill(0);
+		this.pixels = newPixels;
 	}
 
 	// Helper to check if a pixel exists at an index
 	hasPixel(index: number): boolean {
-		return this.pixels[index] !== null;
+		return this.pixels[index] !== 0;
 	}
 }

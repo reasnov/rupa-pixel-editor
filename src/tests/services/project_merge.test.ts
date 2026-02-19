@@ -12,6 +12,9 @@ vi.mock('../../lib/state/editor.svelte.js', () => ({
 				activeLayerIndex: 0,
 				activeLayer: null
 			}
+		},
+		canvas: {
+			triggerPulse: vi.fn()
 		}
 	}
 }));
@@ -43,12 +46,12 @@ describe('ProjectService: Merge Infusions', () => {
 
 		const bottomLayer = {
 			name: 'Bottom',
-			pixels: ['#111111', null, '#222222', null],
+			pixels: new Uint32Array([0xff111111, 0, 0xff222222, 0]),
 			isVisible: true
 		};
 		const topLayer = {
 			name: 'Top',
-			pixels: [null, '#FF00FF', '#333333', null],
+			pixels: new Uint32Array([0, 0xffff00ff, 0xff333333, 0]),
 			isVisible: true
 		};
 
@@ -58,8 +61,8 @@ describe('ProjectService: Merge Infusions', () => {
 
 		service.mergeLayerDown();
 
-		// Check merged pixels: ['#111111', '#FF00FF', '#333333', null]
-		expect(bottomLayer.pixels).toEqual(['#111111', '#FF00FF', '#333333', null]);
+		// Check merged pixels: [0xff111111, 0xffff00ff, 0xff333333, 0]
+		expect(bottomLayer.pixels).toEqual(new Uint32Array([0xff111111, 0xffff00ff, 0xff333333, 0]));
 		expect(frame.layers.length).toBe(1);
 		expect(frame.activeLayerIndex).toBe(0);
 		expect(history.push).toHaveBeenCalled();
@@ -68,7 +71,7 @@ describe('ProjectService: Merge Infusions', () => {
 	it('mergeLayerDown should do nothing if active layer is the bottom-most', () => {
 		const service = new ProjectService();
 		const frame = editor.project.activeFrame;
-		frame.layers = [{ name: 'Base', pixels: [null] }] as any;
+		frame.layers = [{ name: 'Base', pixels: new Uint32Array([0]) }] as any;
 		frame.activeLayerIndex = 0;
 
 		service.mergeLayerDown();

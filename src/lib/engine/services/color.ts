@@ -1,7 +1,8 @@
 import { editor } from '../../state/editor.svelte.js';
 import { sfx } from '../audio.js';
 import { history } from '../history.js';
-import { ColorEngine } from '../color.js';
+import { ColorLogic } from '../../logic/color.js';
+import { PixelLogic } from '../../logic/pixel.js';
 
 /**
  * ColorService: Manages colors, palette manipulation,
@@ -29,10 +30,11 @@ export class ColorService {
 	 */
 	pickFromCanvas() {
 		const { x, y } = editor.cursor.pos;
-		const color = editor.canvas.getColor(x, y);
+		const val = editor.canvas.getColor(x, y);
+		const hex = ColorLogic.uint32ToHex(val);
 
-		if (color !== null) {
-			this.setColor(color);
+		if (hex !== null) {
+			this.setColor(hex);
 			editor.studio.isPicking = true;
 			setTimeout(() => {
 				editor.studio.isPicking = false;
@@ -45,7 +47,7 @@ export class ColorService {
 	 */
 	weatherPalette(amount: number) {
 		editor.paletteState.swatches = editor.paletteState.swatches.map((color) =>
-			ColorEngine.adjustBrightness(color, amount)
+			ColorLogic.adjustBrightness(color, amount)
 		);
 		sfx.playDraw();
 	}
@@ -54,7 +56,7 @@ export class ColorService {
 	 * Mix the current active color with another color.
 	 */
 	mixActiveColor(otherHex: string, ratio = 0.5) {
-		const newColor = ColorEngine.mix(editor.activeColor, otherHex, ratio);
+		const newColor = ColorLogic.mix(editor.activeColor, otherHex, ratio);
 		this.setColor(newColor);
 	}
 
@@ -63,62 +65,51 @@ export class ColorService {
 	 */
 	floodFill() {
 		const { x, y } = editor.cursor.pos;
-		const targetColor = editor.canvas.getColor(x, y);
+		const targetVal = editor.canvas.getColor(x, y);
 		const replacementColor = editor.activeColor;
+		const replacementVal = ColorLogic.hexToUint32(replacementColor);
 
 		// Don't fill if color is already the same
-		if (targetColor === replacementColor) return;
+		if (targetVal === replacementVal) return;
 
-		const width = editor.canvas.width;
-		const height = editor.canvas.height;
-		const queue: [number, number][] = [[x, y]];
-		const visited = new Set<number>();
+		const { width, height, pixels } = editor.canvas;
+
+		// Perform scanline flood fill via Logic Layer
+		const filledPixels = PixelLogic.floodFill<number>(
+			Array.from(pixels),
+			width,
+			height,
+			x,
+			y,
+			replacementVal
+		);
+
+		const resultPixels = new Uint32Array(filledPixels as any);
 		const changes: { index: number; oldColor: string | null; newColor: string | null }[] = [];
 
 		// Selection check
 		const hasSelection = editor.selection.isActive;
 		const selectionSet = editor.selection.activeIndicesSet;
 
-		const currentPixels = [...editor.canvas.pixels];
+		for (let i = 0; i < resultPixels.length; i++) {
+			if (resultPixels[i] !== pixels[i]) {
+				// If selection active, only allow changes inside selection
+				if (hasSelection && !selectionSet.has(i)) {
+					resultPixels[i] = pixels[i]; // Revert
+					continue;
+				}
 
-		while (queue.length > 0) {
-			const [cx, cy] = queue.shift()!;
-			const index = cy * width + cx;
-
-			if (visited.has(index)) continue;
-			visited.add(index);
-
-			// Constraint: Must be target color AND (if selection exists, must be in selection)
-			const isCorrectColor = currentPixels[index] === targetColor;
-			const isInsideSelection = !hasSelection || selectionSet.has(index);
-
-			if (isCorrectColor && isInsideSelection) {
 				changes.push({
-					index,
-					oldColor: targetColor,
+					index: i,
+					oldColor: ColorLogic.uint32ToHex(pixels[i]),
 					newColor: replacementColor
 				});
-
-				currentPixels[index] = replacementColor;
-
-				// Neighbors
-				const neighbors: [number, number][] = [
-					[cx + 1, cy],
-					[cx - 1, cy],
-					[cx, cy + 1],
-					[cx, cy - 1]
-				];
-
-				for (const [nx, ny] of neighbors) {
-					if (nx >= 0 && nx < width && ny >= 0 && ny < height) {
-						queue.push([nx, ny]);
-					}
-				}
 			}
 		}
 
 		if (changes.length > 0) {
-			editor.canvas.pixels = currentPixels;
+			editor.canvas.pixels = resultPixels;
+			editor.canvas.triggerPulse();
 			history.beginBatch();
 			changes.forEach((c) => history.push(c));
 			history.endBatch();

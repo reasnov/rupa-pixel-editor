@@ -36,4 +36,34 @@ export class BrushLogic {
 
 		return points;
 	}
+
+	/**
+	 * Returns horizontal spans for high-performance large-scale construction.
+	 * Size is the diameter (1 to 100).
+	 */
+	static getSpans(
+		size: number,
+		shape: 'SQUARE' | 'CIRCLE'
+	): Array<{ y: number; x1: number; x2: number }> {
+		if (size <= 1) return [{ y: 0, x1: 0, x2: 0 }];
+
+		const spans: Array<{ y: number; x1: number; x2: number }> = [];
+		const radius = (size - 1) / 2;
+		const start = -Math.floor(radius);
+		const end = Math.ceil(radius);
+
+		for (let dy = start; dy <= end; dy++) {
+			if (shape === 'SQUARE') {
+				spans.push({ y: dy, x1: start, x2: end });
+			} else {
+				// Midpoint calculation for circles
+				const h = Math.sqrt(radius * radius - dy * dy);
+				const halfSpan = Math.floor(h);
+				if (!isNaN(halfSpan)) {
+					spans.push({ y: dy, x1: -halfSpan, x2: halfSpan });
+				}
+			}
+		}
+		return spans;
+	}
 }

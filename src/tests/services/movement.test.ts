@@ -8,6 +8,9 @@ vi.mock('../../lib/state/editor.svelte.js', () => ({
 			width: 32,
 			height: 32
 		},
+		studio: {
+			isTilingEnabled: false
+		},
 		cursor: {
 			pos: { x: 0, y: 0 },
 			setPos: vi.fn((x, y) => {

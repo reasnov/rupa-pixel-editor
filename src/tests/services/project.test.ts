@@ -17,22 +17,26 @@ vi.mock('../../lib/state/editor.svelte.js', () => ({
 					layers: [],
 					activeLayerIndex: 0,
 					addLayer: vi.fn(),
+					addGroup: vi.fn(),
 					width: 32,
 					height: 32,
 					duration: 100,
 					activeLayer: {
 						id: '00000000-0000-0000-0000-000000000000',
 						name: 'L1',
-						pixels: [],
+						pixels: new Uint32Array(32 * 32),
 						isVisible: true,
 						isLocked: false,
 						opacity: 1.0,
+						type: 'LAYER',
+						parentId: null,
+						isCollapsed: false,
 						clone: vi.fn(),
 						clear: vi.fn(),
 						hasPixel: vi.fn()
 					},
 					removeLayer: vi.fn(),
-					compositePixels: []
+					compositePixels: new Uint32Array(32 * 32)
 				};
 				// @ts-ignore
 				editor.project.frames.push(frame);
@@ -84,22 +88,26 @@ describe('ProjectService', () => {
 				layers: [],
 				activeLayerIndex: 0,
 				addLayer: vi.fn(),
+				addGroup: vi.fn(),
 				width: 32,
 				height: 32,
 				duration: 100,
 				activeLayer: {
 					id: '00000000-0000-0000-0000-000000000000',
 					name: 'L1',
-					pixels: [],
+					pixels: new Uint32Array(32 * 32),
 					isVisible: true,
 					isLocked: false,
 					opacity: 1.0,
+					type: 'LAYER',
+					parentId: null,
+					isCollapsed: false,
 					clone: vi.fn(),
 					clear: vi.fn(),
 					hasPixel: vi.fn()
 				},
 				removeLayer: vi.fn(),
-				compositePixels: []
+				compositePixels: new Uint32Array(32 * 32)
 			}
 		];
 		editor.project.activeFrameIndex = 0;

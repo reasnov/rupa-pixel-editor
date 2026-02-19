@@ -12,7 +12,7 @@ export class StudioState {
 	isPicking = $state(false);
 
 	// Master Etching (v0.8.0)
-	brushSize = $state(1); // 1 to 5
+	brushSize = $state(1); // 1 to 100
 	brushShape = $state<'SQUARE' | 'CIRCLE'>('SQUARE');
 	symmetryMode = $state<'OFF' | 'HORIZONTAL' | 'VERTICAL' | 'QUADRANT'>('OFF');
 	isTilingEnabled = $state(false);
@@ -21,7 +21,11 @@ export class StudioState {
 	isPixelPerfect = $state(false);
 	colorLockSource = $state<string | null>(null);
 
-	activeTool = $state<'BRUSH' | 'ERASER' | 'RECTANGLE' | 'ELLIPSE' | 'POLYGON' | 'GRADIENT'>(
+	// The Mist (v0.8.0 Airbrush)
+	isAirbrushActive = $state(false);
+	airbrushDensity = $state(0.2); // 0.0 to 1.0 (Mist Thickness)
+
+	activeTool = $state<'BRUSH' | 'ERASER' | 'SELECT' | 'RECTANGLE' | 'ELLIPSE' | 'POLYGON' | 'GRADIENT'>(
 		'BRUSH'
 	);
 	shapeAnchor = $state<{ x: number; y: number } | null>(null);
@@ -70,6 +74,7 @@ export class StudioState {
 	showPersistenceMenu = $state(false);
 	showUnderlayMenu = $state(false);
 	showGoTo = $state(false);
+	showMinimap = $state(true);
 
 	// Underlay (Wave II)
 	underlayImage = $state<string | null>(null);
@@ -77,6 +82,10 @@ export class StudioState {
 	underlayOpacity = $state(0.2);
 	underlayOffset = $state({ x: 0, y: 0 });
 	underlayScale = $state(1.0);
+
+	// Panning & Navigation (v0.9.0)
+	panOffset = $state({ x: 0, y: 0 });
+	isHandToolActive = $state(false);
 
 	isTransforming = $state(false);
 
@@ -90,7 +99,7 @@ export class StudioState {
 	patternBrushData = $state<{
 		width: number;
 		height: number;
-		data: (string | null)[];
+		data: Uint32Array;
 	} | null>(null);
 
 	// Tab States
@@ -155,6 +164,10 @@ export class StudioState {
 
 	resetZoom() {
 		this.zoomLevel = 1;
+	}
+
+	resetPan() {
+		this.panOffset = { x: 0, y: 0 };
 	}
 
 	toggleMute() {

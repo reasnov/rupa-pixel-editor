@@ -44,47 +44,70 @@ export class PixelLogic {
 	}
 
 	/**
-	 * Flood Fill: Returns a new array with the connected area filled.
+	 * Scanline Flood Fill: Highly efficient area filling algorithm.
+	 * Processes horizontal spans of pixels to minimize queue operations.
 	 */
-	static floodFill(
-		data: (ColorHex | null)[],
+	static floodFill<T>(
+		data: T[],
 		width: number,
 		height: number,
 		startX: number,
 		startY: number,
-		fillColor: ColorHex
-	): (ColorHex | null)[] {
+		fillColor: T
+	): T[] {
 		const targetColor = data[startY * width + startX];
 		if (targetColor === fillColor) return data;
 
 		const newData = [...data];
-		const queue: [number, number][] = [[startX, startY]];
-		const visited = new Set<number>();
+		const stack: [number, number][] = [[startX, startY]];
 
-		while (queue.length > 0) {
-			const [x, y] = queue.pop()!;
-			const idx = y * width + x;
+		while (stack.length > 0) {
+			let [x, y] = stack.pop()!;
+			let lx = x;
 
-			if (!visited.has(idx)) {
-				visited.add(idx);
-				newData[idx] = fillColor;
+			// Find leftmost point of the span
+			while (lx > 0 && newData[y * width + (lx - 1)] === targetColor) {
+				newData[y * width + (lx - 1)] = fillColor;
+				lx--;
+			}
 
-				const neighbors = [
-					[x + 1, y],
-					[x - 1, y],
-					[x, y + 1],
-					[x, y - 1]
-				];
-				for (const [nx, ny] of neighbors) {
-					if (nx >= 0 && nx < width && ny >= 0 && ny < height) {
-						if (newData[ny * width + nx] === targetColor) {
-							queue.push([nx, ny]);
-						}
-					}
+			// Find rightmost point of the span and fill
+			while (x < width && newData[y * width + x] === targetColor) {
+				newData[y * width + x] = fillColor;
+				x++;
+			}
+
+			// Check adjacent scanlines
+			this.scan(lx, x - 1, y - 1, width, height, newData, targetColor, stack);
+			this.scan(lx, x - 1, y + 1, width, height, newData, targetColor, stack);
+		}
+
+		return newData;
+	}
+
+	private static scan<T>(
+		lx: number,
+		rx: number,
+		y: number,
+		width: number,
+		height: number,
+		data: T[],
+		targetColor: T,
+		stack: [number, number][]
+	) {
+		if (y < 0 || y >= height) return;
+
+		let added = false;
+		for (let x = lx; x <= rx; x++) {
+			if (data[y * width + x] === targetColor) {
+				if (!added) {
+					stack.push([x, y]);
+					added = true;
 				}
+			} else {
+				added = false;
 			}
 		}
-		return newData;
 	}
 
 	/**

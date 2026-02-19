@@ -48,7 +48,7 @@ The application strictly follows a **Keyboard-Primary, Mouse-Optional** hierarch
 
 Beyond the predefined palette, users can select any hex color using the `ColorPicker` (Flavor Basin).
 
-- **Technical Implementation:** Uses `ColorEngine` (`src/lib/engine/color.ts`) to process HSLA and HEX conversions.
+- **Technical Implementation:** Uses `ColorLogic` (`src/lib/engine/color.ts`) to process HSLA and HEX conversions.
 
 ---
 

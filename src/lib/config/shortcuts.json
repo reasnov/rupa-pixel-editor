@@ -29,6 +29,16 @@
 			"label": "Return to Center",
 			"keys": ["Ctrl+h"],
 			"group": "Navigation"
+		},
+		"PAN_VIEWPORT": {
+			"label": "Pan Viewport (Hold)",
+			"keys": ["q"],
+			"group": "Navigation"
+		},
+		"RESET_VIEWPORT": {
+			"label": "Reset Pan/Zoom",
+			"keys": ["Alt+Backspace"],
+			"group": "View"
 		}
 	},
 	"painting": {
@@ -54,7 +64,7 @@
 		},
 		"RECOLOR": {
 			"label": "Recolor All",
-			"keys": ["Alt+h"],
+			"keys": ["Alt+r"],
 			"group": "Magic"
 		},
 		"SELECT_SAME": {
@@ -110,12 +120,12 @@
 	"transform": {
 		"FLIP_H": {
 			"label": "Flip Horizontally",
-			"keys": ["h"],
+			"keys": ["Alt+h"],
 			"group": "Transform"
 		},
 		"FLIP_V": {
 			"label": "Flip Vertically",
-			"keys": ["v"],
+			"keys": ["Alt+v"],
 			"group": "Transform"
 		},
 		"ROTATE": {
@@ -180,6 +190,11 @@
 		"NEW_LAYER": {
 			"label": "Add New Layer",
 			"keys": ["Alt+Shift+n"],
+			"group": "Layers"
+		},
+		"NEW_LAYER_GROUP": {
+			"label": "Group Layers",
+			"keys": ["Ctrl+g"],
 			"group": "Layers"
 		},
 		"DUPLICATE_LAYER": {
@@ -249,6 +264,11 @@
 			"keys": ["t"],
 			"group": "Etching"
 		},
+		"TOGGLE_AIRBRUSH": {
+			"label": "The Mist (Airbrush)",
+			"keys": ["Alt+a"],
+			"group": "Etching"
+		},
 		"TOGGLE_ALPHA_LOCK": {
 			"label": "Toggle Alpha Lock",
 			"keys": ["a"],
@@ -289,9 +309,19 @@
 			"keys": ["e"],
 			"group": "Etching"
 		},
+		"TOOL_SELECT": {
+			"label": "Select Tool",
+			"keys": ["Shift+s"],
+			"group": "Etching"
+		},
+		"TOGGLE_HAND_TOOL": {
+			"label": "Hand Tool",
+			"keys": ["h"],
+			"group": "Etching"
+		},
 		"TOOL_RECTANGLE": {
 			"label": "Rectangle Tool",
-			"keys": ["Alt+r"],
+			"keys": ["Shift+r"],
 			"group": "Etching"
 		},
 		"TOOL_ELLIPSE": {
@@ -316,12 +346,12 @@
 		},
 		"POLY_INDENT_INC": {
 			"label": "Increase Indentation",
-			"keys": ["Ctrl+]"],
+			"keys": ["Alt+Shift+]"],
 			"group": "Etching"
 		},
 		"POLY_INDENT_DEC": {
 			"label": "Decrease Indentation",
-			"keys": ["Ctrl+["],
+			"keys": ["Alt+Shift+["],
 			"group": "Etching"
 		},
 		"SET_SIDES_3": { "label": "Set Sides: 3", "keys": ["Alt+3"], "group": "Etching" },
@@ -391,6 +421,11 @@
 		},
 		"TOGGLE_MUTE": {
 			"label": "Mute Audio",
+			"keys": ["Ctrl+Shift+m"],
+			"group": "System"
+		},
+		"TOGGLE_MINIMAP": {
+			"label": "Minimap",
 			"keys": ["Ctrl+m"],
 			"group": "System"
 		},

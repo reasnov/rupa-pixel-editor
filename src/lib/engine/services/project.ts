@@ -147,6 +147,29 @@ export class ProjectService {
 		return layer;
 	}
 
+	addGroup(name?: string) {
+		const frame = editor.project.activeFrame;
+		const prevIndex = frame.activeLayerIndex;
+		const group = frame.addGroup(name);
+		const newIndex = frame.activeLayerIndex;
+
+		history.push({
+			isStructural: true,
+			label: 'Add Group',
+			undo: () => {
+				frame.layers.splice(newIndex, 1);
+				frame.activeLayerIndex = prevIndex;
+			},
+			redo: () => {
+				frame.layers.splice(newIndex, 0, group);
+				frame.activeLayerIndex = newIndex;
+			}
+		});
+
+		sfx.playDraw();
+		return group;
+	}
+
 	removeLayer(index: number) {
 		const frame = editor.project.activeFrame;
 		if (frame.layers.length <= 1) return;
@@ -365,20 +388,21 @@ export class ProjectService {
 		const topLayer = frame.layers[topIdx];
 		const bottomLayer = frame.layers[bottomIdx];
 
-		const oldBottomPixels = [...bottomLayer.pixels];
+		const oldBottomPixels = new Uint32Array(bottomLayer.pixels);
 		const topPixels = topLayer.pixels;
-		const mergedPixels = [...bottomLayer.pixels];
+		const mergedPixels = new Uint32Array(bottomLayer.pixels);
 
-		// Painter's algorithm: Top overwrites non-null bottom pixels
+		// Painter's algorithm: Top overwrites non-zero bottom pixels
 		for (let i = 0; i < topPixels.length; i++) {
 			const p = topPixels[i];
-			if (p !== null) mergedPixels[i] = p;
+			if (p !== 0) mergedPixels[i] = p;
 		}
 
 		// Apply merge
 		bottomLayer.pixels = mergedPixels;
 		frame.layers.splice(topIdx, 1);
 		frame.activeLayerIndex = bottomIdx;
+		editor.canvas.triggerPulse();
 
 		history.push({
 			isStructural: true,
@@ -387,11 +411,13 @@ export class ProjectService {
 				bottomLayer.pixels = oldBottomPixels;
 				frame.layers.splice(topIdx, 0, topLayer);
 				frame.activeLayerIndex = topIdx;
+				editor.canvas.triggerPulse();
 			},
 			redo: () => {
 				bottomLayer.pixels = mergedPixels;
 				frame.layers.splice(topIdx, 1);
 				frame.activeLayerIndex = bottomIdx;
+				editor.canvas.triggerPulse();
 			}
 		});
 

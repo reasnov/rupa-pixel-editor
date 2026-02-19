@@ -1,14 +1,16 @@
 <script lang="ts">
 	import { editor } from '../../state/editor.svelte.js';
 	import { pointer } from '../../engine/pointer.svelte.js';
+	import { mode } from '../../engine/mode.svelte.js';
 	import CanvasGuides from './CanvasGuides.svelte';
 	import SelectionLasso from './SelectionLasso.svelte';
 	import GhostFrame from './GhostFrame.svelte';
 	import CanvasRuler from './CanvasRuler.svelte';
 	import Cursor from './Cursor.svelte';
 
-	import { ColorEngine } from '../../engine/color.js';
+	import { ColorLogic } from '../../logic/color.js';
 	import { fade } from 'svelte/transition';
+	import { untrack } from 'svelte';
 
 	let gridEl = $state<HTMLElement | null>(null);
 	let canvasEl = $state<HTMLCanvasElement | null>(null);
@@ -58,6 +60,9 @@
 	 * Using ImageData + putImageData to bypass thousand of fillRect calls.
 	 */
 	$effect(() => {
+		// Listen to the pulse (v0.8.0 Steam Pump)
+		if (editor.canvas.renderPulse === -1) return;
+
 		const ctx = canvasEl?.getContext('2d', { alpha: true });
 		const pixels = editor.canvas.compositePixels;
 		if (!ctx || !canvasEl) return;
@@ -65,22 +70,9 @@
 		ctx.imageSmoothingEnabled = false;
 
 		const imageData = ctx.createImageData(w, h);
-		const data = imageData.data;
-
-		for (let i = 0; i < pixels.length; i++) {
-			const color = pixels[i];
-			const offset = i * 4;
-
-			if (color) {
-				const rgba = ColorEngine.toRGBA(color);
-				data[offset] = rgba[0];
-				data[offset + 1] = rgba[1];
-				data[offset + 2] = rgba[2];
-				data[offset + 3] = rgba[3];
-			} else {
-				data[offset + 3] = 0; // Transparent
-			}
-		}
+		// Direct memory copy using Uint32Array view
+		const data32 = new Uint32Array(imageData.data.buffer);
+		data32.set(pixels);
 
 		ctx.putImageData(imageData, 0, 0);
 
@@ -147,9 +139,14 @@
 				bind:this={gridEl}
 				class="relative h-full w-full shadow-[0_20px_60px_rgba(0,0,0,0.12)] ring-1 ring-charcoal/5 outline-none focus:ring-2 focus:ring-brand"
 				style="
-					background-color: {editor.backgroundColor};
-					touch-action: none;
-				"
+										background-color: {editor.backgroundColor};
+										touch-action: none;
+										cursor: {mode.current.type === 'PAN'
+					? pointer.isPointerDownActive
+						? 'grabbing'
+						: 'grab'
+					: 'crosshair'};
+									"
 				role="grid"
 				tabindex="0"
 				oncontextmenu={(e) => e.preventDefault()}

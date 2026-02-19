@@ -13,7 +13,7 @@ export class ProjectState {
 	activeFrameIndex = $state(0);
 	isPlaying = $state(false);
 
-	clipboard = $state<{ width: number; height: number; data: (ColorHex | null)[] } | null>(null);
+	clipboard = $state<{ width: number; height: number; data: Uint32Array } | null>(null);
 
 	constructor() {
 		// Initialize with one default frame

@@ -15,14 +15,47 @@ import { sfx } from './audio.js';
  * It provides a clean API for the UI while delegating to specialized services.
  */
 export class ServiceCoordinator {
-	readonly movement = new MovementService();
-	readonly draw = new DrawService();
-	readonly manipulation = new ManipulationService();
-	readonly clipboard = new ClipboardService();
-	readonly persistence = new PersistenceService();
-	readonly project = new ProjectService();
-	readonly selection = new SelectionService();
-	readonly color = new ColorService();
+	private _movement: MovementService | null = null;
+	private _draw: DrawService | null = null;
+	private _manipulation: ManipulationService | null = null;
+	private _clipboard: ClipboardService | null = null;
+	private _persistence: PersistenceService | null = null;
+	private _project: ProjectService | null = null;
+	private _selection: SelectionService | null = null;
+	private _color: ColorService | null = null;
+
+	get movement() {
+		if (!this._movement) this._movement = new MovementService();
+		return this._movement;
+	}
+	get draw() {
+		if (!this._draw) this._draw = new DrawService();
+		return this._draw;
+	}
+	get manipulation() {
+		if (!this._manipulation) this._manipulation = new ManipulationService();
+		return this._manipulation;
+	}
+	get clipboard() {
+		if (!this._clipboard) this._clipboard = new ClipboardService();
+		return this._clipboard;
+	}
+	get persistence() {
+		if (!this._persistence) this._persistence = new PersistenceService();
+		return this._persistence;
+	}
+	get project() {
+		if (!this._project) this._project = new ProjectService();
+		return this._project;
+	}
+	get selection() {
+		if (!this._selection) this._selection = new SelectionService();
+		return this._selection;
+	}
+	get color() {
+		if (!this._color) this._color = new ColorService();
+		return this._color;
+	}
 
 	// --- Navigation Aliases ---
 
@@ -59,7 +92,7 @@ export class ServiceCoordinator {
 		this.selection.update(editor.cursor.pos.x, editor.cursor.pos.y);
 	}
 	commitSelection() {
-		this.selection.commit();
+		this.selection.fillSelection();
 	}
 
 	clearCanvas() {

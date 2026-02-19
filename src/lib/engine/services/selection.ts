@@ -1,6 +1,8 @@
 import { editor } from '../../state/editor.svelte.js';
 import { history } from '../history.js';
 import { sfx } from '../audio.js';
+import { ColorLogic } from '../../logic/color.js';
+import { PixelLogic } from '../../logic/pixel.js';
 
 /**
  * SelectionService: Handles the logic for defining selection regions
@@ -24,75 +26,67 @@ export class SelectionService {
 	/**
 	 * Batch Fill: Fills the entire active selection with the active color.
 	 */
-	commit() {
+	fillSelection() {
 		const points = editor.selection.getPoints(editor.canvas.width);
 		if (points.length === 0) return;
 
 		const activeColor = editor.paletteState.activeColor;
+		const activeVal = ColorLogic.hexToUint32(activeColor);
 		const width = editor.canvas.width;
 
 		history.beginBatch();
 		let changed = false;
-		const currentPixels = [...editor.canvas.pixels];
+		const currentPixels = new Uint32Array(editor.canvas.pixels);
 
 		points.forEach((p) => {
 			const index = p.y * width + p.x;
-			const oldColor = currentPixels[index];
-			if (oldColor !== activeColor) {
-				history.push({ index, oldColor, newColor: activeColor });
-				currentPixels[index] = activeColor;
+			const oldVal = currentPixels[index];
+			if (oldVal !== activeVal) {
+				history.push({
+					index,
+					oldColor: ColorLogic.uint32ToHex(oldVal),
+					newColor: activeColor
+				});
+				currentPixels[index] = activeVal;
 				changed = true;
 			}
 		});
 
 		if (changed) {
 			editor.canvas.pixels = currentPixels;
+			editor.canvas.triggerPulse();
 			sfx.playDraw();
 		}
 		history.endBatch();
 	}
 
+	commit() {
+		// Just a visual sync for mouse drag-to-select
+		editor.canvas.triggerPulse();
+	}
+
 	/**
 	 * Magic Wand: Selects all connected pixels of the same color.
+	 * Uses scanline fill for performance.
 	 */
 	spiritPick() {
 		const { x, y } = editor.cursor.pos;
-		const targetColor = editor.canvas.getColor(x, y);
-		const width = editor.canvas.width;
-		const height = editor.canvas.height;
+		const targetVal = editor.canvas.getColor(x, y);
+		const { width, height, pixels } = editor.canvas;
 
-		const queue: [number, number][] = [[x, y]];
-		const visited = new Set<string>();
+		// Use floodFill to find connected region
+		const markerVal = 0xffffffff; // temporary marker
+		const filled = PixelLogic.floodFill<number>(Array.from(pixels), width, height, x, y, markerVal);
 
-		editor.selection.clear();
-
-		while (queue.length > 0) {
-			const [cx, cy] = queue.shift()!;
-			const index = cy * width + cx;
-			const key = `${cx},${cy}`;
-
-			if (visited.has(key)) continue;
-			visited.add(key);
-
-			if (editor.canvas.getColor(cx, cy) === targetColor) {
-				editor.selection.indices.push(index);
-
-				const neighbors: [number, number][] = [
-					[cx + 1, cy],
-					[cx - 1, cy],
-					[cx, cy + 1],
-					[cx, cy - 1]
-				];
-
-				for (const [nx, ny] of neighbors) {
-					if (nx >= 0 && nx < width && ny >= 0 && ny < height) {
-						queue.push([nx, ny]);
-					}
-				}
-			}
+		const indices: number[] = [];
+		for (let i = 0; i < filled.length; i++) {
+			if (filled[i] === markerVal) indices.push(i);
 		}
 
-		if (editor.selection.indices.length > 0) {
+		editor.selection.clear();
+		if (indices.length > 0) {
+			editor.selection.indices = indices;
+			editor.canvas.triggerPulse();
 			sfx.playScale(4); // Play a specific harmonic note
 		}
 	}
@@ -154,19 +148,18 @@ export class SelectionService {
 
 		const width = editor.canvas.width;
 		const height = editor.canvas.height;
-		const currentPixels = [...editor.canvas.pixels];
-		const selectedIndices = new Set(editor.selection.indices);
+		const currentPixels = new Uint32Array(editor.canvas.pixels);
 
-		// 1. Capture current colors and clear them from canvas
-		const movedData: Map<number, string | null> = new Map();
+		// 1. Capture current values and clear them from canvas
+		const movedData: Map<number, number> = new Map();
 		editor.selection.indices.forEach((idx) => {
 			movedData.set(idx, currentPixels[idx]);
-			currentPixels[idx] = null;
+			currentPixels[idx] = 0;
 		});
 
 		// 2. Calculate new positions
 		const newIndices: number[] = [];
-		movedData.forEach((color, idx) => {
+		movedData.forEach((val, idx) => {
 			const x = idx % width;
 			const y = Math.floor(idx / width);
 			const nx = x + dx;
@@ -174,13 +167,14 @@ export class SelectionService {
 
 			if (nx >= 0 && nx < width && ny >= 0 && ny < height) {
 				const nIdx = ny * width + nx;
-				currentPixels[nIdx] = color;
+				currentPixels[nIdx] = val;
 				newIndices.push(nIdx);
 			}
 		});
 
 		// 3. Update state
 		editor.canvas.pixels = currentPixels;
+		editor.canvas.triggerPulse();
 		editor.selection.indices = newIndices;
 		sfx.playMove();
 	}

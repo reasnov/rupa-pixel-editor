@@ -4,7 +4,7 @@
 	import { services } from '../../engine/services.js';
 	import { fade, scale } from 'svelte/transition';
 	import { untrack } from 'svelte';
-	import { ColorEngine } from '../../engine/color.js';
+	import { ColorLogic } from '../../logic/color.js';
 	import ColorSlider from './ColorSlider.svelte';
 
 	let { value = $bindable(), onClose } = $props<{ value: string; onClose: () => void }>();
@@ -16,7 +16,7 @@
 	let a = $state(1); // 0.0 to 1.0
 
 	$effect(() => {
-		const color = ColorEngine.toHSLA(value);
+		const color = ColorLogic.toHSLA(value);
 		untrack(() => {
 			h = color.h;
 			s = color.s;
@@ -26,7 +26,7 @@
 	});
 
 	$effect(() => {
-		const newColor = ColorEngine.toHex({ h, s, l, a });
+		const newColor = ColorLogic.toHex({ h, s, l, a });
 		untrack(() => {
 			value = newColor;
 		});

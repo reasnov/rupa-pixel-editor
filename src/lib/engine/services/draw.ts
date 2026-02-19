@@ -1,11 +1,12 @@
 import { editor } from '../../state/editor.svelte.js';
 import { sfx } from '../audio.js';
 import { history } from '../history.js';
-import { PixelEngine } from '../pixel.js';
 import { BrushLogic } from '../../logic/brush.js';
 import { PixelLogic } from '../../logic/pixel.js';
+import { Geometry } from '../../logic/geometry.js';
+import { Path } from '../../logic/path.js';
 import { keyboard } from '../keyboard.svelte.js';
-import { ColorEngine } from '../color.js';
+import { ColorLogic } from '../../logic/color.js';
 import { mode } from '../mode.svelte.js';
 
 /**
@@ -17,7 +18,7 @@ export class DrawService {
 		const y = ty !== undefined ? Math.floor(ty) : editor.cursor.pos.y;
 
 		const batch: Array<{ index: number; oldColor: string | null; newColor: string | null }> = [];
-		const currentPixels = [...editor.canvas.pixels];
+		const currentPixels = new Uint32Array(editor.canvas.pixels);
 
 		// --- Pattern Brush Logic ---
 		if (editor.studio.isPatternBrushActive && editor.studio.patternBrushData) {
@@ -32,8 +33,9 @@ export class DrawService {
 
 					if (editor.canvas.isValidCoord(targetX, targetY)) {
 						const pbIdx = py * pb.width + px;
-						const color = pb.data[pbIdx];
-						if (color === null) continue;
+						const colorVal = pb.data[pbIdx];
+						// 0 is transparent in our system
+						if (colorVal === 0) continue;
 
 						const index = editor.canvas.getIndex(targetX, targetY);
 
@@ -47,12 +49,16 @@ export class DrawService {
 							continue;
 
 						const isEraser = mode.current.type === 'ERASE';
-						const finalColor = isEraser ? null : color;
+						const finalColorVal = isEraser ? 0 : colorVal;
 
-						const oldColor = currentPixels[index];
-						if (oldColor !== finalColor) {
-							batch.push({ index, oldColor, newColor: finalColor });
-							currentPixels[index] = finalColor;
+						const oldVal = currentPixels[index];
+						if (oldVal !== finalColorVal) {
+							batch.push({
+								index,
+								oldColor: ColorLogic.uint32ToHex(oldVal),
+								newColor: ColorLogic.uint32ToHex(finalColorVal)
+							});
+							currentPixels[index] = finalColorVal;
 						}
 					}
 				}
@@ -76,9 +82,15 @@ export class DrawService {
 			}
 
 			// Wrapping & Application
-			const pointsToDraw = editor.studio.isTilingEnabled
+			let pointsToDraw = editor.studio.isTilingEnabled
 				? rawPoints.map((p) => PixelLogic.wrap(p.x, p.y, editor.canvas.width, editor.canvas.height))
 				: rawPoints.filter((p) => editor.canvas.isValidCoord(p.x, p.y));
+
+			// --- The Mist (Airbrush) ---
+			if (editor.studio.isAirbrushActive) {
+				const density = editor.studio.airbrushDensity;
+				pointsToDraw = pointsToDraw.filter(() => Math.random() < density);
+			}
 
 			pointsToDraw.forEach((p) => {
 				const index = editor.canvas.getIndex(p.x, p.y);
@@ -92,21 +104,27 @@ export class DrawService {
 
 				// Color Lock
 				if (editor.studio.isColorLocked && editor.studio.colorLockSource !== null) {
-					if (currentPixels[index] !== editor.studio.colorLockSource) return;
+					if (currentPixels[index] !== ColorLogic.hexToUint32(editor.studio.colorLockSource))
+						return;
 				}
 
-				const activeColor = this.getEffectColorForPoint(p.x, p.y, currentPixels[index]);
-				const oldColor = currentPixels[index];
+				const activeColorVal = this.getEffectColorForPoint(p.x, p.y, currentPixels[index]);
+				const oldVal = currentPixels[index];
 
-				if (oldColor !== activeColor) {
-					batch.push({ index, oldColor, newColor: activeColor });
-					currentPixels[index] = activeColor;
+				if (oldVal !== activeColorVal) {
+					batch.push({
+						index,
+						oldColor: ColorLogic.uint32ToHex(oldVal),
+						newColor: ColorLogic.uint32ToHex(activeColorVal)
+					});
+					currentPixels[index] = activeColorVal;
 				}
 			});
 		}
 
 		if (batch.length > 0) {
 			editor.canvas.pixels = currentPixels;
+			editor.canvas.triggerPulse();
 			history.push(batch);
 			if (mode.current.type === 'ERASE') sfx.playErase();
 			else sfx.playDraw();
@@ -137,7 +155,7 @@ export class DrawService {
 			: rawPoints.filter((p) => editor.canvas.isValidCoord(p.x, p.y));
 
 		const batch: Array<{ index: number; oldColor: string | null; newColor: string | null }> = [];
-		const currentPixels = [...editor.canvas.pixels];
+		const currentPixels = new Uint32Array(editor.canvas.pixels);
 
 		pointsToDraw.forEach((p) => {
 			const index = editor.canvas.getIndex(p.x, p.y);
@@ -147,37 +165,43 @@ export class DrawService {
 			if (editor.studio.isAlphaLocked && !editor.project.activeFrame.activeLayer.hasPixel(index))
 				return;
 
-			const oldColor = currentPixels[index];
-			if (oldColor !== null) {
-				batch.push({ index, oldColor, newColor: null });
-				currentPixels[index] = null;
+			const oldVal = currentPixels[index];
+			if (oldVal !== 0) {
+				batch.push({ index, oldColor: ColorLogic.uint32ToHex(oldVal), newColor: null });
+				currentPixels[index] = 0;
 			}
 		});
 
 		if (batch.length > 0) {
 			editor.canvas.pixels = currentPixels;
+			editor.canvas.triggerPulse();
 			history.push(batch);
 			sfx.playErase();
 		}
 	}
 
-	private getEffectColorForPoint(x: number, y: number, targetColor: string | null): string | null {
-		if (mode.current.type === 'ERASE') return null;
+	private getEffectColorForPoint(x: number, y: number, targetVal: number): number {
+		if (mode.current.type === 'ERASE') return 0;
 
 		const baseColor = editor.paletteState.activeColor;
+		const baseVal = ColorLogic.hexToUint32(baseColor);
 
-		if (keyboard.isXDown || editor.studio.isShadingDither) {
-			return (x + y) % 2 === 0 ? baseColor : null;
+		if (editor.studio.isShadingDither) {
+			return (x + y) % 2 === 0 ? baseVal : 0;
 		}
 
-		if (!targetColor) return baseColor;
+		if (targetVal === 0) return baseVal;
 
-		if (keyboard.isLDown || editor.studio.isShadingLighten)
-			return ColorEngine.adjustBrightness(targetColor, 0.1);
-		if (keyboard.isDDown || editor.studio.isShadingDarken)
-			return ColorEngine.adjustBrightness(targetColor, -0.1);
+		if (editor.studio.isShadingLighten) {
+			const hex = ColorLogic.uint32ToHex(targetVal);
+			return ColorLogic.hexToUint32(ColorLogic.adjustBrightness(hex!, 0.1));
+		}
+		if (editor.studio.isShadingDarken) {
+			const hex = ColorLogic.uint32ToHex(targetVal);
+			return ColorLogic.hexToUint32(ColorLogic.adjustBrightness(hex!, -0.1));
+		}
 
-		return baseColor;
+		return baseVal;
 	}
 
 	beginStroke(x: number, y: number) {
@@ -186,7 +210,7 @@ export class DrawService {
 	}
 
 	continueStroke(x: number, y: number, lastX: number, lastY: number) {
-		const points = PixelEngine.getLinePoints(lastX, lastY, x, y, 0);
+		const points = Geometry.getLinePoints(lastX, lastY, x, y, 0);
 
 		if (editor.studio.isPixelPerfect) {
 			const currentPath = [...editor.canvas.strokePoints, ...points];
@@ -212,8 +236,9 @@ export class DrawService {
 		if (rawPoints.length < 5) return;
 
 		const stab = editor.studio.stabilization;
-		const smoothed = PixelEngine.smoothPath(rawPoints, stab / 10);
-		const arcData = PixelEngine.fitArc(smoothed, stab);
+		const smoothed = Path.smooth(rawPoints, stab / 10);
+		const circularityLimit = 0.05 + (stab / 100) * 0.35;
+		const arcData = Geometry.fitArc(smoothed, circularityLimit);
 
 		editor.canvas.clearBuffer();
 		let finalPixels: Array<{ x: number; y: number }> = [];
@@ -221,9 +246,9 @@ export class DrawService {
 
 		if (arcData && arcData.isFull) {
 			visualPoints = arcData.points;
-			finalPixels = PixelEngine.getCirclePoints(arcData.cx, arcData.cy, arcData.r);
+			finalPixels = Geometry.getCirclePoints(arcData.cx, arcData.cy, arcData.r);
 		} else {
-			const simplified = PixelEngine.simplifyPath(smoothed, (stab / 100) * 2.0);
+			const simplified = Path.simplify(smoothed, (stab / 100) * 2.0);
 
 			if (simplified.length === 2) {
 				let p1 = { ...simplified[0] };
@@ -244,12 +269,12 @@ export class DrawService {
 				}
 
 				visualPoints = [p1, p2];
-				finalPixels = PixelEngine.getLinePoints(p1.x, p1.y, p2.x, p2.y, 0);
+				finalPixels = Geometry.getLinePoints(p1.x, p1.y, p2.x, p2.y, 0);
 			} else if (arcData) {
 				visualPoints = arcData.points;
 				for (let i = 0; i < visualPoints.length - 1; i++) {
 					finalPixels.push(
-						...PixelEngine.getLinePoints(
+						...Geometry.getLinePoints(
 							visualPoints[i].x,
 							visualPoints[i].y,
 							visualPoints[i + 1].x,
@@ -262,7 +287,7 @@ export class DrawService {
 				visualPoints = simplified;
 				for (let i = 0; i < visualPoints.length - 1; i++) {
 					finalPixels.push(
-						...PixelEngine.getLinePoints(
+						...Geometry.getLinePoints(
 							visualPoints[i].x,
 							visualPoints[i].y,
 							visualPoints[i + 1].x,
@@ -287,7 +312,7 @@ export class DrawService {
 		}
 
 		const batch: Array<{ index: number; oldColor: string | null; newColor: string | null }> = [];
-		const currentPixels = [...editor.canvas.pixels];
+		const currentPixels = new Uint32Array(editor.canvas.pixels);
 
 		if (editor.studio.isPatternBrushActive && editor.studio.patternBrushData) {
 			const pb = editor.studio.patternBrushData;
@@ -305,8 +330,8 @@ export class DrawService {
 
 						if (editor.canvas.isValidCoord(targetX, targetY)) {
 							const pbIdx = py * pb.width + px;
-							const color = pb.data[pbIdx];
-							if (color === null) continue;
+							const colorVal = pb.data[pbIdx];
+							if (colorVal === 0) continue;
 
 							const index = editor.canvas.getIndex(targetX, targetY);
 
@@ -319,12 +344,16 @@ export class DrawService {
 								continue;
 
 							const isEraser = mode.current.type === 'ERASE';
-							const finalColor = isEraser ? null : color;
+							const finalColorVal = isEraser ? 0 : colorVal;
 
-							const oldColor = currentPixels[index];
-							if (oldColor !== finalColor) {
-								batch.push({ index, oldColor, newColor: finalColor });
-								currentPixels[index] = finalColor;
+							const oldVal = currentPixels[index];
+							if (oldVal !== finalColorVal) {
+								batch.push({
+									index,
+									oldColor: ColorLogic.uint32ToHex(oldVal),
+									newColor: ColorLogic.uint32ToHex(finalColorVal)
+								});
+								currentPixels[index] = finalColorVal;
 							}
 						}
 					}
@@ -368,11 +397,15 @@ export class DrawService {
 					)
 						return;
 
-					const activeColor = this.getEffectColorForPoint(p.x, p.y, currentPixels[index]);
-					const oldColor = currentPixels[index];
-					if (oldColor !== activeColor) {
-						batch.push({ index, oldColor, newColor: activeColor });
-						currentPixels[index] = activeColor;
+					const activeColorVal = this.getEffectColorForPoint(p.x, p.y, currentPixels[index]);
+					const oldVal = currentPixels[index];
+					if (oldVal !== activeColorVal) {
+						batch.push({
+							index,
+							oldColor: ColorLogic.uint32ToHex(oldVal),
+							newColor: ColorLogic.uint32ToHex(activeColorVal)
+						});
+						currentPixels[index] = activeColorVal;
 					}
 				});
 			});
@@ -380,10 +413,116 @@ export class DrawService {
 
 		if (batch.length > 0) {
 			editor.canvas.pixels = currentPixels;
+			editor.canvas.triggerPulse();
 			history.push(batch);
 			if (mode.current.type === 'ERASE') sfx.playErase();
 			else sfx.playDraw();
 		}
 		editor.canvas.clearBuffer();
+	}
+
+	commitShape() {
+		const anchor = editor.studio.shapeAnchor;
+		if (!anchor) return;
+
+		const { x, y } = editor.cursor.pos;
+		const tool = editor.studio.activeTool;
+
+		if (tool === 'GRADIENT') {
+			const startColor = editor.studio.gradientStartColor;
+			const endColor = editor.paletteState.activeColor;
+			if (!startColor) return;
+
+			// If selection exists, fill selection. Otherwise fill whole frame.
+			const targetIndices = editor.selection.isActive
+				? editor.selection.indices
+				: Array.from({ length: editor.canvas.width * editor.canvas.height }, (_, i) => i);
+
+			const gradientMap = PixelLogic.getLinearGradientMap(
+				anchor.x,
+				anchor.y,
+				x,
+				y,
+				targetIndices,
+				editor.canvas.width
+			);
+
+			const currentPixels = new Uint32Array(editor.canvas.pixels);
+			const batch: Array<{ index: number; oldColor: string | null; newColor: string | null }> = [];
+
+			gradientMap.forEach((m: { index: number; ratio: number }) => {
+				const mixed = ColorLogic.mix(startColor, endColor, m.ratio);
+				const mixedVal = ColorLogic.hexToUint32(mixed);
+				const oldVal = currentPixels[m.index];
+				if (oldVal !== mixedVal) {
+					batch.push({
+						index: m.index,
+						oldColor: ColorLogic.uint32ToHex(oldVal),
+						newColor: mixed
+					});
+					currentPixels[m.index] = mixedVal;
+				}
+			});
+
+			if (batch.length > 0) {
+				editor.canvas.pixels = currentPixels;
+				editor.canvas.triggerPulse();
+				history.push(batch);
+				sfx.playDraw();
+			}
+
+			editor.studio.activeTool = 'BRUSH';
+			editor.studio.shapeAnchor = null;
+			editor.studio.gradientStartColor = null;
+			return;
+		}
+
+		let points: Array<{ x: number; y: number }> = [];
+		if (tool === 'RECTANGLE') {
+			points = PixelLogic.getRectanglePoints(anchor.x, anchor.y, x, y);
+		} else if (tool === 'ELLIPSE') {
+			points = PixelLogic.getEllipsePoints(anchor.x, anchor.y, x, y);
+		} else if (tool === 'POLYGON') {
+			points = PixelLogic.getPolygonPoints(
+				anchor.x,
+				anchor.y,
+				x,
+				y,
+				editor.studio.polygonSides,
+				editor.studio.polygonIndentation
+			);
+		}
+
+		if (points.length > 0) {
+			const activeColor = editor.paletteState.activeColor;
+			const activeVal = ColorLogic.hexToUint32(activeColor);
+			const batch: Array<{ index: number; oldColor: string | null; newColor: string | null }> = [];
+			const currentPixels = new Uint32Array(editor.canvas.pixels);
+
+			points.forEach((p) => {
+				if (editor.canvas.isValidCoord(p.x, p.y)) {
+					const index = editor.canvas.getIndex(p.x, p.y);
+					const oldVal = currentPixels[index];
+					if (oldVal !== activeVal) {
+						batch.push({
+							index,
+							oldColor: ColorLogic.uint32ToHex(oldVal),
+							newColor: activeColor
+						});
+						currentPixels[index] = activeVal;
+					}
+				}
+			});
+
+			if (batch.length > 0) {
+				editor.canvas.pixels = currentPixels;
+				editor.canvas.triggerPulse();
+				history.push(batch);
+				sfx.playDraw();
+			}
+		}
+
+		editor.studio.activeTool = 'BRUSH';
+		editor.studio.shapeAnchor = null;
 	}
 }

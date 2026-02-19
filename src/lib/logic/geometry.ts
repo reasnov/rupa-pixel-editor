@@ -181,4 +181,60 @@ export class Geometry {
 	static getGuidePosition(offset: number, size: number): number {
 		return 50 + (offset / size) * 100;
 	}
+
+	/**
+	 * Maps screen coordinates to canvas grid coordinates.
+	 */
+	static mapScreenToGrid(
+		clientX: number,
+		clientY: number,
+		rect: DOMRect,
+		canvasWidth: number,
+		canvasHeight: number
+	): { x: number; y: number } {
+		const xPct = (clientX - rect.left) / rect.width;
+		const yPct = (clientY - rect.top) / rect.height;
+
+		return {
+			x: xPct * canvasWidth,
+			y: yPct * canvasHeight
+		};
+	}
+
+	/**
+	 * Calculates the CSS transform string for the camera viewport.
+	 */
+	static calculateCameraTransform(
+		zoomLevel: number,
+		panOffset: { x: number; y: number },
+		cursorPos: { x: number; y: number },
+		canvasWidth: number,
+		canvasHeight: number
+	): string {
+		const { x: px, y: py } = panOffset;
+
+		if (zoomLevel <= 1) {
+			return `translate(calc(-50% + ${px}px), calc(-50% + ${py}px)) scale(${zoomLevel})`;
+		}
+
+		const xPct = ((cursorPos.x + 0.5) / canvasWidth) * 100;
+		const yPct = ((cursorPos.y + 0.5) / canvasHeight) * 100;
+
+		return `translate(calc(-${xPct}% + ${px}px), calc(-${yPct}% + ${py}px)) scale(${zoomLevel})`;
+	}
+
+	/**
+	 * Calculates the movement delta for panning.
+	 */
+	static calculatePanDelta(
+		currentX: number,
+		currentY: number,
+		lastX: number,
+		lastY: number
+	): { dx: number; dy: number } {
+		return {
+			dx: currentX - lastX,
+			dy: currentY - lastY
+		};
+	}
 }

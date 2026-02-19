@@ -38,14 +38,15 @@ The brush is no longer a static pixel but a dynamic "Kernel" that follows the cu
 
 ## 4. The Roast (Shading & Toning Mode)
 
-Shading is implemented as a **Chorded Intent** using held-key modifiers.
+Shading is implemented as a **Toggle Stance**, allowing baristas to focus on the stroke without holding modifiers.
 
 ### 4.1 Orchestration
 
-- **Lighten (Highlight):** Hold `L` + Move/Click.
-- **Darken (Shadow):** Hold `D` + Move/Click.
-- **Dither (Texture):** Hold `X` + Move/Click.
-- **Keyboard Engine Upgrade:** The `KeyboardEngine` must be expanded to expose reative `isLDown`, `isDDown`, and `isXDown` states, as these are not standard system modifiers.
+- **Lighten (Highlight):** Toggle `L`.
+- **Darken (Shadow):** Toggle `D`.
+- **Dither (Texture):** Toggle `X`.
+- **Behavior:** Toggling one shading mode automatically deactivates other active shading modes to ensure flavor purity.
+- **Architectural Note:** The `isShading...` states are managed in `StudioState` as reactive runes.
 
 ---
 
@@ -99,19 +100,19 @@ The drawing pipeline must process intents in this order:
 
 To maintain consistency and professional standards, the following mappings are finalized for v0.8.0:
 
-| Feature              | New Intent          | Primary Key | Migration From    |
-| :------------------- | :------------------ | :---------- | :---------------- |
-| **Brush Size -**     | `BRUSH_SIZE_DEC`    | `[`         | `MOVE_LAYER_UP`   |
-| **Brush Size +**     | `BRUSH_SIZE_INC`    | `]`         | `MOVE_LAYER_DOWN` |
-| **Move Layer Up**    | `MOVE_LAYER_UP`     | `Alt + [`   | `[`               |
-| **Move Layer Down**  | `MOVE_LAYER_DOWN`   | `Alt + ]`   | `]`               |
-| **Symmetry Cycle**   | `CYCLE_SYMMETRY`    | `s`         | -                 |
-| **Tiling Toggle**    | `TOGGLE_TILING`     | `t`         | -                 |
-| **Alpha Lock**       | `TOGGLE_ALPHA_LOCK` | `a`         | -                 |
-| **Color Lock**       | `TOGGLE_COLOR_LOCK` | `Shift + a` | -                 |
-| **Highlight (Held)** | `SHADE_LIGHTEN`     | `l`         | -                 |
-| **Shadow (Held)**    | `SHADE_DARKEN`      | `d`         | -                 |
-| **Dither (Held)**    | `SHADE_DITHER`      | `x`         | -                 |
+| Feature             | New Intent          | Primary Key | Migration From    |
+| :------------------ | :------------------ | :---------- | :---------------- |
+| **Brush Size -**    | `BRUSH_SIZE_DEC`    | `[`         | `MOVE_LAYER_UP`   |
+| **Brush Size +**    | `BRUSH_SIZE_INC`    | `]`         | `MOVE_LAYER_DOWN` |
+| **Move Layer Up**   | `MOVE_LAYER_UP`     | `Alt + [`   | `[`               |
+| **Move Layer Down** | `MOVE_LAYER_DOWN`   | `Alt + ]`   | `]`               |
+| **Symmetry Cycle**  | `CYCLE_SYMMETRY`    | `s`         | -                 |
+| **Tiling Toggle**   | `TOGGLE_TILING`     | `t`         | -                 |
+| **Alpha Lock**      | `TOGGLE_ALPHA_LOCK` | `a`         | -                 |
+| **Color Lock**      | `TOGGLE_COLOR_LOCK` | `Shift + a` | -                 |
+| **Highlight**       | `SHADE_LIGHTEN`     | `l`         | -                 |
+| **Shadow**          | `SHADE_DARKEN`      | `d`         | -                 |
+| **Dither**          | `SHADE_DITHER`      | `x`         | -                 |
 
 ---
 
@@ -148,13 +149,16 @@ Support for background reference images to assist in tracing complex sketches.
 
 ## 10. Updated Shortcut Migration Map
 
-| Feature             | New Intent             | Primary Key      | Group   |
-| :------------------ | :--------------------- | :--------------- | :------ |
-| **Pixel-Perfect**   | `TOGGLE_PIXEL_PERFECT` | `p`              | Etching |
-| **Rectangle Tool**  | `TOOL_RECTANGLE`       | `Alt + r`        | Magic   |
-| **Ellipse Tool**    | `TOOL_ELLIPSE`         | `Alt + c`        | Magic   |
-| **Underlay Toggle** | `TOGGLE_UNDERLAY`      | `Ctrl + Alt + u` | View    |
-| **Underlay Crate**  | `OPEN_UNDERLAY_MENU`   | `Alt + u`        | Crates  |
+| Feature             | New Intent             | Primary Key        | Group   |
+| :------------------ | :--------------------- | :----------------- | :------ |
+| **Pixel-Perfect**   | `TOGGLE_PIXEL_PERFECT` | `p`                | Etching |
+| **Rectangle Tool**  | `TOOL_RECTANGLE`       | `Alt + r`          | Magic   |
+| **Ellipse Tool**    | `TOOL_ELLIPSE`         | `Alt + c`          | Magic   |
+| **Underlay Toggle** | `TOGGLE_UNDERLAY`      | `Ctrl + Alt + u`   | View    |
+| **Underlay Crate**  | `OPEN_UNDERLAY_MENU`   | `Alt + u`          | Crates  |
+| **Mute Audio**      | `TOGGLE_MUTE`          | `Ctrl + Shift + m` | System  |
+| **Polygon Indent+** | `POLY_INDENT_INC`      | `Alt + Shift + ]`  | Etching |
+| **Polygon Indent-** | `POLY_INDENT_DEC`      | `Alt + Shift + [`  | Etching |
 
 ---
 

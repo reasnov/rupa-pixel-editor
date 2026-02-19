@@ -9,10 +9,14 @@ vi.mock('../../lib/state/editor.svelte.js', () => ({
 		canvas: {
 			width: 10,
 			height: 10,
-			pixels: new Array(100).fill(null),
-			compositePixels: new Array(100).fill(null),
-			getColor: vi.fn(),
-			getIndex: vi.fn((x, y) => y * 10 + x)
+			pixels: new Uint32Array(100),
+			compositePixels: new Uint32Array(100),
+			getColor: vi.fn((x, y) => {
+				const pixels = new Uint32Array(100);
+				return pixels[y * 10 + x];
+			}),
+			getIndex: vi.fn((x, y) => y * 10 + x),
+			triggerPulse: vi.fn()
 		},
 		selection: {
 			get isActive() {
@@ -35,7 +39,8 @@ vi.mock('../../lib/engine/audio.js', () => ({
 	sfx: {
 		playDraw: vi.fn(),
 		playErase: vi.fn(),
-		playScale: vi.fn()
+		playScale: vi.fn(),
+		playMove: vi.fn()
 	}
 }));
 
@@ -56,7 +61,7 @@ describe('Selection & Clipboard Services', () => {
 		vi.spyOn(editor.selection, 'isActive', 'get').mockReturnValue(false);
 		editor.project.clipboard = null;
 		// Reset pixels
-		for (let i = 0; i < 100; i++) editor.canvas.pixels[i] = null;
+		editor.canvas.pixels.fill(0);
 	});
 
 	describe('SelectionService', () => {
@@ -77,8 +82,8 @@ describe('Selection & Clipboard Services', () => {
 
 			service.commit();
 
-			expect(editor.canvas.pixels[0]).toBe('#FF00FF');
-			expect(editor.canvas.pixels[11]).toBe('#FF00FF');
+			expect(editor.canvas.pixels[0]).toBe(0xffff00ff);
+			expect(editor.canvas.pixels[11]).toBe(0xffff00ff);
 		});
 	});
 
@@ -94,14 +99,14 @@ describe('Selection & Clipboard Services', () => {
 				width: 1,
 				height: 1
 			});
-			editor.canvas.compositePixels[55] = '#ABC';
+			editor.canvas.compositePixels[55] = 0xffaabbcc;
 
 			service.copy();
 
 			expect(editor.project.clipboard).toEqual({
 				width: 1,
 				height: 1,
-				data: ['#ABC']
+				data: new Uint32Array([0xffaabbcc])
 			});
 		});
 
@@ -110,13 +115,13 @@ describe('Selection & Clipboard Services', () => {
 			editor.project.clipboard = {
 				width: 1,
 				height: 1,
-				data: ['#DEF']
+				data: new Uint32Array([0xffddeeff])
 			};
 			editor.cursor.pos = { x: 2, y: 2 };
 
 			service.paste();
 
-			expect(editor.canvas.pixels[22]).toBe('#DEF');
+			expect(editor.canvas.pixels[22]).toBe(0xffddeeff);
 		});
 	});
 });

@@ -10,14 +10,19 @@ vi.mock('../../lib/state/editor.svelte.js', () => ({
 		canvas: {
 			width: 2,
 			height: 2,
-			pixels: ['#000000', '#111111', '#222222', '#333333'],
-			compositePixels: ['#000000', '#111111', '#222222', '#333333'],
+			pixels: new Uint32Array([0xff000000, 0xff111111, 0xff222222, 0xff333333]),
+			compositePixels: new Uint32Array([0xff000000, 0xff111111, 0xff222222, 0xff333333]),
 			getIndex: vi.fn((x, y) => y * 2 + x),
-			getColor: vi.fn((x, y) => ['#000000', '#111111', '#222222', '#333333'][y * 2 + x]),
+			isValidCoord: vi.fn((x, y) => x >= 0 && x < 2 && y >= 0 && y < 2),
+			getColor: vi.fn((x, y) => {
+				const pixels = [0xff000000, 0xff111111, 0xff222222, 0xff333333];
+				return pixels[y * 2 + x];
+			}),
 			clear: vi.fn(),
 			reset: vi.fn(),
 			clearBuffer: vi.fn(),
-			addToBuffer: vi.fn()
+			addToBuffer: vi.fn(),
+			triggerPulse: vi.fn()
 		},
 		paletteState: {
 			activeColor: '#FF00FF',
@@ -25,11 +30,29 @@ vi.mock('../../lib/state/editor.svelte.js', () => ({
 			select: vi.fn()
 		},
 		studio: {
-			isPicking: false
+			isPicking: false,
+			brushSize: 1,
+			brushShape: 'SQUARE',
+			symmetryMode: 'OFF',
+			isTilingEnabled: false,
+			isAlphaLocked: false,
+			isColorLocked: false,
+			isShadingLighten: false,
+			isShadingDarken: false,
+			isShadingDither: false,
+			isAirbrushActive: false,
+			airbrushDensity: 0.2
 		},
 		selection: {
 			isActive: false,
-			indices: []
+			activeIndicesSet: new Set()
+		},
+		project: {
+			activeFrame: {
+				activeLayer: {
+					hasPixel: vi.fn(() => true)
+				}
+			}
 		}
 	}
 }));
@@ -64,7 +87,7 @@ import { history } from '../../lib/engine/history.js';
 describe('Services', () => {
 	beforeEach(() => {
 		vi.clearAllMocks();
-		editor.canvas.pixels = ['#000000', '#111111', '#222222', '#333333'];
+		editor.canvas.pixels = new Uint32Array([0xff000000, 0xff111111, 0xff222222, 0xff333333]);
 	});
 
 	describe('DrawService', () => {
@@ -75,7 +98,7 @@ describe('Services', () => {
 
 			service.draw();
 
-			expect(editor.canvas.pixels[0]).toBe('#FF00FF');
+			expect(editor.canvas.pixels[0]).toBe(0xffff00ff);
 			expect(history.push).toHaveBeenCalled();
 			expect(sfx.playDraw).toHaveBeenCalled();
 		});
@@ -86,7 +109,7 @@ describe('Services', () => {
 
 			service.erase();
 
-			expect(editor.canvas.pixels[3]).toBe(null);
+			expect(editor.canvas.pixels[3]).toBe(0);
 			expect(sfx.playErase).toHaveBeenCalled();
 		});
 
@@ -102,20 +125,20 @@ describe('Services', () => {
 			service.draw();
 
 			// Should NOT have changed index 3
-			expect(editor.canvas.pixels[3]).not.toBe('#FF00FF');
+			expect(editor.canvas.pixels[3]).not.toBe(0xffff00ff);
 
 			// Activate selection that DOES include index 3
 			(editor.selection as any).activeIndicesSet.add(3);
 			service.draw();
 
 			// Should HAVE changed index 3
-			expect(editor.canvas.pixels[3]).toBe('#FF00FF');
+			expect(editor.canvas.pixels[3]).toBe(0xffff00ff);
 		});
 
 		it('erase should respect selection mask', () => {
 			const service = new DrawService();
 			editor.cursor.pos = { x: 0, y: 0 }; // Index 0
-			editor.canvas.pixels[0] = '#FF00FF';
+			editor.canvas.pixels[0] = 0xffff00ff;
 
 			// Activate selection that DOES NOT include index 0
 			(editor.selection as any).isActive = true;
@@ -124,14 +147,14 @@ describe('Services', () => {
 			service.erase();
 
 			// Should NOT have erased index 0
-			expect(editor.canvas.pixels[0]).toBe('#FF00FF');
+			expect(editor.canvas.pixels[0]).toBe(0xffff00ff);
 
 			// Activate selection that DOES include index 0
 			(editor.selection as any).activeIndicesSet.add(0);
 			service.erase();
 
 			// Should HAVE erased index 0
-			expect(editor.canvas.pixels[0]).toBe(null);
+			expect(editor.canvas.pixels[0]).toBe(0);
 		});
 	});
 
@@ -141,7 +164,9 @@ describe('Services', () => {
 			service.flip('horizontal');
 
 			// [0, 1, 2, 3] -> [1, 0, 3, 2]
-			expect(editor.canvas.pixels).toEqual(['#111111', '#000000', '#333333', '#222222']);
+			expect(editor.canvas.pixels).toEqual(
+				new Uint32Array([0xff111111, 0xff000000, 0xff333333, 0xff222222])
+			);
 			expect(history.clear).toHaveBeenCalled();
 		});
 
@@ -150,7 +175,9 @@ describe('Services', () => {
 			service.flip('vertical');
 
 			// [0, 1, 2, 3] -> [2, 3, 0, 1]
-			expect(editor.canvas.pixels).toEqual(['#222222', '#333333', '#000000', '#111111']);
+			expect(editor.canvas.pixels).toEqual(
+				new Uint32Array([0xff222222, 0xff333333, 0xff000000, 0xff111111])
+			);
 		});
 
 		it('clearAll should call canvas.clear if confirmed', () => {
@@ -178,7 +205,7 @@ describe('Services', () => {
 
 		it('pickFromCanvas should set activeColor from cursor position', () => {
 			const service = new ColorService();
-			editor.cursor.pos = { x: 1, y: 0 }; // Color #111111
+			editor.cursor.pos = { x: 1, y: 0 }; // Color 0xff111111
 			editor.paletteState.setColor = vi.fn();
 
 			service.pickFromCanvas();

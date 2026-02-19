@@ -8,9 +8,9 @@ export interface ColorHSLA {
 }
 
 /**
- * ColorEngine: The specialized engine for processing colors.
+ * ColorLogic: The specialized logic for processing colors.
  */
-export class ColorEngine {
+export class ColorLogic {
 	/**
 	 * Converts HSLA color to a HEX string.
 	 */
@@ -174,6 +174,29 @@ export class ColorEngine {
 		const rgba = new Uint8ClampedArray([r, g, b, Math.round(a * 255)]);
 		this.rgbaCache.set(hexStr, rgba);
 		return rgba;
+	}
+
+	/**
+	 * Fast conversion from HEX to Uint32 (ABGR for little-endian).
+	 */
+	static hexToUint32(hexStr: ColorHex | null): number {
+		if (!hexStr) return 0;
+		const { r, g, b, a } = this.hexToRgb(hexStr);
+		const alpha = Math.round(a * 255);
+		// ABGR (Little Endian for [R,G,B,A])
+		return ((alpha << 24) | (b << 16) | (g << 8) | r) >>> 0;
+	}
+
+	/**
+	 * Fast conversion from Uint32 (ABGR) to HEX.
+	 */
+	static uint32ToHex(val: number): ColorHex | null {
+		if (val === 0) return null;
+		const r = val & 0xff;
+		const g = (val >> 8) & 0xff;
+		const b = (val >> 16) & 0xff;
+		const a = (val >> 24) & 0xff;
+		return this.rgbToHex(r, g, b, a / 255);
 	}
 
 	private static hexToRgb(hexStr: string) {

@@ -1,3 +1,4 @@
+import { __ } from "$lib/state/i18n.svelte.js";
 import { editor } from '../state/editor.svelte';
 import { keyboard } from './keyboard.svelte.js';
 import { sequence } from './sequence.svelte.js';

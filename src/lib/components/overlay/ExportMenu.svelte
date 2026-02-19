@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { __ } from "$lib/state/i18n.svelte.js";
 	import { editor } from '../../state/editor.svelte.js';
 	import { ExportEngine } from '../../engine/export.js';
 	import Modal from '../ui/Modal.svelte';

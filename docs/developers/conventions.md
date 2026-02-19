@@ -39,8 +39,8 @@ Rupa Pixel Editor follows a strict **Separation of Concerns (SOC)** across its l
 
 ### 2.4 Internationalization (i18n)
 
-- **No Hardcoded Strings**: All UI text must use the global `__({ key })` function.
-- **Global Availability**: The `__()` function is registered globally. **DO NOT** import it manually in Svelte components.
+- **No Hardcoded Strings**: All UI text must use the `__({ key })` function.
+- **Explicit Imports**: Always import `__` from `$lib/state/i18n.svelte.js`. **DO NOT** rely on global variables for translation.
 - **Translation Files**: Located in `src/lib/lang/{locale}/common.json`.
 - **Locale Standard**: The English (`en`) locale is the primary source of truth for all barista terminology.
 

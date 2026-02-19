@@ -59,7 +59,7 @@ Sound is 50% of the Rupa experience. It anchors the barista in the meditative st
 Rupa follows a **"Keyboard-First, Mouse-Friendly"** model. This hybrid approach balances the precision of keyboard-row navigation with the organic flow of mouse-guided drawing.
 
 - **The Keyboard (Keyboard)**: Provides the structural "Metronome." Perfect for geometric patterns, precise navigational jumps, and bulk project manipulations.
-- **The Mouse (ShuttlePoint)**: Provides **"Fluid Pixeling."** Enables baristas to draw freehand curves and organic patterns that would be physically exhausting via keyboard.
+- **The Mouse (Pointer)**: Provides **"Fluid Pixeling."** Enables baristas to draw freehand curves and organic patterns that would be physically exhausting via keyboard.
 - **Seamless Hand-off**: The Cursor follows both inputs instantly. An barista can move with arrow keys and immediately start a freehand line with the mouse without changing modes.
 - **Context Sovereignty**: UI overlays (Basins) respond to both keyboard shortcuts and mouse clicks, ensuring no barista is forced into a single input method.
 
@@ -70,7 +70,7 @@ Rupa follows a **"Keyboard-First, Mouse-Friendly"** model. This hybrid approach 
 When adding a new feature, ask:
 
 1. Is it reachable via a keyboard chord?
-2. Is it intuitive via mouse pointer (**ShuttlePoint**)?
+2. Is it intuitive via mouse pointer (**Pointer**)?
 3. Does it have a tactile sound or visual glow?
 4. Does it fit within the Solarized/Cottagecore aesthetic?
 5. Does it make the user feel more relaxed or more stressed? (Goal: Relaxed).

@@ -12,7 +12,7 @@ export class LayerState {
 	opacity = $state(1.0); // 0.0 to 1.0 (Density)
 
 	// The actual pixel data for this layer
-	pixels = $state<(ColorHex | null)[]>([]);
+	pixels = $state.raw<(ColorHex | null)[]>([]);
 
 	constructor(name: string, width: number, height: number) {
 		this.name = name;

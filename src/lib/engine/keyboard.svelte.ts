@@ -1,3 +1,4 @@
+import { __ } from "$lib/state/i18n.svelte.js";
 import shortcutsData from '../config/shortcuts.json' with { type: 'json' };
 import { sequence } from './sequence.svelte.js';
 

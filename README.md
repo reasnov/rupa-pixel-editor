@@ -49,6 +49,18 @@ npm install
 npm run dev:all
 ```
 
+## 🐧 Linux Troubleshooting
+
+If you encounter issues starting the application on Linux (e.g., "The SUID sandbox helper binary was found, but is not configured correctly"), you may need to enable unprivileged user namespaces or run with the sandbox disabled manually:
+
+```bash
+# Option A: Fix your system (Recommended)
+sudo sysctl -w kernel.unprivileged_userns_clone=1
+
+# Option B: Run with flags if Option A is not possible
+# npm run electron:dev -- --no-sandbox
+```
+
 ## 📖 Documentation
 
 - [User Guide](./docs/USER_GUIDE.md)

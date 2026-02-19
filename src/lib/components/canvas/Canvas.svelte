@@ -7,6 +7,8 @@
 	import CanvasRuler from './CanvasRuler.svelte';
 	import Cursor from './Cursor.svelte';
 
+	import { ColorEngine } from '../../engine/color.js';
+
 	let gridEl = $state<HTMLElement | null>(null);
 	let canvasEl = $state<HTMLCanvasElement | null>(null);
 
@@ -48,6 +50,7 @@
 
 	/**
 	 * High-Performance Render Loop for the Main Canvas.
+	 * Using ImageData + putImageData to bypass thousand of fillRect calls.
 	 */
 	$effect(() => {
 		const ctx = canvasEl?.getContext('2d', { alpha: true });
@@ -55,17 +58,26 @@
 		if (!ctx || !canvasEl) return;
 
 		ctx.imageSmoothingEnabled = false;
-		ctx.clearRect(0, 0, w, h);
+
+		const imageData = ctx.createImageData(w, h);
+		const data = imageData.data;
 
 		for (let i = 0; i < pixels.length; i++) {
 			const color = pixels[i];
+			const offset = i * 4;
+
 			if (color) {
-				const x = i % w;
-				const y = Math.floor(i / w);
-				ctx.fillStyle = color;
-				ctx.fillRect(x, y, 1, 1);
+				const rgba = ColorEngine.toRGBA(color);
+				data[offset] = rgba[0];
+				data[offset + 1] = rgba[1];
+				data[offset + 2] = rgba[2];
+				data[offset + 3] = rgba[3];
+			} else {
+				data[offset + 3] = 0; // Transparent
 			}
 		}
+
+		ctx.putImageData(imageData, 0, 0);
 	});
 </script>
 

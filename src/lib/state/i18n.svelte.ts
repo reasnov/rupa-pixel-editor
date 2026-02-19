@@ -61,6 +61,3 @@ export function __({
 		lng: locale || i18nState.locale
 	});
 }
-
-// Register globally
-(globalThis as any).__ = __;

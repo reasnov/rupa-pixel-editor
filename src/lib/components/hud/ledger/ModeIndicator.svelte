@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { __ } from "$lib/state/i18n.svelte.js";
 	import { mode } from '../../../engine/mode.svelte.js';
 </script>
 

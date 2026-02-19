@@ -32,7 +32,7 @@ To maintain the high standards of the **Rupa Pixel Editor** (Editor), adhering t
 
 - **Read First, Code Later**: Before implementing any feature, ALWAYS consult `docs/developers/architecture.md` and `docs/developers/conventions.md`.
 - **5-Layer Modular Monolith**: Respect the strict separation between `UI` (Components), `State` (Runes), `Service` (Logic), `Engine` (IO), and `Logic` (Pure Math).
-- **Service-Oriented**: Never write complex logic inside `.svelte` components. Delegate to `shuttle` or specific services.
+- **Service-Oriented**: Never write complex logic inside `.svelte` components. Delegate to `services` or specific services.
 - **Pure Calculation**: Mathematical algorithms must reside in the `Logic Layer` (`src/lib/logic/`) and remain stateless.
 
 ## 2. Inclusive & Global Standards
@@ -56,4 +56,4 @@ To maintain the high standards of the **Rupa Pixel Editor** (Editor), adhering t
 
 - **Svelte 5 Runes**: Exclusively use Runes syntax (`$state`, `$derived`, `$effect`).
 - **Type Safety**: No `any`. Use defined interfaces in `src/lib/types/`.
-- **Global Objects**: Utilize the globally registered `shuttle`, `editor`, and `__` helpers to keep imports clean.
+- **Global Objects**: Utilize the globally registered `services`, `editor`, and `__` helpers to keep imports clean.

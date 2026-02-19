@@ -1,6 +1,7 @@
 import { type ColorHex } from '../types/index.js';
 import { Geometry } from '../logic/geometry.js';
 import { Path } from '../logic/path.js';
+import { PixelLogic } from '../logic/pixel.js';
 
 /**
  * PixelEngine: Orchestrator for computationally expensive pixel operations.
@@ -31,11 +32,8 @@ export class PixelEngine {
 		return Geometry.getCirclePoints(cx, cy, r);
 	}
 
-	// --- Pixel Manipulation Logic ---
+	// --- Pixel Manipulation Delegation ---
 
-	/**
-	 * Flood Fill: Fills a connected area of the same color.
-	 */
 	static floodFill(
 		data: (ColorHex | null)[],
 		width: number,
@@ -44,48 +42,14 @@ export class PixelEngine {
 		startY: number,
 		fillColor: ColorHex
 	): (ColorHex | null)[] {
-		const targetColor = data[startY * width + startX];
-		if (targetColor === fillColor) return data;
-
-		const newData = [...data];
-		const queue = [[startX, startY]];
-		const visited = new Set<number>();
-
-		while (queue.length > 0) {
-			const [x, y] = queue.pop()!;
-			const idx = y * width + x;
-
-			if (!visited.has(idx)) {
-				visited.add(idx);
-				newData[idx] = fillColor;
-
-				const neighbors = [
-					[x + 1, y],
-					[x - 1, y],
-					[x, y + 1],
-					[x, y - 1]
-				];
-				for (const [nx, ny] of neighbors) {
-					if (nx >= 0 && nx < width && ny >= 0 && ny < height) {
-						if (newData[ny * width + nx] === targetColor) {
-							queue.push([nx, ny]);
-						}
-					}
-				}
-			}
-		}
-		return newData;
+		return PixelLogic.floodFill(data, width, height, startX, startY, fillColor);
 	}
 
 	static recolor(data: (ColorHex | null)[], oldColor: ColorHex | null, newColor: ColorHex) {
-		return data.map((c) => (c === oldColor ? newColor : c));
+		return PixelLogic.recolor(data, oldColor, newColor);
 	}
 
 	static getPaletteUsage(data: (ColorHex | null)[]) {
-		const usage = new Set<ColorHex>();
-		data.forEach((c) => {
-			if (c) usage.add(c);
-		});
-		return usage;
+		return PixelLogic.getPaletteUsage(data);
 	}
 }

@@ -161,6 +161,21 @@ export class ColorEngine {
 		return this.rgbToHex(mixed.r, mixed.g, mixed.b, mixed.a);
 	}
 
+	/**
+	 * Fast conversion from HEX to RGBA array [r, g, b, a] (0-255).
+	 * Uses a micro-cache to prevent redundant parsing during render loops.
+	 */
+	private static rgbaCache = new Map<string, Uint8ClampedArray>();
+
+	static toRGBA(hexStr: ColorHex): Uint8ClampedArray {
+		if (this.rgbaCache.has(hexStr)) return this.rgbaCache.get(hexStr)!;
+
+		const { r, g, b, a } = this.hexToRgb(hexStr);
+		const rgba = new Uint8ClampedArray([r, g, b, Math.round(a * 255)]);
+		this.rgbaCache.set(hexStr, rgba);
+		return rgba;
+	}
+
 	private static hexToRgb(hexStr: string) {
 		const hex = hexStr.replace('#', '');
 		let r = 0,

@@ -11,8 +11,8 @@
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"lint": "prettier --check .",
 		"format": "prettier --write .",
-		"electron:dev": "electron . --no-sandbox --disable-vulkan --disable-gpu-sandbox --ozone-platform-hint=auto",
-		"electron:start": "npm run build && electron . --no-sandbox --disable-vulkan --disable-gpu-sandbox --ozone-platform-hint=auto",
+		"electron:dev": "electron . --disable-vulkan --ozone-platform-hint=auto",
+		"electron:start": "npm run build && electron . --disable-vulkan --ozone-platform-hint=auto",
 		"dev:all": "vite dev & sleep 15 && npm run electron:dev",
 		"test": "vitest run",
 		"deploy": "npm run build && gh-pages -d build --dotfiles"

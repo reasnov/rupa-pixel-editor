@@ -477,48 +477,45 @@
 									{/if}
 								</button>
 							</div>
-																					<div class="flex items-center gap-2">
-																						<button
-																							onclick={(e) => toggleProperties('layer', i, e)}
-																							class="text-[10px] opacity-0 transition-opacity group-hover:opacity-40 hover:text-brand"
-																							title="Infusion Properties"
-																						>
-																							{activePropertiesType === 'layer' && activePropertiesIndex === i
-																								? '🔼'
-																								: '⚙️'}
-																						</button>
-																						<button
-																							onclick={(e) => {
-																								e.stopPropagation();
-																								services.project.toggleLock(i);
-																							}}
-																							class="text-[10px] transition-opacity {layer.isLocked
-																								? 'opacity-100'
-																								: 'opacity-20'}"
-																							title={__({ key: 'hud.project_panel.lock' })}
-																						>
-																							{layer.isLocked ? '🔒' : '🔓'}
-																						</button>
-																						<button
-																							onclick={(e) => {
-																								e.stopPropagation();
-																								services.project.removeLayer(i);
-																							}}
-																							class="text-[10px] opacity-0 transition-opacity group-hover:opacity-40 hover:text-brand"
-																							title={__({ key: 'hud.actions.delete' })}
-																						>
-																							🗑️
-																						</button>
-																					</div>
-																				</div>
-							
-																																	<!-- Layer Properties Accordion -->
-																																	{#if activePropertiesType === 'layer' && activePropertiesIndex === i}
-																																		<PropertiesPanel
-																																			target={layer}
-																																		/>
-																																	{/if}
-																																{/if}				{/each}
+							<div class="flex items-center gap-2">
+								<button
+									onclick={(e) => toggleProperties('layer', i, e)}
+									class="text-[10px] opacity-0 transition-opacity group-hover:opacity-40 hover:text-brand"
+									title="Infusion Properties"
+								>
+									{activePropertiesType === 'layer' && activePropertiesIndex === i ? '🔼' : '⚙️'}
+								</button>
+								<button
+									onclick={(e) => {
+										e.stopPropagation();
+										services.project.toggleLock(i);
+									}}
+									class="text-[10px] transition-opacity {layer.isLocked
+										? 'opacity-100'
+										: 'opacity-20'}"
+									title={__({ key: 'hud.project_panel.lock' })}
+								>
+									{layer.isLocked ? '🔒' : '🔓'}
+								</button>
+								<button
+									onclick={(e) => {
+										e.stopPropagation();
+										services.project.removeLayer(i);
+									}}
+									class="text-[10px] opacity-0 transition-opacity group-hover:opacity-40 hover:text-brand"
+									title={__({ key: 'hud.actions.delete' })}
+								>
+									🗑️
+								</button>
+							</div>
+						</div>
+
+						<!-- Layer Properties Accordion -->
+						{#if activePropertiesType === 'layer' && activePropertiesIndex === i}
+							<PropertiesPanel target={layer} />
+						{/if}
+					{/if}
+				{/each}
 			</div>
 		{/if}
 	</div>

@@ -49,4 +49,3 @@ The state uses a hierarchical tree structure:
 - **Context Menus:** Right-click support on layers for quick manipulation (duplicate, merge, delete).
 - **Minimap:** The **Minimap** (Surveyor's Glass) is housed in the `FrameSidebar.svelte` (Left) to provide a global view alongside the layer stack.
 - **Composite Rendering:** `FrameState.compositePixels` caches the flattened pixel array for display, utilizing a reactive color cache for zero-latency updates.
-

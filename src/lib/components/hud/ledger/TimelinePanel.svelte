@@ -43,7 +43,7 @@
 
 		<div class="flex items-center gap-4">
 			{#if !editor.studio.isTimelineMinimized}
-				<div class="flex flex-col items-end mr-4">
+				<div class="mr-4 flex flex-col items-end">
 					<span class="font-serif text-[7px] font-black tracking-widest text-charcoal/20 uppercase">
 						{__({ key: 'timeline.track' })}
 					</span>
@@ -52,7 +52,7 @@
 					</span>
 				</div>
 			{:else}
-				<span class="font-mono text-[8px] font-bold text-brand/40 mr-4">
+				<span class="mr-4 font-mono text-[8px] font-bold text-brand/40">
 					{__({ key: 'timeline.frame_count', replace: { count: editor.project.frames.length } })}
 				</span>
 			{/if}
@@ -64,14 +64,18 @@
 					class="flex h-5 w-5 items-center justify-center rounded transition-colors hover:bg-black/5"
 					title={editor.studio.isTimelineMinimized ? 'Restore' : 'Minimize'}
 				>
-					<span class="text-[10px] opacity-40">{editor.studio.isTimelineMinimized ? '🔼' : '🔽'}</span>
+					<span class="text-[10px] opacity-40"
+						>{editor.studio.isTimelineMinimized ? '🔼' : '🔽'}</span
+					>
 				</button>
 				<button
 					onclick={toggleMaximize}
 					class="flex h-5 w-5 items-center justify-center rounded transition-colors hover:bg-black/5"
 					title={editor.studio.isTimelineMaximized ? 'Restore' : 'Maximize'}
 				>
-					<span class="text-[10px] opacity-40">{editor.studio.isTimelineMaximized ? '🗗' : '⏫'}</span>
+					<span class="text-[10px] opacity-40"
+						>{editor.studio.isTimelineMaximized ? '🗗' : '⏫'}</span
+					>
 				</button>
 			</div>
 		</div>

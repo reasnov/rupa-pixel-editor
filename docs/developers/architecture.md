@@ -113,7 +113,6 @@ The HUD follows a solid container architecture (similar to professional editors 
 - **Properties Panel (Contextual)**: Specialized panel for fine-tuning **Infusion** (Layer) properties like opacity and blend modes.
 - **Status Footer (Bottom)**: Houses the **TechLedger** with modular indicators for Modes, Working Time, and Ambiance status.
 
-
 ### 5.2 The Camera Protocol
 
 Viewport movement is achieved by applying CSS transforms to the **Canvas**. The system ensures that zooming focal points are always centered on the current `cursorPos`, maintaining the artist's focus.

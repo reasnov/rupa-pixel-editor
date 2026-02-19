@@ -23,7 +23,7 @@
 >
 	<div
 		class="h-2 w-2 rounded-full transition-all {hasContent
-			? 'bg-brand shadow-sm scale-110'
+			? 'scale-110 bg-brand shadow-sm'
 			: 'border border-charcoal/20 bg-transparent opacity-30'} {isActive
 			? 'ring-4 ring-brand/20'
 			: ''}"

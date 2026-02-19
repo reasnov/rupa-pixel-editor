@@ -54,5 +54,4 @@ _The Chronos Protocol: Solving choppy animations, 00:00 duration videos, and unp
 
 ---
 
-
 _Note: Blueprints are finalized once implemented but remain here as architectural reference._

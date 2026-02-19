@@ -87,7 +87,11 @@
 				>
 					{__({ key: 'export.static_title' })}
 				</span>
-				<div class="grid grid-cols-2 gap-3" role="radiogroup" aria-label={__({ key: 'export.static_formats_label' })}>
+				<div
+					class="grid grid-cols-2 gap-3"
+					role="radiogroup"
+					aria-label={__({ key: 'export.static_formats_label' })}
+				>
 					<button
 						class="flex flex-col items-center gap-3 rounded-xl border-2 p-4 transition-all {format ===
 						'png'

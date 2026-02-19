@@ -29,7 +29,10 @@
 		<!-- Cups Count -->
 		<div class="flex items-center justify-between">
 			<div class="flex flex-col gap-1">
-				<label for="cups-input" class="font-serif text-sm font-bold tracking-tight text-studio-text/60 uppercase">
+				<label
+					for="cups-input"
+					class="font-serif text-sm font-bold tracking-tight text-studio-text/60 uppercase"
+				>
 					{__({ key: 'export.propagation.frames_label' })}
 				</label>
 				<span class="font-serif text-[10px] text-studio-text/40">
@@ -78,7 +81,7 @@
 		</div>
 
 		<button
-			class="editor-primary-btn w-full py-4 text-lg mt-4"
+			class="editor-primary-btn mt-4 w-full py-4 text-lg"
 			onclick={execute}
 			disabled={cups <= 0}
 		>

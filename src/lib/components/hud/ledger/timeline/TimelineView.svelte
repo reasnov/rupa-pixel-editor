@@ -119,7 +119,7 @@
 						class="flex h-6 w-full items-center px-2 text-left transition-colors {i ===
 						editor.project.activeFrame.activeLayerIndex
 							? 'bg-brand/5 text-brand'
-							: 'hover:bg-black/5 text-charcoal/60'}"
+							: 'text-charcoal/60 hover:bg-black/5'}"
 					>
 						<span class="truncate font-serif text-[9px] font-bold uppercase">{layer.name}</span>
 					</button>
@@ -140,7 +140,7 @@
 							{#each editor.project.frames as frame, frameIdx}
 								<TimelineDrop
 									layer={frame.layers[layerIdx]}
-									{frameIdx}
+									frameIndex={frameIdx}
 									isActive={frameIdx === editor.project.activeFrameIndex &&
 										layerIdx === editor.project.activeFrame.activeLayerIndex}
 									onclick={() => selectCell(frameIdx, layerIdx)}

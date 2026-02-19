@@ -12,7 +12,7 @@
 
 <div
 	transition:fade={{ duration: 100 }}
-	class="mb-2 mr-2 flex flex-col gap-3 rounded-b-lg border-x border-b border-charcoal/5 bg-charcoal/[0.02] p-3 pt-1"
+	class="mr-2 mb-2 flex flex-col gap-3 rounded-b-lg border-x border-b border-charcoal/5 bg-charcoal/[0.02] p-3 pt-1"
 >
 	<!-- Common: Opacity -->
 	<div class="flex items-center justify-between gap-4">
@@ -52,6 +52,7 @@
 				class="flex h-4 w-8 items-center rounded-full transition-colors {target.isLinked
 					? 'bg-brand'
 					: 'bg-charcoal/10'}"
+				aria-label="Toggle Steeped (Sync across all cups)"
 			>
 				<div
 					class="h-2.5 w-2.5 rounded-full bg-white shadow-sm transition-transform {target.isLinked

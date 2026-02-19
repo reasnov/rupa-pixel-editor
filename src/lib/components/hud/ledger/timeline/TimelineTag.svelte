@@ -26,7 +26,7 @@
 	>
 	<button
 		onclick={remove}
-		class="ml-1 hidden h-3 w-3 items-center justify-center rounded-full bg-black/10 text-[6px] hover:bg-brand hover:text-white group-hover:flex"
+		class="ml-1 hidden h-3 w-3 items-center justify-center rounded-full bg-black/10 text-[6px] group-hover:flex hover:bg-brand hover:text-white"
 	>
 		✕
 	</button>

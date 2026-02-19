@@ -64,7 +64,23 @@ export class CanvasState {
 	}
 
 	set pixels(v: Uint32Array) {
-		this.project.activeFrame.activeLayer.pixels = v;
+		const frame = this.project.activeFrame;
+		const layerIndex = frame.activeLayerIndex;
+		const layer = frame.activeLayer;
+
+		layer.pixels = v;
+
+		// Steeped Layers (Linked Cells) Logic
+		if (layer.isLinked) {
+			this.project.frames.forEach((f, idx) => {
+				if (idx !== this.project.activeFrameIndex) {
+					const targetLayer = f.layers[layerIndex];
+					if (targetLayer) {
+						targetLayer.pixels = v;
+					}
+				}
+			});
+		}
 	}
 
 	// --- Buffer Management ---

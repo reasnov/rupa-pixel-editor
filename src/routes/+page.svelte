@@ -24,6 +24,7 @@
 	import AudioSettings from '$lib/components/overlay/AudioSettings.svelte';
 	import GuideBook from '$lib/components/overlay/GuideBook.svelte';
 	import UnderlayMenu from '$lib/components/overlay/UnderlayMenu.svelte';
+	import PourBasin from '$lib/components/overlay/PourBasin.svelte';
 	import ContextMenu from '$lib/components/ui/ContextMenu.svelte';
 	import Toast from '$lib/components/ui/Toast.svelte';
 
@@ -68,6 +69,10 @@
 
 {#if editor.showGoTo}
 	<GoToModal onClose={() => (editor.showGoTo = false)} />
+{/if}
+
+{#if editor.studio.showPourBasin}
+	<PourBasin onClose={() => (editor.studio.showPourBasin = false)} />
 {/if}
 
 {#if editor.showAudioSettings}

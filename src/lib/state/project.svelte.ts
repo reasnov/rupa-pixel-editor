@@ -1,6 +1,14 @@
 import { type ColorHex } from '../types/index.js';
 import { FrameState } from './frame.svelte.js';
 
+export interface FrameTag {
+	id: string;
+	name: string;
+	color: string;
+	from: number;
+	to: number;
+}
+
 /**
  * ProjectState: Manages metadata, clipboard data, and the collection of Frames.
  */
@@ -10,6 +18,7 @@ export class ProjectState {
 
 	// Project Structure
 	frames = $state<FrameState[]>([]);
+	tags = $state<FrameTag[]>([]);
 	activeFrameIndex = $state(0);
 	selectedFrameIndices = $state<Set<number>>(new Set([0]));
 	isPlaying = $state(false);

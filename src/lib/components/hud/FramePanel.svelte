@@ -147,6 +147,17 @@
 					}
 				},
 				{
+					label: 'Add Flavor Tag',
+					icon: '🏷️',
+					action: () => {
+						const name = prompt('Tag Name:', 'New Sequence');
+						if (name) {
+							const indices = Array.from(project.selectedFrameIndices).sort((a, b) => a - b);
+							services.project.addTag(name, indices[0], indices[indices.length - 1]);
+						}
+					}
+				},
+				{
 					label: isMulti
 						? `Spill ${project.selectedFrameIndices.size} Cups`
 						: __({ key: 'hud.actions.delete' }),

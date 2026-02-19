@@ -178,4 +178,78 @@ export class SelectionService {
 		editor.selection.indices = newIndices;
 		sfx.playMove();
 	}
+
+	/**
+	 * Syrup Flow (Selection Propagation):
+	 * Projects the current selection across next N frames with a linear offset.
+	 */
+	propagate(frameCount: number, deltaX: number, deltaY: number) {
+		if (editor.selection.indices.length === 0) return;
+
+		const project = editor.project;
+		const startFrameIdx = project.activeFrameIndex;
+		const activeLayerIdx = project.activeFrame.activeLayerIndex;
+		const width = editor.canvas.width;
+		const height = editor.canvas.height;
+
+		// 1. Capture selection data and affected layers
+		const sourceLayer = project.activeFrame.activeLayer;
+		const selectionData: Array<{ x: number; y: number; val: number }> = [];
+		editor.selection.indices.forEach((idx) => {
+			selectionData.push({
+				x: idx % width,
+				y: Math.floor(idx / width),
+				val: sourceLayer.pixels[idx]
+			});
+		});
+
+		const oldPixelStates = new Map<number, Uint32Array>();
+		const newPixelStates = new Map<number, Uint32Array>();
+
+		for (let i = 1; i <= frameCount; i++) {
+			const targetFrameIdx = startFrameIdx + i;
+			if (targetFrameIdx >= project.frames.length) break;
+
+			const targetLayer = project.frames[targetFrameIdx].layers[activeLayerIdx];
+			if (!targetLayer || targetLayer.isLocked) continue;
+
+			// Store old state
+			oldPixelStates.set(targetFrameIdx, new Uint32Array(targetLayer.pixels));
+
+			// Calculate new state
+			const nextPixels = new Uint32Array(targetLayer.pixels);
+			const offsetX = deltaX * i;
+			const offsetY = deltaY * i;
+
+			selectionData.forEach((item) => {
+				const nx = item.x + offsetX;
+				const ny = item.y + offsetY;
+				if (nx >= 0 && nx < width && ny >= 0 && ny < height) {
+					nextPixels[ny * width + nx] = item.val;
+				}
+			});
+			newPixelStates.set(targetFrameIdx, nextPixels);
+		}
+
+		const applyStates = (states: Map<number, Uint32Array>) => {
+			states.forEach((pixels, frameIdx) => {
+				const layer = project.frames[frameIdx].layers[activeLayerIdx];
+				if (layer) layer.pixels = pixels;
+			});
+			editor.canvas.triggerPulse();
+		};
+
+		// Apply forward
+		applyStates(newPixelStates);
+
+		history.push({
+			isStructural: true,
+			label: 'Syrup Flow',
+			undo: () => applyStates(oldPixelStates),
+			redo: () => applyStates(newPixelStates)
+		});
+
+		sfx.playDraw();
+		editor.studio.show(`Poured across ${newPixelStates.size} cups`);
+	}
 }

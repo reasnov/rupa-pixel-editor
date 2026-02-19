@@ -439,4 +439,24 @@ export class ProjectService {
 
 		sfx.playDraw();
 	}
+
+	// --- Tag Management ---
+
+	addTag(name: string, from: number, to: number, color = '#d33682') {
+		const tag = {
+			id: crypto.randomUUID(),
+			name,
+			color,
+			from,
+			to
+		};
+		editor.project.tags.push(tag);
+		sfx.playDraw();
+		return tag;
+	}
+
+	removeTag(id: string) {
+		editor.project.tags = editor.project.tags.filter((t) => t.id !== id);
+		sfx.playErase();
+	}
 }

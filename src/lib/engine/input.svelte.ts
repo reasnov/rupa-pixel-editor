@@ -45,7 +45,8 @@ export class InputEngine {
 				target instanceof HTMLTextAreaElement ||
 				target.isContentEditable
 			) {
-				return;
+				// Allow Escape to propagate even when an input is focused
+				if (e.key !== 'Escape') return;
 			}
 
 			keyboard.updatePhysicalState(e, 'down');

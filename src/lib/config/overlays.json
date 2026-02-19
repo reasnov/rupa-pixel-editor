@@ -9,6 +9,7 @@
 		"showCanvasSettings",
 		"showPersistenceMenu",
 		"showUnderlayMenu",
-		"showGoTo"
+		"showGoTo",
+		"showPourBasin"
 	]
 }

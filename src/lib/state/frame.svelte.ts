@@ -1,4 +1,5 @@
 import { LayerState } from './layer.svelte.js';
+import { animation } from '../engine/animation.svelte.js';
 
 /**
  * FrameState: Represents a single frame in the Project.
@@ -74,6 +75,7 @@ export class FrameState {
 	// Composite projection for rendering (flattening layers)
 	compositePixels = $derived.by(() => {
 		const result = new Uint32Array(this.width * this.height);
+		const time = animation.elapsedTime / 1000;
 
 		// Cache folder visibility for performance
 		const folderVisibility = new Map<string, boolean>();
@@ -89,11 +91,36 @@ export class FrameState {
 			// If inside a hidden folder, don't render
 			if (layer.parentId && folderVisibility.get(layer.parentId) === false) continue;
 
+			// Apply Aroma Pulse Modifiers (Procedural)
+			let offsetX = 0;
+			let offsetY = 0;
+
+			if (layer.swayAmount > 0) {
+				offsetX += Math.sin(time * layer.swaySpeed * Math.PI) * layer.swayAmount;
+			}
+			if (layer.wiggleAmount > 0) {
+				// Deterministic wiggle based on time
+				offsetX += (Math.sin(time * 20) + Math.cos(time * 13)) * (layer.wiggleAmount / 2);
+				offsetY += (Math.cos(time * 17) + Math.sin(time * 11)) * (layer.wiggleAmount / 2);
+			}
+
 			const pixels = layer.pixels;
 			for (let i = 0; i < result.length; i++) {
 				const pixel = pixels[i];
 				if (pixel !== 0) {
-					result[i] = pixel;
+					// Apply translation if offsets exist
+					if (offsetX !== 0 || offsetY !== 0) {
+						const x = i % this.width;
+						const y = Math.floor(i / this.width);
+						const tx = Math.round(x + offsetX);
+						const ty = Math.round(y + offsetY);
+
+						if (tx >= 0 && tx < this.width && ty >= 0 && ty < this.height) {
+							result[ty * this.width + tx] = pixel;
+						}
+					} else {
+						result[i] = pixel;
+					}
 				}
 			}
 		}

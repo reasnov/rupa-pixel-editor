@@ -1,49 +1,27 @@
 <script lang="ts">
+	import { __ } from '$lib/state/i18n.svelte.js';
 	import { editor } from '../../../../state/editor.svelte.js';
 	import { services } from '../../../../engine/services.js';
 	import { AnimationLogic } from '../../../../logic/animation.js';
-	import TimelineFrame from './TimelineFrame.svelte';
+	import TimelineDrop from './TimelineDrop.svelte';
+	import TimelineTag from './TimelineTag.svelte';
 
-	let draggedIndex = $state<number | null>(null);
-	let dropTargetIndex = $state<number | null>(null);
 	let timelineElement: HTMLElement | undefined = $state();
-	let rulerElement: HTMLElement | undefined = $state();
 	let scrollLeft = $state(0);
 
-	let pxPerMs = $derived(0.25 * editor.studio.timelineZoom);
-	const MIN_BLOCK_WIDTH = 50;
+	const FRAME_WIDTH = 32;
 
 	function handleScroll(e: Event) {
 		const target = e.target as HTMLElement;
 		scrollLeft = target.scrollLeft;
 	}
 
-	function handleDragStart(index: number) {
-		draggedIndex = index;
+	function selectCell(frameIndex: number, layerIndex: number) {
+		editor.project.activeFrameIndex = frameIndex;
+		editor.project.activeFrame.activeLayerIndex = layerIndex;
 	}
 
-	function handleDragOver(e: DragEvent, index: number) {
-		e.preventDefault();
-		dropTargetIndex = index;
-	}
-
-	function handleDrop(e: DragEvent, toIndex: number) {
-		e.preventDefault();
-		if (draggedIndex !== null && draggedIndex !== toIndex) {
-			services.project.reorderFrame(draggedIndex, toIndex);
-		}
-		draggedIndex = null;
-		dropTargetIndex = null;
-	}
-
-	let playheadOffset = $derived(
-		AnimationLogic.getFrameOffset(
-			editor.project.frames,
-			editor.project.activeFrameIndex,
-			pxPerMs,
-			MIN_BLOCK_WIDTH
-		)
-	);
+	let playheadOffset = $derived(editor.project.activeFrameIndex * FRAME_WIDTH + FRAME_WIDTH / 2);
 
 	$effect(() => {
 		if (timelineElement && editor.project.isPlaying) {
@@ -54,29 +32,25 @@
 		}
 	});
 
-	let totalDuration = $derived(editor.project.frames.reduce((acc, f) => acc + f.duration, 0));
-	let rulerMarks = $derived(
-		AnimationLogic.getRulerMarks(totalDuration, editor.studio.timelineZoom)
-	);
-	let trackWidth = $derived(
-		AnimationLogic.getTrackWidth(editor.project.frames, pxPerMs, MIN_BLOCK_WIDTH)
-	);
-	let maxRulerWidth = $derived(rulerMarks[rulerMarks.length - 1] * pxPerMs + 100);
+	let rulerMarks = $derived.by(() => {
+		const marks = [];
+		for (let i = 0; i < editor.project.frames.length; i += 5) {
+			marks.push(i);
+		}
+		if ((editor.project.frames.length - 1) % 5 !== 0) {
+			marks.push(editor.project.frames.length - 1);
+		}
+		return marks;
+	});
+
+	let maxRulerWidth = $derived(editor.project.frames.length * FRAME_WIDTH + 200);
 
 	function handleScrub(e: MouseEvent) {
-		if (!rulerElement) return;
-		const rect = rulerElement.getBoundingClientRect();
-		const scrollX = timelineElement?.scrollLeft || 0;
-		const clickX = e.clientX - rect.left + scrollX;
-
-		let currentX = 0;
-		for (let i = 0; i < editor.project.frames.length; i++) {
-			const frameWidth = Math.max(MIN_BLOCK_WIDTH, editor.project.frames[i].duration * pxPerMs);
-			if (clickX >= currentX && clickX < currentX + frameWidth) {
-				editor.project.activeFrameIndex = i;
-				break;
-			}
-			currentX += frameWidth;
+		const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
+		const clickX = e.clientX - rect.left + scrollLeft;
+		const frameIndex = Math.floor(clickX / FRAME_WIDTH);
+		if (frameIndex >= 0 && frameIndex < editor.project.frames.length) {
+			editor.project.activeFrameIndex = frameIndex;
 		}
 	}
 
@@ -93,92 +67,144 @@
 	class="relative flex flex-1 flex-col overflow-hidden rounded border border-charcoal/10 bg-stone-light/30 shadow-inner"
 	onwheel={handleWheel}
 >
-	<!-- Minimalist Time Ruler -->
-	<div
-		bind:this={rulerElement}
-		class="relative h-5 w-full cursor-pointer overflow-hidden border-b border-charcoal/5 bg-foam-white/80"
-		onclick={handleScrub}
-		role="presentation"
-	>
+	<!-- Top Row: Tags -->
+	{#if editor.project.tags.length > 0}
+		<div class="h-4 shrink-0 overflow-hidden bg-black/5">
+			<div
+				class="relative h-full"
+				style="width: {maxRulerWidth}px; margin-left: 128px; transform: translateX(-{scrollLeft}px);"
+			>
+				{#each editor.project.tags as tag (tag.id)}
+					<TimelineTag {tag} />
+				{/each}
+			</div>
+		</div>
+	{/if}
+
+	<!-- Top Row: Corner + Ruler -->
+	<div class="flex h-6 shrink-0 border-b border-charcoal/5 bg-foam-white/95">
 		<div
-			class="absolute top-0 bottom-0"
-			style="width: {maxRulerWidth}px; transform: translateX(-{scrollLeft}px);"
+			class="z-40 flex w-32 shrink-0 items-center border-r border-charcoal/10 px-2 font-serif text-[8px] font-black tracking-widest text-charcoal/30 uppercase"
 		>
-			{#each rulerMarks as ms}
-				<div class="absolute flex flex-col items-start" style="left: {ms * pxPerMs}px;">
-					<div class="h-1.5 w-px bg-charcoal/20"></div>
-					<span
-						class="-mt-0.5 ml-1 font-mono text-[8px] font-bold whitespace-nowrap text-charcoal/30"
-						>{AnimationLogic.formatTimeLabel(ms)}</span
+			Infusions
+		</div>
+		<div class="relative flex-1 overflow-hidden" onclick={handleScrub} role="presentation">
+			<div
+				class="absolute inset-0 flex items-center"
+				style="width: {maxRulerWidth}px; transform: translateX(-{scrollLeft}px);"
+			>
+				{#each rulerMarks as idx}
+					<div
+						class="absolute flex flex-col items-center"
+						style="left: {idx * FRAME_WIDTH}px; width: {FRAME_WIDTH}px;"
 					>
-				</div>
-			{/each}
+						<div class="h-1 w-px bg-charcoal/20"></div>
+						<span class="font-mono text-[8px] font-black text-charcoal/30">{idx + 1}</span>
+					</div>
+				{/each}
+			</div>
 		</div>
 	</div>
 
-	<!-- Track Area -->
-	<div
-		bind:this={timelineElement}
-		class="custom-scrollbar relative flex flex-1 items-start overflow-x-auto overflow-y-hidden"
-		onscroll={handleScroll}
-		role="list"
-		aria-label="Timeline"
-	>
-		<div
-			class="flex h-full items-center bg-transparent py-2 pl-1"
-			style="width: {maxRulerWidth}px;"
-		>
-			{#each editor.project.frames as frame, i (frame.id)}
-				<div
-					role="listitem"
-					draggable="true"
-					ondragstart={() => handleDragStart(i)}
-					ondragover={(e) => handleDragOver(e, i)}
-					ondrop={(e) => handleDrop(e, i)}
-					ondragend={() => {
-						draggedIndex = null;
-						dropTargetIndex = null;
-					}}
-					class="relative h-[50px]"
-				>
-					<TimelineFrame
-						{frame}
-						index={i}
-						isActive={i === editor.project.activeFrameIndex}
-						isDragged={draggedIndex === i}
-						isDropTarget={dropTargetIndex === i && draggedIndex !== i}
-					/>
-					<!-- Drop Indicator -->
-					{#if dropTargetIndex === i && draggedIndex !== i}
-						<div
-							class="absolute top-0 bottom-0 z-50 w-0.5 bg-brand {i < (draggedIndex || 0)
-								? '-left-0.5'
-								: '-right-0.5'}"
-						></div>
-					{/if}
-				</div>
-			{/each}
-
-			<button
-				class="group ml-2 flex h-[50px] w-8 shrink-0 items-center justify-center rounded border border-dashed border-charcoal/20 bg-foam-white/40 text-charcoal/20 transition-all hover:border-brand/40 hover:bg-white hover:text-brand"
-				onclick={() => services.project.addFrame()}
-				title="Add Frame"
+	<!-- Main Body: Sidebar + Grid (Unified Vertical Scroll) -->
+	<div class="custom-scrollbar flex-1 overflow-y-auto">
+		<div class="relative flex min-h-full">
+			<!-- Sticky Sidebar -->
+			<div
+				class="sticky left-0 z-30 flex w-32 shrink-0 flex-col border-r border-charcoal/10 bg-foam-white/95 shadow-sm"
 			>
-				<span class="text-lg">＋</span>
-			</button>
+				{#each editor.project.activeFrame.layers as layer, i}
+					<button
+						onclick={() => (editor.project.activeFrame.activeLayerIndex = i)}
+						class="flex h-6 w-full items-center px-2 text-left transition-colors {i ===
+						editor.project.activeFrame.activeLayerIndex
+							? 'bg-brand/5 text-brand'
+							: 'hover:bg-black/5 text-charcoal/60'}"
+					>
+						<span class="truncate font-serif text-[9px] font-bold uppercase">{layer.name}</span>
+					</button>
+				{/each}
+			</div>
 
-			<div class="w-40 shrink-0"></div>
-		</div>
+			<!-- Scrollable Grid -->
+			<div
+				bind:this={timelineElement}
+				class="custom-scrollbar relative flex-1 overflow-x-auto"
+				onscroll={handleScroll}
+				role="grid"
+				aria-label="The Drop Matrix"
+			>
+				<div class="relative flex flex-col" style="width: {maxRulerWidth}px;">
+					{#each editor.project.activeFrame.layers as _, layerIdx}
+						<div class="flex h-6 border-b border-black/5">
+							{#each editor.project.frames as frame, frameIdx}
+								<TimelineDrop
+									layer={frame.layers[layerIdx]}
+									{frameIdx}
+									isActive={frameIdx === editor.project.activeFrameIndex &&
+										layerIdx === editor.project.activeFrame.activeLayerIndex}
+									onclick={() => selectCell(frameIdx, layerIdx)}
+								/>
+							{/each}
+						</div>
+					{/each}
 
-		<!-- Playhead -->
-		<div
-			class="pointer-events-none absolute top-0 bottom-0 z-20 w-px bg-brand transition-all duration-100 ease-out"
-			style="left: {playheadOffset}px;"
-		>
-			<div class="absolute -top-0.5 -left-1 h-2 w-2 rotate-45 rounded-sm bg-brand shadow-sm"></div>
+					<!-- Playhead -->
+					<div
+						class="pointer-events-none absolute top-0 bottom-0 z-20 w-px bg-brand transition-all duration-100 ease-out"
+						style="left: {playheadOffset}px;"
+					>
+						<div
+							class="absolute -top-0.5 -left-1 h-2 w-2 rotate-45 rounded-sm bg-brand shadow-sm"
+						></div>
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
 </div>
+
+<style>
+	.custom-scrollbar::-webkit-scrollbar {
+		width: 4px;
+		height: 4px;
+	}
+	.custom-scrollbar::-webkit-scrollbar-track {
+		background: transparent;
+	}
+	.custom-scrollbar::-webkit-scrollbar-thumb {
+		background: rgba(0, 0, 0, 0.05);
+		border-radius: 10px;
+	}
+	.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+		background: rgba(211, 54, 130, 0.2);
+	}
+
+	:global(:root) {
+		--frame-width: 32px;
+	}
+</style>
+
+<style>
+	.custom-scrollbar::-webkit-scrollbar {
+		width: 4px;
+		height: 4px;
+	}
+	.custom-scrollbar::-webkit-scrollbar-track {
+		background: transparent;
+	}
+	.custom-scrollbar::-webkit-scrollbar-thumb {
+		background: rgba(0, 0, 0, 0.05);
+		border-radius: 10px;
+	}
+	.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+		background: rgba(211, 54, 130, 0.2);
+	}
+
+	:global(:root) {
+		--frame-width: 32px;
+	}
+</style>
 
 <style>
 	.custom-scrollbar::-webkit-scrollbar {

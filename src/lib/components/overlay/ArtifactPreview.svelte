@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { __ } from '$lib/state/i18n.svelte.js';
 	import { editor } from '../../state/editor.svelte.js';
 	import { ColorLogic } from '../../logic/color.js';
 
@@ -69,11 +70,17 @@
 	</div>
 
 	<div class="flex flex-col items-center gap-1 text-center">
-		<span class="font-tiny5 text-[10px] tracking-widest text-brand uppercase"
-			>{format} Artifact</span
-		>
+		<span class="font-tiny5 text-[10px] tracking-widest text-brand uppercase">
+			{__({ key: 'export.artifact_label', replace: { format } })}
+		</span>
 		<span class="font-mono text-[8px] font-bold tracking-tighter opacity-30">
-			{Math.round(editor.canvas.width * scale)} × {Math.round(editor.canvas.height * scale)} pixels
+			{__({
+				key: 'export.pixel_dims',
+				replace: {
+					width: Math.round(editor.canvas.width * scale),
+					height: Math.round(editor.canvas.height * scale)
+				}
+			})}
 		</span>
 	</div>
 </div>

@@ -66,7 +66,7 @@
 		<div
 			class="flex aspect-square w-[420px] shrink-0 items-center justify-center rounded-2xl bg-black/5 p-6 ring-1 ring-black/5"
 			role="img"
-			aria-label="Art Preview"
+			aria-label={__({ key: 'export.preview_label' })}
 		>
 			<ArtifactPreview
 				{format}
@@ -79,7 +79,7 @@
 		<div
 			class="custom-scrollbar flex h-full flex-1 flex-col gap-8 overflow-y-auto pr-4"
 			role="group"
-			aria-label="Export Settings"
+			aria-label={__({ key: 'export.settings_label' })}
 		>
 			<!-- Section: Static Art -->
 			<div class="flex flex-col gap-3">
@@ -89,7 +89,7 @@
 				>
 					{__({ key: 'export.static_title' })}
 				</span>
-				<div class="grid grid-cols-2 gap-3" role="radiogroup" aria-label="Static Formats">
+				<div class="grid grid-cols-2 gap-3" role="radiogroup" aria-label={__({ key: 'export.static_formats_label' })}>
 					<button
 						class="flex flex-col items-center gap-3 rounded-xl border-2 p-4 transition-all {format ===
 						'png'
@@ -175,7 +175,7 @@
 				<div
 					class="grid grid-cols-2 gap-3 {editor.project.frames.length <= 1 ? 'opacity-40' : ''}"
 					role="radiogroup"
-					aria-label="Animated Formats"
+					aria-label={__({ key: 'export.kinetic_formats_label' })}
 				>
 					<button
 						class="flex flex-col items-center gap-3 rounded-xl border-2 p-4 transition-all {format ===
@@ -315,10 +315,10 @@
 				<div class="flex items-center justify-between">
 					<div class="flex flex-col gap-1">
 						<span class="font-serif text-sm font-bold tracking-tight text-charcoal/60 uppercase">
-							Pixel Borders
+							{__({ key: 'export.pixel_borders_label' })}
 						</span>
 						<span class="font-serif text-[10px] text-charcoal/40">
-							Include grid lines on colored drops
+							{__({ key: 'export.pixel_borders_desc' })}
 						</span>
 					</div>
 					<button
@@ -327,7 +327,7 @@
 							? 'bg-brand'
 							: 'bg-charcoal/10'}"
 						onclick={() => (editor.studio.includePixelBorders = !editor.studio.includePixelBorders)}
-						aria-label="Toggle Pixel Borders"
+						aria-label={__({ key: 'export.pixel_borders_toggle' })}
 					>
 						<div
 							class="h-4 w-4 rounded-full bg-white shadow-sm transition-transform {editor.studio
@@ -352,7 +352,7 @@
 					<div
 						class="flex flex-wrap items-center gap-3"
 						role="radiogroup"
-						aria-label="Background Type"
+						aria-label={__({ key: 'export.bg_type_label' })}
 					>
 						<button
 							class="h-10 w-10 rounded-xl border-2 {editor.studio.exportBgColor === 'transparent'
@@ -360,7 +360,7 @@
 								: 'border-black/5'}"
 							style="background: repeating-conic-gradient(#eee8d5 0% 25%, #fff 0% 50%) 50% / 10px 10px;"
 							onclick={() => (editor.studio.exportBgColor = 'transparent')}
-							title="Transparent"
+							title={__({ key: 'export.bg_transparent' })}
 							role="radio"
 							aria-checked={editor.studio.exportBgColor === 'transparent'}
 						></button>
@@ -369,7 +369,7 @@
 								? 'border-brand'
 								: 'border-black/5'} bg-[#eee8d5]"
 							onclick={() => (editor.studio.exportBgColor = '#eee8d5')}
-							title="Cream"
+							title={__({ key: 'export.bg_cream' })}
 							role="radio"
 							aria-checked={editor.studio.exportBgColor === '#eee8d5'}
 						></button>
@@ -378,7 +378,7 @@
 								? 'border-brand'
 								: 'border-black/5'} bg-black"
 							onclick={() => (editor.studio.exportBgColor = '#000000')}
-							title="Black"
+							title={__({ key: 'export.bg_black' })}
 							role="radio"
 							aria-checked={editor.studio.exportBgColor === '#000000'}
 						></button>
@@ -393,7 +393,7 @@
 									editor.studio.exportBgColor = customBg;
 									showPicker = true;
 								}}
-								title="Custom Backdrop"
+								title={__({ key: 'export.bg_custom' })}
 								role="radio"
 								aria-checked={editor.studio.exportBgColor === customBg}
 							></button>

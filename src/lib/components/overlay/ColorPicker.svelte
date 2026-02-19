@@ -31,6 +31,11 @@
 			value = newColor;
 		});
 	});
+
+	$effect(() => {
+		editor.pushEscapeAction(onClose);
+		return () => editor.popEscapeAction(onClose);
+	});
 </script>
 
 <div

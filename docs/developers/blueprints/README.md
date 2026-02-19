@@ -44,6 +44,14 @@ _The Master Etcher's Kit: Brushes, symmetry, tiling, and shape vessels._
 
 _Scale and speed: Optimized rendering, color caching, and large-project handling._
 
+### [11: Kinetic Assistance](./11-kinetic-assistance.md)
+
+_The Brewing Flow: Enhancing animation workflows through Selection Propagation (Syrup Flow), Tweening (Crema Blend), and Advanced Onion Skinning._
+
+### [12: Deterministic Animation Export](./12-deterministic-animation-export.md)
+
+_The Chronos Protocol: Solving choppy animations, 00:00 duration videos, and unplayable files through deterministic frame assembly._
+
 ---
 
 

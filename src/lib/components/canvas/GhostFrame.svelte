@@ -5,12 +5,14 @@
 		pixels,
 		width,
 		height,
-		opacity = 0.2
+		opacity = 0.2,
+		tint = null
 	} = $props<{
 		pixels: Uint32Array;
 		width: number;
 		height: number;
 		opacity?: number;
+		tint?: string | null;
 	}>();
 
 	let canvasEl = $state<HTMLCanvasElement | null>(null);
@@ -25,7 +27,7 @@
 		for (let i = 0; i < pixels.length; i++) {
 			const val = pixels[i];
 			if (val !== 0) {
-				const color = ColorLogic.uint32ToHex(val)!;
+				const color = tint || ColorLogic.uint32ToHex(val)!;
 				ctx.fillStyle = color;
 				const x = i % width;
 				const y = Math.floor(i / width);

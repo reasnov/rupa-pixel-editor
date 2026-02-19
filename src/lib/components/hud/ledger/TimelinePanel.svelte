@@ -6,7 +6,7 @@
 </script>
 
 <div
-	class="flex h-32 w-full flex-col gap-1 overflow-hidden bg-transparent px-4 py-2"
+	class="flex h-48 w-full flex-col gap-1 overflow-hidden bg-transparent px-4 py-2"
 	role="region"
 	aria-label="Timeline"
 >

@@ -10,6 +10,14 @@ export class LayerState {
 	isVisible = $state(true);
 	isLocked = $state(false);
 	opacity = $state(1.0); // 0.0 to 1.0 (Density)
+	isLinked = $state(false); // Steeped Layers (Linked Cells)
+
+	// Aroma Pulse (Procedural Modifiers)
+	wiggleAmount = $state(0); // 0 to 10 pixels
+	swayAmount = $state(0); // 0 to 50 pixels
+	swaySpeed = $state(1.0);
+	pulseAmount = $state(0); // 0 to 1.0 opacity depth
+	pulseSpeed = $state(1.0);
 
 	// --- Folder System (v0.8.0 Archive) ---
 	type = $state<'LAYER' | 'FOLDER'>('LAYER');
@@ -18,6 +26,14 @@ export class LayerState {
 
 	// The actual pixel data for this layer (ABGR Uint32)
 	pixels = $state.raw<Uint32Array>(new Uint32Array(0));
+
+	hasContent = $derived.by(() => {
+		if (this.type === 'FOLDER') return false;
+		for (let i = 0; i < this.pixels.length; i++) {
+			if (this.pixels[i] !== 0) return true;
+		}
+		return false;
+	});
 
 	constructor(name: string, width: number, height: number, type: 'LAYER' | 'FOLDER' = 'LAYER') {
 		this.name = name;

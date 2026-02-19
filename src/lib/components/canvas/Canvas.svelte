@@ -23,19 +23,33 @@
 	let ghosts = $derived.by(() => {
 		if (!editor.showGhostLayers) return [];
 		const activeIdx = editor.project.activeFrameIndex;
+		const frames = editor.project.frames;
 		const results = [];
 
-		if (activeIdx > 0) {
-			results.push({
-				pixels: editor.project.frames[activeIdx - 1].compositePixels,
-				opacity: 0.3
-			});
+		// Past Echoes (1 to 3 cups back) - Tinted Blue
+		for (let i = 1; i <= 3; i++) {
+			const idx = activeIdx - i;
+			if (idx >= 0) {
+				results.push({
+					id: `past-${idx}`,
+					pixels: frames[idx].compositePixels,
+					opacity: 0.4 / i,
+					tint: '#268bd2'
+				});
+			}
 		}
-		if (activeIdx > 1) {
-			results.push({
-				pixels: editor.project.frames[activeIdx - 2].compositePixels,
-				opacity: 0.1
-			});
+
+		// Future Echoes (1 to 3 cups forward) - Tinted Green
+		for (let i = 1; i <= 3; i++) {
+			const idx = activeIdx + i;
+			if (idx < frames.length) {
+				results.push({
+					id: `future-${idx}`,
+					pixels: frames[idx].compositePixels,
+					opacity: 0.4 / i,
+					tint: '#859900'
+				});
+			}
 		}
 		return results;
 	});
@@ -174,8 +188,14 @@
 				{/if}
 
 				{#if editor.showGhostLayers}
-					{#each ghosts as ghost, i (i)}
-						<GhostFrame pixels={ghost.pixels} width={w} height={h} opacity={ghost.opacity} />
+					{#each ghosts as ghost (ghost.id)}
+						<GhostFrame
+							pixels={ghost.pixels}
+							width={w}
+							height={h}
+							opacity={ghost.opacity}
+							tint={ghost.tint}
+						/>
 					{/each}
 				{/if}
 

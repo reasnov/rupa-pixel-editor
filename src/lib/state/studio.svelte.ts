@@ -74,6 +74,7 @@ export class StudioState {
 	showPersistenceMenu = $state(false);
 	showUnderlayMenu = $state(false);
 	showGoTo = $state(false);
+	showPourBasin = $state(false);
 	showMinimap = $state(true);
 
 	// Underlay (Wave II)

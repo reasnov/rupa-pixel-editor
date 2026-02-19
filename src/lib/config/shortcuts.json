@@ -155,21 +155,6 @@
 		}
 	},
 	"animation": {
-		"NEW_FRAME": {
-			"label": "New Frame",
-			"keys": ["Alt+n"],
-			"group": "Timeline"
-		},
-		"DUPLICATE_FRAME": {
-			"label": "Duplicate Frame",
-			"keys": ["Ctrl+d"],
-			"group": "Timeline"
-		},
-		"DELETE_FRAME": {
-			"label": "Remove Frame",
-			"keys": ["Alt+d"],
-			"group": "Timeline"
-		},
 		"NEXT_FRAME": {
 			"label": "Next Frame",
 			"keys": ["Alt+PageDown", "Tab"],
@@ -192,8 +177,8 @@
 		}
 	},
 	"layering": {
-		"NEW_LAYER": {
-			"label": "Add New Layer",
+		"NEW_ITEM": {
+			"label": "Add New (Contextual)",
 			"keys": ["Alt+Shift+n"],
 			"group": "Layers"
 		},
@@ -202,24 +187,34 @@
 			"keys": ["Ctrl+g"],
 			"group": "Layers"
 		},
-		"DUPLICATE_LAYER": {
-			"label": "Duplicate Layer",
+		"DUPLICATE_ITEM": {
+			"label": "Duplicate (Contextual)",
 			"keys": ["Ctrl+d"],
 			"group": "Layers"
 		},
-		"DELETE_LAYER": {
-			"label": "Remove Layer",
+		"MOVE_ITEM_UP": {
+			"label": "Bring Forward",
+			"keys": ["Ctrl+]"],
+			"group": "Layers"
+		},
+		"MOVE_ITEM_DOWN": {
+			"label": "Send Backward",
+			"keys": ["Ctrl+["],
+			"group": "Layers"
+		},
+		"MOVE_ITEM_TOP": {
+			"label": "Bring to Front",
+			"keys": ["Ctrl+Shift+]"],
+			"group": "Layers"
+		},
+		"MOVE_ITEM_BOTTOM": {
+			"label": "Send to Back",
+			"keys": ["Ctrl+Shift+["],
+			"group": "Layers"
+		},
+		"DELETE_ITEM": {
+			"label": "Remove (Contextual)",
 			"keys": ["Alt+d"],
-			"group": "Layers"
-		},
-		"MOVE_LAYER_UP": {
-			"label": "Move Layer Up",
-			"keys": ["Ctrl+ArrowUp"],
-			"group": "Layers"
-		},
-		"MOVE_LAYER_DOWN": {
-			"label": "Move Layer Down",
-			"keys": ["Ctrl+ArrowDown"],
 			"group": "Layers"
 		},
 		"MERGE_LAYERS": {

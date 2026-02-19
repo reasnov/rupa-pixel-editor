@@ -376,6 +376,22 @@ export class ProjectService {
 		}
 	}
 
+	moveLayerToTop() {
+		const frame = editor.project.activeFrame;
+		const current = frame.activeLayerIndex;
+		if (current < frame.layers.length - 1) {
+			this.reorderLayer(current, frame.layers.length - 1);
+		}
+	}
+
+	moveLayerToBottom() {
+		const frame = editor.project.activeFrame;
+		const current = frame.activeLayerIndex;
+		if (current > 0) {
+			this.reorderLayer(current, 0);
+		}
+	}
+
 	/**
 	 * Merge Layer Down: Combines the active layer with the one directly below it.
 	 */

@@ -7,6 +7,25 @@
 	let draggedIndex = $state<number | null>(null);
 	let dropTargetIndex = $state<number | null>(null);
 
+	// Renaming State
+	let editingIndex = $state<number | null>(null);
+	let tempName = $state('');
+
+	function startRenaming(index: number, currentName: string) {
+		editingIndex = index;
+		tempName = currentName;
+	}
+
+	function commitRename() {
+		if (editingIndex === null) return;
+		if (editor.studio.projectActiveTab === 'layers') {
+			editor.project.activeFrame.layers[editingIndex].name = tempName;
+		} else {
+			editor.project.frames[editingIndex].name = tempName;
+		}
+		editingIndex = null;
+	}
+
 	function handleDragStart(index: number) {
 		draggedIndex = index;
 	}
@@ -252,7 +271,7 @@
 							? 'bg-brand/10 text-brand ring-1 ring-brand/20'
 							: 'hover:bg-charcoal/5'} {i === editor.project.activeFrameIndex
 							? 'bg-brand/5 font-bold'
-							: ''} {dropTargetIndex === i && draggedIndex !== i ? 'border-t-2 border-brand' : ''} {draggedIndex ===
+							: ''} {dropTargetIndex === i && draggedIndex !== i ? 'shadow-[0_-2px_0_var(--color-brand)]' : ''} {draggedIndex ===
 						i
 							? 'opacity-40'
 							: ''}"
@@ -261,10 +280,26 @@
 						<button
 							class="flex flex-1 items-center gap-3 overflow-hidden py-2 pl-1 text-left"
 							onclick={(e) => selectFrame(i, e)}
+							ondblclick={() => startRenaming(i, frame.name)}
 						>
 							<span class="font-mono text-[10px] opacity-30" aria-hidden="true">{i + 1}</span>
-							<span class="truncate font-serif text-sm font-medium text-charcoal">{frame.name}</span
-							>
+							{#if editingIndex === i && editor.studio.projectActiveTab === 'frames'}
+								<input
+									type="text"
+									bind:value={tempName}
+									class="w-full bg-brand/5 font-serif text-sm font-medium text-brand outline-none ring-1 ring-brand/30"
+									onblur={commitRename}
+									onkeydown={(e) => {
+										if (e.key === 'Enter') commitRename();
+										if (e.key === 'Escape') editingIndex = null;
+									}}
+									autoFocus
+								/>
+							{:else}
+								<span class="truncate font-serif text-sm font-medium text-charcoal"
+									>{frame.name}</span
+								>
+							{/if}
 						</button>
 						<div class="flex items-center gap-2">
 							<button
@@ -316,7 +351,7 @@
 														: 'hover:bg-charcoal/5'} {i === editor.project.activeFrame.activeLayerIndex
 														? 'bg-brand/5 font-bold'
 														: ''} {dropTargetIndex === i && draggedIndex !== i
-														? 'border-t-2 border-brand'
+														? 'shadow-[0_-2px_0_var(--color-brand)]'
 														: ''} {draggedIndex === i ? 'opacity-40' : ''}"
 													style={isChild ? 'margin-left: 12px;' : ''}
 													aria-current={i === editor.project.activeFrame.activeLayerIndex ? 'true' : undefined}
@@ -349,15 +384,29 @@
 																	? '📁'
 																	: '🕶️'}
 														</button>
-														<button
-															class="flex-1 truncate py-2 text-left font-serif text-sm font-medium text-charcoal {layer.isVisible
-																? ''
-																: 'opacity-40'}"
-															onclick={(e) => selectLayer(i, e)}
-														>
-															{layer.name}
-														</button>
-													</div>
+																						<button
+																							class="flex-1 truncate py-2 text-left font-serif text-sm font-medium text-charcoal {layer.isVisible
+																								? ''
+																								: 'opacity-40'}"
+																							onclick={(e) => selectLayer(i, e)}
+																							ondblclick={() => startRenaming(i, layer.name)}
+																						>
+																							{#if editingIndex === i && editor.studio.projectActiveTab === 'layers'}
+																								<input
+																									type="text"
+																									bind:value={tempName}
+																									class="w-full bg-brand/5 font-serif text-sm font-medium text-brand outline-none ring-1 ring-brand/30"
+																									onblur={commitRename}
+																									onkeydown={(e) => {
+																										if (e.key === 'Enter') commitRename();
+																										if (e.key === 'Escape') editingIndex = null;
+																									}}
+																									autoFocus
+																								/>
+																							{:else}
+																								{layer.name}
+																							{/if}
+																						</button>													</div>
 							<div class="flex items-center gap-2">
 								<button
 									onclick={(e) => {

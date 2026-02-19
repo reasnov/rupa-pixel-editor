@@ -10,6 +10,8 @@ import { pointer } from './pointer.svelte.js';
 import { feedback } from './feedback.svelte.js';
 import { history } from './history.js';
 import { ColorLogic } from '../logic/color.js';
+import { Geometry } from '../logic/geometry.js';
+import { PixelLogic } from '../logic/pixel.js';
 
 /**
  * EditorEngine: The primary orchestrator of action execution.
@@ -129,39 +131,6 @@ export class EditorEngine {
 				return (state.showCanvasSettings = !state.showCanvasSettings);
 
 			case 'ESCAPE':
-				if ((pointer as any).isPointerDown) {
-					pointer.cancel();
-					return;
-				}
-
-				if (state.selection.isActive) {
-					if (state.studio.isTransforming) {
-						state.studio.isTransforming = false;
-						return;
-					}
-					state.selection.clear();
-					return;
-				}
-
-				if (state.studio.activeTool !== 'BRUSH') {
-					state.studio.activeTool = 'BRUSH';
-					state.studio.shapeAnchor = null;
-					return;
-				}
-
-				// Shading Reset
-				if (
-					state.studio.isShadingLighten ||
-					state.studio.isShadingDarken ||
-					state.studio.isShadingDither
-				) {
-					state.studio.isShadingLighten = false;
-					state.studio.isShadingDarken = false;
-					state.studio.isShadingDither = false;
-					state.studio.show('Shading Reset');
-					return;
-				}
-
 				return state.handleEscape();
 
 			case 'OPEN_PALETTE':
@@ -207,41 +176,60 @@ export class EditorEngine {
 			case 'ROTATE':
 				return services.manipulation.rotate();
 
-			case 'NEW_FRAME':
-				return services.project.addFrame();
-			case 'DUPLICATE_FRAME':
-				return services.project.duplicateFrame(state.project.activeFrameIndex);
-			case 'NEXT_FRAME':
-				return services.project.nextFrame();
-			case 'PREV_FRAME':
-				return services.project.prevFrame();
-			case 'DELETE_FRAME':
-				return services.project.removeFrame(state.project.activeFrameIndex);
 			case 'TAB_TIMELINE':
-				return (state.studio.projectActiveTab = 'frames');
+				state.studio.projectActiveTab = 'frames';
+				return feedback.emit('READY');
 			case 'TAB_LAYERS':
-				return (state.studio.projectActiveTab = 'layers');
+				state.studio.projectActiveTab = 'layers';
+				return feedback.emit('READY');
 
-			case 'NEW_LAYER':
+			case 'NEW_ITEM':
+				if (state.studio.projectActiveTab === 'frames') return services.project.addFrame();
 				return services.project.addLayer();
 			case 'NEW_LAYER_GROUP':
 				return services.project.addGroup();
-			case 'DUPLICATE_LAYER':
+			case 'DUPLICATE_ITEM':
+				if (state.studio.projectActiveTab === 'frames')
+					return services.project.duplicateFrame(state.project.activeFrameIndex);
 				return services.project.duplicateLayer(state.project.activeFrame.activeLayerIndex);
-			case 'NEXT_LAYER':
-				return services.project.nextLayer();
-			case 'PREV_LAYER':
-				return services.project.prevLayer();
-			case 'DELETE_LAYER':
+			case 'DELETE_ITEM':
+				if (state.studio.projectActiveTab === 'frames')
+					return services.project.removeFrame(state.project.activeFrameIndex);
 				return services.project.removeLayer(state.project.activeFrame.activeLayerIndex);
 			case 'TOGGLE_LAYER_LOCK':
 				return services.project.toggleLock();
 			case 'TOGGLE_LAYER_VISIBILITY':
 				return services.project.toggleVisibility();
-			case 'MOVE_LAYER_UP':
-				return services.project.moveLayerUp();
-			case 'MOVE_LAYER_DOWN':
-				return services.project.moveLayerDown();
+			case 'MOVE_ITEM_UP':
+				if (state.studio.projectActiveTab === 'frames') {
+					const cur = state.project.activeFrameIndex;
+					if (cur < state.project.frames.length - 1) services.project.reorderFrame(cur, cur + 1);
+				} else {
+					services.project.moveLayerUp();
+				}
+				return;
+			case 'MOVE_ITEM_DOWN':
+				if (state.studio.projectActiveTab === 'frames') {
+					const cur = state.project.activeFrameIndex;
+					if (cur > 0) services.project.reorderFrame(cur, cur - 1);
+				} else {
+					services.project.moveLayerDown();
+				}
+				return;
+			case 'MOVE_ITEM_TOP':
+				if (state.studio.projectActiveTab === 'frames') {
+					services.project.reorderFrame(state.project.activeFrameIndex, state.project.frames.length - 1);
+				} else {
+					services.project.moveLayerToTop();
+				}
+				return;
+			case 'MOVE_ITEM_BOTTOM':
+				if (state.studio.projectActiveTab === 'frames') {
+					services.project.reorderFrame(state.project.activeFrameIndex, 0);
+				} else {
+					services.project.moveLayerToBottom();
+				}
+				return;
 			case 'MERGE_LAYERS':
 				return services.project.mergeLayerDown();
 
@@ -258,7 +246,7 @@ export class EditorEngine {
 					const cb = state.project.clipboard;
 					const u32 = new Uint32Array(cb.data.length);
 					for (let i = 0; i < cb.data.length; i++) {
-						u32[i] = cb.data[i]; // Already Uint32Array in ProjectState
+						u32[i] = cb.data[i];
 					}
 					state.studio.patternBrushData = {
 						width: cb.width,

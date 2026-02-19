@@ -8,6 +8,9 @@ import { animation } from './animation.svelte.js';
 import { studioAudio } from './audioContext.js';
 import { pointer } from './pointer.svelte.js';
 import { feedback } from './feedback.svelte.js';
+import { PixelLogic } from '../logic/pixel.js';
+import { ColorEngine } from './color.js';
+import { history } from './history.js';
 
 /**
  * EditorEngine: The primary orchestrator of action execution.
@@ -330,7 +333,7 @@ export class EditorEngine {
 			const currentPixels = [...state.canvas.pixels];
 			const batch: Array<{ index: number; oldColor: string | null; newColor: string | null }> = [];
 
-			gradientMap.forEach((m) => {
+			gradientMap.forEach((m: { index: number; ratio: number }) => {
 				const mixed = ColorEngine.mix(startColor, endColor, m.ratio);
 				const oldColor = currentPixels[m.index];
 				if (oldColor !== mixed) {

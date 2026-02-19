@@ -193,20 +193,19 @@
 
 				<!-- Shape Preview Layer (Geometric Stance) -->
 				{#if editor.studio.activeTool !== 'NONE' && editor.studio.shapeAnchor}
+					{@const anchor = editor.studio.shapeAnchor}
+					{@const cursor = editor.cursor.pos}
+					{@const x1 = Math.min(anchor.x, cursor.x)}
+					{@const y1 = Math.min(anchor.y, cursor.y)}
+					{@const x2 = Math.max(anchor.x, cursor.x)}
+					{@const y2 = Math.max(anchor.y, cursor.y)}
+					{@const rw = x2 - x1 + 1}
+					{@const rh = y2 - y1 + 1}
 					<svg
 						class="pointer-events-none absolute inset-0 z-40 h-full w-full overflow-visible"
 						viewBox="0 0 {w} {h}"
 						preserveAspectRatio="none"
 					>
-						{@const anchor = editor.studio.shapeAnchor}
-						{@const cursor = editor.cursor.pos}
-						{@const x1 = Math.min(anchor.x, cursor.x)}
-						{@const y1 = Math.min(anchor.y, cursor.y)}
-						{@const x2 = Math.max(anchor.x, cursor.x)}
-						{@const y2 = Math.max(anchor.y, cursor.y)}
-						{@const rw = x2 - x1 + 1}
-						{@const rh = y2 - y1 + 1}
-
 						{#if editor.studio.activeTool === 'RECTANGLE'}
 							<rect
 								x={x1}

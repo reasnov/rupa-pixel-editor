@@ -40,7 +40,7 @@
 		{#if studio.underlayImage}
 			<div class="grid grid-cols-2 gap-4">
 				<div class="flex flex-col gap-2">
-					<label class="text-xs font-bold text-charcoal/60 uppercase">Visibility</label>
+					<span class="text-xs font-bold text-charcoal/60 uppercase">Visibility</span>
 					<button
 						class="editor-tool-btn justify-center"
 						onclick={() => (studio.isUnderlayVisible = !studio.isUnderlayVisible)}
@@ -50,10 +50,11 @@
 				</div>
 
 				<div class="flex flex-col gap-2">
-					<label class="text-xs font-bold text-charcoal/60 uppercase"
+					<label class="text-xs font-bold text-charcoal/60 uppercase" for="underlay-opacity"
 						>Vapor Opacity ({Math.round(studio.underlayOpacity * 100)}%)</label
 					>
 					<input
+						id="underlay-opacity"
 						type="range"
 						min="0"
 						max="1"
@@ -65,7 +66,7 @@
 			</div>
 
 			<div class="flex flex-col gap-2">
-				<label class="text-xs font-bold text-charcoal/60 uppercase">Manual Positioning</label>
+				<span class="text-xs font-bold text-charcoal/60 uppercase">Manual Positioning</span>
 				<div class="flex items-center gap-4">
 					<button class="editor-tool-btn text-xs" onclick={resetUnderlay}> Reset View </button>
 					<span class="text-[10px] text-charcoal/40 italic">

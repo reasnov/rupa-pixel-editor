@@ -1,0 +1,369 @@
+{
+	"hud": {
+		"actions": {
+			"save_project": "Store the Recipe",
+			"clear_canvas": "Clear the Foam",
+			"mute_audio": "Mute Ambience",
+			"unmute_audio": "Unmute Ambience",
+			"add_frame": "New Cup",
+			"add_layer": "New Infusion",
+			"merge_layers": "Merge Infusions",
+			"duplicate": "Clone",
+			"delete": "Spill"
+		},
+		"menu": {
+			"color_title": "Flavor Station",
+			"catalog_title": "Café Menu",
+			"catalog_search": "Search recipes or barista skills...",
+			"catalog_no_results": "No orders found for \"{{query}}\"",
+			"catalog_footer": "Use Arrows to Navigate • Enter to Brew",
+			"catalog_count": "{{count}} Skills Available"
+		},
+		"audio": {
+			"title": "Audio Bar"
+		},
+		"project_panel": {
+			"frames": "Cups",
+			"layers": "Infusions",
+			"visibility": "Show/Hide Infusion",
+			"lock": "Seal/Unseal Infusion",
+			"active": "In Service"
+		},
+		"stats": {
+			"pixel_count": "{{count}} drops poured",
+			"pixel_count_plural": "{{count}} drops poured"
+		}
+	},
+	"cursor": {
+		"position": "Etcher at {{x}}, {{y}}"
+	},
+	"stats": {
+		"cursor_focus": "Etcher Focus",
+		"canvas_size": "Milk Foam Size",
+		"zoom_level": "Focus Level",
+		"active_pattern": "Art: {{count}} Drops",
+		"technical_details": "Technical Ledger"
+	},
+	"project": {
+		"saved": "Recipe Saved {{time}}"
+	},
+	"splash": {
+		"welcome": "The Café is open, Barista.",
+		"version": "Blend {{version}}",
+		"phases": [
+			"Roasting the beans...",
+			"Frothing the milk...",
+			"Polishing the cups...",
+			"Heating the etcher...",
+			"Café is ready for service."
+		]
+	},
+	"manual": {
+		"title": "The Barista's Manual",
+		"subtitle": "Edition I: The Art of Crema",
+		"philosophy": {
+			"title": "The Way of the Pour",
+			"p1": "In the beginning, there was only the Foam—a pristine, untouched cream void. Then came the Etcher, guided by your rhythm, bringing the first drop of flavor to the surface.",
+			"p2": "Rupa is more than a tool; it is your sanctuary. Here, pixels aren't just data points—they are Drops. Every mark you make is a deliberate act of brewing that requires flow, focus, and a peaceful heart.",
+			"p3": "\"We do not just paint pixels; we etch moments into the crema of time.\""
+		},
+		"pillars": {
+			"cursor": {
+				"title": "The Etcher",
+				"desc": "Your voice on the foam. Move it with the Arrow Keys to guide your patterns with barista precision."
+			},
+			"colors": {
+				"title": "The Flavors",
+				"desc": "Rich extracts and syrups. Apply them with Space and switch flavors using the numbers on your keyboard."
+			},
+			"layers": {
+				"title": "The Infusions",
+				"desc": "Layers of depth. Like stacking fine flavors, each infusion adds a new dimension to your cup."
+			}
+		},
+		"techniques": {
+			"title": "Barista Skills",
+			"continuous": {
+				"title": "Continuous Pouring",
+				"desc": "Hold Ctrl while moving to stream flavor across the foam."
+			},
+			"magic_select": {
+				"title": "Spirit Selection",
+				"desc": "Press W to select all connected drops of the same tone. A magical way to move patterns."
+			},
+			"timeline": {
+				"title": "The Flow of Time",
+				"desc": "Create sequences of cups to breathe life into your work. Press P to feel the pulse."
+			},
+			"audio": {
+				"title": "Café Resonance",
+				"desc": "Listen. The café responds to your focus with piano melodies that grow as you brew."
+			}
+		},
+		"footer": {
+			"quote": "May your etcher be swift and your crema ever-smooth.",
+			"guild": "The Rupa Barista Guild",
+			"all_shortcuts": "Review the Menu",
+			"enter": "Step Behind the Bar"
+		}
+	},
+	"color_picker": {
+		"title": "Flavor Station",
+		"subtitle": "Mix your unique extracts",
+		"hex_label": "FLAVOR CODE (HEX)",
+		"apply": "Seal the Flavor",
+		"eyedropper": "Taste from Foam",
+		"sliders": {
+			"hue": "Roast (Hue)",
+			"saturation": "Body (Saturation)",
+			"lightness": "Brightness (Lightness)",
+			"alpha": "Opacity (Alpha)"
+		}
+	},
+	"timeline": {
+		"audio_status": {
+			"title": "Ambiance Flow",
+			"silent": "Quiet",
+			"brewing": "Brewing",
+			"resonant": "Resonant"
+		},
+		"mode": "Mode",
+		"mode_labels": {
+			"brewing": "Brewing...",
+			"tasting": "Tasting...",
+			"clearing": "Clearing",
+			"selecting": "Selecting",
+			"pouring": "Pouring",
+			"ready": "Café Ready"
+		},
+		"rhythm": "Rhythm",
+		"waiting": "Waiting",
+		"duration": "Shift Duration",
+		"title": "The Flow",
+		"track": "Animated Stream",
+		"frame_count": "{{count}} Cups",
+		"frame_count_plural": "{{count}} Cups"
+	},
+	"navigation": {
+		"title": "Jump to Table",
+		"subtitle": "Direct Etcher Placement",
+		"label_x": "Column (X)",
+		"label_y": "Row (Y)",
+		"current": "Currently at: {{x}}, {{y}}",
+		"action": "Move Etcher"
+	},
+	"export": {
+		"title": "Serving Tray",
+		"subtitle": "Prepare Cups for Service",
+		"static_title": "Static Art",
+		"animated_title": "Animated Brews",
+		"requires_frames": "Requires multiple cups",
+		"scale_label": "Service Scale",
+		"scale_desc": "Multiplier for final output size",
+		"fps_label": "Brew Pace (FPS)",
+		"fps_desc": "Drops per second",
+		"background_label": "Cup Base",
+		"background_desc": "Fill empty foam with base color",
+		"match_canvas_background": "Match Counter Color",
+		"action": "Brew & Serve",
+		"preview_label": "Visual Tasting (Preview)",
+		"settings_label": "Brew Settings",
+		"static_formats_label": "Static Art Selection",
+		"kinetic_formats_label": "Animated Brew Selection",
+		"grid_borders_label": "Vessel Borders",
+		"grid_borders_desc": "Include grid lines on colored drops",
+		"grid_borders_toggle": "Toggle Vessel Borders",
+		"background_type_label": "Backdrop Selection",
+		"background_transparent": "Crystal Clear (Transparent)",
+		"background_cream": "Warm Cream",
+		"background_black": "Midnight Roast",
+		"background_custom": "Custom Blend",
+		"wiggle_modifier": "Wiggle (Mist)",
+		"sway_modifier": "Sway (Flow)",
+		"file_label": "{{format}} Cup",
+		"dimensions_label": "{{width}} × {{height}} Drops",
+		"propagation": {
+			"title": "Pour Basin",
+			"subtitle": "Flow the selection across cups",
+			"frames_label": "Target Cups",
+			"frames_desc": "How many cups to pour into",
+			"offset_label": "Pour Offset",
+			"offset_desc": "Directional flow per cup",
+			"action": "Start the Flow"
+		},
+		"formats": {
+			"png": "Polaroid PNG",
+			"webp": "WebP Extract",
+			"jpg": "Vintage JPG",
+			"svg_static": "Vector Blueprint",
+			"svg_animated": "Animated SVG",
+			"webm": "WebM Motion",
+			"gif": "Looping GIF",
+			"mp4": "MP4 Reel"
+		}
+	},
+	"shortcuts": {
+		"title": "Guide Book",
+		"subtitle": "Barista Rhythms & Flows",
+		"header_title": "Mastering the Bar",
+		"header_desc": "In Rupa, we play rhythms. These key combinations create a flow state, allowing your etcher to dance across the foam with professional precision.",
+		"footer_quote": "A master barista knows every flavor by heart."
+	},
+	"settings": {
+		"title": "Café Settings",
+		"subtitle": "Configure the Service Bar",
+		"width": "Cup Width",
+		"height": "Cup Height",
+		"fps_label": "Service Pace (FPS)",
+		"fps_desc": "Default frames per second",
+		"background_label": "Counter Color",
+		"background_desc": "Visual background for the bar",
+		"stabilization": "Pour Stability",
+		"stabilization_desc": "Corrects shaky hand movements",
+		"apply": "Reset Service Bar",
+		"note": "Note: Resizing will center your current art on the new foam. Large cups may slow down the pour."
+	},
+	"shortcut_groups": {
+		"rhythms": "Core Rhythms (Basics)",
+		"navigation": "Step the Etcher (Navigation)",
+		"cursor": "The Etcher (Cursor)",
+		"barista": "Barista Skills",
+		"tools": "Barista Tools (Drawing)",
+		"magic": "Barista Magic (Special)",
+		"flow": "Continuous Flow",
+		"selection": "Focus Area (Selection)",
+		"etching": "Master Etching (Advanced)",
+		"transform": "Transformation",
+		"geometry": "Forms & Geometry",
+		"timeline": "The Flow (Timeline)",
+		"layers": "Infusions (Layers)",
+		"edit": "Recipe Adjustments (Edit)",
+		"view": "Viewport & View",
+		"menu": "The Menu (Palette)",
+		"vibes": "Atmosphere (Audio)",
+		"colors": "Select Flavors (Colors)",
+		"system": "Studio System"
+	},
+	"labels": {
+		"MOVE_UP": "Move Etcher Up",
+		"MOVE_DOWN": "Move Etcher Down",
+		"MOVE_LEFT": "Move Etcher Left",
+		"MOVE_RIGHT": "Move Etcher Right",
+		"GOTO": { "artisan": "Jump to Spot", "technical": "Go to Coordinate" },
+		"PAN_VIEWPORT": "Pan Viewport (Hold Space/Q)",
+		"RESET_PAN": "Reset View",
+		"RESET_VIEWPORT": "Reset Viewport",
+		"JUMP_HOME": { "artisan": "Return to Center", "technical": "Reset Position" },
+		"PAINT": { "artisan": "Pour Flavor", "technical": "Paint Tool" },
+		"ERASE": { "artisan": "Wipe Drop", "technical": "Eraser Tool" },
+		"PICK_COLOR": { "artisan": "Taste Color", "technical": "Eyedropper" },
+		"FLOOD_FILL": { "artisan": "Flavor Soak", "technical": "Flood Fill" },
+		"BIND_VERTEX": { "artisan": "Pin Vertex", "technical": "Add Polygon Point" },
+		"SEAL_BINDING": { "artisan": "Seal Shape", "technical": "Close Polygon" },
+		"TOOL_GRADIENT": { "artisan": "Ombre Pour", "technical": "Gradient Fill" },
+		"RECOLOR": { "artisan": "Change Brew", "technical": "Replace Color" },
+		"SELECT_SAME": { "artisan": "Magic Select", "technical": "Magic Wand" },
+		"FLOW_PAINT": "Stream Pouring",
+		"FLOW_ERASE": "Stream Clearing",
+		"FLOW_SELECT": "Define Area",
+		"COPY": "Copy Recipe",
+		"CUT": "Cut Extract",
+		"PASTE": "Paste from Clipboard",
+		"CLEAR_CANVAS": { "artisan": "Clean the Foam", "technical": "Clear Canvas" },
+		"FLIP_H": "Flip Horizontally",
+		"FLIP_V": "Flip Vertically",
+		"ROTATE": "Rotate Cup",
+		"ZOOM_IN": "Focus In",
+		"ZOOM_OUT": "Focus Out",
+		"RESET_ZOOM": "Reset Focus",
+		"NEW_FRAME": { "artisan": "New Cup", "technical": "New Frame" },
+		"DUPLICATE_FRAME": { "artisan": "Clone Cup", "technical": "Duplicate Frame" },
+		"DELETE_FRAME": { "artisan": "Spill Cup", "technical": "Delete Frame" },
+		"NEXT_FRAME": "Next Cup",
+		"PREV_FRAME": "Previous Cup",
+		"PLAY_PAUSE": "Start/Stop Service",
+		"TOGGLE_GHOST_LAYERS": { "artisan": "See Ghost Infusions", "technical": "Onion Skinning" },
+		"NEW_ITEM": { "artisan": "Add Ingredient", "technical": "New Item" },
+		"NEW_LAYER": { "artisan": "Add Infusion", "technical": "New Layer" },
+		"NEW_LAYER_GROUP": { "artisan": "Group Infusions", "technical": "New Group" },
+		"DUPLICATE_ITEM": { "artisan": "Clone Ingredient", "technical": "Duplicate Item" },
+		"DUPLICATE_LAYER": { "artisan": "Clone Infusion", "technical": "Duplicate Layer" },
+		"DELETE_ITEM": { "artisan": "Remove Ingredient", "technical": "Delete Item" },
+		"DELETE_LAYER": { "artisan": "Spill Infusion", "technical": "Delete Layer" },
+		"MOVE_ITEM_UP": "Move Up",
+		"MOVE_ITEM_DOWN": "Move Down",
+		"MOVE_ITEM_TOP": "Move to Top",
+		"MOVE_ITEM_BOTTOM": "Move to Bottom",
+		"MOVE_LAYER_UP": "Lift Infusion",
+		"MOVE_LAYER_DOWN": "Lower Infusion",
+		"MERGE_LAYERS": { "artisan": "Merge Infusion Down", "technical": "Merge Layer" },
+		"TOGGLE_LAYER_VISIBILITY": "Reveal/Hide Infusion (Ctrl+Alt+V)",
+		"TOGGLE_LAYER_LOCK": "Seal/Unseal Infusion",
+		"BRUSH_SIZE_INC": "Grind Larger",
+		"BRUSH_SIZE_DEC": "Grind Smaller",
+		"TOGGLE_PATTERN_BRUSH": { "artisan": "Vessel Stencil", "technical": "Pattern Brush" },
+		"TOGGLE_BRUSH_SHAPE": "Swap Vessel",
+		"TOGGLE_HAND_TOOL": "Hand Tool",
+		"CYCLE_SYMMETRY": "Reflective Brewing",
+		"TOGGLE_TILING": { "artisan": "Infinite Pour", "technical": "Tiling Mode" },
+		"TOGGLE_AIRBRUSH": { "artisan": "The Mist", "technical": "Airbrush Mode" },
+		"TOGGLE_ALPHA_LOCK": "Seal Transparent",
+		"TOGGLE_COLOR_LOCK": "Seal Flavor",
+		"SHADE_LIGHTEN": "Light Roast (L)",
+		"SHADE_DARKEN": "Dark Roast (D)",
+		"SHADE_DITHER": "Add Texture (X)",
+		"TOGGLE_SHADE_LIGHTEN": "Toggle Light Roast",
+		"TOGGLE_SHADE_DARKEN": "Toggle Dark Roast",
+		"TOGGLE_SHADE_DITHER": "Toggle Texture",
+		"TOGGLE_PIXEL_PERFECT": "Pure Pour (Shift+P)",
+		"TOOL_BRUSH": "Vessel Etcher (Brush)",
+		"TOOL_ERASER": "Vessel Wiper (Eraser)",
+		"TOOL_SELECT": "Focus Area (Select)",
+		"TOOL_RECTANGLE": { "artisan": "Box Vessel", "technical": "Rectangle Tool" },
+		"TOOL_ELLIPSE": { "artisan": "Round Vessel", "technical": "Ellipse Tool" },
+		"TOOL_POLYGON": { "artisan": "Star Vessel", "technical": "Polygon Tool" },
+		"POLY_SIDES_INC": "Add Facet",
+		"POLY_SIDES_DEC": "Remove Facet",
+		"POLY_INDENT_INC": "Deepen Star (Alt+Shift+])",
+		"POLY_INDENT_DEC": "Flatten Star (Alt+Shift+[)",
+		"SET_SIDES_3": "Make Triangle",
+		"SET_SIDES_4": "Make Square",
+		"SET_SIDES_5": "Make Pentagon",
+		"SET_SIDES_6": "Make Hexagon",
+		"SET_SIDES_7": "Make Heptagon",
+		"SET_SIDES_8": "Make Octagon",
+		"SET_SIDES_9": "Make Nonagon",
+		"SET_SIDES_10": "Make Decagon",
+		"TOGGLE_UNDERLAY": "See Reference Underlay",
+		"OPEN_UNDERLAY_MENU": "Underlay Crate",
+		"TOOL_TRANSFORM": { "artisan": "Shift Focus Area", "technical": "Transform Selection" },
+		"OPEN_MENU": "Open Menu",
+		"OPEN_EXPORT": "Serving Tray",
+		"SAVE": "Store Recipe (Save)",
+		"OPEN": "Open Recipe",
+		"OPEN_SETTINGS": "Café Settings",
+		"OPEN_MANUAL": "Barista Manual",
+		"OPEN_PALETTE": "Flavor Station",
+		"OPEN_HELP": "Guide Book",
+		"OPEN_AUDIO": "Audio Settings",
+		"TOGGLE_MUTE": "Silence the Café (Ctrl+Shift+M)",
+		"TOGGLE_MINIMAP": "Toggle Surveyor's Glass",
+		"UNDO": "Rewind Action",
+		"REDO": "Fast-Forward Action",
+		"ESCAPE": "Clear Focus",
+		"TAB_TIMELINE": "Focus Timeline",
+		"TAB_LAYERS": "Focus Infusions",
+		"SWITCH_FOCUS": "Switch Focus",
+		"SET_POSITION": "Set Etcher Position",
+		"SELECT_COLOR_1": "Select Flavor 1",
+		"SELECT_COLOR_2": "Select Flavor 2",
+		"SELECT_COLOR_3": "Select Flavor 3",
+		"SELECT_COLOR_4": "Select Flavor 4",
+		"SELECT_COLOR_5": "Select Flavor 5",
+		"SELECT_COLOR_6": "Select Flavor 6",
+		"SELECT_COLOR_7": "Select Flavor 7",
+		"SELECT_COLOR_8": "Select Flavor 8",
+		"SELECT_COLOR_9": "Select Flavor 9",
+		"SELECT_COLOR_0": "Select Flavor 0"
+	}
+}

@@ -1,0 +1,472 @@
+{
+	"navigation": {
+		"MOVE_UP": {
+			"label": "Move Up",
+			"keys": ["ArrowUp"],
+			"group": "Navigation"
+		},
+		"MOVE_DOWN": {
+			"label": "Move Down",
+			"keys": ["ArrowDown"],
+			"group": "Navigation"
+		},
+		"MOVE_LEFT": {
+			"label": "Move Left",
+			"keys": ["ArrowLeft"],
+			"group": "Navigation"
+		},
+		"MOVE_RIGHT": {
+			"label": "Move Right",
+			"keys": ["ArrowRight"],
+			"group": "Navigation"
+		},
+		"GOTO": {
+			"label": "Jump to Coordinate",
+			"keys": ["Alt+j"],
+			"group": "Navigation"
+		},
+		"JUMP_HOME": {
+			"label": "Return to Center",
+			"keys": ["Ctrl+h"],
+			"group": "Navigation"
+		},
+		"PAN_VIEWPORT": {
+			"label": "Pan Viewport (Hold)",
+			"keys": ["q"],
+			"group": "Navigation"
+		},
+		"RESET_PAN": {
+			"label": "Reset Panning",
+			"keys": ["Alt+q"],
+			"group": "Navigation"
+		},
+		"RESET_VIEWPORT": {
+			"label": "Reset Pan/Zoom",
+			"keys": ["Alt+Backspace"],
+			"group": "View"
+		}
+	},
+	"painting": {
+		"PAINT": {
+			"label": "Paint (Apply Color)",
+			"keys": ["Space", "Enter"],
+			"group": "Tools"
+		},
+		"ERASE": {
+			"label": "Erase Pixel",
+			"keys": ["Backspace", "Delete"],
+			"group": "Tools"
+		},
+		"PICK_COLOR": {
+			"label": "Sample Color",
+			"keys": ["Alt+i", "Alt+Space"],
+			"group": "Tools"
+		},
+		"FLOOD_FILL": {
+			"label": "Color Fill",
+			"keys": ["Alt+f"],
+			"group": "Magic"
+		},
+		"RECOLOR": {
+			"label": "Recolor All",
+			"keys": ["Alt+r"],
+			"group": "Magic"
+		},
+		"SELECT_SAME": {
+			"label": "Magic Wand",
+			"keys": ["w"],
+			"group": "Magic"
+		},
+		"TOOL_GRADIENT": {
+			"label": "Gradient Fill",
+			"keys": ["Alt+g"],
+			"group": "Magic"
+		}
+	},
+	"flows": {
+		"FLOW_PAINT": {
+			"label": "Continuous Painting",
+			"keys": ["Ctrl"],
+			"group": "Flow"
+		},
+		"FLOW_ERASE": {
+			"label": "Continuous Erasing",
+			"keys": ["Ctrl+Shift"],
+			"group": "Flow"
+		},
+		"FLOW_SELECT": {
+			"label": "Define Selection",
+			"keys": ["Shift"],
+			"group": "Flow"
+		}
+	},
+	"manipulation": {
+		"COPY": {
+			"label": "Copy",
+			"keys": ["Ctrl+c"],
+			"group": "Edit"
+		},
+		"CUT": {
+			"label": "Cut",
+			"keys": ["Ctrl+x"],
+			"group": "Edit"
+		},
+		"PASTE": {
+			"label": "Paste",
+			"keys": ["Ctrl+v"],
+			"group": "Edit"
+		},
+		"CLEAR_CANVAS": {
+			"label": "Clear All",
+			"keys": ["Ctrl+l"],
+			"group": "Edit"
+		}
+	},
+	"transform": {
+		"FLIP_H": {
+			"label": "Flip Horizontally",
+			"keys": ["Alt+h"],
+			"group": "Transform"
+		},
+		"FLIP_V": {
+			"label": "Flip Vertically",
+			"keys": ["Alt+v"],
+			"group": "Transform"
+		},
+		"ROTATE": {
+			"label": "Rotate 90° Clockwise",
+			"keys": ["r"],
+			"group": "Transform"
+		},
+		"ZOOM_IN": {
+			"label": "Zoom In",
+			"keys": ["+", "="],
+			"group": "View"
+		},
+		"ZOOM_OUT": {
+			"label": "Zoom Out",
+			"keys": ["-"],
+			"group": "View"
+		},
+		"RESET_ZOOM": {
+			"label": "Reset Zoom",
+			"keys": ["Ctrl+0"],
+			"group": "View"
+		}
+	},
+	"animation": {
+		"NEXT_FRAME": {
+			"label": "Next Frame",
+			"keys": ["Alt+PageDown", "Tab"],
+			"group": "Timeline"
+		},
+		"PREV_FRAME": {
+			"label": "Previous Frame",
+			"keys": ["Alt+PageUp", "Shift+Tab"],
+			"group": "Timeline"
+		},
+		"PLAY_PAUSE": {
+			"label": "Play/Pause",
+			"keys": ["p"],
+			"group": "Timeline"
+		},
+		"TOGGLE_GHOST_LAYERS": {
+			"label": "Onion Skinning",
+			"keys": ["Alt+o"],
+			"group": "Timeline"
+		}
+	},
+	"layering": {
+		"NEW_ITEM": {
+			"label": "Add New (Contextual)",
+			"keys": ["Alt+Shift+n"],
+			"group": "Layers"
+		},
+		"NEW_LAYER_GROUP": {
+			"label": "Group Layers",
+			"keys": ["Ctrl+g"],
+			"group": "Layers"
+		},
+		"DUPLICATE_ITEM": {
+			"label": "Duplicate (Contextual)",
+			"keys": ["Ctrl+d"],
+			"group": "Layers"
+		},
+		"MOVE_ITEM_UP": {
+			"label": "Bring Forward",
+			"keys": ["Ctrl+]"],
+			"group": "Layers"
+		},
+		"MOVE_ITEM_DOWN": {
+			"label": "Send Backward",
+			"keys": ["Ctrl+["],
+			"group": "Layers"
+		},
+		"MOVE_ITEM_TOP": {
+			"label": "Bring to Front",
+			"keys": ["Ctrl+Shift+]"],
+			"group": "Layers"
+		},
+		"MOVE_ITEM_BOTTOM": {
+			"label": "Send to Back",
+			"keys": ["Ctrl+Shift+["],
+			"group": "Layers"
+		},
+		"DELETE_ITEM": {
+			"label": "Remove (Contextual)",
+			"keys": ["Alt+d"],
+			"group": "Layers"
+		},
+		"MERGE_LAYERS": {
+			"label": "Merge Layer Down",
+			"keys": ["Ctrl+Alt+m"],
+			"group": "Layers"
+		},
+		"TOGGLE_LAYER_VISIBILITY": {
+			"label": "Show/Hide Layer",
+			"keys": ["Ctrl+Alt+v"],
+			"group": "Layers"
+		},
+		"TOGGLE_LAYER_LOCK": {
+			"label": "Lock/Unlock Layer",
+			"keys": ["Alt+l"],
+			"group": "Layers"
+		}
+	},
+	"etching": {
+		"BRUSH_SIZE_INC": {
+			"label": "Increase Brush Size",
+			"keys": ["]"],
+			"group": "Etching"
+		},
+		"BRUSH_SIZE_DEC": {
+			"label": "Decrease Brush Size",
+			"keys": ["["],
+			"group": "Etching"
+		},
+		"TOGGLE_PATTERN_BRUSH": {
+			"label": "Pattern Brush",
+			"keys": ["Ctrl+Alt+b"],
+			"group": "Etching"
+		},
+		"TOGGLE_BRUSH_SHAPE": {
+			"label": "Toggle Brush Shape",
+			"keys": ["Alt+b"],
+			"group": "Etching"
+		},
+		"CYCLE_SYMMETRY": {
+			"label": "Cycle Symmetry Mode",
+			"keys": ["s"],
+			"group": "Etching"
+		},
+		"TOGGLE_TILING": {
+			"label": "Toggle Seamless Tiling",
+			"keys": ["t"],
+			"group": "Etching"
+		},
+		"TOGGLE_AIRBRUSH": {
+			"label": "The Mist (Airbrush)",
+			"keys": ["Alt+a"],
+			"group": "Etching"
+		},
+		"TOGGLE_ALPHA_LOCK": {
+			"label": "Toggle Alpha Lock",
+			"keys": ["a"],
+			"group": "Etching"
+		},
+		"TOGGLE_COLOR_LOCK": {
+			"label": "Toggle Color Lock",
+			"keys": ["Shift+a"],
+			"group": "Etching"
+		},
+		"SHADE_LIGHTEN": {
+			"label": "Shade: Lighten",
+			"keys": ["l"],
+			"group": "Etching"
+		},
+		"SHADE_DARKEN": {
+			"label": "Shade: Darken",
+			"keys": ["d"],
+			"group": "Etching"
+		},
+		"SHADE_DITHER": {
+			"label": "Shade: Dither",
+			"keys": ["x"],
+			"group": "Etching"
+		},
+		"TOGGLE_PIXEL_PERFECT": {
+			"label": "Toggle Pixel-Perfect Lines",
+			"keys": ["Shift+p"],
+			"group": "Etching"
+		},
+		"TOOL_BRUSH": {
+			"label": "Brush Tool",
+			"keys": ["Shift+b"],
+			"group": "Etching"
+		},
+		"TOOL_ERASER": {
+			"label": "Eraser Tool",
+			"keys": ["e"],
+			"group": "Etching"
+		},
+		"TOOL_SELECT": {
+			"label": "Select Tool",
+			"keys": ["Shift+s"],
+			"group": "Etching"
+		},
+		"TOGGLE_HAND_TOOL": {
+			"label": "Hand Tool",
+			"keys": ["h"],
+			"group": "Etching"
+		},
+		"TOOL_RECTANGLE": {
+			"label": "Rectangle Tool",
+			"keys": ["Shift+r"],
+			"group": "Etching"
+		},
+		"TOOL_ELLIPSE": {
+			"label": "Ellipse Tool",
+			"keys": ["Alt+c"],
+			"group": "Etching"
+		},
+		"TOOL_POLYGON": {
+			"label": "Polygon Tool",
+			"keys": ["Alt+p"],
+			"group": "Etching"
+		},
+		"POLY_SIDES_INC": {
+			"label": "Increase Polygon Sides",
+			"keys": ["Alt+."],
+			"group": "Etching"
+		},
+		"POLY_SIDES_DEC": {
+			"label": "Decrease Polygon Sides",
+			"keys": ["Alt+,"],
+			"group": "Etching"
+		},
+		"POLY_INDENT_INC": {
+			"label": "Increase Indentation",
+			"keys": ["Alt+Shift+]"],
+			"group": "Etching"
+		},
+		"POLY_INDENT_DEC": {
+			"label": "Decrease Indentation",
+			"keys": ["Alt+Shift+["],
+			"group": "Etching"
+		},
+		"SET_SIDES_3": { "label": "Set Sides: 3", "keys": ["Alt+3"], "group": "Etching" },
+		"SET_SIDES_4": { "label": "Set Sides: 4", "keys": ["Alt+4"], "group": "Etching" },
+		"SET_SIDES_5": { "label": "Set Sides: 5", "keys": ["Alt+5"], "group": "Etching" },
+		"SET_SIDES_6": { "label": "Set Sides: 6", "keys": ["Alt+6"], "group": "Etching" },
+		"SET_SIDES_7": { "label": "Set Sides: 7", "keys": ["Alt+7"], "group": "Etching" },
+		"SET_SIDES_8": { "label": "Set Sides: 8", "keys": ["Alt+8"], "group": "Etching" },
+		"SET_SIDES_9": { "label": "Set Sides: 9", "keys": ["Alt+9"], "group": "Etching" },
+		"SET_SIDES_10": { "label": "Set Sides: 10", "keys": ["Alt+0"], "group": "Etching" },
+		"TOGGLE_UNDERLAY": {
+			"label": "Toggle Underlay Visibility",
+			"keys": ["Ctrl+Alt+u"],
+			"group": "View"
+		},
+		"OPEN_UNDERLAY_MENU": {
+			"label": "Underlay Menu",
+			"keys": ["Alt+u"],
+			"group": "View"
+		},
+		"TOOL_TRANSFORM": {
+			"label": "Transform Selection",
+			"keys": ["m"],
+			"group": "Edit"
+		}
+	},
+	"system": {
+		"OPEN_MENU": {
+			"label": "Command Palette",
+			"keys": ["Ctrl+k"],
+			"group": "System"
+		},
+		"OPEN_EXPORT": {
+			"label": "Export",
+			"keys": ["Ctrl+e"],
+			"group": "System"
+		},
+		"SAVE": {
+			"label": "Save",
+			"keys": ["Ctrl+s"],
+			"group": "System"
+		},
+		"OPEN_SETTINGS": {
+			"label": "Settings",
+			"keys": ["Ctrl+,"],
+			"group": "System"
+		},
+		"OPEN_MANUAL": {
+			"label": "Barista Manual",
+			"keys": ["F1"],
+			"group": "System"
+		},
+		"OPEN_PALETTE": {
+			"label": "Color Picker",
+			"keys": ["b"],
+			"group": "System"
+		},
+		"OPEN_HELP": {
+			"label": "Quick Guide",
+			"keys": ["F2"],
+			"group": "System"
+		},
+		"OPEN_AUDIO": {
+			"label": "Audio Settings",
+			"keys": ["Ctrl+Shift+a"],
+			"group": "System"
+		},
+		"TOGGLE_MUTE": {
+			"label": "Mute Audio",
+			"keys": ["Ctrl+Shift+m"],
+			"group": "System"
+		},
+		"TOGGLE_MINIMAP": {
+			"label": "Minimap",
+			"keys": ["Ctrl+m"],
+			"group": "System"
+		},
+		"UNDO": {
+			"label": "Undo",
+			"keys": ["Ctrl+z"],
+			"group": "System"
+		},
+		"REDO": {
+			"label": "Redo",
+			"keys": ["Ctrl+Shift+z", "Ctrl+y"],
+			"group": "System"
+		},
+		"ESCAPE": {
+			"label": "Close/Cancel",
+			"keys": ["Escape"],
+			"group": "System"
+		}
+	},
+	"colors": {
+		"SELECT_COLOR_1": { "label": "Select Color 1", "keys": ["1"], "group": "Colors" },
+		"SELECT_COLOR_2": { "label": "Select Color 2", "keys": ["2"], "group": "Colors" },
+		"SELECT_COLOR_3": { "label": "Select Color 3", "keys": ["3"], "group": "Colors" },
+		"SELECT_COLOR_4": { "label": "Select Color 4", "keys": ["4"], "group": "Colors" },
+		"SELECT_COLOR_5": { "label": "Select Color 5", "keys": ["5"], "group": "Colors" },
+		"SELECT_COLOR_6": { "label": "Select Color 6", "keys": ["6"], "group": "Colors" },
+		"SELECT_COLOR_7": { "label": "Select Color 7", "keys": ["7"], "group": "Colors" },
+		"SELECT_COLOR_8": { "label": "Select Color 8", "keys": ["8"], "group": "Colors" },
+		"SELECT_COLOR_9": { "label": "Select Color 9", "keys": ["9"], "group": "Colors" },
+		"SELECT_COLOR_0": { "label": "Select Color 0", "keys": ["0"], "group": "Colors" }
+	},
+	"tabs": {
+		"TAB_TIMELINE": {
+			"label": "Focus Timeline",
+			"keys": ["Alt+1"],
+			"group": "System"
+		},
+		"TAB_LAYERS": {
+			"label": "Focus Layers",
+			"keys": ["Alt+2"],
+			"group": "System"
+		}
+	}
+}

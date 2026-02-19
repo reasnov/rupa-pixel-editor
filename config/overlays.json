@@ -1,0 +1,15 @@
+{
+	"managed": [
+		"showColorPicker",
+		"showAudioSettings",
+		"showCommandPalette",
+		"showGuideMenu",
+		"showGuideBook",
+		"showExportMenu",
+		"showCanvasSettings",
+		"showPersistenceMenu",
+		"showUnderlayMenu",
+		"showGoTo",
+		"showPourBasin"
+	]
+}

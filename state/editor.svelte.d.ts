@@ -1,0 +1,86 @@
+import { CanvasState } from './canvas.svelte.js';
+import { CursorState } from './cursor.svelte.js';
+import { PaletteState } from './palette.svelte.js';
+import { StudioState } from './studio.svelte.js';
+import { ProjectState } from './project.svelte.js';
+import { SelectionState } from './selection.svelte.js';
+/**
+ * The EditorState: The root orchestrator of the application.
+ * It delegates concerns to specialized sub-states.
+ */
+export declare class EditorState {
+    readonly version: any;
+    project: ProjectState;
+    canvas: CanvasState;
+    cursor: CursorState;
+    paletteState: PaletteState;
+    studio: StudioState;
+    selection: SelectionState;
+    get pixels(): Uint32Array<ArrayBufferLike>;
+    set pixels(v: Uint32Array<ArrayBufferLike>);
+    get canvasWidth(): number;
+    set canvasWidth(v: number);
+    get canvasHeight(): number;
+    set canvasHeight(v: number);
+    get activeColor(): string;
+    set activeColor(v: string);
+    get palette(): string[];
+    set palette(v: string[]);
+    get isMuted(): boolean;
+    set isMuted(v: boolean);
+    get sfxVolume(): number;
+    set sfxVolume(v: number);
+    get bgmVolume(): number;
+    set bgmVolume(v: number);
+    get usageMinutes(): number;
+    get backgroundColor(): string;
+    set backgroundColor(v: string);
+    constructor();
+    get isAppReady(): boolean;
+    set isAppReady(v: boolean);
+    get isPicking(): boolean;
+    set isPicking(v: boolean);
+    get isCursorVisible(): boolean;
+    set isCursorVisible(v: boolean);
+    get showColorPicker(): boolean;
+    set showColorPicker(v: boolean);
+    get showAudioSettings(): boolean;
+    set showAudioSettings(v: boolean);
+    get showCommandPalette(): boolean;
+    set showCommandPalette(v: boolean);
+    get showGuideBook(): boolean;
+    set showGuideBook(v: boolean);
+    get showGuideMenu(): boolean;
+    set showGuideMenu(v: boolean);
+    get showExportMenu(): boolean;
+    set showExportMenu(v: boolean);
+    get showCanvasSettings(): boolean;
+    set showCanvasSettings(v: boolean);
+    get showPersistenceMenu(): boolean;
+    set showPersistenceMenu(v: boolean);
+    get showGoTo(): boolean;
+    set showGoTo(v: boolean);
+    get showGhostLayers(): boolean;
+    set showGhostLayers(v: boolean);
+    displayCoords: {
+        x: number;
+        y: number;
+    };
+    cameraTransform: string;
+    usedColors: string[];
+    pushEscapeAction(fn: (onClose?: any) => void): void;
+    popEscapeAction(fn: (onClose?: any) => void): void;
+    toggleMute(): void;
+    handleEscape(): boolean;
+    undo(): void;
+    redo(): void;
+    clearCanvas(): void;
+    pickColor(): void;
+    loadProject(): void;
+    copySelection(): void;
+    cutSelection(): void;
+    pasteSelection(): void;
+    flipCanvas(axis: 'horizontal' | 'vertical'): void;
+    rotateCanvas(): void;
+}
+export declare const editor: EditorState;

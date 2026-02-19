@@ -1,0 +1,62 @@
+{
+	"splash": {
+		"phases": [
+			"Roasting the beans...",
+			"Frothing the milk...",
+			"Polishing the cups...",
+			"Heating the etcher...",
+			"Café is ready for service."
+		]
+	},
+	"manual": {
+		"title": "The Barista's Manual",
+		"subtitle": "Edition I: The Art of Crema",
+		"philosophy": {
+			"title": "The Way of the Pour",
+			"paragraphs": [
+				"In the beginning, there was only the Foam—a pristine, untouched cream void. Then came the Etcher, guided by your rhythm, bringing the first drop of flavor to the surface.",
+				"Rupa is more than a tool; it is your sanctuary. Here, pixels aren't just data points—they are Drops. Every mark you make is a deliberate act of brewing that requires flow, focus, and a peaceful heart.",
+				"\"We do not just paint pixels; we etch moments into the crema of time.\""
+			]
+		},
+		"pillars": [
+			{
+				"icon": "🖋️",
+				"title": "The Etcher",
+				"description": "Your voice on the foam. Move it with the Arrow Keys to guide your patterns with barista precision."
+			},
+			{
+				"icon": "☕",
+				"title": "The Flavors",
+				"description": "Rich extracts and syrups. Apply them with Space and switch flavors using the numbers on your keyboard."
+			},
+			{
+				"icon": "🍶",
+				"title": "The Infusions",
+				"description": "Layers of depth. Like stacking fine flavors, each infusion adds a new dimension to your cup."
+			}
+		],
+		"techniques": [
+			{
+				"icon": "🌊",
+				"title": "Continuous Flow",
+				"description": "Hold Ctrl while moving to stream flavor across the foam. Flow with the rhythm of the bar."
+			},
+			{
+				"icon": "🪄",
+				"title": "Spirit Selection",
+				"description": "Press W to select all connected drops of the same tone. A magical way to move patterns."
+			},
+			{
+				"icon": "⏳",
+				"title": "The Spindle",
+				"description": "The axis of time. Create sequences of cups to see your work in motion. Press P to feel the pulse."
+			},
+			{
+				"icon": "🎹",
+				"title": "Resonance",
+				"description": "Listen. The café responds to your focus with piano melodies that grow as you work."
+			}
+		]
+	}
+}

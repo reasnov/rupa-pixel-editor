@@ -20,14 +20,22 @@
 	let menuEl = $state<HTMLElement | null>(null);
 
 	// Ensure menu stays within viewport
-	let adjustedX = $state(x);
-	let adjustedY = $state(y);
+	let menuWidth = $state(160);
+	let menuHeight = $state(100);
+
+	let adjustedX = $derived(
+		x + menuWidth > (typeof window !== 'undefined' ? window.innerWidth : 1000) ? x - menuWidth : x
+	);
+	let adjustedY = $derived(
+		y + menuHeight > (typeof window !== 'undefined' ? window.innerHeight : 1000)
+			? y - menuHeight
+			: y
+	);
 
 	onMount(() => {
 		if (menuEl) {
-			const rect = menuEl.getBoundingClientRect();
-			if (x + rect.width > window.innerWidth) adjustedX = x - rect.width;
-			if (y + rect.height > window.innerHeight) adjustedY = y - rect.height;
+			menuWidth = menuEl.offsetWidth;
+			menuHeight = menuEl.offsetHeight;
 		}
 	});
 </script>
@@ -40,6 +48,8 @@
 	class="fixed z-[2000] min-w-[160px] overflow-hidden rounded-lg border border-charcoal/10 bg-foam-white/95 p-1 shadow-xl backdrop-blur-md"
 	style="left: {adjustedX}px; top: {adjustedY}px;"
 	oncontextmenu={(e) => e.preventDefault()}
+	role="menu"
+	tabindex="-1"
 >
 	<div class="flex flex-col gap-0.5">
 		{#each items as item}
@@ -53,7 +63,9 @@
 				disabled={item.disabled}
 				class="flex w-full items-center justify-between rounded px-3 py-2 text-left transition-colors {item.danger
 					? 'text-red-600 hover:bg-red-50'
-					: 'text-charcoal hover:bg-brand/5'} {item.disabled ? 'opacity-30 grayscale cursor-not-allowed' : ''}"
+					: 'text-charcoal hover:bg-brand/5'} {item.disabled
+					? 'cursor-not-allowed opacity-30 grayscale'
+					: ''}"
 			>
 				<div class="flex items-center gap-3">
 					{#if item.icon}

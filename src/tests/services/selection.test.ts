@@ -80,7 +80,7 @@ describe('Selection & Clipboard Services', () => {
 			]);
 			editor.paletteState.activeColor = '#FF00FF';
 
-			service.commit();
+			service.fillSelection();
 
 			expect(editor.canvas.pixels[0]).toBe(0xffff00ff);
 			expect(editor.canvas.pixels[11]).toBe(0xffff00ff);

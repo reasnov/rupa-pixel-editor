@@ -3,6 +3,7 @@
 	import { editor } from '../../state/editor.svelte.js';
 	import { services } from '../../engine/services.js';
 	import { fade } from 'svelte/transition';
+	import PropertiesPanel from './layering/PropertiesPanel.svelte';
 
 	let draggedIndex = $state<number | null>(null);
 	let dropTargetIndex = $state<number | null>(null);
@@ -11,9 +12,29 @@
 	let editingIndex = $state<number | null>(null);
 	let tempName = $state('');
 
+	// Properties Menu State
+	let activePropertiesType = $state<'layer' | 'frame' | null>(null);
+	let activePropertiesIndex = $state<number | null>(null);
+
+	function toggleProperties(type: 'layer' | 'frame', index: number, event: MouseEvent) {
+		event.stopPropagation();
+		if (activePropertiesType === type && activePropertiesIndex === index) {
+			activePropertiesType = null;
+			activePropertiesIndex = null;
+		} else {
+			activePropertiesType = type;
+			activePropertiesIndex = index;
+		}
+	}
+
 	function startRenaming(index: number, currentName: string) {
 		editingIndex = index;
 		tempName = currentName;
+	}
+
+	function focusInput(node: HTMLInputElement) {
+		node.focus();
+		node.select();
 	}
 
 	function commitRename() {
@@ -183,7 +204,11 @@
 					action: () => services.project.duplicateLayer(index)
 				},
 				{
-					label: isMulti ? 'Show/Hide Selected' : layer.isVisible ? 'Hide Infusion' : 'Show Infusion',
+					label: isMulti
+						? 'Show/Hide Selected'
+						: layer.isVisible
+							? 'Hide Infusion'
+							: 'Show Infusion',
 					icon: layer.isVisible ? '🕶️' : '👁️',
 					action: () => {
 						const indices = Array.from(frame.selectedLayerIndices);
@@ -193,7 +218,11 @@
 					}
 				},
 				{
-					label: isMulti ? 'Seal/Unseal Selected' : layer.isLocked ? 'Unlock Infusion' : 'Lock Infusion',
+					label: isMulti
+						? 'Seal/Unseal Selected'
+						: layer.isLocked
+							? 'Unlock Infusion'
+							: 'Lock Infusion',
 					icon: layer.isLocked ? '🔓' : '🔒',
 					action: () => {
 						const indices = Array.from(frame.selectedLayerIndices);
@@ -252,14 +281,25 @@
 	</div>
 
 	<!-- Content -->
-	<div class="custom-scrollbar flex-1 overflow-y-auto p-2" onclick={resetSelections}>
+	<div
+		class="custom-scrollbar flex-1 overflow-y-auto p-2"
+		onclick={resetSelections}
+		onkeydown={(e) => {
+			if (e.key === 'Escape') resetSelections();
+		}}
+		role="presentation"
+	>
 		{#if editor.studio.projectActiveTab === 'frames'}
 			<div class="flex flex-col gap-1" transition:fade={{ duration: 150 }} role="list">
 				{#each editor.project.frames as frame, i}
 					<div
-						role="listitem"
+						role="button"
+						tabindex="0"
 						draggable="true"
 						onclick={(e) => e.stopPropagation()}
+						onkeydown={(e) => {
+							if (e.key === 'Enter' || e.key === ' ') selectFrame(i, e as any);
+						}}
 						ondragstart={() => handleDragStart(i)}
 						ondragover={(e) => handleDragOver(e, i)}
 						ondrop={(e) => handleDrop(e, i)}
@@ -271,10 +311,9 @@
 							? 'bg-brand/10 text-brand ring-1 ring-brand/20'
 							: 'hover:bg-charcoal/5'} {i === editor.project.activeFrameIndex
 							? 'bg-brand/5 font-bold'
-							: ''} {dropTargetIndex === i && draggedIndex !== i ? 'shadow-[0_-2px_0_var(--color-brand)]' : ''} {draggedIndex ===
-						i
-							? 'opacity-40'
-							: ''}"
+							: ''} {dropTargetIndex === i && draggedIndex !== i
+							? 'shadow-[0_-2px_0_var(--color-brand)]'
+							: ''} {draggedIndex === i ? 'opacity-40' : ''}"
 						aria-current={i === editor.project.activeFrameIndex ? 'true' : undefined}
 					>
 						<button
@@ -287,13 +326,13 @@
 								<input
 									type="text"
 									bind:value={tempName}
-									class="w-full bg-brand/5 font-serif text-sm font-medium text-brand outline-none ring-1 ring-brand/30"
+									class="w-full bg-brand/5 font-serif text-sm font-medium text-brand ring-1 ring-brand/30 outline-none"
 									onblur={commitRename}
 									onkeydown={(e) => {
 										if (e.key === 'Enter') commitRename();
 										if (e.key === 'Escape') editingIndex = null;
 									}}
-									autoFocus
+									use:focusInput
 								/>
 							{:else}
 								<span class="truncate font-serif text-sm font-medium text-charcoal"
@@ -302,6 +341,13 @@
 							{/if}
 						</button>
 						<div class="flex items-center gap-2">
+							<button
+								onclick={(e) => toggleProperties('frame', i, e)}
+								class="text-[10px] opacity-0 transition-opacity group-hover:opacity-40 hover:text-brand"
+								title="Cup Properties"
+							>
+								{activePropertiesType === 'frame' && activePropertiesIndex === i ? '🔼' : '⚙️'}
+							</button>
 							<button
 								onclick={(e) => {
 									e.stopPropagation();
@@ -326,6 +372,11 @@
 							{/if}
 						</div>
 					</div>
+
+					<!-- Frame Properties Accordion -->
+					{#if activePropertiesType === 'frame' && activePropertiesIndex === i}
+						<PropertiesPanel target={frame} margin="24px" />
+					{/if}
 				{/each}
 			</div>
 		{:else}
@@ -336,104 +387,128 @@
 						: null}
 					{#if !parent || !parent.isCollapsed}
 						{@const isChild = layer.parentId !== null}
-																		<div
-																			role="listitem"
-																			draggable="true"
-																			onclick={(e) => e.stopPropagation()}
-																			ondragstart={() => handleDragStart(i)}
-																			ondragover={(e) => handleDragOver(e, i)}													ondrop={(e) => handleDrop(e, i)}
-													ondragend={handleDragEnd}
-													oncontextmenu={(e) => handleLayerContextMenu(e, i)}
-													class="group flex cursor-grab items-center justify-between rounded px-2 transition-all {editor.project.activeFrame.selectedLayerIndices.has(
-														i
-													)
-														? 'bg-brand/10 text-brand ring-1 ring-brand/20'
-														: 'hover:bg-charcoal/5'} {i === editor.project.activeFrame.activeLayerIndex
-														? 'bg-brand/5 font-bold'
-														: ''} {dropTargetIndex === i && draggedIndex !== i
-														? 'shadow-[0_-2px_0_var(--color-brand)]'
-														: ''} {draggedIndex === i ? 'opacity-40' : ''}"
-													style={isChild ? 'margin-left: 12px;' : ''}
-													aria-current={i === editor.project.activeFrame.activeLayerIndex ? 'true' : undefined}
-												>
-													<div class="flex flex-1 items-center gap-2 overflow-hidden">
-														{#if layer.type === 'FOLDER'}
-															<button
-																onclick={(e) => {
-																	e.stopPropagation();
-																	layer.isCollapsed = !layer.isCollapsed;
-																}}
-																class="text-[10px] opacity-40 hover:opacity-100"
-															>
-																{layer.isCollapsed ? '▶' : '▼'}
-															</button>
-														{/if}
-														<button
-															onclick={(e) => {
-																e.stopPropagation();
-																services.project.toggleVisibility(i);
-															}}
-															class="text-xs transition-opacity {layer.isVisible ? 'opacity-100' : 'opacity-20'}"
-															title={__({ key: 'hud.project_panel.visibility' })}
-														>
-															{layer.isVisible
-																? layer.type === 'FOLDER'
-																	? '📂'
-																	: '👁️'
-																: layer.type === 'FOLDER'
-																	? '📁'
-																	: '🕶️'}
-														</button>
-																						<button
-																							class="flex-1 truncate py-2 text-left font-serif text-sm font-medium text-charcoal {layer.isVisible
-																								? ''
-																								: 'opacity-40'}"
-																							onclick={(e) => selectLayer(i, e)}
-																							ondblclick={() => startRenaming(i, layer.name)}
-																						>
-																							{#if editingIndex === i && editor.studio.projectActiveTab === 'layers'}
-																								<input
-																									type="text"
-																									bind:value={tempName}
-																									class="w-full bg-brand/5 font-serif text-sm font-medium text-brand outline-none ring-1 ring-brand/30"
-																									onblur={commitRename}
-																									onkeydown={(e) => {
-																										if (e.key === 'Enter') commitRename();
-																										if (e.key === 'Escape') editingIndex = null;
-																									}}
-																									autoFocus
-																								/>
-																							{:else}
-																								{layer.name}
-																							{/if}
-																						</button>													</div>
-							<div class="flex items-center gap-2">
+						<div
+							role="button"
+							tabindex="0"
+							draggable="true"
+							onclick={(e) => e.stopPropagation()}
+							onkeydown={(e) => {
+								if (e.key === 'Enter' || e.key === ' ') selectLayer(i, e as any);
+							}}
+							ondragstart={() => handleDragStart(i)}
+							ondragover={(e) => handleDragOver(e, i)}
+							ondrop={(e) => handleDrop(e, i)}
+							ondragend={handleDragEnd}
+							oncontextmenu={(e) => handleLayerContextMenu(e, i)}
+							class="group flex cursor-grab items-center justify-between rounded px-2 transition-all {editor.project.activeFrame.selectedLayerIndices.has(
+								i
+							)
+								? 'bg-brand/10 text-brand ring-1 ring-brand/20'
+								: 'hover:bg-charcoal/5'} {i === editor.project.activeFrame.activeLayerIndex
+								? 'bg-brand/5 font-bold'
+								: ''} {dropTargetIndex === i && draggedIndex !== i
+								? 'shadow-[0_-2px_0_var(--color-brand)]'
+								: ''} {draggedIndex === i ? 'opacity-40' : ''}"
+							style={isChild ? 'margin-left: 12px;' : ''}
+							aria-current={i === editor.project.activeFrame.activeLayerIndex ? 'true' : undefined}
+						>
+							<div class="flex flex-1 items-center gap-2 overflow-hidden">
+								{#if layer.type === 'FOLDER'}
+									<button
+										onclick={(e) => {
+											e.stopPropagation();
+											layer.isCollapsed = !layer.isCollapsed;
+										}}
+										class="text-[10px] opacity-40 hover:opacity-100"
+									>
+										{layer.isCollapsed ? '▶' : '▼'}
+									</button>
+								{/if}
 								<button
 									onclick={(e) => {
 										e.stopPropagation();
-										services.project.toggleLock(i);
+										services.project.toggleVisibility(i);
 									}}
-									class="text-[10px] transition-opacity {layer.isLocked
+									class="text-xs transition-opacity {layer.isVisible
 										? 'opacity-100'
 										: 'opacity-20'}"
-									title={__({ key: 'hud.project_panel.lock' })}
+									title={__({ key: 'hud.project_panel.visibility' })}
 								>
-									{layer.isLocked ? '🔒' : '🔓'}
+									{layer.isVisible
+										? layer.type === 'FOLDER'
+											? '📂'
+											: '👁️'
+										: layer.type === 'FOLDER'
+											? '📁'
+											: '🕶️'}
 								</button>
 								<button
-									onclick={(e) => {
-										e.stopPropagation();
-										services.project.removeLayer(i);
-									}}
-									class="text-[10px] opacity-0 transition-opacity group-hover:opacity-40 hover:text-brand"
-									title={__({ key: 'hud.actions.delete' })}
+									class="flex-1 truncate py-2 text-left font-serif text-sm font-medium text-charcoal {layer.isVisible
+										? ''
+										: 'opacity-40'}"
+									onclick={(e) => selectLayer(i, e)}
+									ondblclick={() => startRenaming(i, layer.name)}
 								>
-									🗑️
+									{#if editingIndex === i && editor.studio.projectActiveTab === 'layers'}
+										<input
+											type="text"
+											bind:value={tempName}
+											class="w-full bg-brand/5 font-serif text-sm font-medium text-brand ring-1 ring-brand/30 outline-none"
+											onblur={commitRename}
+											onkeydown={(e) => {
+												if (e.key === 'Enter') commitRename();
+												if (e.key === 'Escape') editingIndex = null;
+											}}
+											use:focusInput
+										/>
+									{:else}
+										{layer.name}
+									{/if}
 								</button>
 							</div>
-						</div>
-					{/if}
-				{/each}
+																					<div class="flex items-center gap-2">
+																						<button
+																							onclick={(e) => toggleProperties('layer', i, e)}
+																							class="text-[10px] opacity-0 transition-opacity group-hover:opacity-40 hover:text-brand"
+																							title="Infusion Properties"
+																						>
+																							{activePropertiesType === 'layer' && activePropertiesIndex === i
+																								? '🔼'
+																								: '⚙️'}
+																						</button>
+																						<button
+																							onclick={(e) => {
+																								e.stopPropagation();
+																								services.project.toggleLock(i);
+																							}}
+																							class="text-[10px] transition-opacity {layer.isLocked
+																								? 'opacity-100'
+																								: 'opacity-20'}"
+																							title={__({ key: 'hud.project_panel.lock' })}
+																						>
+																							{layer.isLocked ? '🔒' : '🔓'}
+																						</button>
+																						<button
+																							onclick={(e) => {
+																								e.stopPropagation();
+																								services.project.removeLayer(i);
+																							}}
+																							class="text-[10px] opacity-0 transition-opacity group-hover:opacity-40 hover:text-brand"
+																							title={__({ key: 'hud.actions.delete' })}
+																						>
+																							🗑️
+																						</button>
+																					</div>
+																				</div>
+							
+																																	<!-- Layer Properties Accordion -->
+																																	{#if activePropertiesType === 'layer' && activePropertiesIndex === i}
+																																		<PropertiesPanel
+																																			target={layer}
+																																			margin={isChild ? '24px' : '12px'}
+																																		/>
+																																	{/if}
+																																{/if}				{/each}
 			</div>
 		{/if}
 	</div>

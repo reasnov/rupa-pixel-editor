@@ -23,19 +23,20 @@
 </script>
 
 <div
-	class="minimap-container pointer-events-none fixed right-72 bottom-12 z-[200] overflow-hidden rounded-lg border border-charcoal/10 bg-foam-white/80 p-1 shadow-2xl backdrop-blur-md transition-all duration-300"
+	class="minimap-container border-b border-charcoal/10 bg-charcoal/5 p-3 transition-all duration-300"
 >
-	<div class="relative overflow-hidden rounded border border-charcoal/5 bg-stone-light/20">
+	<div
+		class="relative flex items-center justify-center overflow-hidden rounded border border-charcoal/5 bg-stone-light/20 p-2 shadow-inner"
+	>
 		<canvas
 			bind:this={canvasEl}
 			width={editor.canvas.width}
 			height={editor.canvas.height}
-			class="max-h-40 max-w-40"
+			class="h-auto w-full max-w-[180px] shadow-sm"
 			style="image-rendering: pixelated;"
 		></canvas>
 
 		<!-- Viewport Indicator (Magenta Box) -->
-		<!-- Note: In a real implementation with panning, we would calculate this based on zoom/pan -->
 		<div
 			class="pointer-events-none absolute inset-0 ring-1 ring-brand ring-inset"
 			style="opacity: 0.4;"

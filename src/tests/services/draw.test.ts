@@ -10,7 +10,12 @@ vi.mock('../../lib/state/editor.svelte.js', () => ({
 		canvas: {
 			width: 2,
 			height: 2,
-			pixels: new Uint32Array([0xff000000, 0xff111111, 0xff222222, 0xff333333]),
+			get pixels() {
+				return (editor.project.activeFrame as any).layers[0].pixels;
+			},
+			set pixels(v) {
+				(editor.project.activeFrame as any).layers[0].pixels = v;
+			},
 			compositePixels: new Uint32Array([0xff000000, 0xff111111, 0xff222222, 0xff333333]),
 			getIndex: vi.fn((x, y) => y * 2 + x),
 			isValidCoord: vi.fn((x, y) => x >= 0 && x < 2 && y >= 0 && y < 2),
@@ -41,7 +46,8 @@ vi.mock('../../lib/state/editor.svelte.js', () => ({
 			isShadingDarken: false,
 			isShadingDither: false,
 			isAirbrushActive: false,
-			airbrushDensity: 0.2
+			airbrushDensity: 0.2,
+			show: vi.fn()
 		},
 		selection: {
 			isActive: false,
@@ -49,6 +55,13 @@ vi.mock('../../lib/state/editor.svelte.js', () => ({
 		},
 		project: {
 			activeFrame: {
+				activeLayerIndex: 0,
+				layers: [
+					{
+						type: 'LAYER',
+						pixels: new Uint32Array([0xff000000, 0xff111111, 0xff222222, 0xff333333])
+					}
+				],
 				activeLayer: {
 					hasPixel: vi.fn(() => true)
 				}
@@ -167,7 +180,7 @@ describe('Services', () => {
 			expect(editor.canvas.pixels).toEqual(
 				new Uint32Array([0xff111111, 0xff000000, 0xff333333, 0xff222222])
 			);
-			expect(history.clear).toHaveBeenCalled();
+			expect(history.beginBatch).toHaveBeenCalled();
 		});
 
 		it('flip vertical should reverse columns', () => {

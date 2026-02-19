@@ -218,7 +218,10 @@ export class EditorEngine {
 				return;
 			case 'MOVE_ITEM_TOP':
 				if (state.studio.projectActiveTab === 'frames') {
-					services.project.reorderFrame(state.project.activeFrameIndex, state.project.frames.length - 1);
+					services.project.reorderFrame(
+						state.project.activeFrameIndex,
+						state.project.frames.length - 1
+					);
 				} else {
 					services.project.moveLayerToTop();
 				}

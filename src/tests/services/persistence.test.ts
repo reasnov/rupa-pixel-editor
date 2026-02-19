@@ -26,20 +26,25 @@ vi.mock('../../state/layer.svelte.js', () => ({
 		isVisible = true;
 		isLocked = false;
 		opacity = 1.0;
-		pixels: any[] = [];
+		type = 'LAYER';
+		parentId = null;
+		isCollapsed = false;
+		pixels = new Uint32Array(0);
 		constructor(
 			public name: string,
 			public width: number,
 			public height: number
-		) {}
+		) {
+			this.pixels = new Uint32Array(width * height);
+		}
 		clone() {
 			return this;
 		}
 		clear() {
-			this.pixels.fill(null);
+			this.pixels.fill(0);
 		}
 		hasPixel(idx: number) {
-			return this.pixels[idx] !== null;
+			return this.pixels[idx] !== 0;
 		}
 	}
 }));
@@ -55,6 +60,9 @@ vi.mock('../../lib/state/editor.svelte.js', () => ({
 			currentFilePath: null,
 			setMetadata: vi.fn(),
 			lastSaved: null
+		},
+		canvas: {
+			triggerPulse: vi.fn()
 		}
 	}
 }));

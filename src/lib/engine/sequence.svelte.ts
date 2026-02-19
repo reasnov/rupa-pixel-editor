@@ -29,8 +29,8 @@ export class SequenceEngine {
 		// Pattern Mapping
 		const patterns: Record<string, ActionIntent> = {
 			'g,c': 'GOTO', // Go to Center
-			'f,n': 'NEW_FRAME', // Project: New Frame
-			'i,n': 'NEW_LAYER', // Layer: New Layer
+			'f,n': 'NEW_ITEM', // Project: New Frame
+			'i,n': 'NEW_ITEM', // Layer: New Layer
 			'i,l': 'TOGGLE_LAYER_LOCK', // Layer: Lock
 			'i,h': 'TOGGLE_LAYER_VISIBILITY', // Layer: Hide
 			'i,m': 'MERGE_LAYERS' // Layer: Merge

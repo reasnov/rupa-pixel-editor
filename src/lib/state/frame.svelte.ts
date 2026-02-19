@@ -10,6 +10,7 @@ export class FrameState {
 	width = $state(32);
 	height = $state(32);
 	duration = $state(100); // Duration in ms (Default 100ms = 10 FPS)
+	opacity = $state(1.0); // 0.0 to 1.0 (Global cup opacity)
 
 	// The stack of layers. Order: [Background, ..., Foreground]
 	layers = $state<LayerState[]>([]);

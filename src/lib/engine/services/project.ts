@@ -239,16 +239,7 @@ export class ProjectService {
 				? editor.project.activeFrame.layers[index]
 				: editor.project.activeFrame.activeLayer;
 		if (layer) {
-			const prevState = layer.isLocked;
 			layer.isLocked = !layer.isLocked;
-
-			history.push({
-				isStructural: true,
-				label: 'Toggle Layer Lock',
-				undo: () => (layer.isLocked = prevState),
-				redo: () => (layer.isLocked = !prevState)
-			});
-
 			sfx.playDraw();
 		}
 	}
@@ -259,16 +250,7 @@ export class ProjectService {
 				? editor.project.activeFrame.layers[index]
 				: editor.project.activeFrame.activeLayer;
 		if (layer) {
-			const prevState = layer.isVisible;
 			layer.isVisible = !layer.isVisible;
-
-			history.push({
-				isStructural: true,
-				label: 'Toggle Layer Visibility',
-				undo: () => (layer.isVisible = prevState),
-				redo: () => (layer.isVisible = !prevState)
-			});
-
 			sfx.playDraw();
 		}
 	}

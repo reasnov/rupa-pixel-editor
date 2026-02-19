@@ -45,7 +45,7 @@ export class ManipulationService {
 		const { width, height, pixels } = editor.canvas;
 		if (width !== height) return;
 
-		const newPixels = Array(width * height).fill('#eee8d5');
+		const newPixels = Array(width * height).fill(null);
 		for (let y = 0; y < height; y++) {
 			for (let x = 0; x < width; x++) {
 				const oldIdx = y * width + x;
@@ -80,11 +80,13 @@ export class ManipulationService {
 		const changes: { index: number; oldColor: string | null; newColor: string | null }[] = [];
 
 		const hasSelection = editor.selection.isActive;
-		const selectionIndices = editor.selection.indices;
+		const selectionSet = editor.selection.activeIndicesSet;
+
+		const currentPixels = [...pixels];
 
 		pixels.forEach((color, index) => {
 			const isCorrectColor = color === targetColor;
-			const isInsideSelection = !hasSelection || selectionIndices.includes(index);
+			const isInsideSelection = !hasSelection || selectionSet.has(index);
 
 			if (isCorrectColor && isInsideSelection) {
 				changes.push({
@@ -92,11 +94,12 @@ export class ManipulationService {
 					oldColor: targetColor,
 					newColor: replacementColor
 				});
-				editor.canvas.pixels[index] = replacementColor;
+				currentPixels[index] = replacementColor;
 			}
 		});
 
 		if (changes.length > 0) {
+			editor.canvas.pixels = currentPixels;
 			history.beginBatch();
 			changes.forEach((c) => history.push(c));
 			history.endBatch();

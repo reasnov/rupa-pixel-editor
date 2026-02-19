@@ -8,6 +8,7 @@
 	import Cursor from './Cursor.svelte';
 
 	import { ColorEngine } from '../../engine/color.js';
+	import { fade } from 'svelte/transition';
 
 	let gridEl = $state<HTMLElement | null>(null);
 	let canvasEl = $state<HTMLCanvasElement | null>(null);
@@ -39,6 +40,10 @@
 
 	let isSnapped = $derived(pointer.isSnappedState);
 	let polylinePoints = $derived(editor.canvas.strokePoints.map((p) => `${p.x},${p.y}`).join(' '));
+
+	// Tiling Preview
+	let showTiling = $derived(editor.studio.isTilingEnabled);
+	let canvasDataUrl = $state('');
 
 	function handleWheel(e: WheelEvent) {
 		if (e.ctrlKey) {
@@ -78,6 +83,11 @@
 		}
 
 		ctx.putImageData(imageData, 0, 0);
+
+		// Capture for Tiling Preview
+		if (showTiling) {
+			canvasDataUrl = canvasEl.toDataURL();
+		}
 	});
 </script>
 
@@ -108,6 +118,23 @@
 
 	<!-- The Main Working Area -->
 	<div class="relative flex flex-1 items-center justify-center overflow-hidden bg-charcoal/[0.02]">
+		{#if showTiling}
+			<!-- Tiled Preview (3x3 grid) - Using CSS repeat for performance -->
+			<div
+				transition:fade
+				class="pointer-events-none absolute inset-0 z-0 opacity-20 blur-[1px] grayscale"
+				style="
+					background-image: url({canvasDataUrl});
+					background-repeat: repeat;
+					background-size: {editor.canvas.getFitDimension('horizontal')} {editor.canvas.getFitDimension(
+					'vertical'
+				)};
+					background-position: center;
+					transform: {editor.cameraTransform};
+				"
+			></div>
+		{/if}
+
 		<div
 			class="canvas-container absolute top-1/2 left-1/2 origin-center transition-transform duration-500 ease-[cubic-bezier(0.23,1,0.32,1)]"
 			style="
@@ -118,7 +145,7 @@
 		>
 			<div
 				bind:this={gridEl}
-				class="relative h-full w-full shadow-[0_20px_60px_rgba(0,0,0,0.12)] ring-1 ring-charcoal/5"
+				class="relative h-full w-full shadow-[0_20px_60px_rgba(0,0,0,0.12)] ring-1 ring-charcoal/5 outline-none focus:ring-2 focus:ring-brand"
 				style="
 					background-color: {editor.backgroundColor};
 					touch-action: none;

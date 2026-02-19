@@ -1,4 +1,4 @@
-import { __ } from "$lib/state/i18n.svelte.js";
+import { __ } from '$lib/state/i18n.svelte.js';
 import shortcutsData from '../config/shortcuts.json' with { type: 'json' };
 import { sequence } from './sequence.svelte.js';
 
@@ -64,6 +64,16 @@ export type ActionIntent =
 	| 'MOVE_LAYER_DOWN'
 	| 'MERGE_LAYERS'
 	| 'SWITCH_FOCUS'
+	| 'BRUSH_SIZE_INC'
+	| 'BRUSH_SIZE_DEC'
+	| 'TOGGLE_BRUSH_SHAPE'
+	| 'CYCLE_SYMMETRY'
+	| 'TOGGLE_TILING'
+	| 'TOGGLE_ALPHA_LOCK'
+	| 'TOGGLE_COLOR_LOCK'
+	| 'SHADE_LIGHTEN'
+	| 'SHADE_DARKEN'
+	| 'SHADE_DITHER'
 	| 'SELECT_COLOR_1'
 	| 'SELECT_COLOR_2'
 	| 'SELECT_COLOR_3'
@@ -93,6 +103,11 @@ export class KeyboardEngine {
 	isCtrlActive = $state(false);
 	isShiftActive = $state(false);
 	isAltActive = $state(false);
+
+	// Master Etcher Modifiers (v0.8.0)
+	isLDown = $state(false); // Lighten
+	isDDown = $state(false); // Darken
+	isXDown = $state(false); // Dither
 
 	constructor() {
 		this.loadPatterns();
@@ -242,6 +257,11 @@ export class KeyboardEngine {
 		this.isCtrlActive = e.ctrlKey || e.metaKey;
 		this.isShiftActive = e.shiftKey;
 		this.isAltActive = e.altKey;
+
+		// Master Etcher Modifiers (v0.8.0)
+		this.isLDown = this.activeKeys.includes('l');
+		this.isDDown = this.activeKeys.includes('d');
+		this.isXDown = this.activeKeys.includes('x');
 
 		if (!this.isCtrlActive)
 			this.activeKeys = this.activeKeys.filter((k) => k !== 'control' && k !== 'meta');

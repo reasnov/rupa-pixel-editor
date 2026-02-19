@@ -11,6 +11,15 @@ export class StudioState {
 	isAppReady = $state(false);
 	isPicking = $state(false);
 
+	// Master Etching (v0.8.0)
+	brushSize = $state(1); // 1 to 5
+	brushShape = $state<'SQUARE' | 'CIRCLE'>('SQUARE');
+	symmetryMode = $state<'OFF' | 'HORIZONTAL' | 'VERTICAL' | 'QUADRANT'>('OFF');
+	isTilingEnabled = $state(false);
+	isAlphaLocked = $state(false);
+	isColorLocked = $state(false);
+	colorLockSource = $state<string | null>(null);
+
 	// Smoothing & Stabilization (0 to 100)
 	stabilization = $state(50);
 

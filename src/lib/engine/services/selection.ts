@@ -33,19 +33,23 @@ export class SelectionService {
 
 		history.beginBatch();
 		let changed = false;
+		const currentPixels = [...editor.canvas.pixels];
 
 		points.forEach((p) => {
 			const index = p.y * width + p.x;
-			const oldColor = editor.canvas.pixels[index];
+			const oldColor = currentPixels[index];
 			if (oldColor !== activeColor) {
 				history.push({ index, oldColor, newColor: activeColor });
-				editor.canvas.pixels[index] = activeColor;
+				currentPixels[index] = activeColor;
 				changed = true;
 			}
 		});
 
+		if (changed) {
+			editor.canvas.pixels = currentPixels;
+			sfx.playDraw();
+		}
 		history.endBatch();
-		if (changed) sfx.playDraw();
 	}
 
 	/**

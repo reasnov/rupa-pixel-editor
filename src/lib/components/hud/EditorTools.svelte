@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { __ } from "$lib/state/i18n.svelte.js";
+	import { __ } from '$lib/state/i18n.svelte.js';
 	import { editor as state } from '../../state/editor.svelte.js';
 	import { editor } from '../../engine/editor.svelte.js';
 	import StateIndicator from './StateIndicator.svelte';

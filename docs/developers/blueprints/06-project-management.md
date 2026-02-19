@@ -8,11 +8,11 @@ Blueprint 06 transforms **Rupa Pixel Editor** from a single-canvas editor into a
 
 ## 2. Terminology Mapping
 
-| Technical Term | UI (Barista) Term | Implementation File |
-| :--- | :--- | :--- |
-| **Project** | **The Order** | `src/lib/state/project.svelte.ts` |
-| **Frame** | **The Cup** | `src/lib/state/frame.svelte.ts` |
-| **Layer** | **The Infusion** | `src/lib/state/layer.svelte.ts` |
+| Technical Term | UI (Barista) Term | Implementation File               |
+| :------------- | :---------------- | :-------------------------------- |
+| **Project**    | **The Order**     | `src/lib/state/project.svelte.ts` |
+| **Frame**      | **The Cup**       | `src/lib/state/frame.svelte.ts`   |
+| **Layer**      | **The Infusion**  | `src/lib/state/layer.svelte.ts`   |
 
 ---
 

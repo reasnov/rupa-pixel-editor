@@ -1,10 +1,47 @@
-import { type ColorHex } from '../types/index.js';
+import { type ColorHex, type Point } from '../types/index.js';
 
 /**
  * Pixel Logic: Pure data transformations for pixel grids.
  * Part of the stateless Logic Layer.
  */
 export class PixelLogic {
+	/**
+	 * Returns mirrored coordinates based on the active symmetry mode.
+	 */
+	static getSymmetryPoints(
+		x: number,
+		y: number,
+		width: number,
+		height: number,
+		mode: 'HORIZONTAL' | 'VERTICAL' | 'QUADRANT'
+	): Point[] {
+		const points: Point[] = [];
+		const mx = width - 1 - x;
+		const my = height - 1 - y;
+
+		if (mode === 'HORIZONTAL') {
+			points.push({ x: mx, y });
+		} else if (mode === 'VERTICAL') {
+			points.push({ x, y: my });
+		} else if (mode === 'QUADRANT') {
+			points.push({ x: mx, y });
+			points.push({ x, y: my });
+			points.push({ x: mx, y: my });
+		}
+
+		return points;
+	}
+
+	/**
+	 * Wraps a point to the canvas boundaries for seamless tiling.
+	 */
+	static wrap(x: number, y: number, width: number, height: number): Point {
+		return {
+			x: ((x % width) + width) % width,
+			y: ((y % height) + height) % height
+		};
+	}
+
 	/**
 	 * Flood Fill: Returns a new array with the connected area filled.
 	 */

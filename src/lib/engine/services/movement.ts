@@ -1,5 +1,6 @@
 import { editor } from '../../state/editor.svelte.js';
 import { sfx } from '../audio.js';
+import { PixelLogic } from '../../logic/pixel.js';
 
 /**
  * MovementService: Handles cursor navigation and coordinate translations.
@@ -9,8 +10,17 @@ export class MovementService {
 	 * Move the cursor by a delta.
 	 */
 	move(dx: number, dy: number): boolean {
-		const newX = Math.max(0, Math.min(editor.canvas.width - 1, editor.cursor.pos.x + dx));
-		const newY = Math.max(0, Math.min(editor.canvas.height - 1, editor.cursor.pos.y + dy));
+		let newX = editor.cursor.pos.x + dx;
+		let newY = editor.cursor.pos.y + dy;
+
+		if (editor.studio.isTilingEnabled) {
+			const wrapped = PixelLogic.wrap(newX, newY, editor.canvas.width, editor.canvas.height);
+			newX = wrapped.x;
+			newY = wrapped.y;
+		} else {
+			newX = Math.max(0, Math.min(editor.canvas.width - 1, newX));
+			newY = Math.max(0, Math.min(editor.canvas.height - 1, newY));
+		}
 
 		if (newX !== editor.cursor.pos.x || newY !== editor.cursor.pos.y) {
 			editor.cursor.setPos(newX, newY);

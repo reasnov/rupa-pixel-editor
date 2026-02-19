@@ -16,11 +16,11 @@ The logic is centralized in `src/lib/engine/pixel.ts` (PixelEngine), which coord
 
 ### 2.1 Assisted Drawing
 
-| Feature | Description | Logic Location |
-| :--- | :--- | :--- |
-| **Shape Snapping** | Hold pointer to convert paths to perfect forms. | `PixelEngine.fitArc` |
-| **Bresenham Line** | Pixel-perfect line interpolation. | `Geometry.getLinePoints` |
-| **Smoothing** | Moving average for organic strokes. | `Path.smooth` |
+| Feature            | Description                                     | Logic Location           |
+| :----------------- | :---------------------------------------------- | :----------------------- |
+| **Shape Snapping** | Hold pointer to convert paths to perfect forms. | `PixelEngine.fitArc`     |
+| **Bresenham Line** | Pixel-perfect line interpolation.               | `Geometry.getLinePoints` |
+| **Smoothing**      | Moving average for organic strokes.             | `Path.smooth`            |
 
 ---
 

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { __ } from "$lib/state/i18n.svelte.js";
+	import { __ } from '$lib/state/i18n.svelte.js';
 	import { editor } from '../../state/editor.svelte.js';
 	import Brand from './Brand.svelte';
 	import { feedback } from '../../engine/feedback.svelte.js';

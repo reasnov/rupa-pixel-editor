@@ -38,12 +38,16 @@ export class ClipboardService {
 		if (points.length === 0) return;
 
 		history.beginBatch();
+		const currentPixels = [...editor.canvas.pixels];
+
 		points.forEach((p) => {
 			const index = p.y * width + p.x;
-			const oldColor = editor.canvas.pixels[index];
+			const oldColor = currentPixels[index];
 			history.push({ index, oldColor, newColor: null });
-			editor.canvas.pixels[index] = null;
+			currentPixels[index] = null;
 		});
+
+		editor.canvas.pixels = currentPixels;
 		history.endBatch();
 
 		sfx.playErase();
@@ -58,6 +62,9 @@ export class ClipboardService {
 		const { width: lw, height: lh } = editor.canvas;
 
 		history.beginBatch();
+		const currentPixels = [...editor.canvas.pixels];
+		let changed = false;
+
 		for (let y = 0; y < cb.height; y++) {
 			for (let x = 0; x < cb.width; x++) {
 				const tx = nx + x;
@@ -69,14 +76,19 @@ export class ClipboardService {
 
 					if (color !== null) {
 						const lIdx = ty * lw + tx;
-						const oldColor = editor.canvas.pixels[lIdx];
+						const oldColor = currentPixels[lIdx];
 						history.push({ index: lIdx, oldColor, newColor: color });
-						editor.canvas.pixels[lIdx] = color;
+						currentPixels[lIdx] = color;
+						changed = true;
 					}
 				}
 			}
 		}
+
+		if (changed) {
+			editor.canvas.pixels = currentPixels;
+			sfx.playDraw();
+		}
 		history.endBatch();
-		sfx.playDraw();
 	}
 }

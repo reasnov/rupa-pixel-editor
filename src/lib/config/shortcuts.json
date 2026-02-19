@@ -22,7 +22,7 @@
 		},
 		"GOTO": {
 			"label": "Jump to Coordinate",
-			"keys": ["g"],
+			"keys": ["Alt+g"],
 			"group": "Navigation"
 		},
 		"JUMP_HOME": {
@@ -44,12 +44,12 @@
 		},
 		"PICK_COLOR": {
 			"label": "Sample Color",
-			"keys": ["i", "Alt+Space"],
+			"keys": ["Alt+i", "Alt+Space"],
 			"group": "Tools"
 		},
 		"FLOOD_FILL": {
 			"label": "Color Fill",
-			"keys": ["f"],
+			"keys": ["Alt+f"],
 			"group": "Magic"
 		},
 		"RECOLOR": {
@@ -189,12 +189,12 @@
 		},
 		"MOVE_LAYER_UP": {
 			"label": "Move Layer Up",
-			"keys": ["["],
+			"keys": ["Alt+["],
 			"group": "Layers"
 		},
 		"MOVE_LAYER_DOWN": {
 			"label": "Move Layer Down",
-			"keys": ["]"],
+			"keys": ["Alt+]"],
 			"group": "Layers"
 		},
 		"MERGE_LAYERS": {
@@ -211,6 +211,58 @@
 			"label": "Lock/Unlock Layer",
 			"keys": ["Alt+l"],
 			"group": "Layers"
+		}
+	},
+	"etching": {
+		"BRUSH_SIZE_INC": {
+			"label": "Increase Brush Size",
+			"keys": ["]"],
+			"group": "Etching"
+		},
+		"BRUSH_SIZE_DEC": {
+			"label": "Decrease Brush Size",
+			"keys": ["["],
+			"group": "Etching"
+		},
+		"TOGGLE_BRUSH_SHAPE": {
+			"label": "Toggle Brush Shape",
+			"keys": ["Alt+b"],
+			"group": "Etching"
+		},
+		"CYCLE_SYMMETRY": {
+			"label": "Cycle Symmetry Mode",
+			"keys": ["s"],
+			"group": "Etching"
+		},
+		"TOGGLE_TILING": {
+			"label": "Toggle Seamless Tiling",
+			"keys": ["t"],
+			"group": "Etching"
+		},
+		"TOGGLE_ALPHA_LOCK": {
+			"label": "Toggle Alpha Lock",
+			"keys": ["a"],
+			"group": "Etching"
+		},
+		"TOGGLE_COLOR_LOCK": {
+			"label": "Toggle Color Lock",
+			"keys": ["Shift+a"],
+			"group": "Etching"
+		},
+		"SHADE_LIGHTEN": {
+			"label": "Shade: Lighten",
+			"keys": ["l"],
+			"group": "Etching"
+		},
+		"SHADE_DARKEN": {
+			"label": "Shade: Darken",
+			"keys": ["d"],
+			"group": "Etching"
+		},
+		"SHADE_DITHER": {
+			"label": "Shade: Dither",
+			"keys": ["x"],
+			"group": "Etching"
 		}
 	},
 	"system": {

@@ -72,24 +72,25 @@ export class ColorService {
 		const width = editor.canvas.width;
 		const height = editor.canvas.height;
 		const queue: [number, number][] = [[x, y]];
-		const visited = new Set<string>();
+		const visited = new Set<number>();
 		const changes: { index: number; oldColor: string | null; newColor: string | null }[] = [];
 
 		// Selection check
 		const hasSelection = editor.selection.isActive;
-		const selectionIndices = editor.selection.indices;
+		const selectionSet = editor.selection.activeIndicesSet;
+
+		const currentPixels = [...editor.canvas.pixels];
 
 		while (queue.length > 0) {
 			const [cx, cy] = queue.shift()!;
 			const index = cy * width + cx;
-			const key = `${cx},${cy}`;
 
-			if (visited.has(key)) continue;
-			visited.add(key);
+			if (visited.has(index)) continue;
+			visited.add(index);
 
 			// Constraint: Must be target color AND (if selection exists, must be in selection)
-			const isCorrectColor = editor.canvas.getColor(cx, cy) === targetColor;
-			const isInsideSelection = !hasSelection || selectionIndices.includes(index);
+			const isCorrectColor = currentPixels[index] === targetColor;
+			const isInsideSelection = !hasSelection || selectionSet.has(index);
 
 			if (isCorrectColor && isInsideSelection) {
 				changes.push({
@@ -98,8 +99,7 @@ export class ColorService {
 					newColor: replacementColor
 				});
 
-				// Update state immediately for visual feedback
-				editor.canvas.pixels[index] = replacementColor;
+				currentPixels[index] = replacementColor;
 
 				// Neighbors
 				const neighbors: [number, number][] = [
@@ -118,6 +118,7 @@ export class ColorService {
 		}
 
 		if (changes.length > 0) {
+			editor.canvas.pixels = currentPixels;
 			history.beginBatch();
 			changes.forEach((c) => history.push(c));
 			history.endBatch();

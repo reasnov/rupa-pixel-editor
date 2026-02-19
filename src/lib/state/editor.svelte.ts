@@ -249,13 +249,17 @@ export class EditorState {
 				entry.undo();
 				sfx.playErase();
 			} else if (Array.isArray(entry)) {
+				const currentPixels = [...this.canvas.pixels];
 				for (let i = entry.length - 1; i >= 0; i--) {
 					const action = entry[i];
-					this.canvas.pixels[action.index] = action.oldColor;
+					currentPixels[action.index] = action.oldColor;
 				}
+				this.canvas.pixels = currentPixels;
 				sfx.playErase();
 			} else {
-				this.canvas.pixels[entry.index] = entry.oldColor;
+				const currentPixels = [...this.canvas.pixels];
+				currentPixels[entry.index] = entry.oldColor;
+				this.canvas.pixels = currentPixels;
 				sfx.playErase();
 			}
 		}
@@ -269,12 +273,16 @@ export class EditorState {
 				entry.redo();
 				sfx.playDraw();
 			} else if (Array.isArray(entry)) {
+				const currentPixels = [...this.canvas.pixels];
 				for (const action of entry) {
-					this.canvas.pixels[action.index] = action.newColor;
+					currentPixels[action.index] = action.newColor;
 				}
+				this.canvas.pixels = currentPixels;
 				sfx.playDraw();
 			} else {
-				this.canvas.pixels[entry.index] = entry.newColor;
+				const currentPixels = [...this.canvas.pixels];
+				currentPixels[entry.index] = entry.newColor;
+				this.canvas.pixels = currentPixels;
 				sfx.playDraw();
 			}
 		}

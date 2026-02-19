@@ -7,10 +7,10 @@ import { ambient } from './ambient.js';
 import { animation } from './animation.svelte.js';
 import { studioAudio } from './audioContext.js';
 import { pointer } from './pointer.svelte.js';
+import { feedback } from './feedback.svelte.js';
 
 /**
  * EditorEngine: The primary orchestrator of action execution.
- * It listens to normalized signals from the InputEngine and executes ServiceManager operations.
  */
 export class EditorEngine {
 	private backupInterval: any = null;
@@ -178,6 +178,44 @@ export class EditorEngine {
 				return services.project.moveLayerDown();
 			case 'MERGE_LAYERS':
 				return services.project.mergeLayerDown();
+
+			case 'BRUSH_SIZE_INC':
+				state.studio.brushSize = Math.min(5, state.studio.brushSize + 1);
+				return feedback.emit('READY');
+			case 'BRUSH_SIZE_DEC':
+				state.studio.brushSize = Math.max(1, state.studio.brushSize - 1);
+				return feedback.emit('READY');
+			case 'TOGGLE_BRUSH_SHAPE':
+				state.studio.brushShape = state.studio.brushShape === 'SQUARE' ? 'CIRCLE' : 'SQUARE';
+				return feedback.emit('READY');
+			case 'CYCLE_SYMMETRY':
+				const modes: Array<'OFF' | 'HORIZONTAL' | 'VERTICAL' | 'QUADRANT'> = [
+					'OFF',
+					'HORIZONTAL',
+					'VERTICAL',
+					'QUADRANT'
+				];
+				const currentIdx = modes.indexOf(state.studio.symmetryMode);
+				state.studio.symmetryMode = modes[(currentIdx + 1) % modes.length];
+				return feedback.emit('READY');
+			case 'TOGGLE_TILING':
+				state.studio.isTilingEnabled = !state.studio.isTilingEnabled;
+				return feedback.emit('READY');
+			case 'TOGGLE_ALPHA_LOCK':
+				state.studio.isAlphaLocked = !state.studio.isAlphaLocked;
+				return feedback.emit('READY');
+			case 'TOGGLE_COLOR_LOCK':
+				if (state.studio.isColorLocked) {
+					state.studio.isColorLocked = false;
+					state.studio.colorLockSource = null;
+				} else {
+					state.studio.isColorLocked = true;
+					state.studio.colorLockSource = state.canvas.getColor(
+						state.cursor.pos.x,
+						state.cursor.pos.y
+					);
+				}
+				return feedback.emit('READY');
 
 			default:
 				if (intent.startsWith('SELECT_COLOR_')) {

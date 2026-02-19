@@ -55,7 +55,9 @@
 	});
 
 	let totalDuration = $derived(editor.project.frames.reduce((acc, f) => acc + f.duration, 0));
-	let rulerMarks = $derived(AnimationLogic.getRulerMarks(totalDuration, editor.studio.timelineZoom));
+	let rulerMarks = $derived(
+		AnimationLogic.getRulerMarks(totalDuration, editor.studio.timelineZoom)
+	);
 	let trackWidth = $derived(
 		AnimationLogic.getTrackWidth(editor.project.frames, pxPerMs, MIN_BLOCK_WIDTH)
 	);

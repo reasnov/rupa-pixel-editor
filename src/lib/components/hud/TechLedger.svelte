@@ -5,6 +5,7 @@
 	import SessionTimer from './ledger/SessionTimer.svelte';
 	import SelectionInfo from './ledger/SelectionInfo.svelte';
 	import CanvasMetadata from './ledger/CanvasMetadata.svelte';
+	import EtchingIndicator from './ledger/EtchingIndicator.svelte';
 </script>
 
 <div
@@ -17,6 +18,8 @@
 		<div class="h-3 w-px bg-charcoal/20"></div>
 
 		<div class="flex items-center gap-3">
+			<EtchingIndicator />
+			<div class="h-3 w-px bg-charcoal/20"></div>
 			<SessionTimer />
 			<AtmosphereIndicator />
 			<div class="h-3 w-px bg-charcoal/20"></div>

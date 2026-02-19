@@ -1,4 +1,4 @@
-import { __ } from "$lib/state/i18n.svelte.js";
+import { __ } from '$lib/state/i18n.svelte.js';
 import { editor } from '../state/editor.svelte';
 import { keyboard } from './keyboard.svelte.js';
 import { sequence } from './sequence.svelte.js';
@@ -55,7 +55,7 @@ export class ModeEngine {
 			};
 		}
 
-		if (keyboard.isCtrlActive) {
+		if (keyboard.isCtrlActive || keyboard.isLDown || keyboard.isDDown || keyboard.isXDown) {
 			return {
 				type: 'PAINT',
 				label: __({ key: 'timeline.mode_labels.pouring' }),

@@ -1,18 +1,33 @@
 <script lang="ts">
 	import { editor } from '../../state/editor.svelte';
-	import { fade, fly } from 'svelte/transition';
+	import { fade, fly, scale } from 'svelte/transition';
+
+	const studio = editor.studio;
 </script>
 
 {#if editor.isCursorVisible}
 	<div transition:fade={{ duration: 800 }} class="cursor-container absolute inset-0">
 		<!-- The Editor Cursor (Inversion Petals) -->
-		<div class="cursor-bloom">
+		<div
+			class="cursor-bloom transition-transform duration-200"
+			style="transform: scale({studio.brushSize})"
+		>
 			<div class="petal p-top"></div>
 			<div class="petal p-bottom"></div>
 			<div class="petal p-left"></div>
 			<div class="petal p-right"></div>
 			<div class="center-dot"></div>
 		</div>
+
+		<!-- Status Indicators (Locks/Tiling) -->
+		{#if studio.isAlphaLocked || studio.isColorLocked}
+			<div
+				transition:scale
+				class="absolute -top-3 -right-3 flex items-center justify-center rounded-full border-2 border-white bg-brand p-1 text-[8px] font-bold text-white shadow-lg ring-1 ring-black/5"
+			>
+				🔒
+			</div>
+		{/if}
 
 		<!-- Picking Feedback (Barista Pin) -->
 		{#if editor.isPicking}

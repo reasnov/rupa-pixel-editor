@@ -2,29 +2,70 @@ import { editor } from '../../state/editor.svelte.js';
 import { sfx } from '../audio.js';
 import { history } from '../history.js';
 import { PixelEngine } from '../pixel.js';
+import { BrushLogic } from '../../logic/brush.js';
+import { PixelLogic } from '../../logic/pixel.js';
+import { keyboard } from '../keyboard.svelte.js';
+import { ColorEngine } from '../color.js';
 
 /**
  * DrawService: Manages the lifecycle of digital drawing and painting.
- * Uses PixelEngine for pixel math and ensures sequential processing.
  */
 export class DrawService {
 	draw(tx?: number, ty?: number) {
 		const x = tx !== undefined ? Math.floor(tx) : editor.cursor.pos.x;
 		const y = ty !== undefined ? Math.floor(ty) : editor.cursor.pos.y;
 
-		const index = editor.canvas.getIndex(x, y);
+		// 1. Expansion: Brush Kernel
+		const kernel = BrushLogic.getKernel(editor.studio.brushSize, editor.studio.brushShape);
+		const rawPoints = kernel.map((p) => ({ x: x + p.x, y: y + p.y }));
 
-		// Selection Masking: Only draw if index is in selection (if selection is active)
-		if (editor.selection.isActive && !editor.selection.activeIndicesSet.has(index)) return;
+		// 2. Reflection: Symmetry
+		if (editor.studio.symmetryMode !== 'OFF') {
+			const symMode = editor.studio.symmetryMode;
+			const { width, height } = editor.canvas;
+			const mirrored: Array<{ x: number; y: number }> = [];
 
-		const oldColor = editor.canvas.pixels[index];
-		const activeColor = editor.paletteState.activeColor;
+			rawPoints.forEach((p) => {
+				const points = PixelLogic.getSymmetryPoints(p.x, p.y, width, height, symMode);
+				mirrored.push(...points);
+			});
+			rawPoints.push(...mirrored);
+		}
 
-		if (oldColor !== activeColor) {
-			const currentPixels = [...editor.canvas.pixels];
-			currentPixels[index] = activeColor;
+		// 3. Wrapping & Application
+		const pointsToDraw = editor.studio.isTilingEnabled
+			? rawPoints.map((p) => PixelLogic.wrap(p.x, p.y, editor.canvas.width, editor.canvas.height))
+			: rawPoints.filter((p) => editor.canvas.isValidCoord(p.x, p.y));
+
+		const activeColor = this.getEffectColor(x, y);
+		const batch: Array<{ index: number; oldColor: string | null; newColor: string | null }> = [];
+		const currentPixels = [...editor.canvas.pixels];
+
+		pointsToDraw.forEach((p) => {
+			const index = editor.canvas.getIndex(p.x, p.y);
+
+			// Selection Masking
+			if (editor.selection.isActive && !editor.selection.activeIndicesSet.has(index)) return;
+
+			// Alpha Lock
+			if (editor.studio.isAlphaLocked && !editor.project.activeFrame.activeLayer.hasPixel(index))
+				return;
+
+			// Color Lock
+			if (editor.studio.isColorLocked && editor.studio.colorLockSource !== null) {
+				if (currentPixels[index] !== editor.studio.colorLockSource) return;
+			}
+
+			const oldColor = currentPixels[index];
+			if (oldColor !== activeColor) {
+				batch.push({ index, oldColor, newColor: activeColor });
+				currentPixels[index] = activeColor;
+			}
+		});
+
+		if (batch.length > 0) {
 			editor.canvas.pixels = currentPixels;
-			history.push({ index, oldColor, newColor: activeColor });
+			history.push(batch);
 			sfx.playDraw();
 		}
 	}
@@ -33,20 +74,71 @@ export class DrawService {
 		const x = tx !== undefined ? Math.floor(tx) : editor.cursor.pos.x;
 		const y = ty !== undefined ? Math.floor(ty) : editor.cursor.pos.y;
 
-		const index = editor.canvas.getIndex(x, y);
+		// 1. Expansion: Brush Kernel
+		const kernel = BrushLogic.getKernel(editor.studio.brushSize, editor.studio.brushShape);
+		const rawPoints = kernel.map((p) => ({ x: x + p.x, y: y + p.y }));
 
-		// Selection Masking: Only erase if index is in selection (if selection is active)
-		if (editor.selection.isActive && !editor.selection.activeIndicesSet.has(index)) return;
+		// 2. Reflection: Symmetry
+		if (editor.studio.symmetryMode !== 'OFF') {
+			const symMode = editor.studio.symmetryMode;
+			const { width, height } = editor.canvas;
+			const mirrored: Array<{ x: number; y: number }> = [];
 
-		const oldColor = editor.canvas.pixels[index];
+			rawPoints.forEach((p) => {
+				const points = PixelLogic.getSymmetryPoints(p.x, p.y, width, height, symMode);
+				mirrored.push(...points);
+			});
+			rawPoints.push(...mirrored);
+		}
 
-		if (oldColor !== null) {
-			const currentPixels = [...editor.canvas.pixels];
-			currentPixels[index] = null;
+		// 3. Wrapping & Application
+		const pointsToDraw = editor.studio.isTilingEnabled
+			? rawPoints.map((p) => PixelLogic.wrap(p.x, p.y, editor.canvas.width, editor.canvas.height))
+			: rawPoints.filter((p) => editor.canvas.isValidCoord(p.x, p.y));
+
+		const batch: Array<{ index: number; oldColor: string | null; newColor: string | null }> = [];
+		const currentPixels = [...editor.canvas.pixels];
+
+		pointsToDraw.forEach((p) => {
+			const index = editor.canvas.getIndex(p.x, p.y);
+
+			// Selection Masking
+			if (editor.selection.isActive && !editor.selection.activeIndicesSet.has(index)) return;
+
+			// Alpha Lock: Erase only if there is a pixel (implicit)
+			if (editor.studio.isAlphaLocked && !editor.project.activeFrame.activeLayer.hasPixel(index))
+				return;
+
+			const oldColor = currentPixels[index];
+			if (oldColor !== null) {
+				batch.push({ index, oldColor, newColor: null });
+				currentPixels[index] = null;
+			}
+		});
+
+		if (batch.length > 0) {
 			editor.canvas.pixels = currentPixels;
-			history.push({ index, oldColor, newColor: null });
+			history.push(batch);
 			sfx.playErase();
 		}
+	}
+
+	private getEffectColor(x: number, y: number): string | null {
+		const baseColor = editor.paletteState.activeColor;
+		const targetColor = editor.canvas.getColor(x, y);
+
+		// Dither
+		if (keyboard.isXDown) {
+			return (x + y) % 2 === 0 ? baseColor : null;
+		}
+
+		// Shading: Only works if there's an existing color
+		if (!targetColor) return baseColor;
+
+		if (keyboard.isLDown) return ColorEngine.adjustBrightness(targetColor, 0.1);
+		if (keyboard.isDDown) return ColorEngine.adjustBrightness(targetColor, -0.1);
+
+		return baseColor;
 	}
 
 	// --- Sequential Stroke Management (The Render) ---
@@ -152,19 +244,54 @@ export class DrawService {
 			return;
 		}
 
-		const activeColor = editor.paletteState.activeColor;
 		const batch: Array<{ index: number; oldColor: string | null; newColor: string | null }> = [];
 		const currentPixels = [...editor.canvas.pixels];
 
-		buffer.forEach((index) => {
-			// Selection Masking
-			if (editor.selection.isActive && !editor.selection.activeIndicesSet.has(index)) return;
+		const kernel = BrushLogic.getKernel(editor.studio.brushSize, editor.studio.brushShape);
 
-			const oldColor = currentPixels[index];
-			if (oldColor !== activeColor) {
-				batch.push({ index, oldColor, newColor: activeColor });
-				currentPixels[index] = activeColor;
+		buffer.forEach((idx) => {
+			const x = idx % editor.canvas.width;
+			const y = Math.floor(idx / editor.canvas.width);
+
+			// 1. Expansion: Brush Kernel
+			const rawPoints = kernel.map((p) => ({ x: x + p.x, y: y + p.y }));
+
+			// 2. Reflection: Symmetry
+			if (editor.studio.symmetryMode !== 'OFF') {
+				const symMode = editor.studio.symmetryMode;
+				const { width, height } = editor.canvas;
+				const mirrored: Array<{ x: number; y: number }> = [];
+
+				rawPoints.forEach((p) => {
+					const points = PixelLogic.getSymmetryPoints(p.x, p.y, width, height, symMode);
+					mirrored.push(...points);
+				});
+				rawPoints.push(...mirrored);
 			}
+
+			// 3. Wrapping & Application
+			const pointsToDraw = editor.studio.isTilingEnabled
+				? rawPoints.map((p) => PixelLogic.wrap(p.x, p.y, editor.canvas.width, editor.canvas.height))
+				: rawPoints.filter((p) => editor.canvas.isValidCoord(p.x, p.y));
+
+			const activeColor = this.getEffectColor(x, y);
+
+			pointsToDraw.forEach((p) => {
+				const index = editor.canvas.getIndex(p.x, p.y);
+
+				// Selection Masking
+				if (editor.selection.isActive && !editor.selection.activeIndicesSet.has(index)) return;
+
+				// Alpha Lock
+				if (editor.studio.isAlphaLocked && !editor.project.activeFrame.activeLayer.hasPixel(index))
+					return;
+
+				const oldColor = currentPixels[index];
+				if (oldColor !== activeColor) {
+					batch.push({ index, oldColor, newColor: activeColor });
+					currentPixels[index] = activeColor;
+				}
+			});
 		});
 
 		if (batch.length > 0) {

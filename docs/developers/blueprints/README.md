@@ -36,6 +36,15 @@ _Efficiency and automation: Flood fill, smart selection, and mathematical assist
 
 _Bringing pixels to life: Timeline management, onion skinning, and animation playback._
 
+### [09: Advanced Drawing Tools](./09-advanced-drawing-tools.md)
+
+_The Master Etcher's Kit: Brushes, symmetry, tiling, and shape vessels._
+
+### [10: Industrial Scale Performance](./10-industrial-scale-performance.md)
+
+_Scale and speed: Optimized rendering, color caching, and large-project handling._
+
 ---
+
 
 _Note: Blueprints are finalized once implemented but remain here as architectural reference._

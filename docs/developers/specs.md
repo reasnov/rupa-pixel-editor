@@ -15,28 +15,48 @@
 
 Every interaction is mapped to a `ActionIntent` to ensure semantic consistency. Intents are triggered by the **Keyboard** or the **Pointer Engine**.
 
-### 2.1 Navigation & Positioning
+### 2.1 Navigation & Viewport
 
 - `MOVE_UP`, `MOVE_DOWN`, `MOVE_LEFT`, `MOVE_RIGHT`: Keyboard-driven step movement.
 - `SET_POSITION`: Pointer-driven absolute positioning (Screen-to-Canvas mapping).
 - `JUMP_HOME`: Reset position to center.
+- `GOTO`: Jump to specific coordinate (**`Alt + J`**).
+- `PAN_VIEWPORT`: Free-form canvas panning (**`Q`**).
+- `ZOOM_IN`, `ZOOM_OUT`: Control viewport scale.
+- `TOGGLE_MINIMAP`: Show/Hide the **Minimap** (Surveyor's Glass).
 
-### 2.2 Action Intents
+### 2.2 Painting & Etching (Drawing Tools)
 
 - `PAINT`: Apply color (Space/Enter/Click).
 - `ERASE`: Remove color (Backspace/Delete/Right-click).
+- `BRUSH_SIZE_INC`, `BRUSH_SIZE_DEC`: Adjust brush diameter (**`[`** and **`]`**).
+- `TOGGLE_BRUSH_SHAPE`: Switch between Square and Circle vessels (**`Alt + B`**).
+- `CYCLE_SYMMETRY`: Toggle Horizontal, Vertical, and Quadrant symmetry (**`S`**).
+- `TOGGLE_TILING`: Enable seamless coordinate wrapping (**`T`**).
+- `TOGGLE_PIXEL_PERFECT`: Automated line cleaning (**`Shift + P`**).
+- `SHADE_LIGHTEN`, `SHADE_DARKEN`, `SHADE_DITHER`: Real-time color modification modifiers (**`L`**, **`D`**, **`X`**).
+- `TOGGLE_ALPHA_LOCK`, `TOGGLE_COLOR_LOCK`: Pixel protection modes (**`A`**, **`Shift + A`**).
+
+### 2.3 Manipulation & Magic
+
 - `UNDO`, `REDO`: History traversal.
 - `FLOOD_FILL`: Connected color fill.
 - `RECOLOR`: Global color replacement.
 - `SELECT_SAME`: Magic wand selection.
+- `TOOL_GRADIENT`: Linear ombre pouring.
+- `TOOL_RECTANGLE`, `TOOL_ELLIPSE`, `TOOL_POLYGON`: Geometric shape vessels.
+- `TOOL_TRANSFORM`: Nudge and reposition selected pixels.
 
-### 2.3 Continuous Flow Intents (Sustained Modifiers)
+### 2.4 Project & Layering (Order Management)
 
-- `FLOW_PAINT`: Continuous drawing (Ctrl + Movement/Drag).
-- `FLOW_ERASE`: Continuous erasing (Ctrl + Shift + Movement/Right-drag).
-- `FLOW_SELECT`: Area selection (Shift + Movement/Drag).
+- `NEW_ITEM`: Contextual creation of Frames or Infusions.
+- `DUPLICATE_ITEM`: Clone active selection or layer.
+- `DELETE_ITEM`: Remove active selection or layer.
+- `MOVE_ITEM_UP`, `MOVE_ITEM_DOWN`: Reorder Infusions (Layers) in the stack.
+- `MERGE_LAYERS`: Flatten an Infusion into the one below it.
+- `TOGGLE_LAYER_VISIBILITY`, `TOGGLE_LAYER_LOCK`: Manage Infusion properties.
 
-### 2.4 UI Intents
+### 2.5 UI & Environment Intents
 
 - `OPEN_MENU`: Show Command Palette (Ctrl+K).
 - `OPEN_PALETTE`: Show Color Picker (b).
@@ -44,8 +64,10 @@ Every interaction is mapped to a `ActionIntent` to ensure semantic consistency. 
 - `OPEN_EXPORT`: Show Export Menu (Ctrl+E).
 - `OPEN_MANUAL`: Show Barista Manual (F1).
 - `OPEN_HELP`: Show Quick Guide (F2).
+- `TOGGLE_GHOST_LAYERS`: Onion Skinning toggle.
+- `TOGGLE_UNDERLAY`: Reference image visibility toggle.
 
-### 2.5 Convention: Reserved Shortcuts
+### 2.6 Convention: Reserved Shortcuts
 
 To maintain cross-platform integrity, the following chord patterns are reserved for the OS/Browser:
 

@@ -32,8 +32,10 @@ _Historical and future development roadmaps._
 - [06: Project Management](./developers/blueprints/06-project-management.md)
 - [07: Geometric Logic](./developers/blueprints/07-geometric-logic.md)
 - [08: Timeline System](./developers/blueprints/08-timeline-system.md)
+- [09: Advanced Drawing Tools](./developers/blueprints/09-advanced-drawing-tools.md)
+- [10: Industrial Scale Performance](./developers/blueprints/10-industrial-scale-performance.md)
 
-### 6. [Release Notes](./pubs/releases/v0.7.0.md)
+### 6. [Release Notes](./pubs/releases/v0.8.0.md)
 
 _Latest milestone highlights and changes._
 

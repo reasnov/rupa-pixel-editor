@@ -38,10 +38,15 @@ The state uses a hierarchical tree structure:
 
 - **Coordinator:** `ServiceCoordinator` (`services`) in `src/lib/engine/services.ts`.
 - **Operations:** Supports reordering frames/layers, merging layers, and cross-frame clipboard actions.
+- **Batch Processing:** Multi-selection support for layers, enabling bulk visibility toggling and movement.
 
 ---
 
 ## 5. Interaction Design
 
 - **Sidebar:** Managed via `FrameSidebar.svelte` and `FramePanel.svelte`.
-- **Composite Rendering:** `FrameState.compositePixels` caches the flattened pixel array for display.
+- **Properties Panel:** `PropertiesPanel.svelte` handles per-layer settings like visibility, lock state, and opacity.
+- **Context Menus:** Right-click support on layers for quick manipulation (duplicate, merge, delete).
+- **Minimap:** The **Minimap** (Surveyor's Glass) is housed in the `FrameSidebar.svelte` (Left) to provide a global view alongside the layer stack.
+- **Composite Rendering:** `FrameState.compositePixels` caches the flattened pixel array for display, utilizing a reactive color cache for zero-latency updates.
+

@@ -108,9 +108,11 @@ The "Brain" of the application. This layer contains pure, side-effect-free algor
 The HUD follows a solid container architecture (similar to professional editors like Figma):
 
 - **Editor Header (Top)**: Central command center for identity, tools, and project metadata.
-- **Frame Sidebar (Left)**: Management of **Frames** (Cups) and **Layers** (Infusions). Supports Drag-and-Drop.
+- **Frame Sidebar (Left)**: Management of **Frames** (Cups) and **Layers** (Infusions). Includes the **Minimap** (Surveyor's Glass) at the top and support for Drag-and-Drop.
 - **Inspector Sidebar (Right)**: Property panels for **Color** (Flavor) selection, history, and cursor statistics.
+- **Properties Panel (Contextual)**: Specialized panel for fine-tuning **Infusion** (Layer) properties like opacity and blend modes.
 - **Status Footer (Bottom)**: Houses the **TechLedger** with modular indicators for Modes, Working Time, and Ambiance status.
+
 
 ### 5.2 The Camera Protocol
 

@@ -29,8 +29,8 @@ The project is built on Svelte 5. You MUST:
 When adding new interactions:
 
 - Do not add raw `keydown` listeners to components.
-- Map interactions to a `ActionIntent` in `src/lib/engine/enginepad.svelte.ts`.
-- Ensure the `StanceEngine` is updated if the interaction introduces a new behavioral mode.
+- Map interactions to a `ActionIntent` in `src/lib/config/shortcuts.json` and ensure the `InputEngine` correctly processes them.
+- Verify the `ModeEngine` if the interaction introduces a new behavioral state or mode.
 
 ### 2.3 Documentation Integrity
 

@@ -386,7 +386,7 @@
 
 					<!-- Frame Properties Accordion -->
 					{#if activePropertiesType === 'frame' && activePropertiesIndex === i}
-						<PropertiesPanel target={frame} margin="24px" />
+						<PropertiesPanel target={frame} />
 					{/if}
 				{/each}
 			</div>
@@ -516,7 +516,6 @@
 																																	{#if activePropertiesType === 'layer' && activePropertiesIndex === i}
 																																		<PropertiesPanel
 																																			target={layer}
-																																			margin={isChild ? '24px' : '12px'}
 																																		/>
 																																	{/if}
 																																{/if}				{/each}

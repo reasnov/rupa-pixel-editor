@@ -10,6 +10,8 @@ export class StudioState {
 	isAmbientPlaying = $state(true);
 	isAppReady = $state(false);
 	isPicking = $state(false);
+	isTimelineMinimized = $state(false);
+	isTimelineMaximized = $state(false);
 
 	// Master Etching (v0.8.0)
 	brushSize = $state(1); // 1 to 100

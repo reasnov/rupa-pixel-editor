@@ -74,15 +74,15 @@ export class AmbientEngine {
 		this.pianoPluck(freq, time);
 
 		// Subtle Harmonic Overtone
-		this.pianoPluck(freq * 2, time, 0.02);
+		this.pianoPluck(freq * 2, time, 0.08);
 
 		// Occasionally play a second soft note (harmony)
 		if (Math.random() > 0.7) {
-			this.pianoPluck(freq * 0.5, time + 0.05, 0.03); // Sub-octave
+			this.pianoPluck(freq * 0.5, time + 0.05, 0.1); // Sub-octave
 		}
 	}
 
-	private pianoPluck(freq: number, time: number, volume = 0.06) {
+	private pianoPluck(freq: number, time: number, volume = 0.3) {
 		// --- Generative Volume Logic (Data Driven) ---
 		const { startMins, fullMins } = audioConfig.ambient.fade;
 		const minutes = editor.usageMinutes;

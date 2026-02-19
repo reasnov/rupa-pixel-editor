@@ -42,6 +42,14 @@ export class PointerEngine {
 		const pos = this.mapToGrid(e.clientX, e.clientY, canvasElement);
 		this.lastPosition = { x: pos.x, y: pos.y };
 
+		// Quick Navigation: CTRL + CLICK to Jump To without drawing
+		if (e.ctrlKey || e.metaKey) {
+			state.cursor.pos = { x: Math.floor(pos.x), y: Math.floor(pos.y) };
+			this.isPointerDown = false; // Prevent further move/end logic
+			this.isPointerDownActive = false;
+			return;
+		}
+
 		const currentMode = mode.current.type;
 		if (currentMode === 'PAN') return;
 

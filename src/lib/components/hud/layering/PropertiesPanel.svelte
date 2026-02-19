@@ -2,9 +2,8 @@
 	import { __ } from '$lib/state/i18n.svelte.js';
 	import { fade } from 'svelte/transition';
 
-	let { target, margin = '0px' } = $props<{
+	let { target } = $props<{
 		target: any;
-		margin?: string;
 	}>();
 
 	let isLayer = $derived('isLinked' in target);
@@ -14,7 +13,6 @@
 <div
 	transition:fade={{ duration: 100 }}
 	class="mb-2 mr-2 flex flex-col gap-3 rounded-b-lg border-x border-b border-charcoal/5 bg-charcoal/[0.02] p-3 pt-1"
-	style="margin-left: {margin};"
 >
 	<!-- Common: Opacity -->
 	<div class="flex items-center justify-between gap-4">

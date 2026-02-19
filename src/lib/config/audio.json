@@ -17,8 +17,8 @@
 			[116.54, 174.61, 233.08, 349.23]
 		],
 		"fade": {
-			"startMins": 30,
-			"fullMins": 60
+			"startMins": 20,
+			"fullMins": 50
 		}
 	}
 }

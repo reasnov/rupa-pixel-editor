@@ -19,6 +19,7 @@
 
 	let format = $state<'svg' | 'png' | 'jpg' | 'webp' | 'webm' | 'gif' | 'mp4'>('png');
 	let showPicker = $state(false);
+	let isCustomSelected = $state(false);
 
 	let customBg = $state(editor.backgroundColor);
 
@@ -26,15 +27,12 @@
 		if (editor.backgroundColor !== '#eee8d5') {
 			editor.studio.exportBgColor = editor.backgroundColor;
 			customBg = editor.backgroundColor;
+			isCustomSelected = true;
 		}
 	});
 
 	$effect(() => {
-		if (
-			editor.studio.exportBgColor !== 'transparent' &&
-			editor.studio.exportBgColor !== '#eee8d5' &&
-			editor.studio.exportBgColor !== '#000000'
-		) {
+		if (isCustomSelected) {
 			editor.studio.exportBgColor = customBg;
 		}
 	});
@@ -359,7 +357,10 @@
 								? 'border-brand'
 								: 'border-black/5'}"
 							style="background: repeating-conic-gradient(#eee8d5 0% 25%, #fff 0% 50%) 50% / 10px 10px;"
-							onclick={() => (editor.studio.exportBgColor = 'transparent')}
+							onclick={() => {
+								editor.studio.exportBgColor = 'transparent';
+								isCustomSelected = false;
+							}}
 							title={__({ key: 'export.bg_transparent' })}
 							role="radio"
 							aria-checked={editor.studio.exportBgColor === 'transparent'}
@@ -368,7 +369,10 @@
 							class="h-10 w-10 rounded-xl border-2 {editor.studio.exportBgColor === '#eee8d5'
 								? 'border-brand'
 								: 'border-black/5'} bg-[#eee8d5]"
-							onclick={() => (editor.studio.exportBgColor = '#eee8d5')}
+							onclick={() => {
+								editor.studio.exportBgColor = '#eee8d5';
+								isCustomSelected = false;
+							}}
 							title={__({ key: 'export.bg_cream' })}
 							role="radio"
 							aria-checked={editor.studio.exportBgColor === '#eee8d5'}
@@ -377,7 +381,10 @@
 							class="h-10 w-10 rounded-xl border-2 {editor.studio.exportBgColor === '#000000'
 								? 'border-brand'
 								: 'border-black/5'} bg-black"
-							onclick={() => (editor.studio.exportBgColor = '#000000')}
+							onclick={() => {
+								editor.studio.exportBgColor = '#000000';
+								isCustomSelected = false;
+							}}
 							title={__({ key: 'export.bg_black' })}
 							role="radio"
 							aria-checked={editor.studio.exportBgColor === '#000000'}
@@ -385,17 +392,18 @@
 
 						<div class="flex items-center gap-2">
 							<button
-								class="h-10 w-16 rounded-xl border-2 {editor.studio.exportBgColor === customBg
+								class="h-10 w-16 rounded-xl border-2 {isCustomSelected
 									? 'border-brand'
 									: 'border-black/5'} editor-checker-small transition-transform hover:scale-105"
 								style="background-color: {customBg};"
 								onclick={() => {
+									isCustomSelected = true;
 									editor.studio.exportBgColor = customBg;
 									showPicker = true;
 								}}
 								title={__({ key: 'export.bg_custom' })}
 								role="radio"
-								aria-checked={editor.studio.exportBgColor === customBg}
+								aria-checked={isCustomSelected}
 							></button>
 						</div>
 					</div>

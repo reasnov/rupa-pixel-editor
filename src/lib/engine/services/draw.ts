@@ -6,6 +6,7 @@ import { BrushLogic } from '../../logic/brush.js';
 import { PixelLogic } from '../../logic/pixel.js';
 import { keyboard } from '../keyboard.svelte.js';
 import { ColorEngine } from '../color.js';
+import { mode } from '../mode.svelte.js';
 
 /**
  * DrawService: Manages the lifecycle of digital drawing and painting.
@@ -45,21 +46,23 @@ export class DrawService {
 						)
 							continue;
 
+						const isEraser = mode.current.type === 'ERASE';
+						const finalColor = isEraser ? null : color;
+
 						const oldColor = currentPixels[index];
-						if (oldColor !== color) {
-							batch.push({ index, oldColor, newColor: color });
-							currentPixels[index] = color;
+						if (oldColor !== finalColor) {
+							batch.push({ index, oldColor, newColor: finalColor });
+							currentPixels[index] = finalColor;
 						}
 					}
 				}
 			}
 		} else {
 			// --- Standard Brush Logic ---
-			// 1. Expansion: Brush Kernel
 			const kernel = BrushLogic.getKernel(editor.studio.brushSize, editor.studio.brushShape);
 			const rawPoints = kernel.map((p) => ({ x: x + p.x, y: y + p.y }));
 
-			// 2. Reflection: Symmetry
+			// Reflection: Symmetry
 			if (editor.studio.symmetryMode !== 'OFF') {
 				const symMode = editor.studio.symmetryMode;
 				const { width, height } = editor.canvas;
@@ -72,12 +75,10 @@ export class DrawService {
 				rawPoints.push(...mirrored);
 			}
 
-			// 3. Wrapping & Application
+			// Wrapping & Application
 			const pointsToDraw = editor.studio.isTilingEnabled
 				? rawPoints.map((p) => PixelLogic.wrap(p.x, p.y, editor.canvas.width, editor.canvas.height))
 				: rawPoints.filter((p) => editor.canvas.isValidCoord(p.x, p.y));
-
-			const activeColor = this.getEffectColor(x, y);
 
 			pointsToDraw.forEach((p) => {
 				const index = editor.canvas.getIndex(p.x, p.y);
@@ -94,7 +95,9 @@ export class DrawService {
 					if (currentPixels[index] !== editor.studio.colorLockSource) return;
 				}
 
+				const activeColor = this.getEffectColorForPoint(p.x, p.y, currentPixels[index]);
 				const oldColor = currentPixels[index];
+
 				if (oldColor !== activeColor) {
 					batch.push({ index, oldColor, newColor: activeColor });
 					currentPixels[index] = activeColor;
@@ -105,7 +108,8 @@ export class DrawService {
 		if (batch.length > 0) {
 			editor.canvas.pixels = currentPixels;
 			history.push(batch);
-			sfx.playDraw();
+			if (mode.current.type === 'ERASE') sfx.playErase();
+			else sfx.playDraw();
 		}
 	}
 
@@ -113,11 +117,9 @@ export class DrawService {
 		const x = tx !== undefined ? Math.floor(tx) : editor.cursor.pos.x;
 		const y = ty !== undefined ? Math.floor(ty) : editor.cursor.pos.y;
 
-		// 1. Expansion: Brush Kernel
 		const kernel = BrushLogic.getKernel(editor.studio.brushSize, editor.studio.brushShape);
 		const rawPoints = kernel.map((p) => ({ x: x + p.x, y: y + p.y }));
 
-		// 2. Reflection: Symmetry
 		if (editor.studio.symmetryMode !== 'OFF') {
 			const symMode = editor.studio.symmetryMode;
 			const { width, height } = editor.canvas;
@@ -130,7 +132,6 @@ export class DrawService {
 			rawPoints.push(...mirrored);
 		}
 
-		// 3. Wrapping & Application
 		const pointsToDraw = editor.studio.isTilingEnabled
 			? rawPoints.map((p) => PixelLogic.wrap(p.x, p.y, editor.canvas.width, editor.canvas.height))
 			: rawPoints.filter((p) => editor.canvas.isValidCoord(p.x, p.y));
@@ -141,10 +142,8 @@ export class DrawService {
 		pointsToDraw.forEach((p) => {
 			const index = editor.canvas.getIndex(p.x, p.y);
 
-			// Selection Masking
 			if (editor.selection.isActive && !editor.selection.activeIndicesSet.has(index)) return;
 
-			// Alpha Lock: Erase only if there is a pixel (implicit)
 			if (editor.studio.isAlphaLocked && !editor.project.activeFrame.activeLayer.hasPixel(index))
 				return;
 
@@ -162,25 +161,24 @@ export class DrawService {
 		}
 	}
 
-	private getEffectColor(x: number, y: number): string | null {
-		const baseColor = editor.paletteState.activeColor;
-		const targetColor = editor.canvas.getColor(x, y);
+	private getEffectColorForPoint(x: number, y: number, targetColor: string | null): string | null {
+		if (mode.current.type === 'ERASE') return null;
 
-		// Dither
-		if (keyboard.isXDown) {
+		const baseColor = editor.paletteState.activeColor;
+
+		if (keyboard.isXDown || editor.studio.isShadingDither) {
 			return (x + y) % 2 === 0 ? baseColor : null;
 		}
 
-		// Shading: Only works if there's an existing color
 		if (!targetColor) return baseColor;
 
-		if (keyboard.isLDown) return ColorEngine.adjustBrightness(targetColor, 0.1);
-		if (keyboard.isDDown) return ColorEngine.adjustBrightness(targetColor, -0.1);
+		if (keyboard.isLDown || editor.studio.isShadingLighten)
+			return ColorEngine.adjustBrightness(targetColor, 0.1);
+		if (keyboard.isDDown || editor.studio.isShadingDarken)
+			return ColorEngine.adjustBrightness(targetColor, -0.1);
 
 		return baseColor;
 	}
-
-	// --- Sequential Stroke Management (The Render) ---
 
 	beginStroke(x: number, y: number) {
 		editor.canvas.clearBuffer();
@@ -193,8 +191,6 @@ export class DrawService {
 		if (editor.studio.isPixelPerfect) {
 			const currentPath = [...editor.canvas.strokePoints, ...points];
 			const filtered = PixelLogic.pixelPerfectFilter(currentPath);
-
-			// Re-sync the entire buffer for the filtered path
 			editor.canvas.clearBuffer();
 			editor.canvas.addBatchToBuffer(filtered);
 		} else {
@@ -211,9 +207,6 @@ export class DrawService {
 		sfx.playErase();
 	}
 
-	/**
-	 * Path Smoothing: Snaps current buffer to perfect geometric forms.
-	 */
 	snapCurrentStroke() {
 		const rawPoints = editor.canvas.strokePoints;
 		if (rawPoints.length < 5) return;
@@ -325,10 +318,13 @@ export class DrawService {
 							)
 								continue;
 
+							const isEraser = mode.current.type === 'ERASE';
+							const finalColor = isEraser ? null : color;
+
 							const oldColor = currentPixels[index];
-							if (oldColor !== color) {
-								batch.push({ index, oldColor, newColor: color });
-								currentPixels[index] = color;
+							if (oldColor !== finalColor) {
+								batch.push({ index, oldColor, newColor: finalColor });
+								currentPixels[index] = finalColor;
 							}
 						}
 					}
@@ -341,10 +337,8 @@ export class DrawService {
 				const x = idx % editor.canvas.width;
 				const y = Math.floor(idx / editor.canvas.width);
 
-				// 1. Expansion: Brush Kernel
 				const rawPoints = kernel.map((p) => ({ x: x + p.x, y: y + p.y }));
 
-				// 2. Reflection: Symmetry
 				if (editor.studio.symmetryMode !== 'OFF') {
 					const symMode = editor.studio.symmetryMode;
 					const { width, height } = editor.canvas;
@@ -357,28 +351,24 @@ export class DrawService {
 					rawPoints.push(...mirrored);
 				}
 
-				// 3. Wrapping & Application
 				const pointsToDraw = editor.studio.isTilingEnabled
 					? rawPoints.map((p) =>
 							PixelLogic.wrap(p.x, p.y, editor.canvas.width, editor.canvas.height)
 						)
 					: rawPoints.filter((p) => editor.canvas.isValidCoord(p.x, p.y));
 
-				const activeColor = this.getEffectColor(x, y);
-
 				pointsToDraw.forEach((p) => {
 					const index = editor.canvas.getIndex(p.x, p.y);
 
-					// Selection Masking
 					if (editor.selection.isActive && !editor.selection.activeIndicesSet.has(index)) return;
 
-					// Alpha Lock
 					if (
 						editor.studio.isAlphaLocked &&
 						!editor.project.activeFrame.activeLayer.hasPixel(index)
 					)
 						return;
 
+					const activeColor = this.getEffectColorForPoint(p.x, p.y, currentPixels[index]);
 					const oldColor = currentPixels[index];
 					if (oldColor !== activeColor) {
 						batch.push({ index, oldColor, newColor: activeColor });
@@ -391,7 +381,8 @@ export class DrawService {
 		if (batch.length > 0) {
 			editor.canvas.pixels = currentPixels;
 			history.push(batch);
-			sfx.playDraw();
+			if (mode.current.type === 'ERASE') sfx.playErase();
+			else sfx.playDraw();
 		}
 		editor.canvas.clearBuffer();
 	}

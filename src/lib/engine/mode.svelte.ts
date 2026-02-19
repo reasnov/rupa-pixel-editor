@@ -35,7 +35,10 @@ export class ModeEngine {
 			};
 		}
 
-		if (keyboard.isCtrlActive && keyboard.isShiftActive) {
+		if (
+			(keyboard.isCtrlActive && keyboard.isShiftActive) ||
+			editor.studio.activeTool === 'ERASER'
+		) {
 			return {
 				type: 'ERASE',
 				label: __({ key: 'timeline.mode_labels.clearing' }),
@@ -55,7 +58,15 @@ export class ModeEngine {
 			};
 		}
 
-		if (keyboard.isCtrlActive || keyboard.isLDown || keyboard.isDDown || keyboard.isXDown) {
+		if (
+			keyboard.isCtrlActive ||
+			keyboard.isLDown ||
+			keyboard.isDDown ||
+			keyboard.isXDown ||
+			editor.studio.isShadingLighten ||
+			editor.studio.isShadingDarken ||
+			editor.studio.isShadingDither
+		) {
 			return {
 				type: 'PAINT',
 				label: __({ key: 'timeline.mode_labels.pouring' }),

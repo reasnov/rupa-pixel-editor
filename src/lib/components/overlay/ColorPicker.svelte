@@ -49,7 +49,7 @@
 	>
 		<div class="flex items-center justify-between">
 			<div class="flex items-center gap-4">
-				<span class="text-3xl" aria-hidden="true"> Fountain </span>
+				<span class="text-3xl" aria-hidden="true"> ⛲ </span>
 				<div class="flex flex-col">
 					<h2 id="flavor-basin-title" class="font-tiny5 text-3xl leading-none text-brand">
 						{__({ key: 'color_picker.title' })}
@@ -71,6 +71,7 @@
 		<div class="flex flex-col gap-6">
 			<ColorSlider
 				label={__({ key: 'color_picker.sliders.hue' })}
+				icon="🌈"
 				bind:value={h}
 				max={360}
 				unit="°"
@@ -78,18 +79,21 @@
 			/>
 			<ColorSlider
 				label={__({ key: 'color_picker.sliders.saturation' })}
+				icon="🏺"
 				bind:value={s}
 				max={100}
 				unit="%"
 			/>
 			<ColorSlider
 				label={__({ key: 'color_picker.sliders.lightness' })}
+				icon="☀️"
 				bind:value={l}
 				max={100}
 				unit="%"
 			/>
 			<ColorSlider
 				label={__({ key: 'color_picker.sliders.alpha' })}
+				icon="💧"
 				bind:value={a}
 				min={0}
 				max={1}

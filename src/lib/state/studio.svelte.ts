@@ -21,8 +21,12 @@ export class StudioState {
 	isPixelPerfect = $state(false);
 	colorLockSource = $state<string | null>(null);
 
-	activeTool = $state<'NONE' | 'RECTANGLE' | 'ELLIPSE' | 'GRADIENT'>('NONE');
+	activeTool = $state<'BRUSH' | 'ERASER' | 'RECTANGLE' | 'ELLIPSE' | 'POLYGON' | 'GRADIENT'>(
+		'BRUSH'
+	);
 	shapeAnchor = $state<{ x: number; y: number } | null>(null);
+	polygonSides = $state(3); // 3 to 12
+	polygonIndentation = $state(0); // 0 to 100 (percentage)
 
 	// Gradient (Wave III)
 	gradientStartColor = $state<string | null>(null);
@@ -76,6 +80,11 @@ export class StudioState {
 
 	isTransforming = $state(false);
 
+	// Shading & Toning (v0.8.0 Mouse Support)
+	isShadingLighten = $state(false);
+	isShadingDarken = $state(false);
+	isShadingDither = $state(false);
+
 	// Pattern Brush (Wave III)
 	isPatternBrushActive = $state(false);
 	patternBrushData = $state<{
@@ -86,6 +95,20 @@ export class StudioState {
 
 	// Tab States
 	projectActiveTab = $state<'frames' | 'layers'>('layers');
+
+	// HUD Feedback (Toasts)
+	toastMessage = $state('');
+	showToast = $state(false);
+	private toastTimer: any = null;
+
+	show(message: string) {
+		this.toastMessage = message;
+		this.showToast = true;
+		if (this.toastTimer) clearTimeout(this.toastTimer);
+		this.toastTimer = setTimeout(() => {
+			this.showToast = false;
+		}, 2000);
+	}
 
 	// Environment Settings
 	backgroundColor = $state('#eee8d5');

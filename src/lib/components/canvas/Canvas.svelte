@@ -192,7 +192,7 @@
 				></canvas>
 
 				<!-- Shape Preview Layer (Geometric Stance) -->
-				{#if editor.studio.activeTool !== 'NONE' && editor.studio.shapeAnchor}
+				{#if editor.studio.activeTool !== 'BRUSH' && editor.studio.shapeAnchor}
 					{@const anchor = editor.studio.shapeAnchor}
 					{@const cursor = editor.cursor.pos}
 					{@const x1 = Math.min(anchor.x, cursor.x)}
@@ -248,6 +248,61 @@
 								fill="none"
 								stroke="var(--color-brand)"
 								stroke-width="0.05"
+							/>
+						{:else if editor.studio.activeTool === 'POLYGON'}
+							{@const xc = (anchor.x + cursor.x) / 2}
+							{@const yc = (anchor.y + cursor.y) / 2}
+							{@const r =
+								Math.max(Math.abs(cursor.x - anchor.x), Math.abs(cursor.y - anchor.y)) / 2}
+							{@const sides = editor.studio.polygonSides}
+							{@const indent = editor.studio.polygonIndentation}
+							{@const polyPoints = Array.from({ length: indent > 0 ? sides * 2 : sides }).map(
+								(_, i) => {
+									const angle = -Math.PI / 2 + (i * 2 * Math.PI) / (indent > 0 ? sides * 2 : sides);
+									const currentR = indent > 0 ? (i % 2 === 0 ? r : r * (1 - indent / 100)) : r;
+									return `${xc + 0.5 + Math.cos(angle) * currentR},${yc + 0.5 + Math.sin(angle) * currentR}`;
+								}
+							)}
+							<polyline
+								points={polyPoints.join(' ')}
+								fill="none"
+								stroke="var(--color-brand)"
+								stroke-width="0.1"
+								stroke-dasharray="0.2, 0.2"
+								class="marching-ants"
+							/>
+							<!-- Connect last to first -->
+							<line
+								x1={xc +
+									0.5 +
+									Math.cos(
+										-Math.PI / 2 +
+											(((indent > 0 ? sides * 2 : sides) - 1) * 2 * Math.PI) /
+												(indent > 0 ? sides * 2 : sides)
+									) *
+										(indent > 0
+											? ((indent > 0 ? sides * 2 : sides) - 1) % 2 === 0
+												? r
+												: r * (1 - indent / 100)
+											: r)}
+								y1={yc +
+									0.5 +
+									Math.sin(
+										-Math.PI / 2 +
+											(((indent > 0 ? sides * 2 : sides) - 1) * 2 * Math.PI) /
+												(indent > 0 ? sides * 2 : sides)
+									) *
+										(indent > 0
+											? ((indent > 0 ? sides * 2 : sides) - 1) % 2 === 0
+												? r
+												: r * (1 - indent / 100)
+											: r)}
+								x2={xc + 0.5 + Math.cos(-Math.PI / 2) * r}
+								y2={yc + 0.5 + Math.sin(-Math.PI / 2) * r}
+								stroke="var(--color-brand)"
+								stroke-width="0.1"
+								stroke-dasharray="0.2, 0.2"
+								class="marching-ants"
 							/>
 						{/if}
 					</svg>

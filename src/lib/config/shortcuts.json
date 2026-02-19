@@ -194,12 +194,12 @@
 		},
 		"MOVE_LAYER_UP": {
 			"label": "Move Layer Up",
-			"keys": ["Alt+["],
+			"keys": ["Ctrl+ArrowUp"],
 			"group": "Layers"
 		},
 		"MOVE_LAYER_DOWN": {
 			"label": "Move Layer Down",
-			"keys": ["Alt+]"],
+			"keys": ["Ctrl+ArrowDown"],
 			"group": "Layers"
 		},
 		"MERGE_LAYERS": {
@@ -279,6 +279,16 @@
 			"keys": ["Shift+p"],
 			"group": "Etching"
 		},
+		"TOOL_BRUSH": {
+			"label": "Brush Tool",
+			"keys": ["Shift+b"],
+			"group": "Etching"
+		},
+		"TOOL_ERASER": {
+			"label": "Eraser Tool",
+			"keys": ["e"],
+			"group": "Etching"
+		},
 		"TOOL_RECTANGLE": {
 			"label": "Rectangle Tool",
 			"keys": ["Alt+r"],
@@ -289,6 +299,39 @@
 			"keys": ["Alt+c"],
 			"group": "Etching"
 		},
+		"TOOL_POLYGON": {
+			"label": "Polygon Tool",
+			"keys": ["Alt+p"],
+			"group": "Etching"
+		},
+		"POLY_SIDES_INC": {
+			"label": "Increase Polygon Sides",
+			"keys": ["Alt+."],
+			"group": "Etching"
+		},
+		"POLY_SIDES_DEC": {
+			"label": "Decrease Polygon Sides",
+			"keys": ["Alt+,"],
+			"group": "Etching"
+		},
+		"POLY_INDENT_INC": {
+			"label": "Increase Indentation",
+			"keys": ["Ctrl+]"],
+			"group": "Etching"
+		},
+		"POLY_INDENT_DEC": {
+			"label": "Decrease Indentation",
+			"keys": ["Ctrl+["],
+			"group": "Etching"
+		},
+		"SET_SIDES_3": { "label": "Set Sides: 3", "keys": ["Alt+3"], "group": "Etching" },
+		"SET_SIDES_4": { "label": "Set Sides: 4", "keys": ["Alt+4"], "group": "Etching" },
+		"SET_SIDES_5": { "label": "Set Sides: 5", "keys": ["Alt+5"], "group": "Etching" },
+		"SET_SIDES_6": { "label": "Set Sides: 6", "keys": ["Alt+6"], "group": "Etching" },
+		"SET_SIDES_7": { "label": "Set Sides: 7", "keys": ["Alt+7"], "group": "Etching" },
+		"SET_SIDES_8": { "label": "Set Sides: 8", "keys": ["Alt+8"], "group": "Etching" },
+		"SET_SIDES_9": { "label": "Set Sides: 9", "keys": ["Alt+9"], "group": "Etching" },
+		"SET_SIDES_10": { "label": "Set Sides: 10", "keys": ["Alt+0"], "group": "Etching" },
 		"TOGGLE_UNDERLAY": {
 			"label": "Toggle Underlay Visibility",
 			"keys": ["Ctrl+Alt+u"],

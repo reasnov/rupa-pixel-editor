@@ -22,8 +22,8 @@
 					: 'border border-charcoal/5 opacity-80 hover:scale-105 hover:opacity-100'}"
 				style="background-color: {color};"
 				onclick={() => services.color.select(i)}
-				aria-label={__({ key: `shortcut_labels.SELECT_COLOR_${(i + 1) % 10}` })}
-				title={__({ key: `shortcut_labels.SELECT_COLOR_${(i + 1) % 10}` }) + ` (${(i + 1) % 10})`}
+				aria-label={__({ key: `labels.SELECT_COLOR_${(i + 1) % 10}` })}
+				title={__({ key: `labels.SELECT_COLOR_${(i + 1) % 10}` }) + ` (${(i + 1) % 10})`}
 				role="radio"
 				aria-checked={editor.activeColor === color}
 			></button>

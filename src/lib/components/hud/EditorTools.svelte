@@ -15,7 +15,7 @@
 			<button
 				class="editor-tool-btn"
 				onclick={() => editor.handleIntent('OPEN_MENU')}
-				title={__({ key: 'shortcut_labels.OPEN_MENU' }) + ' (Ctrl+K)'}
+				title={__({ key: 'labels.OPEN_MENU' }) + ' (Ctrl+K)'}
 			>
 				<span aria-hidden="true">📖</span>
 				{__({ key: 'hud.menu.catalog_title' })}
@@ -23,7 +23,7 @@
 			<button
 				class="editor-tool-btn"
 				onclick={() => editor.handleIntent('OPEN_EXPORT')}
-				title={__({ key: 'shortcut_labels.OPEN_EXPORT' }) + ' (Ctrl+E)'}
+				title={__({ key: 'labels.OPEN_EXPORT' }) + ' (Ctrl+E)'}
 			>
 				<span aria-hidden="true">🧺</span>
 				{__({ key: 'hud.actions.save_project' })}
@@ -37,23 +37,23 @@
 			<button
 				class="editor-tool-btn"
 				onclick={() => editor.handleIntent('FLOOD_FILL')}
-				title={__({ key: 'shortcut_labels.FLOOD_FILL' }) + ' (F)'}
+				title={__({ key: 'labels.FLOOD_FILL' }) + ' (F)'}
 			>
 				<span aria-hidden="true">💧</span>
-				{__({ key: 'shortcut_labels.FLOOD_FILL' })}
+				{__({ key: 'labels.FLOOD_FILL' })}
 			</button>
 			<button
 				class="editor-tool-btn"
 				onclick={() => editor.handleIntent('SELECT_SAME')}
-				title={__({ key: 'shortcut_labels.SELECT_SAME' }) + ' (W)'}
+				title={__({ key: 'labels.SELECT_SAME' }) + ' (W)'}
 			>
 				<span aria-hidden="true">🪄</span>
-				{__({ key: 'shortcut_labels.SELECT_SAME' })}
+				{__({ key: 'labels.SELECT_SAME' })}
 			</button>
 			<button
 				class="editor-tool-btn"
 				onclick={() => editor.handleIntent('ROTATE')}
-				title={__({ key: 'shortcut_labels.ROTATE' }) + ' (R)'}
+				title={__({ key: 'labels.ROTATE' }) + ' (R)'}
 			>
 				<span aria-hidden="true">🔄</span>
 			</button>
@@ -66,7 +66,7 @@
 			<button
 				class="editor-tool-btn"
 				onclick={() => editor.handleIntent('CLEAR_CANVAS')}
-				title={__({ key: 'shortcut_labels.CLEAR_CANVAS' }) + ' (Ctrl+L)'}
+				title={__({ key: 'labels.CLEAR_CANVAS' }) + ' (Ctrl+L)'}
 			>
 				<span aria-hidden="true">🌿</span>
 				{__({ key: 'hud.actions.clear_canvas' })}
@@ -74,7 +74,7 @@
 			<button
 				class="editor-tool-btn"
 				onclick={() => editor.handleIntent('TOGGLE_MUTE')}
-				title={__({ key: 'shortcut_labels.TOGGLE_MUTE' }) + ' (Ctrl+M)'}
+				title={__({ key: 'labels.TOGGLE_MUTE' }) + ' (Ctrl+M)'}
 			>
 				<span aria-hidden="true">{state.isMuted ? '🔇' : '🔊'}</span>
 				{state.isMuted

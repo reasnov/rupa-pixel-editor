@@ -1,6 +1,7 @@
 <script lang="ts">
 	let {
 		label,
+		icon,
 		value = $bindable(),
 		min = 0,
 		max,
@@ -9,6 +10,7 @@
 		isHue = false
 	} = $props<{
 		label: string;
+		icon: string;
 		value: number;
 		min?: number;
 		max: number;
@@ -22,7 +24,10 @@
 	<div
 		class="flex justify-between font-serif text-[10px] font-bold tracking-wider uppercase opacity-40"
 	>
-		<span>{label}</span>
+		<div class="flex items-center gap-1.5">
+			<span>{icon}</span>
+			<span>{label}</span>
+		</div>
 		<span>{step < 1 ? value.toFixed(2) : Math.round(value)}{unit}</span>
 	</div>
 	<input

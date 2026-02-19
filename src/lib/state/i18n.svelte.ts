@@ -69,5 +69,5 @@ export function __({
 		}
 	}
 
-	return val as string;
+	return val as unknown as string;
 }

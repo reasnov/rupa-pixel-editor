@@ -20,12 +20,20 @@
 		</div>
 
 		<!-- Status Indicators (Locks/Tiling) -->
-		{#if studio.isAlphaLocked || studio.isColorLocked}
+		{#if studio.isAlphaLocked || studio.isColorLocked || studio.isShadingLighten || studio.isShadingDarken || studio.isShadingDither}
 			<div
 				transition:scale
 				class="absolute -top-3 -right-3 flex items-center justify-center rounded-full border-2 border-white bg-brand p-1 text-[8px] font-bold text-white shadow-lg ring-1 ring-black/5"
 			>
-				🔒
+				{#if studio.isAlphaLocked || studio.isColorLocked}
+					🔒
+				{:else if studio.isShadingLighten}
+					☀️
+				{:else if studio.isShadingDarken}
+					🌙
+				{:else if studio.isShadingDither}
+					🏁
+				{/if}
 			</div>
 		{/if}
 

@@ -1,4 +1,5 @@
 import { type ColorHex, type Point } from '../types/index.js';
+import { Geometry } from './geometry.js';
 
 /**
  * Pixel Logic: Pure data transformations for pixel grids.
@@ -225,6 +226,61 @@ export class PixelLogic {
 		points.push({ x: Math.round(xc - x), y: Math.round(yc + y) });
 		points.push({ x: Math.round(xc + x), y: Math.round(yc - y) });
 		points.push({ x: Math.round(xc - x), y: Math.round(yc - y) });
+	}
+
+	/**
+	 * Returns points for a regular polygon or star outline.
+	 * If indentation > 0, it creates a star by adding inner vertices.
+	 */
+	static getPolygonPoints(
+		x1: number,
+		y1: number,
+		x2: number,
+		y2: number,
+		sides: number,
+		indentation: number = 0
+	): Point[] {
+		const xc = (x1 + x2) / 2;
+		const yc = (y1 + y2) / 2;
+		const rx = Math.abs(x2 - x1) / 2;
+		const ry = Math.abs(y2 - y1) / 2;
+		const r = Math.max(rx, ry);
+
+		if (r === 0) return [];
+
+		const vertices: Point[] = [];
+		const startAngle = -Math.PI / 2;
+
+		if (indentation > 0) {
+			// Star Shape: 2x vertices (outer and inner)
+			const innerR = r * (1 - indentation / 100);
+			for (let i = 0; i < sides * 2; i++) {
+				const angle = startAngle + (i * Math.PI) / sides;
+				const currentR = i % 2 === 0 ? r : innerR;
+				vertices.push({
+					x: Math.round(xc + Math.cos(angle) * currentR),
+					y: Math.round(yc + Math.sin(angle) * currentR)
+				});
+			}
+		} else {
+			// Regular Polygon
+			for (let i = 0; i < sides; i++) {
+				const angle = startAngle + (i * 2 * Math.PI) / sides;
+				vertices.push({
+					x: Math.round(xc + Math.cos(angle) * r),
+					y: Math.round(yc + Math.sin(angle) * r)
+				});
+			}
+		}
+
+		const points: Point[] = [];
+		for (let i = 0; i < vertices.length; i++) {
+			const v1 = vertices[i];
+			const v2 = vertices[(i + 1) % vertices.length];
+			points.push(...Geometry.getLinePoints(v1.x, v1.y, v2.x, v2.y));
+		}
+
+		return points;
 	}
 
 	/**

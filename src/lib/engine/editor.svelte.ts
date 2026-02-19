@@ -17,6 +17,7 @@ import { history } from './history.js';
  */
 export class EditorEngine {
 	private backupInterval: any = null;
+	private autoSaveTimer: any = null;
 	private unsubscribeInput: (() => void) | null = null;
 
 	mount(canvasElement: HTMLElement | null = null) {
@@ -24,6 +25,9 @@ export class EditorEngine {
 
 		state.studio.mount();
 		ambient.start();
+
+		// Attempt to restore last session
+		services.persistence.restoreLastSession();
 
 		this.unsubscribeInput = input.subscribe((signal) => {
 			this.handleIntent(signal.intent as ActionIntent);
@@ -35,12 +39,14 @@ export class EditorEngine {
 			if (this.unsubscribeInput) this.unsubscribeInput();
 			cleanupInput();
 			clearInterval(this.backupInterval);
+			if (this.autoSaveTimer) clearTimeout(this.autoSaveTimer);
 		};
 	}
 
 	handleIntent(intent: ActionIntent) {
 		studioAudio.resume();
 		state.cursor.resetInactivityTimer();
+		this.resetAutoSaveTimer();
 
 		// Special Case: Underlay Nudging (Ctrl + Alt + Arrows)
 		if (
@@ -71,7 +77,7 @@ export class EditorEngine {
 
 			case 'PAINT':
 				if (state.selection.isActive) return services.commitSelection();
-				if (state.studio.activeTool !== 'NONE') {
+				if (state.studio.activeTool !== 'BRUSH') {
 					this.commitShape();
 					return;
 				}
@@ -88,7 +94,7 @@ export class EditorEngine {
 					return services.selection.sealBinding();
 				}
 				if (state.selection.isActive) return services.commitSelection();
-				if (state.studio.activeTool !== 'NONE') {
+				if (state.studio.activeTool !== 'BRUSH') {
 					this.commitShape();
 					return;
 				}
@@ -134,9 +140,22 @@ export class EditorEngine {
 					return;
 				}
 
-				if (state.studio.activeTool !== 'NONE') {
-					state.studio.activeTool = 'NONE';
+				if (state.studio.activeTool !== 'BRUSH') {
+					state.studio.activeTool = 'BRUSH';
 					state.studio.shapeAnchor = null;
+					return;
+				}
+
+				// Shading Reset
+				if (
+					state.studio.isShadingLighten ||
+					state.studio.isShadingDarken ||
+					state.studio.isShadingDither
+				) {
+					state.studio.isShadingLighten = false;
+					state.studio.isShadingDarken = false;
+					state.studio.isShadingDither = false;
+					state.studio.show('Shading Reset');
 					return;
 				}
 
@@ -250,6 +269,56 @@ export class EditorEngine {
 			case 'TOGGLE_PIXEL_PERFECT':
 				state.studio.isPixelPerfect = !state.studio.isPixelPerfect;
 				return feedback.emit('READY');
+			case 'TOGGLE_SHADE_LIGHTEN':
+				state.studio.isShadingLighten = !state.studio.isShadingLighten;
+				if (state.studio.isShadingLighten) {
+					state.studio.isShadingDarken = false;
+					state.studio.isShadingDither = false;
+				}
+				state.studio.show(state.studio.isShadingLighten ? 'Light Roast Active' : 'Light Roast Off');
+				return feedback.emit('READY');
+			case 'TOGGLE_SHADE_DARKEN':
+				state.studio.isShadingDarken = !state.studio.isShadingDarken;
+				if (state.studio.isShadingDarken) {
+					state.studio.isShadingLighten = false;
+					state.studio.isShadingDither = false;
+				}
+				state.studio.show(state.studio.isShadingDarken ? 'Dark Roast Active' : 'Dark Roast Off');
+				return feedback.emit('READY');
+			case 'TOGGLE_SHADE_DITHER':
+				state.studio.isShadingDither = !state.studio.isShadingDither;
+				if (state.studio.isShadingDither) {
+					state.studio.isShadingLighten = false;
+					state.studio.isShadingDarken = false;
+				}
+				state.studio.show(state.studio.isShadingDither ? 'Texture Active' : 'Texture Off');
+				return feedback.emit('READY');
+
+			case 'SHADE_LIGHTEN':
+				state.studio.isShadingLighten = !state.studio.isShadingLighten;
+				if (state.studio.isShadingLighten) {
+					state.studio.isShadingDarken = false;
+					state.studio.isShadingDither = false;
+				}
+				state.studio.show(state.studio.isShadingLighten ? 'Light Roast Active' : 'Light Roast Off');
+				return feedback.emit('READY');
+			case 'SHADE_DARKEN':
+				state.studio.isShadingDarken = !state.studio.isShadingDarken;
+				if (state.studio.isShadingDarken) {
+					state.studio.isShadingLighten = false;
+					state.studio.isShadingDither = false;
+				}
+				state.studio.show(state.studio.isShadingDarken ? 'Dark Roast Active' : 'Dark Roast Off');
+				return feedback.emit('READY');
+			case 'SHADE_DITHER':
+				state.studio.isShadingDither = !state.studio.isShadingDither;
+				if (state.studio.isShadingDither) {
+					state.studio.isShadingLighten = false;
+					state.studio.isShadingDarken = false;
+				}
+				state.studio.show(state.studio.isShadingDither ? 'Texture Active' : 'Texture Off');
+				return feedback.emit('READY');
+
 			case 'TOGGLE_COLOR_LOCK':
 				if (state.studio.isColorLocked) {
 					state.studio.isColorLocked = false;
@@ -278,9 +347,35 @@ export class EditorEngine {
 				state.studio.activeTool = 'ELLIPSE';
 				state.studio.shapeAnchor = { ...state.cursor.pos };
 				return feedback.emit('READY');
+			case 'TOOL_BRUSH':
+				state.studio.activeTool = 'BRUSH';
+				return feedback.emit('READY');
+			case 'TOOL_ERASER':
+				state.studio.activeTool = 'ERASER';
+				return feedback.emit('READY');
+			case 'TOOL_POLYGON':
+				state.studio.activeTool = 'POLYGON';
+				state.studio.shapeAnchor = { ...state.cursor.pos };
+				return feedback.emit('READY');
+			case 'POLY_SIDES_INC':
+				state.studio.polygonSides = Math.min(12, state.studio.polygonSides + 1);
+				state.studio.show(`${state.studio.polygonSides} Facets`);
+				return feedback.emit('READY');
+			case 'POLY_SIDES_DEC':
+				state.studio.polygonSides = Math.max(3, state.studio.polygonSides - 1);
+				state.studio.show(`${state.studio.polygonSides} Facets`);
+				return feedback.emit('READY');
+			case 'POLY_INDENT_INC':
+				state.studio.polygonIndentation = Math.min(100, state.studio.polygonIndentation + 10);
+				state.studio.show(`${state.studio.polygonIndentation}% Steeping`);
+				return feedback.emit('READY');
+			case 'POLY_INDENT_DEC':
+				state.studio.polygonIndentation = Math.max(0, state.studio.polygonIndentation - 10);
+				state.studio.show(`${state.studio.polygonIndentation}% Steeping`);
+				return feedback.emit('READY');
 			case 'TOOL_GRADIENT':
 				if (state.studio.activeTool === 'GRADIENT') {
-					state.studio.activeTool = 'NONE';
+					state.studio.activeTool = 'BRUSH';
 					state.studio.shapeAnchor = null;
 					state.studio.gradientStartColor = null;
 				} else {
@@ -297,6 +392,12 @@ export class EditorEngine {
 				return;
 
 			default:
+				if (intent.startsWith('SET_SIDES_')) {
+					const num = parseInt(intent.split('_')[2]);
+					state.studio.polygonSides = num;
+					state.studio.show(`${num} Facets`);
+					return feedback.emit('READY');
+				}
 				if (intent.startsWith('SELECT_COLOR_')) {
 					const num = parseInt(intent.split('_')[2]);
 					return services.color.select(num === 0 ? 9 : num - 1);
@@ -348,7 +449,7 @@ export class EditorEngine {
 				feedback.emit('DRAW');
 			}
 
-			state.studio.activeTool = 'NONE';
+			state.studio.activeTool = 'BRUSH';
 			state.studio.shapeAnchor = null;
 			state.studio.gradientStartColor = null;
 			return;
@@ -359,6 +460,15 @@ export class EditorEngine {
 			points = PixelLogic.getRectanglePoints(anchor.x, anchor.y, x, y);
 		} else if (tool === 'ELLIPSE') {
 			points = PixelLogic.getEllipsePoints(anchor.x, anchor.y, x, y);
+		} else if (tool === 'POLYGON') {
+			points = PixelLogic.getPolygonPoints(
+				anchor.x,
+				anchor.y,
+				x,
+				y,
+				state.studio.polygonSides,
+				state.studio.polygonIndentation
+			);
 		}
 
 		if (points.length > 0) {
@@ -384,7 +494,7 @@ export class EditorEngine {
 			}
 		}
 
-		state.studio.activeTool = 'NONE';
+		state.studio.activeTool = 'BRUSH';
 		state.studio.shapeAnchor = null;
 	}
 
@@ -403,6 +513,13 @@ export class EditorEngine {
 			if (currentMode === 'PAINT') services.draw.draw();
 			if (currentMode === 'ERASE') services.draw.erase();
 		}
+	}
+
+	resetAutoSaveTimer() {
+		if (this.autoSaveTimer) clearTimeout(this.autoSaveTimer);
+		this.autoSaveTimer = setTimeout(() => {
+			services.persistence.autoSaveSession();
+		}, 10000); // 10 seconds of inactivity
 	}
 }
 

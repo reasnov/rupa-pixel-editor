@@ -46,7 +46,7 @@
 			onclick={() => (editor.studio.projectActiveTab = 'frames')}
 			role="tab"
 			aria-selected={editor.studio.projectActiveTab === 'frames'}
-			title={__({ key: 'shortcut_labels.TAB_TIMELINE' }) + ' (Alt+1)'}
+			title={__({ key: 'labels.TAB_TIMELINE' }) + ' (Alt+1)'}
 			class="flex flex-1 items-center justify-center gap-2 py-2 text-[10px] font-bold tracking-widest uppercase transition-all {editor
 				.studio.projectActiveTab === 'frames'
 				? 'rounded bg-foam-white text-brand shadow-sm'
@@ -59,7 +59,7 @@
 			onclick={() => (editor.studio.projectActiveTab = 'layers')}
 			role="tab"
 			aria-selected={editor.studio.projectActiveTab === 'layers'}
-			title={__({ key: 'shortcut_labels.TAB_LAYERS' }) + ' (Alt+2)'}
+			title={__({ key: 'labels.TAB_LAYERS' }) + ' (Alt+2)'}
 			class="flex flex-1 items-center justify-center gap-2 py-2 text-[10px] font-bold tracking-widest uppercase transition-all {editor
 				.studio.projectActiveTab === 'layers'
 				? 'rounded bg-foam-white text-brand shadow-sm'

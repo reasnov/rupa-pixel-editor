@@ -1,11 +1,11 @@
-import { editor } from '../state/editor.svelte.js';
+import { editor as state } from '../state/editor.svelte.js';
+import { editor as engine } from './editor.svelte.js';
 import { input } from './input.svelte.js';
 import { mode } from './mode.svelte.js';
 import { services } from './services.js';
 
 /**
  * PointerEngine: Manages fluid pointer interactions.
- * It follows a strict sequence: handleStart -> handleMove -> handleEnd.
  */
 export class PointerEngine {
 	private isPointerDown = false;
@@ -18,7 +18,7 @@ export class PointerEngine {
 
 	mapToGrid(clientX: number, clientY: number, canvasElement: HTMLElement) {
 		const rect = canvasElement.getBoundingClientRect();
-		const { width, height } = editor.canvas;
+		const { width, height } = state.canvas;
 
 		const xPct = (clientX - rect.left) / rect.width;
 		const yPct = (clientY - rect.top) / rect.height;
@@ -30,6 +30,7 @@ export class PointerEngine {
 	}
 
 	handleStart(e: PointerEvent, canvasElement: HTMLElement) {
+		engine.resetAutoSaveTimer();
 		this.isPointerDown = true;
 		this.isSnapped = false;
 		this.buttonType = e.button === 2 ? 'secondary' : 'primary';
@@ -37,26 +38,74 @@ export class PointerEngine {
 		const pos = this.mapToGrid(e.clientX, e.clientY, canvasElement);
 		this.lastPosition = { x: pos.x, y: pos.y };
 
-		editor.cursor.pos = { x: Math.floor(pos.x), y: Math.floor(pos.y) };
+		state.cursor.pos = { x: Math.floor(pos.x), y: Math.floor(pos.y) };
+
+		// Geometric Tool Support
+		const tool = state.studio.activeTool;
+		if (
+			this.buttonType === 'primary' &&
+			['RECTANGLE', 'ELLIPSE', 'POLYGON', 'GRADIENT'].includes(tool)
+		) {
+			state.studio.shapeAnchor = { ...state.cursor.pos };
+			if (tool === 'GRADIENT') state.studio.gradientStartColor = state.paletteState.activeColor;
+			return;
+		}
 
 		const currentMode = mode.current.type;
-		if (this.buttonType === 'primary' && currentMode !== 'SELECT' && currentMode !== 'ERASE') {
-			services.draw.beginStroke(pos.x, pos.y);
-			this.startHoldTimer();
+		const isShading =
+			keyboard.isLDown ||
+			keyboard.isDDown ||
+			keyboard.isXDown ||
+			state.studio.isShadingLighten ||
+			state.studio.isShadingDarken ||
+			state.studio.isShadingDither;
+
+		if (this.buttonType === 'primary' && currentMode !== 'SELECT') {
+			if (isShading) {
+				services.draw.draw(pos.x, pos.y);
+			} else {
+				services.draw.beginStroke(pos.x, pos.y);
+				this.startHoldTimer();
+			}
 		}
 	}
 
 	handleMove(e: PointerEvent, canvasElement: HTMLElement) {
 		if (!this.isPointerDown) return;
+		engine.resetAutoSaveTimer();
 
 		if (this.rafId) return;
 
 		this.rafId = requestAnimationFrame(() => {
 			const pos = this.mapToGrid(e.clientX, e.clientY, canvasElement);
-			const currentMode = mode.current.type;
+			state.cursor.pos = { x: Math.floor(pos.x), y: Math.floor(pos.y) };
 
-			if (this.buttonType === 'primary' && currentMode !== 'SELECT' && currentMode !== 'ERASE') {
-				if (!this.isSnapped) {
+			const currentMode = mode.current.type;
+			const tool = state.studio.activeTool;
+
+			const isShading =
+				keyboard.isLDown ||
+				keyboard.isDDown ||
+				keyboard.isXDown ||
+				state.studio.isShadingLighten ||
+				state.studio.isShadingDarken ||
+				state.studio.isShadingDither;
+
+			// Shapes and Gradients handle their own visual preview via Canvas.svelte
+			if (
+				this.buttonType === 'primary' &&
+				['RECTANGLE', 'ELLIPSE', 'POLYGON', 'GRADIENT'].includes(tool)
+			) {
+				this.lastPosition = { x: pos.x, y: pos.y };
+				this.rafId = null;
+				return;
+			}
+
+			if (this.buttonType === 'primary' && currentMode !== 'SELECT') {
+				if (isShading) {
+					// Immediate feedback for shading/toning
+					services.draw.draw(pos.x, pos.y);
+				} else if (!this.isSnapped) {
 					services.draw.continueStroke(pos.x, pos.y, this.lastPosition.x, this.lastPosition.y);
 					this.resetHoldTimer();
 				}
@@ -77,10 +126,18 @@ export class PointerEngine {
 		}
 
 		const currentMode = mode.current.type;
-		if (this.buttonType === 'primary' && currentMode !== 'SELECT' && currentMode !== 'ERASE') {
+		const tool = state.studio.activeTool;
+
+		// Shape/Gradient Commit on Mouse Up
+		if (
+			this.buttonType === 'primary' &&
+			['RECTANGLE', 'ELLIPSE', 'POLYGON', 'GRADIENT'].includes(tool)
+		) {
+			engine.commitShape();
+		} else if (this.buttonType === 'primary' && currentMode !== 'SELECT') {
 			services.draw.endStroke();
 		} else {
-			editor.canvas.clearBuffer();
+			state.canvas.clearBuffer();
 		}
 
 		this.buttonType = null;

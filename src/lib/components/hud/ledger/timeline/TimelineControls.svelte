@@ -16,8 +16,8 @@
 			? 'bg-brand'
 			: 'bg-slate-700'}"
 		onclick={() => animation.togglePlayback()}
-		title={__({ key: 'shortcut_labels.PLAY_PAUSE' }) + ' (P)'}
-		aria-label={__({ key: 'shortcut_labels.PLAY_PAUSE' })}
+		title={__({ key: 'labels.PLAY_PAUSE' }) + ' (P)'}
+		aria-label={__({ key: 'labels.PLAY_PAUSE' })}
 	>
 		<span class="text-xs" aria-hidden="true">{editor.project.isPlaying ? '⏹' : '▶'}</span>
 		<span class="font-tiny5 tracking-widest uppercase">
@@ -52,8 +52,8 @@
 			? 'bg-brand/10 text-brand ring-1 ring-brand/20'
 			: 'bg-black/5 opacity-40 shadow-sm hover:bg-white/60 hover:opacity-100'}"
 		onclick={() => (editor.studio.showGhostLayers = !editor.studio.showGhostLayers)}
-		title={__({ key: 'shortcut_labels.TOGGLE_GHOST_LAYERS' }) + ' (Alt+G)'}
-		aria-label={__({ key: 'shortcut_labels.TOGGLE_GHOST_LAYERS' })}
+		title={__({ key: 'labels.TOGGLE_GHOST_LAYERS' }) + ' (Alt+G)'}
+		aria-label={__({ key: 'labels.TOGGLE_GHOST_LAYERS' })}
 	>
 		<span class="text-xs" aria-hidden="true">👻</span>
 		<span class="font-serif text-[11px] font-black tracking-wider text-studio-text/70 uppercase"

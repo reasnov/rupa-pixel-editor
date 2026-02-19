@@ -95,6 +95,32 @@ export class PersistenceService {
 		}
 	}
 
+	/**
+	 * Autosave to browser storage (LocalStorage).
+	 */
+	autoSaveSession() {
+		try {
+			const data = this.serialize();
+			localStorage.setItem('rupa_autosave_session', data);
+			editor.project.lastSaved = new Date();
+			console.log('Session autosaved.');
+		} catch (e) {
+			console.warn('Autosave failed (likely quota exceeded):', e);
+		}
+	}
+
+	/**
+	 * Check and restore the last autosaved session if it exists.
+	 */
+	restoreLastSession() {
+		const data = localStorage.getItem('rupa_autosave_session');
+		if (data) {
+			this.deserialize(data);
+			return true;
+		}
+		return false;
+	}
+
 	private deserialize(json: string) {
 		try {
 			const d = JSON.parse(json);

@@ -24,6 +24,7 @@
 	import AudioSettings from '$lib/components/overlay/AudioSettings.svelte';
 	import GuideBook from '$lib/components/overlay/GuideBook.svelte';
 	import UnderlayMenu from '$lib/components/overlay/UnderlayMenu.svelte';
+	import Toast from '$lib/components/ui/Toast.svelte';
 
 	import { onMount } from 'svelte';
 
@@ -79,6 +80,8 @@
 {#if editor.studio.showUnderlayMenu}
 	<UnderlayMenu />
 {/if}
+
+<Toast />
 
 <!-- HUD Layout -->
 <div class="flex h-screen w-screen flex-col overflow-hidden bg-canvas-bg selection:bg-brand/20">

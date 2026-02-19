@@ -75,9 +75,27 @@ export type ActionIntent =
 	| 'SHADE_LIGHTEN'
 	| 'SHADE_DARKEN'
 	| 'SHADE_DITHER'
+	| 'TOGGLE_SHADE_LIGHTEN'
+	| 'TOGGLE_SHADE_DARKEN'
+	| 'TOGGLE_SHADE_DITHER'
+	| 'TOOL_BRUSH'
+	| 'TOOL_ERASER'
 	| 'TOGGLE_PIXEL_PERFECT'
 	| 'TOOL_RECTANGLE'
 	| 'TOOL_ELLIPSE'
+	| 'TOOL_POLYGON'
+	| 'POLY_SIDES_INC'
+	| 'POLY_SIDES_DEC'
+	| 'POLY_INDENT_INC'
+	| 'POLY_INDENT_DEC'
+	| 'SET_SIDES_3'
+	| 'SET_SIDES_4'
+	| 'SET_SIDES_5'
+	| 'SET_SIDES_6'
+	| 'SET_SIDES_7'
+	| 'SET_SIDES_8'
+	| 'SET_SIDES_9'
+	| 'SET_SIDES_10'
 	| 'TOGGLE_UNDERLAY'
 	| 'OPEN_UNDERLAY_MENU'
 	| 'TOOL_TRANSFORM'
@@ -112,11 +130,6 @@ export class KeyboardEngine {
 	isShiftActive = $state(false);
 	isAltActive = $state(false);
 
-	// Master Etcher Modifiers (v0.8.0)
-	isLDown = $state(false); // Lighten
-	isDDown = $state(false); // Darken
-	isXDown = $state(false); // Dither
-
 	constructor() {
 		this.loadPatterns();
 	}
@@ -128,7 +141,7 @@ export class KeyboardEngine {
 				const { keys, group } = data as { label: string; keys: string[]; group: string };
 
 				// PROFESSIONAL KEYS: Use updated common.json keys
-				const label = __({ key: `shortcut_labels.${intent}` });
+				const label = __({ key: `labels.${intent}` });
 				const groupKey = group.toLowerCase().replace(/ & /g, '_').replace(/ /g, '_');
 				const translatedGroup = __({ key: `shortcut_groups.${groupKey}` });
 
@@ -296,11 +309,6 @@ export class KeyboardEngine {
 		this.isCtrlActive = e.ctrlKey || e.metaKey;
 		this.isShiftActive = e.shiftKey;
 		this.isAltActive = e.altKey;
-
-		// Master Etcher Modifiers (v0.8.0)
-		this.isLDown = this.activeKeys.includes('l');
-		this.isDDown = this.activeKeys.includes('d');
-		this.isXDown = this.activeKeys.includes('x');
 
 		if (!this.isCtrlActive)
 			this.activeKeys = this.activeKeys.filter((k) => k !== 'control' && k !== 'meta');

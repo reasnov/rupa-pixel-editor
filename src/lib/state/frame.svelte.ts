@@ -14,6 +14,7 @@ export class FrameState {
 	// The stack of layers. Order: [Background, ..., Foreground]
 	layers = $state<LayerState[]>([]);
 	activeLayerIndex = $state(0);
+	selectedLayerIndices = $state<Set<number>>(new Set([0]));
 
 	constructor(name: string, width = 32, height = 32) {
 		this.name = name;

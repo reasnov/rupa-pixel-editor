@@ -11,6 +11,7 @@ export class ProjectState {
 	// Project Structure
 	frames = $state<FrameState[]>([]);
 	activeFrameIndex = $state(0);
+	selectedFrameIndices = $state<Set<number>>(new Set([0]));
 	isPlaying = $state(false);
 
 	clipboard = $state<{ width: number; height: number; data: Uint32Array } | null>(null);

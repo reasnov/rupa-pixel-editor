@@ -10,6 +10,7 @@ export type ActionIntent =
 	| 'JUMP_HOME'
 	| 'SET_POSITION'
 	| 'GOTO'
+	| 'RESET_PAN'
 	| 'PAINT'
 	| 'ERASE'
 	| 'FLOOD_FILL'

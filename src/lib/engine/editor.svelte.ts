@@ -74,6 +74,9 @@ export class EditorEngine {
 				return services.jumpHome();
 			case 'GOTO':
 				return (state.showGoTo = true);
+			case 'RESET_PAN':
+				state.studio.resetPan();
+				return feedback.emit('READY');
 
 			case 'PAINT':
 				if (state.selection.isActive) return services.commitSelection();

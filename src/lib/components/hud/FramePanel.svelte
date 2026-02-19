@@ -33,6 +33,168 @@
 		draggedIndex = null;
 		dropTargetIndex = null;
 	}
+
+	function resetSelections() {
+		const project = editor.project;
+		project.selectedFrameIndices = new Set([project.activeFrameIndex]);
+
+		const frame = project.activeFrame;
+		frame.selectedLayerIndices = new Set([frame.activeLayerIndex]);
+	}
+
+	function selectFrame(index: number, event: MouseEvent) {
+		const project = editor.project;
+		if (event.ctrlKey || event.metaKey) {
+			if (project.selectedFrameIndices.has(index) && project.selectedFrameIndices.size > 1) {
+				project.selectedFrameIndices.delete(index);
+			} else {
+				project.selectedFrameIndices.add(index);
+			}
+		} else if (event.shiftKey) {
+			const start = Math.min(project.activeFrameIndex, index);
+			const end = Math.max(project.activeFrameIndex, index);
+			const nextSet = new Set<number>();
+			for (let i = start; i <= end; i++) nextSet.add(i);
+			project.selectedFrameIndices = nextSet;
+		} else {
+			project.selectedFrameIndices = new Set([index]);
+		}
+		project.activeFrameIndex = index;
+	}
+
+	function selectLayer(index: number, event: MouseEvent) {
+		const frame = editor.project.activeFrame;
+		if (event.ctrlKey || event.metaKey) {
+			if (frame.selectedLayerIndices.has(index) && frame.selectedLayerIndices.size > 1) {
+				frame.selectedLayerIndices.delete(index);
+			} else {
+				frame.selectedLayerIndices.add(index);
+			}
+		} else if (event.shiftKey) {
+			const start = Math.min(frame.activeLayerIndex, index);
+			const end = Math.max(frame.activeLayerIndex, index);
+			const nextSet = new Set<number>();
+			for (let i = start; i <= end; i++) nextSet.add(i);
+			frame.selectedLayerIndices = nextSet;
+		} else {
+			frame.selectedLayerIndices = new Set([index]);
+		}
+		frame.activeLayerIndex = index;
+	}
+
+	function handleFrameContextMenu(e: MouseEvent, index: number) {
+		e.preventDefault();
+		const project = editor.project;
+		if (!project.selectedFrameIndices.has(index)) {
+			project.selectedFrameIndices = new Set([index]);
+			project.activeFrameIndex = index;
+		}
+
+		const isMulti = project.selectedFrameIndices.size > 1;
+
+		editor.studio.contextMenu = {
+			x: e.clientX,
+			y: e.clientY,
+			items: [
+				{
+					label: isMulti
+						? `Duplicate ${project.selectedFrameIndices.size} Cups`
+						: __({ key: 'hud.actions.duplicate' }),
+					icon: '📋',
+					action: () => {
+						// Logic for multi-duplicate if needed
+						services.project.duplicateFrame(index);
+					}
+				},
+				{
+					label: isMulti
+						? `Spill ${project.selectedFrameIndices.size} Cups`
+						: __({ key: 'hud.actions.delete' }),
+					icon: '🗑️',
+					danger: true,
+					disabled: project.frames.length <= project.selectedFrameIndices.size,
+					action: () => {
+						const indices = Array.from(project.selectedFrameIndices).sort((a, b) => b - a);
+						indices.forEach((idx) => services.project.removeFrame(idx));
+						project.selectedFrameIndices = new Set([project.activeFrameIndex]);
+					}
+				}
+			]
+		};
+	}
+
+	function handleLayerContextMenu(e: MouseEvent, index: number) {
+		const frame = editor.project.activeFrame;
+		e.preventDefault();
+
+		if (!frame.selectedLayerIndices.has(index)) {
+			frame.selectedLayerIndices = new Set([index]);
+			frame.activeLayerIndex = index;
+		}
+
+		const isMulti = frame.selectedLayerIndices.size > 1;
+		const layer = frame.layers[index];
+
+		editor.studio.contextMenu = {
+			x: e.clientX,
+			y: e.clientY,
+			items: [
+				{
+					label: isMulti ? 'Group Selected' : 'Group',
+					icon: '📁',
+					action: () => {
+						const group = services.project.addGroup();
+						if (isMulti) {
+							const selected = Array.from(frame.selectedLayerIndices);
+							selected.forEach((idx) => {
+								const l = frame.layers[idx];
+								if (l !== group) l.parentId = group.id;
+							});
+						} else {
+							layer.parentId = group.id;
+						}
+					}
+				},
+				{
+					label: isMulti
+						? `Duplicate ${frame.selectedLayerIndices.size} Infusions`
+						: __({ key: 'hud.actions.duplicate' }),
+					icon: '📋',
+					disabled: isMulti, // Keep it simple for now
+					action: () => services.project.duplicateLayer(index)
+				},
+				{
+					label: isMulti ? 'Show/Hide Selected' : layer.isVisible ? 'Hide Infusion' : 'Show Infusion',
+					icon: layer.isVisible ? '🕶️' : '👁️',
+					action: () => {
+						const indices = Array.from(frame.selectedLayerIndices);
+						const targetState = isMulti ? !layer.isVisible : !layer.isVisible;
+						indices.forEach((idx) => (frame.layers[idx].isVisible = targetState));
+						editor.canvas.triggerPulse();
+					}
+				},
+				{
+					label: isMulti ? 'Seal/Unseal Selected' : layer.isLocked ? 'Unlock Infusion' : 'Lock Infusion',
+					icon: layer.isLocked ? '🔓' : '🔒',
+					action: () => {
+						const indices = Array.from(frame.selectedLayerIndices);
+						indices.forEach((idx) => services.project.toggleLock(idx));
+					}
+				},
+				{
+					label: __({ key: 'hud.actions.delete' }),
+					icon: '🗑️',
+					danger: true,
+					disabled: frame.layers.length <= frame.selectedLayerIndices.size,
+					action: () => {
+						const indices = Array.from(frame.selectedLayerIndices).sort((a, b) => b - a);
+						indices.forEach((idx) => services.project.removeLayer(idx));
+						frame.selectedLayerIndices = new Set([frame.activeLayerIndex]);
+					}
+				}
+			]
+		};
+	}
 </script>
 
 <div
@@ -71,28 +233,34 @@
 	</div>
 
 	<!-- Content -->
-	<div class="custom-scrollbar flex-1 overflow-y-auto p-2">
+	<div class="custom-scrollbar flex-1 overflow-y-auto p-2" onclick={resetSelections}>
 		{#if editor.studio.projectActiveTab === 'frames'}
 			<div class="flex flex-col gap-1" transition:fade={{ duration: 150 }} role="list">
 				{#each editor.project.frames as frame, i}
 					<div
 						role="listitem"
 						draggable="true"
+						onclick={(e) => e.stopPropagation()}
 						ondragstart={() => handleDragStart(i)}
 						ondragover={(e) => handleDragOver(e, i)}
 						ondrop={(e) => handleDrop(e, i)}
 						ondragend={handleDragEnd}
-						class="group flex cursor-grab items-center justify-between rounded px-2 transition-all {i ===
-						editor.project.activeFrameIndex
-							? 'bg-brand/5 text-brand ring-1 ring-brand/10'
-							: 'hover:bg-charcoal/5'} {dropTargetIndex === i && draggedIndex !== i
-							? 'border-t-2 border-brand'
-							: ''} {draggedIndex === i ? 'opacity-40' : ''}"
+						oncontextmenu={(e) => handleFrameContextMenu(e, i)}
+						class="group flex cursor-grab items-center justify-between rounded px-2 transition-all {editor.project.selectedFrameIndices.has(
+							i
+						)
+							? 'bg-brand/10 text-brand ring-1 ring-brand/20'
+							: 'hover:bg-charcoal/5'} {i === editor.project.activeFrameIndex
+							? 'bg-brand/5 font-bold'
+							: ''} {dropTargetIndex === i && draggedIndex !== i ? 'border-t-2 border-brand' : ''} {draggedIndex ===
+						i
+							? 'opacity-40'
+							: ''}"
 						aria-current={i === editor.project.activeFrameIndex ? 'true' : undefined}
 					>
 						<button
 							class="flex flex-1 items-center gap-3 overflow-hidden py-2 pl-1 text-left"
-							onclick={() => (editor.project.activeFrameIndex = i)}
+							onclick={(e) => selectFrame(i, e)}
 						>
 							<span class="font-mono text-[10px] opacity-30" aria-hidden="true">{i + 1}</span>
 							<span class="truncate font-serif text-sm font-medium text-charcoal">{frame.name}</span
@@ -133,61 +301,63 @@
 						: null}
 					{#if !parent || !parent.isCollapsed}
 						{@const isChild = layer.parentId !== null}
-						<div
-							role="listitem"
-							draggable="true"
-							ondragstart={() => handleDragStart(i)}
-							ondragover={(e) => handleDragOver(e, i)}
-							ondrop={(e) => handleDrop(e, i)}
-							ondragend={handleDragEnd}
-							class="group flex cursor-grab items-center justify-between rounded px-2 transition-all {i ===
-							editor.project.activeFrame.activeLayerIndex
-								? 'bg-brand/5 text-brand ring-1 ring-brand/10'
-								: 'hover:bg-charcoal/5'} {dropTargetIndex === i && draggedIndex !== i
-								? 'border-t-2 border-brand'
-								: ''} {draggedIndex === i ? 'opacity-40' : ''}"
-							style={isChild ? 'margin-left: 12px;' : ''}
-							aria-current={i === editor.project.activeFrame.activeLayerIndex ? 'true' : undefined}
-						>
-							<div class="flex flex-1 items-center gap-2 overflow-hidden">
-								{#if layer.type === 'FOLDER'}
-									<button
-										onclick={(e) => {
-											e.stopPropagation();
-											layer.isCollapsed = !layer.isCollapsed;
-										}}
-										class="text-[10px] opacity-40 hover:opacity-100"
-									>
-										{layer.isCollapsed ? '▶' : '▼'}
-									</button>
-								{/if}
-								<button
-									onclick={(e) => {
-										e.stopPropagation();
-										services.project.toggleVisibility(i);
-									}}
-									class="text-xs transition-opacity {layer.isVisible
-										? 'opacity-100'
-										: 'opacity-20'}"
-									title={__({ key: 'hud.project_panel.visibility' })}
-								>
-									{layer.isVisible
-										? layer.type === 'FOLDER'
-											? '📂'
-											: '👁️'
-										: layer.type === 'FOLDER'
-											? '📁'
-											: '🕶️'}
-								</button>
-								<button
-									class="flex-1 truncate py-2 text-left font-serif text-sm font-medium text-charcoal {layer.isVisible
-										? ''
-										: 'opacity-40'}"
-									onclick={() => (editor.project.activeFrame.activeLayerIndex = i)}
-								>
-									{layer.name}
-								</button>
-							</div>
+																		<div
+																			role="listitem"
+																			draggable="true"
+																			onclick={(e) => e.stopPropagation()}
+																			ondragstart={() => handleDragStart(i)}
+																			ondragover={(e) => handleDragOver(e, i)}													ondrop={(e) => handleDrop(e, i)}
+													ondragend={handleDragEnd}
+													oncontextmenu={(e) => handleLayerContextMenu(e, i)}
+													class="group flex cursor-grab items-center justify-between rounded px-2 transition-all {editor.project.activeFrame.selectedLayerIndices.has(
+														i
+													)
+														? 'bg-brand/10 text-brand ring-1 ring-brand/20'
+														: 'hover:bg-charcoal/5'} {i === editor.project.activeFrame.activeLayerIndex
+														? 'bg-brand/5 font-bold'
+														: ''} {dropTargetIndex === i && draggedIndex !== i
+														? 'border-t-2 border-brand'
+														: ''} {draggedIndex === i ? 'opacity-40' : ''}"
+													style={isChild ? 'margin-left: 12px;' : ''}
+													aria-current={i === editor.project.activeFrame.activeLayerIndex ? 'true' : undefined}
+												>
+													<div class="flex flex-1 items-center gap-2 overflow-hidden">
+														{#if layer.type === 'FOLDER'}
+															<button
+																onclick={(e) => {
+																	e.stopPropagation();
+																	layer.isCollapsed = !layer.isCollapsed;
+																}}
+																class="text-[10px] opacity-40 hover:opacity-100"
+															>
+																{layer.isCollapsed ? '▶' : '▼'}
+															</button>
+														{/if}
+														<button
+															onclick={(e) => {
+																e.stopPropagation();
+																services.project.toggleVisibility(i);
+															}}
+															class="text-xs transition-opacity {layer.isVisible ? 'opacity-100' : 'opacity-20'}"
+															title={__({ key: 'hud.project_panel.visibility' })}
+														>
+															{layer.isVisible
+																? layer.type === 'FOLDER'
+																	? '📂'
+																	: '👁️'
+																: layer.type === 'FOLDER'
+																	? '📁'
+																	: '🕶️'}
+														</button>
+														<button
+															class="flex-1 truncate py-2 text-left font-serif text-sm font-medium text-charcoal {layer.isVisible
+																? ''
+																: 'opacity-40'}"
+															onclick={(e) => selectLayer(i, e)}
+														>
+															{layer.name}
+														</button>
+													</div>
 							<div class="flex items-center gap-2">
 								<button
 									onclick={(e) => {

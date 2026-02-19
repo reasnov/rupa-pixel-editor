@@ -35,6 +35,11 @@
 			"keys": ["q"],
 			"group": "Navigation"
 		},
+		"RESET_PAN": {
+			"label": "Reset Panning",
+			"keys": ["Alt+q"],
+			"group": "Navigation"
+		},
 		"RESET_VIEWPORT": {
 			"label": "Reset Pan/Zoom",
 			"keys": ["Alt+Backspace"],

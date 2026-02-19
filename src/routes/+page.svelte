@@ -25,6 +25,7 @@
 	import GuideBook from '$lib/components/overlay/GuideBook.svelte';
 	import UnderlayMenu from '$lib/components/overlay/UnderlayMenu.svelte';
 	import Minimap from '$lib/components/hud/Minimap.svelte';
+	import ContextMenu from '$lib/components/ui/ContextMenu.svelte';
 	import Toast from '$lib/components/ui/Toast.svelte';
 
 	import { onMount } from 'svelte';
@@ -84,6 +85,15 @@
 
 {#if editor.studio.showMinimap}
 	<Minimap />
+{/if}
+
+{#if editor.studio.contextMenu}
+	<ContextMenu
+		x={editor.studio.contextMenu.x}
+		y={editor.studio.contextMenu.y}
+		items={editor.studio.contextMenu.items}
+		onClose={() => (editor.studio.contextMenu = null)}
+	/>
 {/if}
 
 <Toast />

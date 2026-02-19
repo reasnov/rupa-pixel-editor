@@ -9,6 +9,7 @@ import { sfx } from '../engine/audio.js';
 import { services } from '../engine/services.js';
 import { ColorLogic } from '../logic/color.js';
 import { Geometry } from '../logic/geometry.js';
+import { pointer } from '../engine/pointer.svelte.js';
 
 /**
  * The EditorState: The root orchestrator of the application.
@@ -234,8 +235,61 @@ export class EditorState {
 	toggleMute() {
 		this.studio.toggleMute();
 	}
+
 	handleEscape() {
-		return this.studio.handleEscape();
+		const lastAction = this.studio.handleEscape();
+		if (lastAction) return true;
+
+		// 1. Reset Multiple Selections in UI
+		let wasMulti = false;
+		if (this.project.selectedFrameIndices.size > 1) {
+			this.project.selectedFrameIndices = new Set([this.project.activeFrameIndex]);
+			wasMulti = true;
+		}
+
+		const frame = this.project.activeFrame;
+		if (frame.selectedLayerIndices.size > 1) {
+			frame.selectedLayerIndices = new Set([frame.activeLayerIndex]);
+			wasMulti = true;
+		}
+
+		if (wasMulti) return true;
+
+		// 2. Handle drawing/tool escapes
+		if (pointer.isPointerDownActive) {
+			pointer.cancel();
+			return true;
+		}
+
+		if (this.selection.isActive) {
+			if (this.studio.isTransforming) {
+				this.studio.isTransforming = false;
+				return true;
+			}
+			this.selection.clear();
+			return true;
+		}
+
+		if (this.studio.activeTool !== 'BRUSH') {
+			this.studio.activeTool = 'BRUSH';
+			this.studio.shapeAnchor = null;
+			return true;
+		}
+
+		// Shading Reset
+		if (
+			this.studio.isShadingLighten ||
+			this.studio.isShadingDarken ||
+			this.studio.isShadingDither
+		) {
+			this.studio.isShadingLighten = false;
+			this.studio.isShadingDarken = false;
+			this.studio.isShadingDither = false;
+			this.studio.show('Shading Reset');
+			return true;
+		}
+
+		return false;
 	}
 
 	undo() {

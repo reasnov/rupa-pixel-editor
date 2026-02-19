@@ -110,6 +110,18 @@ export class StudioState {
 	showToast = $state(false);
 	private toastTimer: any = null;
 
+	contextMenu = $state<{
+		x: number;
+		y: number;
+		items: Array<{
+			label: string;
+			icon?: string;
+			action: () => void;
+			danger?: boolean;
+			disabled?: boolean;
+		}>;
+	} | null>(null);
+
 	show(message: string) {
 		this.toastMessage = message;
 		this.showToast = true;

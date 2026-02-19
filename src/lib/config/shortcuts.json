@@ -54,7 +54,7 @@
 		},
 		"RECOLOR": {
 			"label": "Recolor All",
-			"keys": ["Alt+r"],
+			"keys": ["Alt+h"],
 			"group": "Magic"
 		},
 		"SELECT_SAME": {
@@ -209,7 +209,7 @@
 		},
 		"TOGGLE_LAYER_VISIBILITY": {
 			"label": "Show/Hide Layer",
-			"keys": ["Alt+h"],
+			"keys": ["Ctrl+Alt+v"],
 			"group": "Layers"
 		},
 		"TOGGLE_LAYER_LOCK": {
@@ -276,7 +276,7 @@
 		},
 		"TOGGLE_PIXEL_PERFECT": {
 			"label": "Toggle Pixel-Perfect Lines",
-			"keys": ["p"],
+			"keys": ["Shift+p"],
 			"group": "Etching"
 		},
 		"TOOL_RECTANGLE": {

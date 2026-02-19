@@ -133,17 +133,34 @@ export class KeyboardEngine {
 				const translatedGroup = __({ key: `shortcut_groups.${groupKey}` });
 
 				keys.forEach((keyCombo) => {
-					const parts = keyCombo.toLowerCase().split('+');
-					let key = parts[parts.length - 1].trim();
+					const lowerCombo = keyCombo.toLowerCase();
+					let key = '';
+					let ctrl = false;
+					let shift = false;
+					let alt = false;
+
+					if (lowerCombo === '+') {
+						key = '+';
+					} else {
+						const parts = lowerCombo.split('+');
+						key = parts[parts.length - 1].trim();
+						if (key === '' && lowerCombo.endsWith('++')) {
+							key = '+';
+						}
+						ctrl = parts.includes('ctrl') || parts.includes('control');
+						shift = parts.includes('shift');
+						alt = parts.includes('alt');
+					}
+
 					if (key === 'space') key = ' ';
 					if (key === 'ctrl' || key === 'control') key = 'control';
 
 					this.patterns.push({
 						intent: intent as ActionIntent,
 						key,
-						ctrl: parts.includes('ctrl') || parts.includes('control'),
-						shift: parts.includes('shift'),
-						alt: parts.includes('alt'),
+						ctrl,
+						shift,
+						alt,
 						label,
 						group: translatedGroup
 					});
@@ -224,28 +241,42 @@ export class KeyboardEngine {
 			groups[a.group].push(a as any);
 		});
 
-		const order = [
+		// PREDEFINED ORDER (For aesthetic sorting)
+		const predefinedOrder = [
 			__({ key: 'shortcut_groups.rhythms' }),
 			__({ key: 'shortcut_groups.navigation' }),
-			__({ key: 'shortcut_groups.cursor' }),
-			__({ key: 'shortcut_groups.barista' }),
-			__({ key: 'shortcut_groups.flow' }),
+			__({ key: 'shortcut_groups.tools' }),
 			__({ key: 'shortcut_groups.magic' }),
+			__({ key: 'shortcut_groups.etching' }),
+			__({ key: 'shortcut_groups.flow' }),
 			__({ key: 'shortcut_groups.selection' }),
+			__({ key: 'shortcut_groups.transform' }),
 			__({ key: 'shortcut_groups.geometry' }),
 			__({ key: 'shortcut_groups.timeline' }),
 			__({ key: 'shortcut_groups.layers' }),
+			__({ key: 'shortcut_groups.edit' }),
+			__({ key: 'shortcut_groups.view' }),
 			__({ key: 'shortcut_groups.menu' }),
-			__({ key: 'shortcut_groups.vibes' }),
-			__({ key: 'shortcut_groups.colors' })
+			__({ key: 'shortcut_groups.colors' }),
+			__({ key: 'shortcut_groups.system' })
 		];
 
-		return order
-			.filter((name) => groups[name])
-			.map((name) => ({
-				group: name,
-				items: groups[name]
-			}));
+		// Collect all existing groups in the data
+		const allGroups = Object.keys(groups);
+
+		// Sort: Use predefined order if exists, otherwise push to the end
+		allGroups.sort((a, b) => {
+			const idxA = predefinedOrder.indexOf(a);
+			const idxB = predefinedOrder.indexOf(b);
+			const posA = idxA === -1 ? 999 : idxA;
+			const posB = idxB === -1 ? 999 : idxB;
+			return posA - posB;
+		});
+
+		return allGroups.map((name) => ({
+			group: name,
+			items: groups[name]
+		}));
 	}
 
 	updatePhysicalState(e: KeyboardEvent, type: 'down' | 'up') {

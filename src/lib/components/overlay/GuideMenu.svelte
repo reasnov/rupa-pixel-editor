@@ -32,6 +32,16 @@
 			<p class="font-serif text-xs leading-relaxed text-charcoal/60">
 				{__({ key: 'shortcuts.header_desc' })}
 			</p>
+
+			<!-- Barista Glossary -->
+			<div class="mt-4 grid grid-cols-3 gap-4 border-t border-charcoal/5 pt-4">
+				{#each [['Cup', 'Frame'], ['Infusion', 'Layer'], ['Flavor', 'Color'], ['Vessel', 'Brush/Tool'], ['Pour', 'Paint'], ['Spill', 'Delete']] as [term, tech]}
+					<div class="flex flex-col">
+						<span class="font-tiny5 text-[10px] text-brand uppercase">{term}</span>
+						<span class="font-serif text-[10px] text-charcoal/40 italic">meaning {tech}</span>
+					</div>
+				{/each}
+			</div>
 		</header>
 
 		<!-- Shortcut Groups Grid -->

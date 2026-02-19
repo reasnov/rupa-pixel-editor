@@ -96,4 +96,25 @@
 			🌈 GRADIENT
 		</div>
 	{/if}
+
+	<!-- Geometric Tools -->
+	{#if studio.activeTool === 'RECTANGLE'}
+		<div
+			transition:fade
+			class="flex items-center gap-1 rounded-sm bg-brand/10 px-1.5 py-0.5 font-bold text-brand"
+			title={__({ key: 'shortcut_labels.TOOL_RECTANGLE' })}
+		>
+			📦 BOX
+		</div>
+	{/if}
+
+	{#if studio.activeTool === 'ELLIPSE'}
+		<div
+			transition:fade
+			class="flex items-center gap-1 rounded-sm bg-brand/10 px-1.5 py-0.5 font-bold text-brand"
+			title={__({ key: 'shortcut_labels.TOOL_ELLIPSE' })}
+		>
+			⭕ ROUND
+		</div>
+	{/if}
 </div>

@@ -56,8 +56,18 @@ export function __({
 }) {
 	if (!i18nState.isReady) return key;
 
-	return i18next.t(key, {
+	const val = i18next.t(key, {
 		...replace,
-		lng: locale || i18nState.locale
+		lng: locale || i18nState.locale,
+		returnObjects: true
 	});
+
+	if (typeof val === 'object' && val !== null) {
+		const { artisan, technical } = val as any;
+		if (artisan && technical) {
+			return `${artisan} (${technical})`;
+		}
+	}
+
+	return val as string;
 }

@@ -105,7 +105,7 @@
 						for="fps-input"
 						class="font-serif text-sm font-bold tracking-tight text-studio-text/60 uppercase"
 					>
-						{__({ key: 'settings.weave_pace' })}
+						{__({ key: 'settings.fps_label' })}
 					</label>
 					<span class="font-serif text-[10px] text-studio-text/40">
 						{__({ key: 'settings.fps_desc' })}
@@ -127,10 +127,10 @@
 			<div class="flex items-center justify-between">
 				<div class="flex flex-col gap-1">
 					<span class="font-serif text-sm font-bold tracking-tight text-studio-text/60 uppercase">
-						{__({ key: 'settings.backdrop' })}
+						{__({ key: 'settings.background_label' })}
 					</span>
 					<span class="font-serif text-[10px] text-studio-text/40">
-						{__({ key: 'settings.backdrop_desc' })}
+						{__({ key: 'settings.background_desc' })}
 					</span>
 				</div>
 				<button

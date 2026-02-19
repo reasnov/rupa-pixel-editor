@@ -24,7 +24,7 @@
 			title="Selection Propagation (Syrup Flow)"
 		>
 			<span aria-hidden="true">🍯</span>
-			{__({ key: 'export.pour_basin.title' })}
+			{__({ key: 'export.propagation.title' })}
 		</button>
 	{/if}
 </div>

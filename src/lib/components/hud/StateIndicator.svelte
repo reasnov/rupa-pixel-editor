@@ -5,9 +5,7 @@
 </script>
 
 <div
-	class="flex items-center gap-4 transition-opacity duration-1000 {editor.cursor.isVisible
-		? 'opacity-100'
-		: 'opacity-0'}"
+	class="flex items-center gap-4 transition-opacity duration-1000"
 	role="status"
 	aria-live="polite"
 >

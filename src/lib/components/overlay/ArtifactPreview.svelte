@@ -71,11 +71,11 @@
 
 	<div class="flex flex-col items-center gap-1 text-center">
 		<span class="font-tiny5 text-[10px] tracking-widest text-brand uppercase">
-			{__({ key: 'export.artifact_label', replace: { format } })}
+			{__({ key: 'export.file_label', replace: { format } })}
 		</span>
 		<span class="font-mono text-[8px] font-bold tracking-tighter opacity-30">
 			{__({
-				key: 'export.pixel_dims',
+				key: 'export.dimensions_label',
 				replace: {
 					width: Math.round(editor.canvas.width * scale),
 					height: Math.round(editor.canvas.height * scale)

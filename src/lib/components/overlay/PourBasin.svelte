@@ -19,8 +19,8 @@
 </script>
 
 <Modal
-	title={__({ key: 'export.pour_basin.title' })}
-	subtitle={__({ key: 'export.pour_basin.subtitle' })}
+	title={__({ key: 'export.propagation.title' })}
+	subtitle={__({ key: 'export.propagation.subtitle' })}
 	icon="🍯"
 	{onClose}
 	width="400px"
@@ -30,10 +30,10 @@
 		<div class="flex items-center justify-between">
 			<div class="flex flex-col gap-1">
 				<label for="cups-input" class="font-serif text-sm font-bold tracking-tight text-studio-text/60 uppercase">
-					{__({ key: 'export.pour_basin.cups_label' })}
+					{__({ key: 'export.propagation.frames_label' })}
 				</label>
 				<span class="font-serif text-[10px] text-studio-text/40">
-					{__({ key: 'export.pour_basin.cups_desc' })}
+					{__({ key: 'export.propagation.frames_desc' })}
 				</span>
 			</div>
 			<input
@@ -50,10 +50,10 @@
 		<div class="flex flex-col gap-4">
 			<div class="flex flex-col gap-1">
 				<span class="font-serif text-sm font-bold tracking-tight text-studio-text/60 uppercase">
-					{__({ key: 'export.pour_basin.offset_label' })}
+					{__({ key: 'export.propagation.offset_label' })}
 				</span>
 				<span class="font-serif text-[10px] text-studio-text/40">
-					{__({ key: 'export.pour_basin.offset_desc' })}
+					{__({ key: 'export.propagation.offset_desc' })}
 				</span>
 			</div>
 
@@ -82,7 +82,7 @@
 			onclick={execute}
 			disabled={cups <= 0}
 		>
-			{__({ key: 'export.pour_basin.action' })}
+			{__({ key: 'export.propagation.action' })}
 		</button>
 	</div>
 </Modal>

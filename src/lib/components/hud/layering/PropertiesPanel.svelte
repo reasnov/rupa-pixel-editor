@@ -65,7 +65,9 @@
 
 		<!-- Wiggle -->
 		<div class="flex items-center justify-between gap-4">
-			<span class="font-serif text-[10px] font-bold text-charcoal/40 uppercase">Wiggle</span>
+			<span class="font-serif text-[10px] font-bold text-charcoal/40 uppercase">
+				{__({ key: 'export.wiggle_modifier' })}
+			</span>
 			<div class="flex flex-1 items-center gap-2">
 				<input
 					type="range"
@@ -81,7 +83,9 @@
 
 		<!-- Sway -->
 		<div class="flex items-center justify-between gap-4">
-			<span class="font-serif text-[10px] font-bold text-charcoal/40 uppercase">Sway</span>
+			<span class="font-serif text-[10px] font-bold text-charcoal/40 uppercase">
+				{__({ key: 'export.sway_modifier' })}
+			</span>
 			<div class="flex flex-1 items-center gap-2">
 				<input
 					type="range"

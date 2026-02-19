@@ -48,12 +48,12 @@
 						{__({ key: 'timeline.track' })}
 					</span>
 					<span class="font-mono text-[9px] font-bold text-brand/40">
-						{__({ key: 'timeline.pixel_count', replace: { count: editor.project.frames.length } })}
+						{__({ key: 'timeline.frame_count', replace: { count: editor.project.frames.length } })}
 					</span>
 				</div>
 			{:else}
 				<span class="font-mono text-[8px] font-bold text-brand/40 mr-4">
-					{editor.project.frames.length} Cups
+					{__({ key: 'timeline.frame_count', replace: { count: editor.project.frames.length } })}
 				</span>
 			{/if}
 

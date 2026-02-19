@@ -162,7 +162,7 @@
 						class="font-serif text-[10px] font-bold tracking-[0.2em] text-studio-text/30 uppercase"
 						aria-hidden="true"
 					>
-						{__({ key: 'export.kinetic_title' })}
+						{__({ key: 'export.animated_title' })}
 					</span>
 					{#if editor.project.frames.length <= 1}
 						<span class="font-serif text-[9px] font-bold text-brand italic opacity-60">
@@ -313,10 +313,10 @@
 				<div class="flex items-center justify-between">
 					<div class="flex flex-col gap-1">
 						<span class="font-serif text-sm font-bold tracking-tight text-charcoal/60 uppercase">
-							{__({ key: 'export.pixel_borders_label' })}
+							{__({ key: 'export.grid_borders_label' })}
 						</span>
 						<span class="font-serif text-[10px] text-charcoal/40">
-							{__({ key: 'export.pixel_borders_desc' })}
+							{__({ key: 'export.grid_borders_desc' })}
 						</span>
 					</div>
 					<button
@@ -325,7 +325,7 @@
 							? 'bg-brand'
 							: 'bg-charcoal/10'}"
 						onclick={() => (editor.studio.includePixelBorders = !editor.studio.includePixelBorders)}
-						aria-label={__({ key: 'export.pixel_borders_toggle' })}
+						aria-label={__({ key: 'export.grid_borders_toggle' })}
 					>
 						<div
 							class="h-4 w-4 rounded-full bg-white shadow-sm transition-transform {editor.studio
@@ -341,16 +341,16 @@
 				<div class="flex flex-col gap-4">
 					<div class="flex flex-col gap-1">
 						<span class="font-serif text-sm font-bold tracking-tight text-studio-text/60 uppercase">
-							{__({ key: 'export.bg_label' })}
+							{__({ key: 'export.background_label' })}
 						</span>
 						<span class="font-serif text-[10px] text-studio-text/40">
-							{__({ key: 'export.bg_desc' })}
+							{__({ key: 'export.background_desc' })}
 						</span>
 					</div>
 					<div
 						class="flex flex-wrap items-center gap-3"
 						role="radiogroup"
-						aria-label={__({ key: 'export.bg_type_label' })}
+						aria-label={__({ key: 'export.background_type_label' })}
 					>
 						<button
 							class="h-10 w-10 rounded-xl border-2 {editor.studio.exportBgColor === 'transparent'
@@ -361,7 +361,7 @@
 								editor.studio.exportBgColor = 'transparent';
 								isCustomSelected = false;
 							}}
-							title={__({ key: 'export.bg_transparent' })}
+							title={__({ key: 'export.background_transparent' })}
 							role="radio"
 							aria-checked={editor.studio.exportBgColor === 'transparent'}
 						></button>
@@ -373,7 +373,7 @@
 								editor.studio.exportBgColor = '#eee8d5';
 								isCustomSelected = false;
 							}}
-							title={__({ key: 'export.bg_cream' })}
+							title={__({ key: 'export.background_cream' })}
 							role="radio"
 							aria-checked={editor.studio.exportBgColor === '#eee8d5'}
 						></button>
@@ -385,7 +385,7 @@
 								editor.studio.exportBgColor = '#000000';
 								isCustomSelected = false;
 							}}
-							title={__({ key: 'export.bg_black' })}
+							title={__({ key: 'export.background_black' })}
 							role="radio"
 							aria-checked={editor.studio.exportBgColor === '#000000'}
 						></button>
@@ -401,7 +401,7 @@
 									editor.studio.exportBgColor = customBg;
 									showPicker = true;
 								}}
-								title={__({ key: 'export.bg_custom' })}
+								title={__({ key: 'export.background_custom' })}
 								role="radio"
 								aria-checked={isCustomSelected}
 							></button>
@@ -417,7 +417,7 @@
 							class="flex items-center gap-2 font-serif text-[10px] font-bold tracking-widest text-brand uppercase opacity-60 hover:opacity-100"
 						>
 							<span aria-hidden="true">🎨</span>
-							{__({ key: 'export.match_background' })}
+							{__({ key: 'export.match_canvas_background' })}
 						</button>
 					{/if}
 				</div>

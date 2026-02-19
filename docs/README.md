@@ -8,19 +8,15 @@ Welcome to the **Rupa Pixel Editor** (Editor) documentation. This repository con
 
 _Core philosophy, project identity, and the "Cottagecore" aesthetic._
 
-### 2. [User Guide](./USER_GUIDE.md)
-
-_How to use the Café: Navigation, Pixeling, and Artifact Creation._
-
-### 3. [Technical Architecture](./developers/architecture.md)
+### 2. [Technical Architecture](./developers/architecture.md)
 
 _System design, state management with Svelte 5 Runes, and core engines._
 
-### 4. [Technical Specifications](./developers/specs.md)
+### 3. [Technical Specifications](./developers/specs.md)
 
 _Grid mechanics, intent schemas, visual identity, and performance requirements._
 
-### 5. [Development Blueprints](./developers/blueprints/README.md)
+### 4. [Development Blueprints](./developers/blueprints/README.md)
 
 _Historical and future development roadmaps._
 
@@ -35,11 +31,11 @@ _Historical and future development roadmaps._
 - [09: Advanced Drawing Tools](./developers/blueprints/09-advanced-drawing-tools.md)
 - [10: Industrial Scale Performance](./developers/blueprints/10-industrial-scale-performance.md)
 
-### 6. [Release Notes](./pubs/releases/v0.8.0.md)
+### 5. [Release Notes](./pubs/releases/v0.8.0.md)
 
 _Latest milestone highlights and changes._
 
-### 7. [Security Policy](../SECURITY.md)
+### 6. [Security Policy](../SECURITY.md)
 
 _Guidelines for reporting vulnerabilities._
 

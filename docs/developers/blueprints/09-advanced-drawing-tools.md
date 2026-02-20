@@ -166,13 +166,14 @@ Support for background reference images to assist in tracing complex sketches.
 
 Wave III introduces high-level manipulation and organic blending to the studio.
 
-### 11.1 The Ombre Pour (Gradient Fill)
+### 11.1 The Aroma Blend (Dither Blending)
 
-Advanced color blending across defined areas or the entire canvas.
+Professional-grade color transitions integrated directly into the brush engine.
 
-- **Orchestration:** `Alt + G` (Toggle Gradient Stance).
-- **Control:** Enter to set Start Color, Move to define Axis, Enter to set End Color.
-- **Algorithm:** Linear and Radial interpolation between two hex values.
+- **Orchestration:** `Alt + G` (Toggle Aroma Blend).
+- **Mechanism:** Utilizes a **4x4 Bayer Matrix** for ordered dithering.
+- **Control:** The **Frothiness (Hardness)** slider determines the density falloff towards the brush edges.
+- **Fidelity:** Creates perfect checkerboard patterns at 50% density, ideal for pixel art shading that looks smooth when zoomed out.
 
 ### 11.2 Pattern Etching (Custom Stencils)
 
@@ -199,7 +200,7 @@ Move and scale selected pixels without using the clipboard.
 | **Rectangle Tool**  | `TOOL_RECTANGLE`       | `Alt + r`        | Magic   |
 | **Ellipse Tool**    | `TOOL_ELLIPSE`         | `Alt + c`        | Magic   |
 | **Underlay Toggle** | `TOGGLE_UNDERLAY`      | `Ctrl + Alt + u` | View    |
-| **Gradient Fill**   | `TOOL_GRADIENT`        | `Alt + g`        | Magic   |
+| **Classic Blend**   | `TOGGLE_DITHER_BLEND`  | `Alt + g`        | Magic   |
 | **Pattern Brush**   | `TOGGLE_PATTERN_BRUSH` | `Ctrl + Alt + b` | Etching |
 | **Transform Mode**  | `TOOL_TRANSFORM`       | `m`              | Edit    |
 

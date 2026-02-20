@@ -45,7 +45,7 @@ Every interaction is mapped to a `ActionIntent` to ensure semantic consistency. 
 - `FLOOD_FILL`: Connected color fill.
 - `RECOLOR`: Global color replacement.
 - `SELECT_SAME`: Magic wand selection.
-- `TOOL_GRADIENT`: Linear ombre pouring.
+- `TOGGLE_DITHER_BLEND`: Professional dithered brush blending (**`Alt + G`**).
 - `TOOL_RECTANGLE`, `TOOL_ELLIPSE`, `TOOL_POLYGON`: Geometric shape vessels.
 - `TOOL_TRANSFORM`: Nudge and reposition selected pixels.
 - `TOOL_SELECT`: Area focus tool (**`Shift + S`**).
@@ -59,6 +59,7 @@ Every interaction is mapped to a `ActionIntent` to ensure semantic consistency. 
 - `MOVE_ITEM_UP`, `MOVE_ITEM_DOWN`: Reorder Infusions (Layers) in the stack.
 - `MERGE_LAYERS`: Flatten an Infusion into the one below it.
 - `TOGGLE_LAYER_VISIBILITY`, `TOGGLE_LAYER_LOCK`: Manage Infusion properties.
+- `TOGGLE_FRAME_VISIBILITY`: Manage frame inclusion in playback/export.
 
 ### 2.5 UI & Environment Intents
 

@@ -64,6 +64,10 @@ The export system transforms reactive grid data into standard formats.
 ### 3.2 Raster Engine (Image Output)
 
 - **Technical Detail:** Utilizes HTML5 Canvas for high-fidelity PNG/JPG/WebP generation.
+- **Service Mastery (v0.9.1):**
+  - **Frame Selection:** Support for targeted exports (Active Only, Visible, Selected, or All).
+  - **ZIP Bundling:** Automated packaging of multiple frames into a single `.zip` artifact using `JSZip`.
+  - **Progress Visibility:** Integrated progress reporting (0-100%) during rendering and compression.
 - **Location:** `src/lib/engine/export.ts`.
 
 ---

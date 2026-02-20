@@ -1,10 +1,10 @@
-# Rupa Pixel Editor ☕
-
-**Rupa** is a professional-grade, meditative pixel art editor designed for digital baristas. It combines a keyboard-first workflow with a "Cottagecore" aesthetic, turning pixel art into a tactile craft of digital brewing.
-
 [![Version](https://img.shields.io/badge/version-0.9.0-magenta.svg)](./docs/pubs/releases/v0.9.0.md)
 [![Architecture](https://img.shields.io/badge/architecture-Modular%20Layered%20Monolith-teal.svg)](./docs/developers/architecture.md)
 [![Framework](https://img.shields.io/badge/framework-Svelte%205-orange.svg)](https://svelte.dev)
+
+# Rupa Pixel Editor ☕
+
+**Rupa** is a professional-grade, meditative pixel art editor designed for digital baristas. It combines a keyboard-first workflow with a "Cottagecore" aesthetic, turning pixel art into a tactile craft of digital brewing.
 
 ---
 

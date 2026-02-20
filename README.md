@@ -1,4 +1,4 @@
-[![Version](https://img.shields.io/badge/version-0.9.0-magenta.svg)](./docs/pubs/releases/v0.9.0.md)
+[![Version](https://img.shields.io/badge/version-0.9.1-magenta.svg)](./docs/pubs/releases/v0.9.1.md)
 [![Architecture](https://img.shields.io/badge/architecture-Modular%20Layered%20Monolith-teal.svg)](./docs/developers/architecture.md)
 [![Framework](https://img.shields.io/badge/framework-Svelte%205-orange.svg)](https://svelte.dev)
 
@@ -6,19 +6,26 @@
 
 **Rupa** is a professional-grade, meditative pixel art editor designed for digital baristas. It combines a keyboard-first workflow with a "Cottagecore" aesthetic, turning pixel art into a tactile craft of digital brewing.
 
+![Screenshot 1](./static/screenshots/screenshot-1.png)
+
 ---
 
-## ✨ Features (v0.9.0: The Kinetic Flow)
+## ✨ Features (v0.9.1: The Master Blend)
 
+- **Aroma Blend**: Professional dithered blending integrated into the brush engine for classic pixel transitions.
+- **Flavor Library**: Persistent palette management with support for custom presets, GPL imports, and universal export.
 - **The Drop Matrix**: Professional grid-based timeline for high-density animation management.
-- **Syrup Flow (Propagation)**: Automated projection of selections across frames with linear offsets.
-- **The Chronos Protocol**: 100% deterministic animation export for perfect Videos and GIFs.
-- **The Temporal Echo**: Advanced multi-frame onion skinning with directional color tints.
-- **Aroma Pulse**: Procedural layer modifiers (Wiggle, Sway) for effortless organic motion.
-- **Steeped Layers**: Automatic cross-frame cell linking for synchronized static elements.
+- **Chronos Export**: High-fidelity export engine with multi-frame selection, ZIP bundling, and progress tracking.
+- **Precision Timeline**: Adaptive time ruler with sub-second accuracy and unified sticky-scrolling.
 - **Master Etcher's Kit**: Professional tools including Mirror Symmetry, Dynamic Brush Sizes, and Shading.
-- **Canvas-Powered Grid**: High-speed HTML5 Canvas rendering for limitless pixel creativity.
 - **Barista Ecosystem**: A sun-drenched sanctuary with generative piano soundscapes and tactile feedback.
+
+## 🖼️ Gallery
+
+<div align="center">
+  <img src="./static/screenshots/screenshot-2.png" width="45%" />
+  <img src="./static/screenshots/screenshot-3.png" width="45%" />
+</div>
 
 ## 🏗️ Architectural Sovereignty
 
@@ -68,7 +75,7 @@ sudo sysctl -w kernel.unprivileged_userns_clone=1
 
 - [User Guide](./docs/USER_GUIDE.md)
 - [Developer Specs](./docs/developers/specs.md)
-- [Latest Release Notes](./docs/pubs/releases/v0.9.0.md)
+- [Latest Release Notes](./docs/pubs/releases/v0.9.1.md)
 
 ---
 

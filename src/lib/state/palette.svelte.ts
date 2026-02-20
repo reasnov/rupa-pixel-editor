@@ -1,5 +1,6 @@
 import { type ColorHex } from '../types/index.js';
 import palettes from '../config/palettes.json' with { type: 'json' };
+import { ColorLogic } from '../logic/color.js';
 
 export interface PalettePreset {
 	id: string;
@@ -53,6 +54,20 @@ export class PaletteState {
 		if (!this.swatches.includes(this.activeColor)) {
 			this.activeColor = this.swatches[0];
 		}
+	}
+
+	newPalette() {
+		this.swatches = [this.activeColor];
+	}
+
+	importPalette(content: string) {
+		const colors = ColorLogic.parsePaletteText(content);
+		if (colors.length > 0) {
+			this.swatches = colors;
+			this.activeColor = colors[0];
+			return true;
+		}
+		return false;
 	}
 
 	savePreset(name: string) {

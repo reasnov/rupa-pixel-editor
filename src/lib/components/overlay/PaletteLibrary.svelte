@@ -2,6 +2,7 @@
 	import { __ } from '$lib/state/i18n.svelte.js';
 	import { editor } from '../../state/editor.svelte.js';
 	import { services } from '../../engine/services.js';
+	import { ColorLogic } from '../../logic/color.js';
 	import Modal from '../ui/Modal.svelte';
 	import { fade, slide } from 'svelte/transition';
 
@@ -10,18 +11,19 @@
 	}>();
 
 	let newPresetName = $state('');
+	let fileInput: HTMLInputElement | undefined = $state();
 
 	function handleSave() {
 		if (!newPresetName.trim()) return;
 		editor.paletteState.savePreset(newPresetName.trim());
 		newPresetName = '';
-		services.persistence.backup(); // Save to current session
-		services.persistence.saveGlobalPalettes(); // Save to global library
+		services.persistence.backup();
+		services.persistence.saveGlobalPalettes();
 	}
 
 	function handleApply(id: string) {
 		editor.paletteState.applyPreset(id);
-		editor.studio.show('Flavor Swatched Applied');
+		editor.studio.show('Flavor Swatch Applied');
 	}
 
 	function handleDelete(id: string) {
@@ -29,7 +31,52 @@
 		services.persistence.backup();
 		services.persistence.saveGlobalPalettes();
 	}
+
+	function handleNewRecipe() {
+		editor.paletteState.newPalette();
+		editor.studio.show('Empty Cup Ready for New Flavors');
+	}
+
+	function triggerImport() {
+		fileInput?.click();
+	}
+
+	async function handleFileChange(e: Event) {
+		const file = (e.target as HTMLInputElement).files?.[0];
+		if (!file) return;
+
+		const text = await file.text();
+		if (editor.paletteState.importPalette(text)) {
+			editor.studio.show(`Imported ${file.name}`);
+		} else {
+			editor.studio.show('Invalid Ingredients (File Format Error)');
+		}
+		// Reset input
+		(e.target as HTMLInputElement).value = '';
+	}
+
+	function handleExport(id: string) {
+		const preset = editor.paletteState.presets.find((p) => p.id === id);
+		if (!preset) return;
+
+		const gplContent = ColorLogic.toGPL(preset.name, preset.colors);
+		const blob = new Blob([gplContent], { type: 'text/plain' });
+		const url = URL.createObjectURL(blob);
+		const a = document.createElement('a');
+		a.href = url;
+		a.download = `${preset.name.toLowerCase().replace(/\s+/g, '-')}.gpl`;
+		a.click();
+		URL.revokeObjectURL(url);
+	}
 </script>
+
+<input
+	type="file"
+	accept=".gpl,.txt"
+	class="hidden"
+	bind:this={fileInput}
+	onchange={handleFileChange}
+/>
 
 <Modal
 	title={__({ key: 'palette_library.title' })}
@@ -39,6 +86,35 @@
 	width="600px"
 >
 	<div class="flex flex-col gap-8">
+		<!-- Actions: New & Import -->
+		<div class="flex items-center gap-3">
+			<button
+				class="flex flex-1 items-center justify-center gap-2 rounded-xl border-2 border-dashed border-charcoal/10 bg-white/40 py-4 transition-all hover:border-brand/40 hover:bg-white"
+				onclick={handleNewRecipe}
+			>
+				<span class="text-lg">🥣</span>
+				<div class="flex flex-col items-start">
+					<span class="font-serif text-[10px] font-bold tracking-widest text-charcoal/60 uppercase"
+						>New Recipe</span
+					>
+					<span class="font-serif text-[8px] text-charcoal/30 italic">Start from a blank cup</span>
+				</div>
+			</button>
+
+			<button
+				class="flex flex-1 items-center justify-center gap-2 rounded-xl border-2 border-dashed border-charcoal/10 bg-white/40 py-4 transition-all hover:border-brand/40 hover:bg-white"
+				onclick={triggerImport}
+			>
+				<span class="text-lg">📦</span>
+				<div class="flex flex-col items-start">
+					<span class="font-serif text-[10px] font-bold tracking-widest text-charcoal/60 uppercase"
+						>Import Ingredients</span
+					>
+					<span class="font-serif text-[8px] text-charcoal/30 italic">Load .GPL or HEX list</span>
+				</div>
+			</button>
+		</div>
+
 		<!-- Save Current Palette -->
 		<div class="flex flex-col gap-3 rounded-xl border border-brand/10 bg-brand/5 p-6">
 			<div class="flex flex-col gap-1">
@@ -112,6 +188,15 @@
 							>
 								{__({ key: 'palette_library.button.apply' })}
 							</button>
+
+							<button
+								class="flex h-8 w-8 items-center justify-center rounded-lg border border-charcoal/10 bg-stone-light/50 text-[10px] transition-all hover:border-brand hover:bg-brand hover:text-white"
+								onclick={() => handleExport(preset.id)}
+								title="Export Recipe (.gpl)"
+							>
+								📥
+							</button>
+
 							{#if !preset.isDefault}
 								<button
 									class="flex h-8 w-8 items-center justify-center rounded-lg border border-charcoal/10 bg-stone-light/50 text-[10px] transition-all hover:border-red-500 hover:bg-red-500 hover:text-white"

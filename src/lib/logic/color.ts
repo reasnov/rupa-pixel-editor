@@ -222,4 +222,58 @@ export class ColorLogic {
 		const hex = `#${toHex(r)}${toHex(g)}${toHex(b)}`;
 		return alphaHex === 'ff' ? hex : hex + alphaHex;
 	}
+
+	/**
+	 * Generates a .gpl (GIMP Palette) string.
+	 */
+	static toGPL(name: string, colors: ColorHex[]): string {
+		let gpl = `GIMP Palette\nName: ${name}\nColumns: 4\n#\n`;
+		colors.forEach((hex) => {
+			const { r, g, b } = this.hexToRgb(hex);
+			gpl += `${r.toString().padStart(3)} ${g.toString().padStart(3)} ${b.toString().padStart(3)} Untitled\n`;
+		});
+		return gpl;
+	}
+
+	/**
+	 * Parses a string (GPL or HEX list) and extracts valid HEX colors.
+	 */
+	static parsePaletteText(content: string): ColorHex[] {
+		const colors: ColorHex[] = [];
+		const hexRegex = /#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3}|[A-Fa-f0-9]{8})/g;
+
+		// 1. Try to find HEX codes directly
+		let match;
+		while ((match = hexRegex.exec(content)) !== null) {
+			colors.push(match[0] as ColorHex);
+		}
+
+		if (colors.length > 0) return colors;
+
+		// 2. Try to parse as GPL (R G B format)
+		const lines = content.split('\n');
+		lines.forEach((line) => {
+			const trimmed = line.trim();
+			if (
+				!trimmed ||
+				trimmed.startsWith('GIMP') ||
+				trimmed.startsWith('Name:') ||
+				trimmed.startsWith('#')
+			)
+				return;
+
+			const parts = trimmed.split(/\s+/).filter((p) => p.length > 0);
+			if (parts.length >= 3) {
+				const r = parseInt(parts[0], 10);
+				const g = parseInt(parts[1], 10);
+				const b = parseInt(parts[2], 10);
+
+				if (!isNaN(r) && !isNaN(g) && !isNaN(b)) {
+					colors.push(this.rgbToHex(r, g, b, 1.0) as ColorHex);
+				}
+			}
+		});
+
+		return colors;
+	}
 }

@@ -236,10 +236,20 @@ export class ExportEngine {
 		};
 
 		return new Promise((resolve, reject) => {
-			recorder.onstop = () => {
+			recorder.onstop = async () => {
 				document.body.removeChild(canvas);
-				const blob = new Blob(chunks, { type: mimeType });
-				resolve(blob);
+				const rawBlob = new Blob(chunks, { type: mimeType });
+
+				// Chronos Phase 3: Metadata Injection (Header Patching)
+				try {
+					const { EbmlLogic } = await import('../logic/ebml.js');
+					const totalDuration = frameDurations.reduce((a, b) => a + b, 0);
+					const fixedBlob = await EbmlLogic.injectMetadata(rawBlob, totalDuration);
+					resolve(fixedBlob);
+				} catch (e) {
+					console.warn('Metadata injection failed, returning raw video:', e);
+					resolve(rawBlob);
+				}
 			};
 			recorder.onerror = (err) => {
 				document.body.removeChild(canvas);

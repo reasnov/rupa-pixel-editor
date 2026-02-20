@@ -50,7 +50,7 @@
 		else if (zoom > 1.2) timeStep = 0.5;
 
 		const framesPerStep = Math.max(1, Math.round(fps * timeStep));
-		
+
 		// Fill the ruler up to maxRulerWidth (content + buffer)
 		const totalPossibleFrames = Math.ceil(maxRulerWidth / currentFrameWidth);
 
@@ -120,16 +120,20 @@
 			>
 				{#each rulerMarks as mark}
 					<div
-						class="absolute flex flex-col items-center transition-opacity duration-300 {mark.isFuture ? 'opacity-20' : 'opacity-100'}"
+						class="absolute flex flex-col items-center transition-opacity duration-300 {mark.isFuture
+							? 'opacity-20'
+							: 'opacity-100'}"
 						style="left: {mark.index * currentFrameWidth}px; width: {currentFrameWidth}px;"
 					>
 						<div class="w-px bg-charcoal/20 {mark.isMajor ? 'h-2' : 'h-1'}"></div>
 						{#if mark.label}
-							<span class="font-mono text-[7px] font-black {mark.isMajor && !mark.isFuture ? 'text-brand' : 'text-charcoal/40'} mt-0.5 leading-none"
-								>{mark.label}</span
+							<span
+								class="font-mono text-[7px] font-black {mark.isMajor && !mark.isFuture
+									? 'text-brand'
+									: 'text-charcoal/40'} mt-0.5 leading-none">{mark.label}</span
 							>
 						{:else if mark.index % 5 === 0}
-							<span class="font-mono text-[7px] font-bold text-charcoal/20 mt-0.5 leading-none"
+							<span class="mt-0.5 font-mono text-[7px] leading-none font-bold text-charcoal/20"
 								>{mark.index + 1}</span
 							>
 						{/if}
@@ -148,7 +152,11 @@
 		role="grid"
 		aria-label="The Drop Matrix"
 	>
-		<div class="relative flex" style="width: {maxRulerWidth + 128}px; min-height: 100%; --frame-width: {currentFrameWidth}px;">
+		<div
+			class="relative flex"
+			style="width: {maxRulerWidth +
+				128}px; min-height: 100%; --frame-width: {currentFrameWidth}px;"
+		>
 			<!-- Sticky Sidebar -->
 			<div
 				class="sticky left-0 z-30 flex w-32 shrink-0 flex-col border-r border-charcoal/10 bg-foam-white/95 shadow-sm"

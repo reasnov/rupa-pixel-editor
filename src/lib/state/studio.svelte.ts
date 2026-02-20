@@ -29,9 +29,7 @@ export class StudioState {
 	isAirbrushActive = $state(false);
 	airbrushDensity = $state(0.2); // 0.0 to 1.0 (Mist Thickness)
 
-	activeTool = $state<
-		'BRUSH' | 'ERASER' | 'SELECT' | 'RECTANGLE' | 'ELLIPSE' | 'POLYGON'
-	>('BRUSH');
+	activeTool = $state<'BRUSH' | 'ERASER' | 'SELECT' | 'RECTANGLE' | 'ELLIPSE' | 'POLYGON'>('BRUSH');
 	shapeAnchor = $state<{ x: number; y: number } | null>(null);
 	polygonSides = $state(3); // 3 to 12
 	polygonIndentation = $state(0); // 0 to 100 (percentage)

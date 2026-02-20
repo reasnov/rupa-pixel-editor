@@ -74,7 +74,11 @@
 	</div>
 
 	<!-- Main Timeline Area -->
-	<div class="flex min-h-0 flex-1 flex-col overflow-hidden {editor.studio.isTimelineMinimized ? 'opacity-0 pointer-events-none' : 'opacity-100'} transition-opacity duration-300">
+	<div
+		class="flex min-h-0 flex-1 flex-col overflow-hidden {editor.studio.isTimelineMinimized
+			? 'pointer-events-none opacity-0'
+			: 'opacity-100'} transition-opacity duration-300"
+	>
 		<TimelineView />
 	</div>
 </div>

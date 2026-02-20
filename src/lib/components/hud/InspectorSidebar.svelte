@@ -13,7 +13,7 @@
 	</div>
 
 	<!-- Main Inspector Content -->
-	<div class="flex flex-1 flex-col gap-4 p-3 overflow-y-auto custom-scrollbar">
+	<div class="custom-scrollbar flex flex-1 flex-col gap-4 overflow-y-auto p-3">
 		<!-- Active Color & Palette -->
 		<div class="flex flex-col gap-3">
 			<BrushSettings />

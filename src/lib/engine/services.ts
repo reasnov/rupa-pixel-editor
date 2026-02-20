@@ -279,9 +279,13 @@ export class ServiceCoordinator {
 
 					// Extract base64 part
 					const base64Data = dataUrl.split(',')[1];
-					zip.file(`${frame.name.toLowerCase().replace(/\s+/g, '-')}-${i}.${actualFormat}`, base64Data, {
-						base64: true
-					});
+					zip.file(
+						`${frame.name.toLowerCase().replace(/\s+/g, '-')}-${i}.${actualFormat}`,
+						base64Data,
+						{
+							base64: true
+						}
+					);
 					updateProgress((i + 1) / framesToProcess.length);
 					await new Promise((r) => setTimeout(r, 0));
 				}

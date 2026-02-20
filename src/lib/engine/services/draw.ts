@@ -116,7 +116,10 @@ export class DrawService {
 					if (editor.selection.isActive && !editor.selection.activeIndicesSet.has(index)) return;
 
 					// Alpha Lock
-					if (editor.studio.isAlphaLocked && !editor.project.activeFrame.activeLayer.hasPixel(index))
+					if (
+						editor.studio.isAlphaLocked &&
+						!editor.project.activeFrame.activeLayer.hasPixel(index)
+					)
 						return;
 
 					// Color Lock
@@ -426,8 +429,7 @@ export class DrawService {
 
 						if (!PixelLogic.orderedDither(finalPos.x, finalPos.y, threshold)) return;
 
-						if (editor.selection.isActive && !editor.selection.activeIndicesSet.has(index))
-							return;
+						if (editor.selection.isActive && !editor.selection.activeIndicesSet.has(index)) return;
 
 						if (
 							editor.studio.isAlphaLocked &&

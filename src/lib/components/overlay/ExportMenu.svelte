@@ -50,8 +50,9 @@
 
 	async function handleExport() {
 		if (isExporting) return;
-		
-		const isKinetic = ['webm', 'gif', 'mp4'].includes(format) || (format === 'svg' && activeTab === 'video');
+
+		const isKinetic =
+			['webm', 'gif', 'mp4'].includes(format) || (format === 'svg' && activeTab === 'video');
 		if (isKinetic && !canUseVideo) {
 			editor.studio.show(__({ key: 'export.status.requires_frames' }));
 			return;
@@ -113,7 +114,9 @@
 			aria-label={__({ key: 'export.settings_label' })}
 		>
 			<!-- Tab Switcher -->
-			<div class="flex rounded-xl bg-black/5 p-1 {isExporting ? 'opacity-50 pointer-events-none' : ''}">
+			<div
+				class="flex rounded-xl bg-black/5 p-1 {isExporting ? 'pointer-events-none opacity-50' : ''}"
+			>
 				<button
 					onclick={() => setTab('image')}
 					class="flex-1 rounded-lg py-2 font-serif text-[10px] font-bold tracking-widest uppercase transition-all {activeTab ===
@@ -138,7 +141,7 @@
 				<!-- Section: Static Art -->
 				<div class="flex flex-col gap-3" transition:fade={{ duration: 150 }}>
 					<div
-						class="grid grid-cols-2 gap-3 {isExporting ? 'opacity-50 pointer-events-none' : ''}"
+						class="grid grid-cols-2 gap-3 {isExporting ? 'pointer-events-none opacity-50' : ''}"
 						role="radiogroup"
 					>
 						<button
@@ -208,7 +211,11 @@
 					</div>
 
 					<!-- Selection Strategy -->
-					<div class="mt-2 flex flex-col gap-4 rounded-xl border border-black/5 bg-black/5 p-4 {isExporting ? 'opacity-50 pointer-events-none' : ''}">
+					<div
+						class="mt-2 flex flex-col gap-4 rounded-xl border border-black/5 bg-black/5 p-4 {isExporting
+							? 'pointer-events-none opacity-50'
+							: ''}"
+					>
 						<div class="flex flex-col gap-1">
 							<span
 								class="font-serif text-[10px] font-bold tracking-widest text-studio-text/60 uppercase"
@@ -258,7 +265,9 @@
 						</div>
 					{/if}
 					<div
-						class="grid grid-cols-2 gap-3 {!canUseVideo || isExporting ? 'opacity-40 pointer-events-none' : ''}"
+						class="grid grid-cols-2 gap-3 {!canUseVideo || isExporting
+							? 'pointer-events-none opacity-40'
+							: ''}"
 						role="radiogroup"
 					>
 						<button
@@ -328,7 +337,11 @@
 					</div>
 
 					<!-- FPS Control -->
-					<div class="mt-2 flex items-center justify-between rounded-xl bg-black/5 p-4 {isExporting ? 'opacity-50 pointer-events-none' : ''}">
+					<div
+						class="mt-2 flex items-center justify-between rounded-xl bg-black/5 p-4 {isExporting
+							? 'pointer-events-none opacity-50'
+							: ''}"
+					>
 						<div class="flex flex-col gap-1">
 							<label
 								for="fps-input"
@@ -353,7 +366,11 @@
 			{/if}
 
 			<!-- Global Settings -->
-			<div class="flex flex-col gap-5 rounded-xl border border-black/5 bg-white/40 p-6 {isExporting ? 'opacity-50 pointer-events-none' : ''}">
+			<div
+				class="flex flex-col gap-5 rounded-xl border border-black/5 bg-white/40 p-6 {isExporting
+					? 'pointer-events-none opacity-50'
+					: ''}"
+			>
 				<!-- Scale -->
 				<div class="flex items-center justify-between">
 					<div class="flex flex-col gap-1">
@@ -382,7 +399,9 @@
 				<!-- Pixel Borders -->
 				<div class="flex items-center justify-between">
 					<div class="flex flex-col gap-1">
-						<span class="font-serif text-[10px] font-bold tracking-widest text-charcoal/60 uppercase">
+						<span
+							class="font-serif text-[10px] font-bold tracking-widest text-charcoal/60 uppercase"
+						>
 							{__({ key: 'export.label.borders' })}
 						</span>
 						<span class="font-serif text-[9px] text-charcoal/40">
@@ -411,17 +430,16 @@
 				<!-- Background -->
 				<div class="flex flex-col gap-4">
 					<div class="flex flex-col gap-1">
-						<span class="font-serif text-[10px] font-bold tracking-widest text-studio-text/60 uppercase">
+						<span
+							class="font-serif text-[10px] font-bold tracking-widest text-studio-text/60 uppercase"
+						>
 							{__({ key: 'export.label.background' })}
 						</span>
 						<span class="font-serif text-[9px] text-studio-text/40">
 							{__({ key: 'export.description.background' })}
 						</span>
 					</div>
-					<div
-						class="flex flex-wrap items-center gap-3"
-						role="radiogroup"
-					>
+					<div class="flex flex-wrap items-center gap-3" role="radiogroup">
 						<button
 							class="h-10 w-10 rounded-xl border-2 {editor.studio.exportBgColor === 'transparent'
 								? 'border-brand'
@@ -496,7 +514,9 @@
 			<div class="flex flex-col gap-3">
 				{#if isExporting}
 					<div class="flex flex-col gap-2" transition:fade>
-						<div class="flex items-center justify-between font-serif text-[10px] font-bold tracking-widest text-brand uppercase">
+						<div
+							class="flex items-center justify-between font-serif text-[10px] font-bold tracking-widest text-brand uppercase"
+						>
 							<span>{__({ key: 'export.status.progress' })}</span>
 							<span>{editor.studio.exportProgress}%</span>
 						</div>
@@ -510,7 +530,9 @@
 				{/if}
 
 				<button
-					class="editor-primary-btn w-full py-5 text-xl flex items-center justify-center gap-3 transition-all {isExporting ? 'opacity-80' : ''}"
+					class="editor-primary-btn flex w-full items-center justify-center gap-3 py-5 text-xl transition-all {isExporting
+						? 'opacity-80'
+						: ''}"
 					onclick={handleExport}
 					disabled={isExporting || (activeTab === 'video' && !canUseVideo)}
 				>
@@ -523,4 +545,5 @@
 				</button>
 			</div>
 		</div>
-	</div></Modal>
+	</div></Modal
+>

@@ -395,7 +395,9 @@ export class EditorEngine {
 				return feedback.emit('READY');
 			case 'TOGGLE_DITHER_BLEND':
 				state.studio.isDitherBlendActive = !state.studio.isDitherBlendActive;
-				state.studio.show(state.studio.isDitherBlendActive ? 'Classic Blend ON' : 'Classic Blend OFF');
+				state.studio.show(
+					state.studio.isDitherBlendActive ? 'Classic Blend ON' : 'Classic Blend OFF'
+				);
 				return feedback.emit('READY');
 			case 'TOOL_TRANSFORM':
 				if (state.selection.isActive) {

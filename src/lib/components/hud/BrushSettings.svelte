@@ -15,8 +15,8 @@
 			<button
 				onclick={() => (studio.brushShape = 'SQUARE')}
 				class="h-5 w-5 rounded border transition-all {studio.brushShape === 'SQUARE'
-					? 'bg-brand text-white border-brand shadow-sm'
-					: 'bg-charcoal/5 border-transparent text-charcoal/40 hover:bg-charcoal/10'}"
+					? 'border-brand bg-brand text-white shadow-sm'
+					: 'border-transparent bg-charcoal/5 text-charcoal/40 hover:bg-charcoal/10'}"
 				title="Square Vessel"
 			>
 				<span class="text-[10px]">■</span>
@@ -24,8 +24,8 @@
 			<button
 				onclick={() => (studio.brushShape = 'CIRCLE')}
 				class="h-5 w-5 rounded border transition-all {studio.brushShape === 'CIRCLE'
-					? 'bg-brand text-white border-brand shadow-sm'
-					: 'bg-charcoal/5 border-transparent text-charcoal/40 hover:bg-charcoal/10'}"
+					? 'border-brand bg-brand text-white shadow-sm'
+					: 'border-transparent bg-charcoal/5 text-charcoal/40 hover:bg-charcoal/10'}"
 				title="Circle Vessel"
 			>
 				<span class="text-[10px]">●</span>

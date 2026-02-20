@@ -69,7 +69,6 @@ export class PointerEngine {
 			['RECTANGLE', 'ELLIPSE', 'POLYGON', 'GRADIENT'].includes(tool)
 		) {
 			state.studio.shapeAnchor = { ...state.cursor.pos };
-			if (tool === 'GRADIENT') state.studio.gradientStartColor = state.paletteState.activeColor;
 			return;
 		}
 

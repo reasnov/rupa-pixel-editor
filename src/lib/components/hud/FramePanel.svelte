@@ -328,8 +328,9 @@
 						aria-current={i === editor.project.activeFrameIndex ? 'true' : undefined}
 					>
 						<div class="flex flex-1 items-center gap-2 overflow-hidden">
-							<span class="font-mono text-[9px] font-bold opacity-20 w-4 shrink-0 text-center" aria-hidden="true"
-								>{i + 1}</span
+							<span
+								class="w-4 shrink-0 text-center font-mono text-[9px] font-bold opacity-20"
+								aria-hidden="true">{i + 1}</span
 							>
 							<button
 								onclick={(e) => {
@@ -444,7 +445,7 @@
 											e.stopPropagation();
 											layer.isCollapsed = !layer.isCollapsed;
 										}}
-										class="text-[10px] w-4 shrink-0 text-center opacity-40 hover:opacity-100"
+										class="w-4 shrink-0 text-center text-[10px] opacity-40 hover:opacity-100"
 									>
 										{layer.isCollapsed ? '▶' : '▼'}
 									</button>

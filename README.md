@@ -1,4 +1,4 @@
-# Rupa Pixel Editor (Editor) ☕
+# Rupa Pixel Editor ☕
 
 **Rupa** is a professional-grade, meditative pixel art editor designed for digital baristas. It combines a keyboard-first workflow with a "Cottagecore" aesthetic, turning pixel art into a tactile craft of digital brewing.
 

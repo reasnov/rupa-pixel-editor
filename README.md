@@ -1,4 +1,4 @@
-[![Version](https://img.shields.io/badge/version-0.9.1-magenta.svg)](./docs/pubs/releases/v0.9.1.md)
+[![Version](https://img.shields.io/badge/version-0.9.2-magenta.svg)](./docs/pubs/releases/v0.9.2.md)
 [![Architecture](https://img.shields.io/badge/architecture-Modular%20Layered%20Monolith-teal.svg)](./docs/developers/architecture.md)
 [![Framework](https://img.shields.io/badge/framework-Svelte%205-orange.svg)](https://svelte.dev)
 
@@ -10,12 +10,12 @@
 
 ---
 
-## ✨ Features (v0.9.1: The Master Blend)
+## ✨ Features (v0.9.2: Palette & Video Precision)
 
 - **Aroma Blend**: Professional dithered blending integrated into the brush engine for classic pixel transitions.
 - **Flavor Library**: Persistent palette management with support for custom presets, GPL imports, and universal export.
+- **Chronos Export**: High-fidelity export engine with WebM Header Patching for perfect seekable videos.
 - **The Drop Matrix**: Professional grid-based timeline for high-density animation management.
-- **Chronos Export**: High-fidelity export engine with multi-frame selection, ZIP bundling, and progress tracking.
 - **Precision Timeline**: Adaptive time ruler with sub-second accuracy and unified sticky-scrolling.
 - **Master Etcher's Kit**: Professional tools including Mirror Symmetry, Dynamic Brush Sizes, and Shading.
 - **Barista Ecosystem**: A sun-drenched sanctuary with generative piano soundscapes and tactile feedback.
@@ -47,7 +47,7 @@ Rupa follows a strict **5-Layer Modular Monolith** pattern:
 ### Installation
 
 ```bash
-git clone https://github.com/reasnov/rupa-pixel-editor.git
+git clone https://github.com/reasnovynt/Projects/reasnov/rupa-pixel-editor.git
 cd rupa-pixel-editor
 npm install
 ```
@@ -75,7 +75,7 @@ sudo sysctl -w kernel.unprivileged_userns_clone=1
 
 - [User Guide](./docs/USER_GUIDE.md)
 - [Developer Specs](./docs/developers/specs.md)
-- [Latest Release Notes](./docs/pubs/releases/v0.9.1.md)
+- [Latest Release Notes](./docs/pubs/releases/v0.9.2.md)
 
 ---
 

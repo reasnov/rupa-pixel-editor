@@ -36,7 +36,7 @@
 		<input
 			id="pace-input"
 			type="number"
-			bind:value={editor.studio.fps}
+			bind:value={editor.project.fps}
 			min="1"
 			max="60"
 			class="w-10 bg-transparent text-center font-mono text-sm font-bold text-studio-text focus:outline-none"

@@ -5,7 +5,7 @@
 	import TimelineView from './timeline/TimelineView.svelte';
 
 	let heightClass = $derived.by(() => {
-		if (editor.studio.isTimelineMinimized) return 'h-8';
+		if (editor.studio.isTimelineMinimized) return 'h-12';
 		if (editor.studio.isTimelineMaximized) return 'h-[75vh]';
 		return 'h-40';
 	});
@@ -36,26 +36,18 @@
 				>
 			</div>
 
-			{#if !editor.studio.isTimelineMinimized}
-				<TimelineControls />
-			{/if}
+			<TimelineControls />
 		</div>
 
 		<div class="flex items-center gap-4">
-			{#if !editor.studio.isTimelineMinimized}
-				<div class="mr-4 flex flex-col items-end">
-					<span class="font-serif text-[7px] font-black tracking-widest text-charcoal/20 uppercase">
-						{__({ key: 'timeline.track' })}
-					</span>
-					<span class="font-mono text-[9px] font-bold text-brand/40">
-						{__({ key: 'timeline.frame_count', replace: { count: editor.project.frames.length } })}
-					</span>
-				</div>
-			{:else}
-				<span class="mr-4 font-mono text-[8px] font-bold text-brand/40">
+			<div class="mr-4 flex flex-col items-end">
+				<span class="font-serif text-[7px] font-black tracking-widest text-charcoal/20 uppercase">
+					{__({ key: 'timeline.track' })}
+				</span>
+				<span class="font-mono text-[9px] font-bold text-brand/40">
 					{__({ key: 'timeline.frame_count', replace: { count: editor.project.frames.length } })}
 				</span>
-			{/if}
+			</div>
 
 			<!-- Action Buttons -->
 			<div class="flex items-center gap-1 border-l border-charcoal/10 pl-4">
@@ -82,7 +74,7 @@
 	</div>
 
 	<!-- Main Timeline Area -->
-	{#if !editor.studio.isTimelineMinimized}
+	<div class="flex min-h-0 flex-1 flex-col overflow-hidden {editor.studio.isTimelineMinimized ? 'opacity-0 pointer-events-none' : 'opacity-100'} transition-opacity duration-300">
 		<TimelineView />
-	{/if}
+	</div>
 </div>

@@ -101,8 +101,8 @@ describe('ProjectService', () => {
 				addGroup: vi.fn(),
 				width: 32,
 				height: 32,
-				duration: 100,
 				opacity: 1.0,
+				isVisible: true,
 				activeLayer: {
 					id: '00000000-0000-0000-0000-000000000000',
 					name: 'L1',

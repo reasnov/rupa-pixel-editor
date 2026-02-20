@@ -114,7 +114,7 @@
 				<input
 					id="fps-input"
 					type="number"
-					bind:value={editor.studio.fps}
+					bind:value={editor.project.fps}
 					min="1"
 					max="60"
 					class="w-20 rounded-xl border border-black/10 bg-white px-4 py-2 font-mono text-lg text-studio-text focus:border-brand focus:outline-none"

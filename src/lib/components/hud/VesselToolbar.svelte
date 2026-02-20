@@ -14,7 +14,6 @@
 		{ id: 'RECTANGLE', icon: '📦', intent: 'TOOL_RECTANGLE' as const, label: 'TOOL_RECTANGLE' },
 		{ id: 'ELLIPSE', icon: '⭕', intent: 'TOOL_ELLIPSE' as const, label: 'TOOL_ELLIPSE' },
 		{ id: 'POLYGON', icon: '⭐', intent: 'TOOL_POLYGON' as const, label: 'TOOL_POLYGON' },
-		{ id: 'GRADIENT', icon: '🌈', intent: 'TOOL_GRADIENT' as const, label: 'TOOL_GRADIENT' },
 		{ id: 'HAND', icon: '🤚', intent: 'TOGGLE_HAND_TOOL' as const, label: 'TOGGLE_HAND_TOOL' }
 	];
 

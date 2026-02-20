@@ -168,6 +168,28 @@ export class PixelLogic {
 	}
 
 	/**
+	 * Ordered Dithering (Bayer 4x4 Matrix)
+	 * Returns true if the pixel at (x, y) should be painted for a given threshold (0.0 to 1.0).
+	 */
+	private static BAYER_4X4 = [
+		[0, 8, 2, 10],
+		[12, 4, 14, 6],
+		[3, 11, 1, 9],
+		[15, 7, 13, 5]
+	];
+
+	static orderedDither(x: number, y: number, threshold: number): boolean {
+		if (threshold >= 1.0) return true;
+		if (threshold <= 0.0) return false;
+
+		const mx = ((x % 4) + 4) % 4;
+		const my = ((y % 4) + 4) % 4;
+		const matrixValue = this.BAYER_4X4[my][mx] / 16;
+
+		return threshold > matrixValue;
+	}
+
+	/**
 	 * Returns points for a rectangle outline.
 	 */
 	static getRectanglePoints(x1: number, y1: number, x2: number, y2: number): Point[] {

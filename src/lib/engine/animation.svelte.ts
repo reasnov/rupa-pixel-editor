@@ -9,7 +9,8 @@ export class AnimationEngine {
 	elapsedTime = $state(0);
 
 	totalDuration = $derived.by(() => {
-		return editor.project.frames.reduce((acc, f) => acc + f.duration, 0);
+		const fpsDuration = 1000 / editor.project.fps;
+		return editor.project.frames.length * fpsDuration;
 	});
 
 	startPlayback() {
@@ -22,8 +23,9 @@ export class AnimationEngine {
 
 		editor.project.isPlaying = true;
 		this.elapsedTime = 0;
+		const fpsDuration = 1000 / editor.project.fps;
 		for (let i = 0; i < editor.project.activeFrameIndex; i++) {
-			this.elapsedTime += editor.project.frames[i].duration;
+			this.elapsedTime += fpsDuration;
 		}
 
 		sfx.playDraw();
@@ -47,16 +49,33 @@ export class AnimationEngine {
 		if (!editor.project.isPlaying) return;
 
 		const currentFrame = editor.project.activeFrame;
-		const nextIndex = (editor.project.activeFrameIndex + 1) % editor.project.frames.length;
+
+		// Calculate duration based on project FPS (Master Pace)
+		// 1000ms / FPS = duration per frame
+		const frameDuration = Math.max(16, 1000 / editor.project.fps);
+
+		// Find next visible frame
+		let nextIndex = (editor.project.activeFrameIndex + 1) % editor.project.frames.length;
+		let attempts = 0;
+		while (!editor.project.frames[nextIndex].isVisible && attempts < editor.project.frames.length) {
+			nextIndex = (nextIndex + 1) % editor.project.frames.length;
+			attempts++;
+		}
+
+		// If no visible frames or only one, stop playback or stay
+		if (!editor.project.frames[nextIndex].isVisible) {
+			this.stopPlayback();
+			return;
+		}
 
 		this.interval = setTimeout(() => {
 			editor.project.activeFrameIndex = nextIndex;
 
 			if (nextIndex === 0) this.elapsedTime = 0;
-			else this.elapsedTime += currentFrame.duration;
+			else this.elapsedTime += frameDuration;
 
 			this.tick();
-		}, currentFrame.duration);
+		}, frameDuration);
 	}
 }
 

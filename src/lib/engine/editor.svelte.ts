@@ -393,16 +393,9 @@ export class EditorEngine {
 				state.studio.polygonIndentation = Math.max(0, state.studio.polygonIndentation - 10);
 				state.studio.show(`${state.studio.polygonIndentation}% Steeping`);
 				return feedback.emit('READY');
-			case 'TOOL_GRADIENT':
-				if (state.studio.activeTool === 'GRADIENT') {
-					state.studio.activeTool = 'BRUSH';
-					state.studio.shapeAnchor = null;
-					state.studio.gradientStartColor = null;
-				} else {
-					state.studio.activeTool = 'GRADIENT';
-					state.studio.shapeAnchor = { ...state.cursor.pos };
-					state.studio.gradientStartColor = state.paletteState.activeColor;
-				}
+			case 'TOGGLE_DITHER_BLEND':
+				state.studio.isDitherBlendActive = !state.studio.isDitherBlendActive;
+				state.studio.show(state.studio.isDitherBlendActive ? 'Classic Blend ON' : 'Classic Blend OFF');
 				return feedback.emit('READY');
 			case 'TOOL_TRANSFORM':
 				if (state.selection.isActive) {

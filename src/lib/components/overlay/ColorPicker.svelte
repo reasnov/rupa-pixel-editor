@@ -75,7 +75,7 @@
 
 		<div class="flex flex-col gap-6">
 			<ColorSlider
-				label={__({ key: 'color_picker.sliders.hue' })}
+				label={__({ key: 'color_picker.label.hue' })}
 				icon="🌈"
 				bind:value={h}
 				max={360}
@@ -83,21 +83,21 @@
 				isHue={true}
 			/>
 			<ColorSlider
-				label={__({ key: 'color_picker.sliders.saturation' })}
+				label={__({ key: 'color_picker.label.saturation' })}
 				icon="🏺"
 				bind:value={s}
 				max={100}
 				unit="%"
 			/>
 			<ColorSlider
-				label={__({ key: 'color_picker.sliders.lightness' })}
+				label={__({ key: 'color_picker.label.lightness' })}
 				icon="☀️"
 				bind:value={l}
 				max={100}
 				unit="%"
 			/>
 			<ColorSlider
-				label={__({ key: 'color_picker.sliders.alpha' })}
+				label={__({ key: 'color_picker.label.alpha' })}
 				icon="💧"
 				bind:value={a}
 				min={0}
@@ -110,7 +110,7 @@
 		<div class="flex flex-col gap-4">
 			<div class="flex items-center gap-4 rounded-xl border border-black/5 bg-white/50 p-4">
 				<label for="hex-input" class="font-mono text-xs font-bold text-studio-text/40">
-					{__({ key: 'color_picker.hex_label' })}
+					{__({ key: 'color_picker.label.hex' })}
 				</label>
 				<input
 					id="hex-input"
@@ -126,13 +126,13 @@
 						services.pickColor();
 						onClose();
 					}}
-					title={__({ key: 'color_picker.eye_drop' })}
-					aria-label={__({ key: 'color_picker.eye_drop' })}
+					title={__({ key: 'color_picker.button.eye_dropper' })}
+					aria-label={__({ key: 'color_picker.button.eye_dropper' })}
 				>
 					<span aria-hidden="true"> 🖌️ </span>
 				</button>
 				<button class="editor-primary-btn flex-1 py-4" onclick={onClose}>
-					{__({ key: 'color_picker.seal' })}
+					{__({ key: 'color_picker.button.confirm' })}
 				</button>
 			</div>
 		</div>

@@ -64,61 +64,83 @@ export class DrawService {
 				}
 			}
 		} else {
-			// --- Standard Brush Logic ---
+			// --- Standard Brush Logic (With Dither Blending) ---
 			const kernel = BrushLogic.getKernel(editor.studio.brushSize, editor.studio.brushShape);
-			const rawPoints = kernel.map((p) => ({ x: x + p.x, y: y + p.y }));
+			const hardness = editor.studio.brushHardness;
 
-			// Reflection: Symmetry
-			if (editor.studio.symmetryMode !== 'OFF') {
-				const symMode = editor.studio.symmetryMode;
-				const { width, height } = editor.canvas;
-				const mirrored: Array<{ x: number; y: number }> = [];
+			// Mirror & Filter Points
+			kernel.forEach((kp) => {
+				const px = x + kp.x;
+				const py = y + kp.y;
+
+				const rawPoints = [{ x: px, y: py, weight: kp.weight }];
+
+				// Symmetry
+				if (editor.studio.symmetryMode !== 'OFF') {
+					const symPoints = PixelLogic.getSymmetryPoints(
+						px,
+						py,
+						editor.canvas.width,
+						editor.canvas.height,
+						editor.studio.symmetryMode
+					);
+					symPoints.forEach((sp) => rawPoints.push({ ...sp, weight: kp.weight }));
+				}
 
 				rawPoints.forEach((p) => {
-					const points = PixelLogic.getSymmetryPoints(p.x, p.y, width, height, symMode);
-					mirrored.push(...points);
-				});
-				rawPoints.push(...mirrored);
-			}
-
-			// Wrapping & Application
-			let pointsToDraw = editor.studio.isTilingEnabled
-				? rawPoints.map((p) => PixelLogic.wrap(p.x, p.y, editor.canvas.width, editor.canvas.height))
-				: rawPoints.filter((p) => editor.canvas.isValidCoord(p.x, p.y));
-
-			// --- The Mist (Airbrush) ---
-			if (editor.studio.isAirbrushActive) {
-				const density = editor.studio.airbrushDensity;
-				pointsToDraw = pointsToDraw.filter(() => Math.random() < density);
-			}
-
-			pointsToDraw.forEach((p) => {
-				const index = editor.canvas.getIndex(p.x, p.y);
-
-				// Selection Masking
-				if (editor.selection.isActive && !editor.selection.activeIndicesSet.has(index)) return;
-
-				// Alpha Lock
-				if (editor.studio.isAlphaLocked && !editor.project.activeFrame.activeLayer.hasPixel(index))
-					return;
-
-				// Color Lock
-				if (editor.studio.isColorLocked && editor.studio.colorLockSource !== null) {
-					if (currentPixels[index] !== ColorLogic.hexToUint32(editor.studio.colorLockSource))
+					let finalPos = p;
+					if (editor.studio.isTilingEnabled) {
+						finalPos = {
+							...PixelLogic.wrap(p.x, p.y, editor.canvas.width, editor.canvas.height),
+							weight: p.weight
+						};
+					} else if (!editor.canvas.isValidCoord(p.x, p.y)) {
 						return;
-				}
+					}
 
-				const activeColorVal = this.getEffectColorForPoint(p.x, p.y, currentPixels[index]);
-				const oldVal = currentPixels[index];
+					const index = editor.canvas.getIndex(finalPos.x, finalPos.y);
 
-				if (oldVal !== activeColorVal) {
-					batch.push({
-						index,
-						oldColor: ColorLogic.uint32ToHex(oldVal),
-						newColor: ColorLogic.uint32ToHex(activeColorVal)
-					});
-					currentPixels[index] = activeColorVal;
-				}
+					// --- Dither Blending Logic ---
+					// Threshold maps weight to dither density based on hardness
+					const threshold = editor.studio.isDitherBlendActive
+						? p.weight + (1 - p.weight) * (hardness / 100)
+						: 1.0;
+
+					if (!PixelLogic.orderedDither(finalPos.x, finalPos.y, threshold)) return;
+
+					// --- The Mist (Airbrush) ---
+					if (editor.studio.isAirbrushActive && Math.random() > editor.studio.airbrushDensity)
+						return;
+
+					// Selection Masking
+					if (editor.selection.isActive && !editor.selection.activeIndicesSet.has(index)) return;
+
+					// Alpha Lock
+					if (editor.studio.isAlphaLocked && !editor.project.activeFrame.activeLayer.hasPixel(index))
+						return;
+
+					// Color Lock
+					if (editor.studio.isColorLocked && editor.studio.colorLockSource !== null) {
+						if (currentPixels[index] !== ColorLogic.hexToUint32(editor.studio.colorLockSource))
+							return;
+					}
+
+					const activeColorVal = this.getEffectColorForPoint(
+						finalPos.x,
+						finalPos.y,
+						currentPixels[index]
+					);
+					const oldVal = currentPixels[index];
+
+					if (oldVal !== activeColorVal) {
+						batch.push({
+							index,
+							oldColor: ColorLogic.uint32ToHex(oldVal),
+							newColor: ColorLogic.uint32ToHex(activeColorVal)
+						});
+						currentPixels[index] = activeColorVal;
+					}
+				});
 			});
 		}
 
@@ -361,52 +383,73 @@ export class DrawService {
 			});
 		} else {
 			const kernel = BrushLogic.getKernel(editor.studio.brushSize, editor.studio.brushShape);
+			const hardness = editor.studio.brushHardness;
 
 			buffer.forEach((idx) => {
 				const x = idx % editor.canvas.width;
 				const y = Math.floor(idx / editor.canvas.width);
 
-				const rawPoints = kernel.map((p) => ({ x: x + p.x, y: y + p.y }));
+				kernel.forEach((kp) => {
+					const px = x + kp.x;
+					const py = y + kp.y;
 
-				if (editor.studio.symmetryMode !== 'OFF') {
-					const symMode = editor.studio.symmetryMode;
-					const { width, height } = editor.canvas;
-					const mirrored: Array<{ x: number; y: number }> = [];
+					const rawPoints = [{ x: px, y: py, weight: kp.weight }];
+
+					if (editor.studio.symmetryMode !== 'OFF') {
+						const symPoints = PixelLogic.getSymmetryPoints(
+							px,
+							py,
+							editor.canvas.width,
+							editor.canvas.height,
+							editor.studio.symmetryMode
+						);
+						symPoints.forEach((sp) => rawPoints.push({ ...sp, weight: kp.weight }));
+					}
 
 					rawPoints.forEach((p) => {
-						const points = PixelLogic.getSymmetryPoints(p.x, p.y, width, height, symMode);
-						mirrored.push(...points);
-					});
-					rawPoints.push(...mirrored);
-				}
+						let finalPos = p;
+						if (editor.studio.isTilingEnabled) {
+							finalPos = {
+								...PixelLogic.wrap(p.x, p.y, editor.canvas.width, editor.canvas.height),
+								weight: p.weight
+							};
+						} else if (!editor.canvas.isValidCoord(p.x, p.y)) {
+							return;
+						}
 
-				const pointsToDraw = editor.studio.isTilingEnabled
-					? rawPoints.map((p) =>
-							PixelLogic.wrap(p.x, p.y, editor.canvas.width, editor.canvas.height)
+						const index = editor.canvas.getIndex(finalPos.x, finalPos.y);
+
+						// Dither Blending
+						const threshold = editor.studio.isDitherBlendActive
+							? p.weight + (1 - p.weight) * (hardness / 100)
+							: 1.0;
+
+						if (!PixelLogic.orderedDither(finalPos.x, finalPos.y, threshold)) return;
+
+						if (editor.selection.isActive && !editor.selection.activeIndicesSet.has(index))
+							return;
+
+						if (
+							editor.studio.isAlphaLocked &&
+							!editor.project.activeFrame.activeLayer.hasPixel(index)
 						)
-					: rawPoints.filter((p) => editor.canvas.isValidCoord(p.x, p.y));
+							return;
 
-				pointsToDraw.forEach((p) => {
-					const index = editor.canvas.getIndex(p.x, p.y);
-
-					if (editor.selection.isActive && !editor.selection.activeIndicesSet.has(index)) return;
-
-					if (
-						editor.studio.isAlphaLocked &&
-						!editor.project.activeFrame.activeLayer.hasPixel(index)
-					)
-						return;
-
-					const activeColorVal = this.getEffectColorForPoint(p.x, p.y, currentPixels[index]);
-					const oldVal = currentPixels[index];
-					if (oldVal !== activeColorVal) {
-						batch.push({
-							index,
-							oldColor: ColorLogic.uint32ToHex(oldVal),
-							newColor: ColorLogic.uint32ToHex(activeColorVal)
-						});
-						currentPixels[index] = activeColorVal;
-					}
+						const activeColorVal = this.getEffectColorForPoint(
+							finalPos.x,
+							finalPos.y,
+							currentPixels[index]
+						);
+						const oldVal = currentPixels[index];
+						if (oldVal !== activeColorVal) {
+							batch.push({
+								index,
+								oldColor: ColorLogic.uint32ToHex(oldVal),
+								newColor: ColorLogic.uint32ToHex(activeColorVal)
+							});
+							currentPixels[index] = activeColorVal;
+						}
+					});
 				});
 			});
 		}
@@ -427,55 +470,6 @@ export class DrawService {
 
 		const { x, y } = editor.cursor.pos;
 		const tool = editor.studio.activeTool;
-
-		if (tool === 'GRADIENT') {
-			const startColor = editor.studio.gradientStartColor;
-			const endColor = editor.paletteState.activeColor;
-			if (!startColor) return;
-
-			// If selection exists, fill selection. Otherwise fill whole frame.
-			const targetIndices = editor.selection.isActive
-				? editor.selection.indices
-				: Array.from({ length: editor.canvas.width * editor.canvas.height }, (_, i) => i);
-
-			const gradientMap = PixelLogic.getLinearGradientMap(
-				anchor.x,
-				anchor.y,
-				x,
-				y,
-				targetIndices,
-				editor.canvas.width
-			);
-
-			const currentPixels = new Uint32Array(editor.canvas.pixels);
-			const batch: Array<{ index: number; oldColor: string | null; newColor: string | null }> = [];
-
-			gradientMap.forEach((m: { index: number; ratio: number }) => {
-				const mixed = ColorLogic.mix(startColor, endColor, m.ratio);
-				const mixedVal = ColorLogic.hexToUint32(mixed);
-				const oldVal = currentPixels[m.index];
-				if (oldVal !== mixedVal) {
-					batch.push({
-						index: m.index,
-						oldColor: ColorLogic.uint32ToHex(oldVal),
-						newColor: mixed
-					});
-					currentPixels[m.index] = mixedVal;
-				}
-			});
-
-			if (batch.length > 0) {
-				editor.canvas.pixels = currentPixels;
-				editor.canvas.triggerPulse();
-				history.push(batch);
-				sfx.playDraw();
-			}
-
-			editor.studio.activeTool = 'BRUSH';
-			editor.studio.shapeAnchor = null;
-			editor.studio.gradientStartColor = null;
-			return;
-		}
 
 		let points: Array<{ x: number; y: number }> = [];
 		if (tool === 'RECTANGLE') {

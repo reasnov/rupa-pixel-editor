@@ -9,7 +9,8 @@
 	let timelineElement: HTMLElement | undefined = $state();
 	let scrollLeft = $state(0);
 
-	const FRAME_WIDTH = 32;
+	const BASE_FRAME_WIDTH = 32;
+	let currentFrameWidth = $derived(BASE_FRAME_WIDTH * editor.studio.timelineZoom);
 
 	function handleScroll(e: Event) {
 		const target = e.target as HTMLElement;
@@ -21,7 +22,9 @@
 		editor.project.activeFrame.activeLayerIndex = layerIndex;
 	}
 
-	let playheadOffset = $derived(editor.project.activeFrameIndex * FRAME_WIDTH + FRAME_WIDTH / 2);
+	let playheadOffset = $derived(
+		editor.project.activeFrameIndex * currentFrameWidth + currentFrameWidth / 2
+	);
 
 	$effect(() => {
 		if (timelineElement && editor.project.isPlaying) {
@@ -32,23 +35,46 @@
 		}
 	});
 
+	let maxRulerWidth = $derived(editor.project.frames.length * currentFrameWidth + 400);
+
 	let rulerMarks = $derived.by(() => {
-		const marks = [];
-		for (let i = 0; i < editor.project.frames.length; i += 5) {
-			marks.push(i);
-		}
-		if ((editor.project.frames.length - 1) % 5 !== 0) {
-			marks.push(editor.project.frames.length - 1);
+		const marks: { index: number; isMajor: boolean; label?: string; isFuture: boolean }[] = [];
+		const fps = editor.project.fps;
+		const zoom = editor.studio.timelineZoom;
+		const frameCount = editor.project.frames.length;
+
+		// Adaptive stepping: 1s, 0.5s, 0.2s, or 0.1s based on zoom
+		let timeStep = 1.0;
+		if (zoom > 3) timeStep = 0.1;
+		else if (zoom > 2) timeStep = 0.2;
+		else if (zoom > 1.2) timeStep = 0.5;
+
+		const framesPerStep = Math.max(1, Math.round(fps * timeStep));
+		
+		// Fill the ruler up to maxRulerWidth (content + buffer)
+		const totalPossibleFrames = Math.ceil(maxRulerWidth / currentFrameWidth);
+
+		for (let i = 0; i < totalPossibleFrames; i++) {
+			const isStep = i % framesPerStep === 0;
+			const isSecond = i % fps === 0;
+			const isFiveFrame = i % 5 === 0;
+			const isFuture = i >= frameCount;
+
+			if (isStep) {
+				const timeSec = i / fps;
+				const label = timeSec % 1 === 0 ? `${timeSec}s` : `${timeSec.toFixed(1)}s`;
+				marks.push({ index: i, isMajor: isSecond, label, isFuture });
+			} else if (isFiveFrame) {
+				marks.push({ index: i, isMajor: false, isFuture });
+			}
 		}
 		return marks;
 	});
 
-	let maxRulerWidth = $derived(editor.project.frames.length * FRAME_WIDTH + 200);
-
 	function handleScrub(e: MouseEvent) {
 		const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
 		const clickX = e.clientX - rect.left + scrollLeft;
-		const frameIndex = Math.floor(clickX / FRAME_WIDTH);
+		const frameIndex = Math.floor(clickX / currentFrameWidth);
 		if (frameIndex >= 0 && frameIndex < editor.project.frames.length) {
 			editor.project.activeFrameIndex = frameIndex;
 		}
@@ -64,8 +90,7 @@
 </script>
 
 <div
-	class="relative flex flex-1 flex-col overflow-hidden rounded border border-charcoal/10 bg-stone-light/30 shadow-inner"
-	onwheel={handleWheel}
+	class="relative flex min-h-0 flex-1 flex-col overflow-hidden rounded border border-charcoal/10 bg-stone-light/30 shadow-inner"
 >
 	<!-- Top Row: Tags -->
 	{#if editor.project.tags.length > 0}
@@ -84,31 +109,46 @@
 	<!-- Top Row: Corner + Ruler -->
 	<div class="flex h-6 shrink-0 border-b border-charcoal/5 bg-foam-white/95">
 		<div
-			class="z-40 flex w-32 shrink-0 items-center border-r border-charcoal/10 px-2 font-serif text-[8px] font-black tracking-widest text-charcoal/30 uppercase"
+			class="z-40 flex w-32 shrink-0 items-center border-r border-charcoal/10 bg-foam-white px-2 font-serif text-[8px] font-black tracking-widest text-charcoal/30 uppercase"
 		>
 			Infusions
 		</div>
 		<div class="relative flex-1 overflow-hidden" onclick={handleScrub} role="presentation">
 			<div
 				class="absolute inset-0 flex items-center"
-				style="width: {maxRulerWidth}px; transform: translateX(-{scrollLeft}px);"
+				style="width: {maxRulerWidth}px; min-width: 100%; transform: translateX(-{scrollLeft}px);"
 			>
-				{#each rulerMarks as idx}
+				{#each rulerMarks as mark}
 					<div
-						class="absolute flex flex-col items-center"
-						style="left: {idx * FRAME_WIDTH}px; width: {FRAME_WIDTH}px;"
+						class="absolute flex flex-col items-center transition-opacity duration-300 {mark.isFuture ? 'opacity-20' : 'opacity-100'}"
+						style="left: {mark.index * currentFrameWidth}px; width: {currentFrameWidth}px;"
 					>
-						<div class="h-1 w-px bg-charcoal/20"></div>
-						<span class="font-mono text-[8px] font-black text-charcoal/30">{idx + 1}</span>
+						<div class="w-px bg-charcoal/20 {mark.isMajor ? 'h-2' : 'h-1'}"></div>
+						{#if mark.label}
+							<span class="font-mono text-[7px] font-black {mark.isMajor && !mark.isFuture ? 'text-brand' : 'text-charcoal/40'} mt-0.5 leading-none"
+								>{mark.label}</span
+							>
+						{:else if mark.index % 5 === 0}
+							<span class="font-mono text-[7px] font-bold text-charcoal/20 mt-0.5 leading-none"
+								>{mark.index + 1}</span
+							>
+						{/if}
 					</div>
 				{/each}
 			</div>
 		</div>
 	</div>
 
-	<!-- Main Body: Sidebar + Grid (Unified Vertical Scroll) -->
-	<div class="custom-scrollbar flex-1 overflow-y-auto">
-		<div class="relative flex min-h-full">
+	<!-- Main Body: Sidebar + Grid (Unified Scrolling) -->
+	<div
+		bind:this={timelineElement}
+		class="custom-scrollbar min-h-0 flex-1 overflow-auto"
+		onscroll={handleScroll}
+		onwheel={handleWheel}
+		role="grid"
+		aria-label="The Drop Matrix"
+	>
+		<div class="relative flex" style="width: {maxRulerWidth + 128}px; min-height: 100%; --frame-width: {currentFrameWidth}px;">
 			<!-- Sticky Sidebar -->
 			<div
 				class="sticky left-0 z-30 flex w-32 shrink-0 flex-col border-r border-charcoal/10 bg-foam-white/95 shadow-sm"
@@ -126,38 +166,30 @@
 				{/each}
 			</div>
 
-			<!-- Scrollable Grid -->
-			<div
-				bind:this={timelineElement}
-				class="custom-scrollbar relative flex-1 overflow-x-auto"
-				onscroll={handleScroll}
-				role="grid"
-				aria-label="The Drop Matrix"
-			>
-				<div class="relative flex flex-col" style="width: {maxRulerWidth}px;">
-					{#each editor.project.activeFrame.layers as _, layerIdx}
-						<div class="flex h-6 border-b border-black/5">
-							{#each editor.project.frames as frame, frameIdx}
-								<TimelineDrop
-									layer={frame.layers[layerIdx]}
-									frameIndex={frameIdx}
-									isActive={frameIdx === editor.project.activeFrameIndex &&
-										layerIdx === editor.project.activeFrame.activeLayerIndex}
-									onclick={() => selectCell(frameIdx, layerIdx)}
-								/>
-							{/each}
-						</div>
-					{/each}
-
-					<!-- Playhead -->
-					<div
-						class="pointer-events-none absolute top-0 bottom-0 z-20 w-px bg-brand transition-all duration-100 ease-out"
-						style="left: {playheadOffset}px;"
-					>
-						<div
-							class="absolute -top-0.5 -left-1 h-2 w-2 rotate-45 rounded-sm bg-brand shadow-sm"
-						></div>
+			<!-- Grid Content -->
+			<div class="relative flex flex-1 flex-col">
+				{#each editor.project.activeFrame.layers as _, layerIdx}
+					<div class="flex h-6 border-b border-black/5">
+						{#each editor.project.frames as frame, frameIdx}
+							<TimelineDrop
+								layer={frame.layers[layerIdx]}
+								frameIndex={frameIdx}
+								isActive={frameIdx === editor.project.activeFrameIndex &&
+									layerIdx === editor.project.activeFrame.activeLayerIndex}
+								onclick={() => selectCell(frameIdx, layerIdx)}
+							/>
+						{/each}
 					</div>
+				{/each}
+
+				<!-- Playhead -->
+				<div
+					class="pointer-events-none absolute top-0 bottom-0 z-20 w-px bg-brand transition-all duration-75 ease-linear"
+					style="left: {playheadOffset}px;"
+				>
+					<div
+						class="absolute -top-0.5 -left-1 h-2 w-2 rotate-45 rounded-sm bg-brand shadow-sm"
+					></div>
 				</div>
 			</div>
 		</div>
@@ -178,9 +210,5 @@
 	}
 	.custom-scrollbar::-webkit-scrollbar-thumb:hover {
 		background: rgba(211, 54, 130, 0.2);
-	}
-
-	:global(:root) {
-		--frame-width: 32px;
 	}
 </style>

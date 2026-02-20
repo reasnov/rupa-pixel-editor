@@ -15,6 +15,8 @@ export class StudioState {
 
 	// Master Etching (v0.8.0)
 	brushSize = $state(1); // 1 to 100
+	brushHardness = $state(100); // 0 to 100 (Softness)
+	isDitherBlendActive = $state(false); // Whether professional blending is on
 	brushShape = $state<'SQUARE' | 'CIRCLE'>('SQUARE');
 	symmetryMode = $state<'OFF' | 'HORIZONTAL' | 'VERTICAL' | 'QUADRANT'>('OFF');
 	isTilingEnabled = $state(false);
@@ -28,15 +30,11 @@ export class StudioState {
 	airbrushDensity = $state(0.2); // 0.0 to 1.0 (Mist Thickness)
 
 	activeTool = $state<
-		'BRUSH' | 'ERASER' | 'SELECT' | 'RECTANGLE' | 'ELLIPSE' | 'POLYGON' | 'GRADIENT'
+		'BRUSH' | 'ERASER' | 'SELECT' | 'RECTANGLE' | 'ELLIPSE' | 'POLYGON'
 	>('BRUSH');
 	shapeAnchor = $state<{ x: number; y: number } | null>(null);
 	polygonSides = $state(3); // 3 to 12
 	polygonIndentation = $state(0); // 0 to 100 (percentage)
-
-	// Gradient (Wave III)
-	gradientStartColor = $state<string | null>(null);
-	gradientEndColor = $state<string | null>(null);
 
 	// Smoothing & Stabilization (0 to 100)
 	stabilization = $state(50);
@@ -46,7 +44,6 @@ export class StudioState {
 	sfxVolume = $state(0.5);
 
 	// Timeline Settings
-	fps = $state(10);
 	isKineticMode = $state(false);
 	showGhostLayers = $state(false);
 	timelineZoom = $state(1);
@@ -140,6 +137,8 @@ export class StudioState {
 	// Export Settings
 	exportScale = $state(10);
 	exportBgColor = $state<string | 'transparent'>('transparent');
+	exportFrameSelection = $state<'ACTIVE' | 'VISIBLE' | 'SELECTED' | 'ALL'>('ACTIVE');
+	exportProgress = $state(0);
 	includePixelBorders = $state(false);
 
 	private escapeStack: (() => void)[] = [];

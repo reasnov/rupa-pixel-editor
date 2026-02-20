@@ -6,13 +6,14 @@ export class ExportEngine {
 	 * Generates an optimized SVG string.
 	 * If includeBorders is true, it draws individual rects with strokes instead of merged paths.
 	 */
-	static toSVG(
+	static async toSVG(
 		width: number,
 		height: number,
 		data: Uint32Array,
 		bgColor: string | 'transparent' = 'transparent',
-		includeBorders = false
-	): string {
+		includeBorders = false,
+		onProgress?: (p: number) => void
+	): Promise<string> {
 		let svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}" shape-rendering="crispEdges">`;
 
 		if (bgColor !== 'transparent') {
@@ -28,6 +29,7 @@ export class ExportEngine {
 				const y = Math.floor(i / width);
 				svg += `<rect x="${x}" y="${y}" width="1" height="1" fill="${color}" stroke="rgba(0,0,0,0.15)" stroke-width="0.05" />`;
 			});
+			if (onProgress) onProgress(1);
 		} else {
 			// Draw optimized clusters
 			const clustersByColor: Map<string, Set<number>> = new Map();
@@ -39,12 +41,18 @@ export class ExportEngine {
 				clustersByColor.get(color)!.add(i);
 			}
 
-			clustersByColor.forEach((indices, color) => {
+			const colors = Array.from(clustersByColor.keys());
+			for (let i = 0; i < colors.length; i++) {
+				const color = colors[i];
+				const indices = clustersByColor.get(color)!;
 				const pathData = Path.traceCluster(indices, width);
 				if (pathData) {
 					svg += `<path d="${pathData}" fill="${color}" />`;
 				}
-			});
+				if (onProgress) onProgress((i + 1) / colors.length);
+				// Yield to UI
+				await new Promise((r) => setTimeout(r, 0));
+			}
 		}
 
 		svg += '</svg>';
@@ -107,14 +115,15 @@ export class ExportEngine {
 	/**
 	 * Generates an Animated SVG.
 	 */
-	static toAnimatedSVG(
+	static async toAnimatedSVG(
 		width: number,
 		height: number,
 		framesData: Uint32Array[],
 		frameDurations: number[],
 		bgColor: string | 'transparent' = 'transparent',
-		includeBorders = false
-	): string {
+		includeBorders = false,
+		onProgress?: (p: number) => void
+	): Promise<string> {
 		const totalDurationMs = frameDurations.reduce((a, b) => a + b, 0);
 		const totalDurationSec = (totalDurationMs / 1000).toFixed(3);
 
@@ -125,7 +134,8 @@ export class ExportEngine {
 		}
 
 		let elapsedMs = 0;
-		framesData.forEach((data, i) => {
+		for (let i = 0; i < framesData.length; i++) {
+			const data = framesData[i];
 			const startPct = ((elapsedMs / totalDurationMs) * 100).toFixed(3);
 			const durationMs = frameDurations[i];
 			const endPct = (((elapsedMs + durationMs) / totalDurationMs) * 100).toFixed(3);
@@ -169,7 +179,9 @@ export class ExportEngine {
             </style>`;
 
 			elapsedMs += durationMs;
-		});
+			if (onProgress) onProgress((i + 1) / framesData.length);
+			await new Promise((r) => setTimeout(r, 0));
+		}
 
 		svg += '</svg>';
 		return svg;
@@ -187,7 +199,8 @@ export class ExportEngine {
 		scale: number,
 		format: 'webm' | 'mp4' = 'webm',
 		bgColor: string | 'transparent' = 'transparent',
-		includeBorders = false
+		includeBorders = false,
+		onProgress?: (p: number) => void
 	): Promise<Blob> {
 		const canvas = document.createElement('canvas');
 		const finalWidth = Math.round(width * scale);
@@ -276,6 +289,7 @@ export class ExportEngine {
 					}
 					// Wait for the duration of the frame
 					await new Promise((r) => setTimeout(r, frameDurations[i]));
+					if (onProgress) onProgress((i + 1) / framesData.length);
 				}
 
 				// Finalization buffer
@@ -297,7 +311,8 @@ export class ExportEngine {
 		frameDurations: number[],
 		scale: number,
 		bgColor: string | 'transparent' = 'transparent',
-		includeBorders = false
+		includeBorders = false,
+		onProgress?: (p: number) => void
 	): Promise<Blob> {
 		const { GifWriter } = await import('./omggif.js');
 
@@ -356,6 +371,7 @@ export class ExportEngine {
 				delay: delayCentiSec
 			});
 
+			if (onProgress) onProgress((i + 1) / framesData.length);
 			await new Promise((r) => setTimeout(r, 0));
 		}
 

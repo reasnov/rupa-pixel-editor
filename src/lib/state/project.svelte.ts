@@ -22,6 +22,7 @@ export class ProjectState {
 	activeFrameIndex = $state(0);
 	selectedFrameIndices = $state<Set<number>>(new Set([0]));
 	isPlaying = $state(false);
+	fps = $state(10);
 
 	clipboard = $state<{ width: number; height: number; data: Uint32Array } | null>(null);
 

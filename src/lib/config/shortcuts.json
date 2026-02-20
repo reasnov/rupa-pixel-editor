@@ -77,8 +77,8 @@
 			"keys": ["w"],
 			"group": "Magic"
 		},
-		"TOOL_GRADIENT": {
-			"label": "Gradient Fill",
+		"TOGGLE_DITHER_BLEND": {
+			"label": "Classic Blend",
 			"keys": ["Alt+g"],
 			"group": "Magic"
 		}

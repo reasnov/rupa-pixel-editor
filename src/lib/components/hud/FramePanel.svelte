@@ -327,30 +327,44 @@
 							: ''} {draggedIndex === i ? 'opacity-40' : ''}"
 						aria-current={i === editor.project.activeFrameIndex ? 'true' : undefined}
 					>
-						<button
-							class="flex flex-1 items-center gap-3 overflow-hidden py-2 pl-1 text-left"
-							onclick={(e) => selectFrame(i, e)}
-							ondblclick={() => startRenaming(i, frame.name)}
-						>
-							<span class="font-mono text-[10px] opacity-30" aria-hidden="true">{i + 1}</span>
-							{#if editingIndex === i && editor.studio.projectActiveTab === 'frames'}
-								<input
-									type="text"
-									bind:value={tempName}
-									class="w-full bg-brand/5 font-serif text-sm font-medium text-brand ring-1 ring-brand/30 outline-none"
-									onblur={commitRename}
-									onkeydown={(e) => {
-										if (e.key === 'Enter') commitRename();
-										if (e.key === 'Escape') editingIndex = null;
-									}}
-									use:focusInput
-								/>
-							{:else}
-								<span class="truncate font-serif text-sm font-medium text-charcoal"
-									>{frame.name}</span
-								>
-							{/if}
-						</button>
+						<div class="flex flex-1 items-center gap-2 overflow-hidden">
+							<span class="font-mono text-[9px] font-bold opacity-20 w-4 shrink-0 text-center" aria-hidden="true"
+								>{i + 1}</span
+							>
+							<button
+								onclick={(e) => {
+									e.stopPropagation();
+									services.project.toggleFrameVisibility(i);
+								}}
+								class="text-xs transition-opacity {frame.isVisible ? 'opacity-100' : 'opacity-20'}"
+								title={frame.isVisible ? 'Hide Cup' : 'Show Cup'}
+							>
+								{frame.isVisible ? '👁️' : '🕶️'}
+							</button>
+							<button
+								class="flex-1 truncate py-2 text-left font-serif text-sm font-medium text-charcoal {frame.isVisible
+									? ''
+									: 'opacity-40'}"
+								onclick={(e) => selectFrame(i, e)}
+								ondblclick={() => startRenaming(i, frame.name)}
+							>
+								{#if editingIndex === i && editor.studio.projectActiveTab === 'frames'}
+									<input
+										type="text"
+										bind:value={tempName}
+										class="w-full bg-brand/5 font-serif text-sm font-medium text-brand ring-1 ring-brand/30 outline-none"
+										onblur={commitRename}
+										onkeydown={(e) => {
+											if (e.key === 'Enter') commitRename();
+											if (e.key === 'Escape') editingIndex = null;
+										}}
+										use:focusInput
+									/>
+								{:else}
+									{frame.name}
+								{/if}
+							</button>
+						</div>
 						<div class="flex items-center gap-2">
 							<button
 								onclick={(e) => toggleProperties('frame', i, e)}
@@ -430,10 +444,12 @@
 											e.stopPropagation();
 											layer.isCollapsed = !layer.isCollapsed;
 										}}
-										class="text-[10px] opacity-40 hover:opacity-100"
+										class="text-[10px] w-4 shrink-0 text-center opacity-40 hover:opacity-100"
 									>
 										{layer.isCollapsed ? '▶' : '▼'}
 									</button>
+								{:else}
+									<div class="w-4 shrink-0"></div>
 								{/if}
 								<button
 									onclick={(e) => {

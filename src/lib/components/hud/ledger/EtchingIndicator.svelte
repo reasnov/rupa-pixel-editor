@@ -97,14 +97,14 @@
 		</div>
 	{/if}
 
-	<!-- Gradient -->
-	{#if studio.activeTool === 'GRADIENT'}
+	<!-- Aroma Blend (Dither) -->
+	{#if studio.isDitherBlendActive}
 		<div
 			transition:fade
 			class="flex items-center gap-1 rounded-sm bg-brand/10 px-1.5 py-0.5 font-bold text-brand"
-			title={__({ key: 'labels.TOOL_GRADIENT' })}
+			title={__({ key: 'labels.TOGGLE_DITHER_BLEND' })}
 		>
-			🌈 GRADIENT
+			🍷 BLEND ({studio.brushHardness}%)
 		</div>
 	{/if}
 

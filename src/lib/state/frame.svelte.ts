@@ -10,8 +10,8 @@ export class FrameState {
 	name = $state('Untitled Frame');
 	width = $state(32);
 	height = $state(32);
-	duration = $state(100); // Duration in ms (Default 100ms = 10 FPS)
 	opacity = $state(1.0); // 0.0 to 1.0 (Global cup opacity)
+	isVisible = $state(true); // Whether the frame is included in playback/export
 
 	// The stack of layers. Order: [Background, ..., Foreground]
 	layers = $state<LayerState[]>([]);

@@ -247,25 +247,6 @@
 								stroke-dasharray="0.2, 0.2"
 								class="marching-ants"
 							/>
-						{:else if editor.studio.activeTool === 'GRADIENT'}
-							<line
-								x1={anchor.x + 0.5}
-								y1={anchor.y + 0.5}
-								x2={cursor.x + 0.5}
-								y2={cursor.y + 0.5}
-								stroke="var(--color-brand)"
-								stroke-width="0.1"
-								class="shadow-sm"
-							/>
-							<circle cx={anchor.x + 0.5} cy={anchor.y + 0.5} r="0.3" fill="var(--color-brand)" />
-							<circle
-								cx={cursor.x + 0.5}
-								cy={cursor.y + 0.5}
-								r="0.3"
-								fill="none"
-								stroke="var(--color-brand)"
-								stroke-width="0.05"
-							/>
 						{:else if editor.studio.activeTool === 'POLYGON'}
 							{@const xc = (anchor.x + cursor.x) / 2}
 							{@const yc = (anchor.y + cursor.y) / 2}

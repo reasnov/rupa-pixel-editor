@@ -68,7 +68,6 @@ export class ProjectService {
 
 		newFrame.width = source.width;
 		newFrame.height = source.height;
-		newFrame.duration = source.duration;
 
 		newFrame.layers = source.layers.map((v) => {
 			return v.clone(source.width, source.height);
@@ -275,6 +274,24 @@ export class ProjectService {
 		if (layer) {
 			layer.isVisible = !layer.isVisible;
 			sfx.playDraw();
+		}
+	}
+
+	toggleFrameVisibility(index?: number) {
+		const project = editor.project;
+		const targetIndex = index !== undefined ? index : project.activeFrameIndex;
+		const frame = project.frames[targetIndex];
+
+		if (frame) {
+			frame.isVisible = !frame.isVisible;
+			sfx.playDraw();
+
+			history.push({
+				isStructural: true,
+				label: 'Toggle Frame Visibility',
+				undo: () => (frame.isVisible = !frame.isVisible),
+				redo: () => (frame.isVisible = !frame.isVisible)
+			});
 		}
 	}
 

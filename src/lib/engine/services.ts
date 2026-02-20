@@ -140,41 +140,96 @@ export class ServiceCoordinator {
 	/**
 	 * Create a permanent artifact (PNG/SVG/JPG/WEBP/WEBM/GIF/MP4) and trigger download.
 	 */
-	async createArtifact(
+	async asyncCreateArtifact(
 		format: 'svg' | 'png' | 'jpg' | 'webp' | 'webm' | 'gif' | 'mp4',
 		scale: number = 10,
 		bgColor: string | 'transparent' = 'transparent'
 	) {
 		editor.studio.show('Preparing Cup...');
+		editor.studio.exportProgress = 0;
+
 		const { ExportEngine } = await import('./export.js');
-		const { width, height, compositePixels } = editor.canvas;
+		const { width, height } = editor.canvas;
 		const includeBorders = editor.studio.includePixelBorders;
 
 		const isAnimated = ['webm', 'gif', 'mp4'].includes(format);
-		const actualFormat = editor.project.frames.length <= 1 && isAnimated ? 'png' : format;
+		const isStatic = ['png', 'jpg', 'webp', 'svg'].includes(format);
+
+		// Progress Callback
+		const updateProgress = (p: number) => {
+			editor.studio.exportProgress = Math.round(p * 100);
+		};
+
+		// 1. Determine which frames to export
+		let framesToProcess = [];
+
+		if (isAnimated) {
+			// Animations always use visible frames
+			framesToProcess = editor.project.frames.filter((f) => f.isVisible);
+		} else {
+			// Static formats use the selection setting
+			switch (editor.studio.exportFrameSelection) {
+				case 'ACTIVE':
+					framesToProcess = [editor.project.activeFrame];
+					break;
+				case 'VISIBLE':
+					framesToProcess = editor.project.frames.filter((f) => f.isVisible);
+					break;
+				case 'SELECTED':
+					framesToProcess = Array.from(editor.project.selectedFrameIndices)
+						.sort((a, b) => a - b)
+						.map((idx) => editor.project.frames[idx]);
+					break;
+				case 'ALL':
+					framesToProcess = editor.project.frames;
+					break;
+				default:
+					framesToProcess = [editor.project.activeFrame];
+			}
+		}
+
+		if (framesToProcess.length === 0) {
+			editor.studio.show('No frames to export');
+			editor.studio.exportProgress = 0;
+			return;
+		}
+
+		const actualFormat = framesToProcess.length <= 1 && isAnimated ? 'png' : format;
+
+		const fpsDuration = 1000 / editor.project.fps;
 
 		if (actualFormat === 'svg') {
-			if (editor.project.frames.length > 1) {
-				const framesData = editor.project.frames.map((f) => f.compositePixels);
-				const durations = editor.project.frames.map((f) => f.duration);
-				const svg = ExportEngine.toAnimatedSVG(
+			if (framesToProcess.length > 1) {
+				const framesData = framesToProcess.map((f) => f.compositePixels);
+				const durations = framesToProcess.map(() => fpsDuration);
+				const svg = await ExportEngine.toAnimatedSVG(
 					width,
 					height,
 					framesData,
 					durations,
 					bgColor,
-					includeBorders
+					includeBorders,
+					updateProgress
 				);
 				const blob = new Blob([svg], { type: 'image/svg+xml' });
 				this.download(URL.createObjectURL(blob), `rupa-image.svg`);
 			} else {
-				const svg = ExportEngine.toSVG(width, height, compositePixels, bgColor, includeBorders);
+				// Single SVG
+				const targetFrame = framesToProcess[0];
+				const svg = await ExportEngine.toSVG(
+					width,
+					height,
+					targetFrame.compositePixels,
+					bgColor,
+					includeBorders,
+					updateProgress
+				);
 				const blob = new Blob([svg], { type: 'image/svg+xml' });
 				this.download(URL.createObjectURL(blob), `rupa-image.svg`);
 			}
 		} else if (actualFormat === 'webm' || actualFormat === 'mp4') {
-			const framesData = editor.project.frames.map((f) => f.compositePixels);
-			const durations = editor.project.frames.map((f) => f.duration);
+			const framesData = framesToProcess.map((f) => f.compositePixels);
+			const durations = framesToProcess.map(() => fpsDuration);
 			const videoBlob = await ExportEngine.toVideo(
 				width,
 				height,
@@ -183,14 +238,15 @@ export class ServiceCoordinator {
 				scale,
 				actualFormat as 'webm' | 'mp4',
 				bgColor,
-				includeBorders
+				includeBorders,
+				updateProgress
 			);
 
 			const extension = videoBlob.type.includes('mp4') ? 'mp4' : 'webm';
 			this.download(URL.createObjectURL(videoBlob), `rupa-video.${extension}`);
 		} else if (actualFormat === 'gif') {
-			const framesData = editor.project.frames.map((f) => f.compositePixels);
-			const durations = editor.project.frames.map((f) => f.duration);
+			const framesData = framesToProcess.map((f) => f.compositePixels);
+			const durations = framesToProcess.map(() => fpsDuration);
 			const gifBlob = await ExportEngine.toGIF(
 				width,
 				height,
@@ -198,22 +254,69 @@ export class ServiceCoordinator {
 				durations,
 				scale,
 				bgColor,
-				includeBorders
+				includeBorders,
+				updateProgress
 			);
 			this.download(URL.createObjectURL(gifBlob), `rupa-animation.gif`);
 		} else {
-			const dataUrl = await ExportEngine.toRaster(
-				width,
-				height,
-				compositePixels,
-				scale,
-				actualFormat as any,
-				bgColor,
-				includeBorders
-			);
-			this.download(dataUrl, `rupa-image.${actualFormat}`);
+			// Static Raster formats (PNG, JPG, WEBP)
+			if (framesToProcess.length > 1) {
+				// ZIP Strategy
+				const JSZip = (await import('jszip')).default;
+				const zip = new JSZip();
+
+				for (let i = 0; i < framesToProcess.length; i++) {
+					const frame = framesToProcess[i];
+					const dataUrl = await ExportEngine.toRaster(
+						width,
+						height,
+						frame.compositePixels,
+						scale,
+						actualFormat as any,
+						bgColor,
+						includeBorders
+					);
+
+					// Extract base64 part
+					const base64Data = dataUrl.split(',')[1];
+					zip.file(`${frame.name.toLowerCase().replace(/\s+/g, '-')}-${i}.${actualFormat}`, base64Data, {
+						base64: true
+					});
+					updateProgress((i + 1) / framesToProcess.length);
+					await new Promise((r) => setTimeout(r, 0));
+				}
+
+				const zipBlob = await zip.generateAsync({ type: 'blob' });
+				this.download(URL.createObjectURL(zipBlob), `rupa-export.zip`);
+			} else {
+				// Single Frame Raster
+				const targetFrame = framesToProcess[0];
+				const dataUrl = await ExportEngine.toRaster(
+					width,
+					height,
+					targetFrame.compositePixels,
+					scale,
+					actualFormat as any,
+					bgColor,
+					includeBorders
+				);
+				this.download(dataUrl, `rupa-image.${actualFormat}`);
+				updateProgress(1);
+			}
 		}
+		editor.studio.exportProgress = 100;
+		// Small delay to show 100% before closing
+		await new Promise((r) => setTimeout(r, 300));
 		editor.studio.showExportMenu = false;
+		editor.studio.exportProgress = 0;
+	}
+
+	createArtifact(
+		format: 'svg' | 'png' | 'jpg' | 'webp' | 'webm' | 'gif' | 'mp4',
+		scale: number = 10,
+		bgColor: string | 'transparent' = 'transparent'
+	) {
+		return this.asyncCreateArtifact(format, scale, bgColor);
 	}
 
 	private download(url: string, filename: string) {

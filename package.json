@@ -43,6 +43,7 @@
 		"@sveltejs/package": "^2.5.7",
 		"@sveltejs/vite-plugin-svelte": "^6.2.4",
 		"@tailwindcss/vite": "^4.1.18",
+		"@types/jszip": "^3.4.0",
 		"electron": "^40.3.0",
 		"gh-pages": "^6.3.0",
 		"jsdom": "^28.1.0",
@@ -62,6 +63,7 @@
 	],
 	"main": "electron/main.cjs",
 	"dependencies": {
-		"i18next": "^25.8.7"
+		"i18next": "^25.8.7",
+		"jszip": "^3.10.1"
 	}
 }

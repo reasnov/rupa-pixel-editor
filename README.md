@@ -23,8 +23,9 @@
 ## 🖼️ Gallery
 
 <div align="center">
-  <img src="./static/screenshots/screenshot-2.png" width="45%" />
-  <img src="./static/screenshots/screenshot-3.png" width="45%" />
+  <img src="./static/screenshots/screenshot-1.png" width="32.5%" />
+  <img src="./static/screenshots/screenshot-2.png" width="32.5%" />
+  <img src="./static/screenshots/screenshot-3.png" width="32.5%" />
 </div>
 
 ## 🏗️ Architectural Sovereignty

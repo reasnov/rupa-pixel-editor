@@ -6,7 +6,7 @@
 
 **Rupa** is a professional-grade, meditative pixel art editor designed for digital baristas. It combines a keyboard-first workflow with a "Cottagecore" aesthetic, turning pixel art into a tactile craft of digital brewing.
 
-![Screenshot 1](./static/screenshots/screenshot-1.png)
+<img src="./static/screenshots/screenshot-1.png" width="100%" />
 
 ---
 
@@ -23,9 +23,8 @@
 ## 🖼️ Gallery
 
 <div align="center">
-  <img src="./static/screenshots/screenshot-1.png" width="32.5%" />
-  <img src="./static/screenshots/screenshot-2.png" width="32.5%" />
-  <img src="./static/screenshots/screenshot-3.png" width="32.5%" />
+  <img src="./static/screenshots/screenshot-2.png" width="49%" />
+  <img src="./static/screenshots/screenshot-3.png" width="49%" />
 </div>
 
 ## 🏗️ Architectural Sovereignty

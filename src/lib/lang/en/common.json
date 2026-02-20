@@ -210,6 +210,19 @@
 		"preview_label": "Visual Tasting (Preview)",
 		"settings_label": "Brew Settings"
 	},
+	"palette_library": {
+		"title": "Flavor Library",
+		"subtitle": "Store and manage your unique extracts",
+		"save_label": "Seal Current Swatch",
+		"save_desc": "Save your active colors as a new recipe",
+		"name_placeholder": "Give this blend a name...",
+		"list_title": "Stored Blends",
+		"button": {
+			"save": "Store Recipe",
+			"apply": "Taste",
+			"delete": "Spill"
+		}
+	},
 	"shortcuts": {
 		"title": "Guide Book",
 		"subtitle": "Barista Rhythms & Flows",

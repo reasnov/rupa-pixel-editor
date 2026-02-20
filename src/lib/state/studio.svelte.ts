@@ -67,6 +67,7 @@ export class StudioState {
 	showGuideMenu = $state(false);
 	showGuideBook = $state(false);
 	showExportMenu = $state(false);
+	showPaletteLibrary = $state(false);
 	showCanvasSettings = $state(false);
 	showPersistenceMenu = $state(false);
 	showUnderlayMenu = $state(false);

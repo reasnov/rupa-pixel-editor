@@ -30,6 +30,7 @@ export class EditorEngine {
 
 		// Attempt to restore last session
 		services.persistence.restoreLastSession();
+		services.persistence.loadGlobalPalettes();
 
 		this.unsubscribeInput = input.subscribe((signal) => {
 			this.handleIntent(signal.intent as ActionIntent);

@@ -22,6 +22,22 @@
 					: 'border border-charcoal/5 opacity-80 hover:scale-105 hover:opacity-100'}"
 				style="background-color: {color};"
 				onclick={() => services.color.select(i)}
+				oncontextmenu={(e) => {
+					e.preventDefault();
+					editor.studio.contextMenu = {
+						x: e.clientX,
+						y: e.clientY,
+						items: [
+							{
+								label: 'Spill Flavor',
+								icon: '🗑️',
+								danger: true,
+								disabled: editor.palette.length <= 1,
+								action: () => editor.paletteState.removeSwatch(i)
+							}
+						]
+					};
+				}}
 				aria-label={__({ key: `labels.SELECT_COLOR_${(i + 1) % 10}` })}
 				title={__({ key: `labels.SELECT_COLOR_${(i + 1) % 10}` }) + ` (${(i + 1) % 10})`}
 				role="radio"
@@ -36,6 +52,15 @@
 			aria-label={__({ key: 'color_picker.title' })}
 		>
 			<span class="text-xs opacity-40" aria-hidden="true">＋</span>
+		</button>
+
+		<button
+			class="flex h-8 w-8 items-center justify-center rounded border border-dashed border-charcoal/20 bg-charcoal/5 transition-all hover:scale-110 hover:border-brand/40 hover:bg-white"
+			onclick={() => (editor.studio.showPaletteLibrary = true)}
+			title={__({ key: 'palette_library.title' })}
+			aria-label={__({ key: 'palette_library.title' })}
+		>
+			<span class="text-xs opacity-40" aria-hidden="true">🎨</span>
 		</button>
 	</div>
 </div>

@@ -14,9 +14,18 @@
 			class="editor-checker-small h-10 w-10 rounded border border-charcoal/10 shadow-inner transition-colors"
 			style="background-color: {editor.paletteState.activeColor};"
 		></div>
-		<span class="font-mono text-[9px] font-bold tracking-tight text-charcoal/40 uppercase">
-			{editor.paletteState.activeColor}
-		</span>
+		<div class="flex items-center gap-2">
+			<span class="font-mono text-[9px] font-bold tracking-tight text-charcoal/40 uppercase">
+				{editor.paletteState.activeColor}
+			</span>
+			<button
+				onclick={() => editor.paletteState.addSwatch(editor.paletteState.activeColor)}
+				class="flex h-4 w-4 items-center justify-center rounded bg-brand/10 text-[8px] text-brand transition-all hover:bg-brand hover:text-white"
+				title="Add to Current Palette"
+			>
+				＋
+			</button>
+		</div>
 	</div>
 
 	<div class="h-px w-full bg-charcoal/5"></div>

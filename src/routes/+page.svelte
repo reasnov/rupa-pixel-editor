@@ -20,6 +20,7 @@
 	import GuideMenu from '$lib/components/overlay/GuideMenu.svelte';
 	import PersistenceMenu from '$lib/components/overlay/PersistenceMenu.svelte';
 	import CanvasSettings from '$lib/components/overlay/CanvasSettings.svelte';
+	import PaletteLibrary from '$lib/components/overlay/PaletteLibrary.svelte';
 	import GoToModal from '$lib/components/overlay/GoToModal.svelte';
 	import AudioSettings from '$lib/components/overlay/AudioSettings.svelte';
 	import GuideBook from '$lib/components/overlay/GuideBook.svelte';
@@ -61,6 +62,10 @@
 
 {#if editor.showPersistenceMenu}
 	<PersistenceMenu onClose={() => (editor.showPersistenceMenu = false)} />
+{/if}
+
+{#if editor.studio.showPaletteLibrary}
+	<PaletteLibrary onClose={() => (editor.studio.showPaletteLibrary = false)} />
 {/if}
 
 {#if editor.showCanvasSettings}

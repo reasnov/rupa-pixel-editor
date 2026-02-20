@@ -15,6 +15,7 @@ export class PersistenceService {
 				lastModified: new Date().toISOString()
 			},
 			palette: editor.paletteState.swatches,
+			presets: editor.paletteState.presets,
 			project: {
 				frames: editor.project.frames.map((f) => ({
 					name: f.name,
@@ -126,12 +127,43 @@ export class PersistenceService {
 		return false;
 	}
 
+	/**
+	 * Save the current preset library to a global LocalStorage key.
+	 */
+	saveGlobalPalettes() {
+		try {
+			const data = JSON.stringify(editor.paletteState.presets);
+			localStorage.setItem('rupa_palette_library', data);
+		} catch (e) {
+			console.warn('Failed to save global palettes:', e);
+		}
+	}
+
+	/**
+	 * Load presets from the global LocalStorage key.
+	 */
+	loadGlobalPalettes() {
+		try {
+			const data = localStorage.getItem('rupa_palette_library');
+			if (data) {
+				const presets = JSON.parse(data);
+				// Merge logic: Add non-duplicates or just replace non-defaults
+				const defaults = editor.paletteState.presets.filter((p) => p.isDefault);
+				const customs = presets.filter((p: any) => !p.isDefault);
+				editor.paletteState.presets = [...defaults, ...customs];
+			}
+		} catch (e) {
+			console.warn('Failed to load global palettes:', e);
+		}
+	}
+
 	private deserialize(json: string) {
 		try {
 			const d = JSON.parse(json);
 
 			// 1. Restore Palette
 			if (d.palette) editor.paletteState.swatches = d.palette;
+			if (d.presets) editor.paletteState.presets = d.presets;
 
 			// 2. Restore Project Structure (with Backward Compatibility)
 			const projectData = d.project || d.folio;

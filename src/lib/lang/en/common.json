@@ -1,192 +1,134 @@
 {
 	"hud": {
 		"actions": {
-			"save_project": "Store the Recipe",
-			"clear_canvas": "Clear the Foam",
-			"mute_audio": "Mute Ambience",
-			"unmute_audio": "Unmute Ambience",
-			"add_frame": "New Cup",
-			"add_layer": "New Infusion",
-			"merge_layers": "Merge Infusions",
+			"save_project": "Store the Chronicle",
+			"clear_canvas": "Clear the Washi",
+			"mute_audio": "Mute Atmosphere",
+			"unmute_audio": "Unmute Atmosphere",
+			"add_frame": "New Serving",
+			"add_layer": "New Ingredient",
+			"merge_layers": "Merge Ingredients",
 			"duplicate": "Clone",
 			"delete": "Spill"
 		},
 		"menu": {
-			"color_title": "Flavor Station",
-			"catalog_title": "Café Menu",
-			"catalog_search": "Search recipes or barista skills...",
-			"catalog_no_results": "No orders found for \"{{query}}\"",
-			"catalog_footer": "Use Arrows to Navigate • Enter to Brew",
+			"color_title": "Pigment Station",
+			"catalog_title": "Sanctuary Records",
+			"catalog_search": "Search chronicles or artisan skills...",
+			"catalog_no_results": "No records found for \"{{query}}\"",
+			"catalog_footer": "Use Arrows to Navigate • Enter to Craft",
 			"catalog_count": "{{count}} Skills Available"
 		},
 		"audio": {
-			"title": "Audio Bar"
+			"title": "Atmosphere Bar"
 		},
 		"project_panel": {
-			"frames": "Cups",
-			"layers": "Infusions",
-			"visibility": "Show/Hide Infusion",
-			"lock": "Seal/Unseal Infusion",
+			"frames": "Servings",
+			"layers": "Ingredients",
+			"visibility": "Show/Hide Ingredient",
+			"lock": "Seal/Unseal Ingredient",
 			"active": "In Service"
 		},
 		"stats": {
-			"pixel_count": "{{count}} drops poured",
-			"pixel_count_plural": "{{count}} drops poured"
+			"pixel_count": "{{count}} leaves placed",
+			"pixel_count_plural": "{{count}} leaves placed"
 		}
 	},
 	"cursor": {
-		"position": "Etcher at {{x}}, {{y}}"
+		"position": "Brush at {{x}}, {{y}}"
 	},
 	"stats": {
-		"cursor_focus": "Etcher Focus",
-		"canvas_size": "Milk Foam Size",
+		"cursor_focus": "Brush Focus",
+		"canvas_size": "Washi Dimensions",
 		"zoom_level": "Focus Level",
-		"active_pattern": "Art: {{count}} Drops",
+		"active_pattern": "Art: {{count}} Leaves",
 		"technical_details": "Technical Ledger"
 	},
 	"project": {
-		"saved": "Recipe Saved {{time}}"
-	},
-	"splash": {
-		"welcome": "The Café is open, Barista.",
-		"version": "Blend {{version}}",
-		"phases": [
-			"Roasting the beans...",
-			"Frothing the milk...",
-			"Polishing the cups...",
-			"Heating the etcher...",
-			"Café is ready for service."
-		]
-	},
-	"manual": {
-		"title": "The Barista's Manual",
-		"subtitle": "Edition I: The Art of Crema",
-		"philosophy": {
-			"title": "The Way of the Pour",
-			"p1": "In the beginning, there was only the Foam—a pristine, untouched cream void. Then came the Etcher, guided by your rhythm, bringing the first drop of flavor to the surface.",
-			"p2": "Rupa is more than a tool; it is your sanctuary. Here, pixels aren't just data points—they are Drops. Every mark you make is a deliberate act of brewing that requires flow, focus, and a peaceful heart.",
-			"p3": "\"We do not just paint pixels; we etch moments into the crema of time.\""
-		},
-		"pillars": {
-			"cursor": {
-				"title": "The Etcher",
-				"desc": "Your voice on the foam. Move it with the Arrow Keys to guide your patterns with barista precision."
-			},
-			"colors": {
-				"title": "The Flavors",
-				"desc": "Rich extracts and syrups. Apply them with Space and switch flavors using the numbers on your keyboard."
-			},
-			"layers": {
-				"title": "The Infusions",
-				"desc": "Layers of depth. Like stacking fine flavors, each infusion adds a new dimension to your cup."
-			}
-		},
-		"techniques": {
-			"title": "Barista Skills",
-			"continuous": {
-				"title": "Continuous Pouring",
-				"desc": "Hold Ctrl while moving to stream flavor across the foam."
-			},
-			"magic_select": {
-				"title": "Spirit Selection",
-				"desc": "Press W to select all connected drops of the same tone. A magical way to move patterns."
-			},
-			"timeline": {
-				"title": "The Flow of Time",
-				"desc": "Create sequences of cups to breathe life into your work. Press P to feel the pulse."
-			},
-			"audio": {
-				"title": "Café Resonance",
-				"desc": "Listen. The café responds to your focus with piano melodies that grow as you brew."
-			}
-		},
-		"footer": {
-			"quote": "May your etcher be swift and your crema ever-smooth.",
-			"guild": "The Rupa Barista Guild",
-			"all_shortcuts": "Review the Menu",
-			"enter": "Step Behind the Bar"
-		}
+		"saved": "Chronicle Preserved {{time}}"
 	},
 	"color_picker": {
-		"title": "Flavor Station",
+		"title": "Pigment Station",
 		"subtitle": "Mix your unique extracts",
 		"label": {
 			"hex": "HEX CODE",
-			"hue": "Roast (Hue)",
-			"saturation": "Body (Saturation)",
+			"hue": "Nature (Hue)",
+			"saturation": "Depth (Saturation)",
 			"lightness": "Brightness (Lightness)",
 			"alpha": "Opacity (Alpha)"
 		},
 		"button": {
-			"eye_dropper": "Taste from Foam",
-			"confirm": "Seal the Flavor"
+			"eye_dropper": "Taste from Washi",
+			"confirm": "Seal the Pigment"
 		}
 	},
 	"timeline": {
 		"audio_status": {
-			"title": "Ambiance Flow",
+			"title": "Atmosphere Flow",
 			"silent": "Quiet",
-			"brewing": "Brewing",
+			"brewing": "Humming",
 			"resonant": "Resonant"
 		},
 		"mode": "Mode",
 		"mode_labels": {
-			"brewing": "Brewing...",
-			"tasting": "Tasting...",
-			"clearing": "Clearing",
-			"selecting": "Selecting",
-			"pouring": "Pouring",
-			"ready": "Café Ready"
+			"brewing": "Crafting...",
+			"tasting": "Sampling...",
+			"clearing": "Sweeping",
+			"selecting": "Gathering",
+			"pouring": "Painting",
+			"ready": "Sanctuary Ready"
 		},
 		"rhythm": "Rhythm",
 		"waiting": "Waiting",
-		"duration": "Shift Duration",
+		"duration": "Sanctuary Time",
 		"title": "The Flow",
 		"track": "Animated Stream",
-		"frame_count": "{{count}} Cups",
-		"frame_count_plural": "{{count}} Cups"
+		"frame_count": "{{count}} Servings",
+		"frame_count_plural": "{{count}} Servings",
+		"pixel_count": "{{count}} leaf",
+		"pixel_count_plural": "{{count}} leaves"
 	},
 	"navigation": {
 		"title": "Jump to Table",
-		"subtitle": "Direct Etcher Placement",
+		"subtitle": "Direct Brush Placement",
 		"label_x": "Column (X)",
 		"label_y": "Row (Y)",
 		"current": "Currently at: {{x}}, {{y}}",
-		"action": "Move Etcher"
+		"action": "Move Brush"
 	},
 	"export": {
-		"title": "Serving Tray",
-		"subtitle": "Prepare Cups for Service",
+		"title": "Hantaran Tray",
+		"subtitle": "Prepare Servings for the Village",
 		"tabs": {
 			"image": "Static Art",
-			"video": "Animated Brews"
+			"video": "Animated Flows"
 		},
 		"label": {
-			"scale": "Service Scale",
-			"fps": "Brew Pace (FPS)",
-			"selection": "Cup Selection",
-			"borders": "Vessel Borders",
-			"background": "Cup Base"
+			"scale": "Serving Scale",
+			"fps": "Village Pace (FPS)",
+			"selection": "Serving Selection",
+			"borders": "Brush Borders",
+			"background": "Washi Base"
 		},
 		"description": {
 			"scale": "Multiplier for final output size",
-			"fps": "Drops per second",
-			"selection": "Choose which cups to serve",
-			"borders": "Include grid lines on colored drops",
-			"background": "Fill empty foam with base color"
+			"fps": "Leaves per second",
+			"selection": "Choose which servings to send",
+			"borders": "Include grid lines on colored leaves",
+			"background": "Fill empty washi with base color"
 		},
 		"selection": {
 			"active": "In Service Only (Active)",
-			"visible": "Visible Cups",
-			"selected": "Selected Cups",
-			"all": "All Cups in Store"
+			"visible": "Visible Servings",
+			"selected": "Selected Servings",
+			"all": "All Servings in Records"
 		},
 		"background": {
 			"transparent": "Crystal Clear (Transparent)",
-			"cream": "Warm Cream",
-			"black": "Midnight Roast",
-			"custom": "Custom Blend",
-			"match_canvas": "Match Counter Color"
+			"cream": "Washi Cream",
+			"black": "Forest Shadow",
+			"custom": "Custom Pigment",
+			"match_canvas": "Match Table Color"
 		},
 		"format": {
 			"png": "Polaroid PNG",
@@ -199,150 +141,129 @@
 			"mp4": "MP4 Reel"
 		},
 		"button": {
-			"submit": "Brew & Serve"
+			"submit": "Craft & Send"
 		},
 		"status": {
-			"preparing": "Preparing Cup...",
-			"progress": "Brewing Progress",
-			"brewing": "Brewing Artifact...",
-			"requires_frames": "Requires multiple cups"
+			"preparing": "Preparing Serving...",
+			"progress": "Crafting Progress",
+			"brewing": "Crafting Artifact...",
+			"requires_frames": "Requires multiple servings"
 		},
-		"preview_label": "Visual Tasting (Preview)",
-		"settings_label": "Brew Settings"
+		"preview_label": "Visual Sampling (Preview)",
+		"settings_label": "Craft Settings",
+		"wiggle_modifier": "Mist Intensity",
+		"sway_modifier": "Flow Sway"
 	},
 	"palette_library": {
-		"title": "Flavor Library",
+		"title": "Pigment Library",
 		"subtitle": "Store and manage your unique extracts",
 		"save_label": "Seal Current Swatch",
-		"save_desc": "Save your active colors as a new recipe",
-		"name_placeholder": "Give this blend a name...",
-		"list_title": "Stored Blends",
+		"save_desc": "Save your active pigments as a new chronicle",
+		"name_placeholder": "Give this set a name...",
+		"list_title": "Stored Pigments",
 		"button": {
-			"save": "Store Recipe",
-			"apply": "Taste",
+			"save": "Store Record",
+			"apply": "Sample",
 			"delete": "Spill"
 		}
 	},
-	"shortcuts": {
-		"title": "Guide Book",
-		"subtitle": "Barista Rhythms & Flows",
-		"header_title": "Mastering the Bar",
-		"header_desc": "In Rupa, we play rhythms. These key combinations create a flow state, allowing your etcher to dance across the foam with professional precision.",
-		"footer_quote": "A master barista knows every flavor by heart."
-	},
 	"settings": {
-		"title": "Café Settings",
-		"subtitle": "Configure the Service Bar",
-		"width": "Cup Width",
-		"height": "Cup Height",
-		"fps_label": "Service Pace (FPS)",
-		"fps_desc": "Default frames per second",
-		"background_label": "Counter Color",
-		"background_desc": "Visual background for the bar",
-		"stabilization": "Pour Stability",
+		"title": "Sanctuary Settings",
+		"subtitle": "Configure the Craft Table",
+		"width": "Washi Width",
+		"height": "Washi Height",
+		"fps_label": "Village Pace (FPS)",
+		"fps_desc": "Default servings per second",
+		"background_label": "Table Color",
+		"background_desc": "Visual background for the table",
+		"stabilization": "Brush Stability",
 		"stabilization_desc": "Corrects shaky hand movements",
-		"apply": "Reset Service Bar",
-		"note": "Note: Resizing will center your current art on the new foam. Large cups may slow down the pour."
-	},
-	"shortcut_groups": {
-		"rhythms": "Core Rhythms (Basics)",
-		"navigation": "Step the Etcher (Navigation)",
-		"cursor": "The Etcher (Cursor)",
-		"barista": "Barista Skills",
-		"tools": "Barista Tools (Drawing)",
-		"magic": "Barista Magic (Special)",
-		"flow": "Continuous Flow",
-		"selection": "Focus Area (Selection)",
-		"etching": "Master Etching (Advanced)",
-		"transform": "Transformation",
-		"geometry": "Forms & Geometry",
-		"timeline": "The Flow (Timeline)",
-		"layers": "Infusions (Layers)",
-		"edit": "Recipe Adjustments (Edit)",
-		"view": "Viewport & View",
-		"menu": "The Menu (Palette)",
-		"vibes": "Atmosphere (Audio)",
-		"colors": "Select Flavors (Colors)",
-		"system": "Studio System"
+		"apply": "Reset Craft Table",
+		"note": "Note: Resizing will center your current art on the new washi. Large servings may slow down the flow."
 	},
 	"labels": {
-		"MOVE_UP": "Move Etcher Up",
-		"MOVE_DOWN": "Move Etcher Down",
-		"MOVE_LEFT": "Move Etcher Left",
-		"MOVE_RIGHT": "Move Etcher Right",
+		"MOVE_UP": "Move Brush Up",
+		"MOVE_DOWN": "Move Brush Down",
+		"MOVE_LEFT": "Move Brush Left",
+		"MOVE_RIGHT": "Move Brush Right",
 		"GOTO": { "artisan": "Jump to Spot", "technical": "Go to Coordinate" },
 		"PAN_VIEWPORT": "Pan Viewport (Hold Space/Q)",
 		"RESET_PAN": "Reset View",
 		"RESET_VIEWPORT": "Reset Viewport",
 		"JUMP_HOME": { "artisan": "Return to Center", "technical": "Reset Position" },
-		"PAINT": { "artisan": "Pour Flavor", "technical": "Paint Tool" },
-		"ERASE": { "artisan": "Wipe Drop", "technical": "Eraser Tool" },
-		"PICK_COLOR": { "artisan": "Taste Color", "technical": "Eyedropper" },
-		"FLOOD_FILL": { "artisan": "Flavor Soak", "technical": "Flood Fill" },
+		"PAINT": { "artisan": "Paint Leaf", "technical": "Brush Tool" },
+		"ERASE": { "artisan": "Sweep Leaf", "technical": "Eraser Tool" },
+		"PICK_COLOR": { "artisan": "Sample Pigment", "technical": "Eyedropper" },
+		"FLOOD_FILL": { "artisan": "Pigment Soak", "technical": "Flood Fill" },
 		"BIND_VERTEX": { "artisan": "Pin Vertex", "technical": "Add Polygon Point" },
 		"SEAL_BINDING": { "artisan": "Seal Shape", "technical": "Close Polygon" },
-		"TOGGLE_DITHER_BLEND": { "artisan": "Aroma Blend", "technical": "Dither Blend" },
-		"RECOLOR": { "artisan": "Change Brew", "technical": "Replace Color" },
-		"SELECT_SAME": { "artisan": "Magic Select", "technical": "Magic Wand" },
-		"FLOW_PAINT": "Stream Pouring",
-		"FLOW_ERASE": "Stream Clearing",
+		"TOGGLE_DITHER_BLEND": { "artisan": "Moss Blend", "technical": "Dither Blend" },
+		"RECOLOR": { "artisan": "Change Pigment", "technical": "Replace Color" },
+		"SELECT_SAME": { "artisan": "Spirit Gathering", "technical": "Magic Wand" },
+		"FLOW_PAINT": "Stream Painting",
+		"FLOW_ERASE": "Stream Sweeping",
 		"FLOW_SELECT": "Define Area",
-		"COPY": "Copy Recipe",
+		"COPY": "Copy Record",
 		"CUT": "Cut Extract",
-		"PASTE": "Paste from Clipboard",
-		"CLEAR_CANVAS": { "artisan": "Clean the Foam", "technical": "Clear Canvas" },
+		"PASTE": "Paste from Memory",
+		"CLEAR_CANVAS": { "artisan": "Clean the Washi", "technical": "Clear Canvas" },
 		"FLIP_H": "Flip Horizontally",
 		"FLIP_V": "Flip Vertically",
-		"ROTATE": "Rotate Cup",
+		"ROTATE": "Rotate Serving",
 		"ZOOM_IN": "Focus In",
 		"ZOOM_OUT": "Focus Out",
 		"RESET_ZOOM": "Reset Focus",
-		"NEW_FRAME": { "artisan": "New Cup", "technical": "New Frame" },
-		"DUPLICATE_FRAME": { "artisan": "Clone Cup", "technical": "Duplicate Frame" },
-		"DELETE_FRAME": { "artisan": "Spill Cup", "technical": "Delete Frame" },
-		"NEXT_FRAME": "Next Cup",
-		"PREV_FRAME": "Previous Cup",
-		"PLAY_PAUSE": "Start/Stop Service",
-		"TOGGLE_GHOST_LAYERS": { "artisan": "See Ghost Infusions", "technical": "Onion Skinning" },
-		"NEW_ITEM": { "artisan": "Add Ingredient", "technical": "New Item" },
-		"NEW_LAYER": { "artisan": "Add Infusion", "technical": "New Layer" },
-		"NEW_LAYER_GROUP": { "artisan": "Group Infusions", "technical": "New Group" },
-		"DUPLICATE_ITEM": { "artisan": "Clone Ingredient", "technical": "Duplicate Item" },
-		"DUPLICATE_LAYER": { "artisan": "Clone Infusion", "technical": "Duplicate Layer" },
-		"DELETE_ITEM": { "artisan": "Remove Ingredient", "technical": "Delete Item" },
-		"DELETE_LAYER": { "artisan": "Spill Infusion", "technical": "Delete Layer" },
+		"NEW_FRAME": { "artisan": "New Serving", "technical": "New Frame" },
+		"DUPLICATE_FRAME": { "artisan": "Clone Serving", "technical": "Duplicate Frame" },
+		"DELETE_FRAME": { "artisan": "Spill Serving", "technical": "Delete Frame" },
+		"NEXT_FRAME": "Next Serving",
+		"PREV_FRAME": "Previous Serving",
+		"PLAY_PAUSE": "Start/Stop Flow",
+		"TOGGLE_GHOST_LAYERS": { "artisan": "See Ghost Ingredients", "technical": "Onion Skinning" },
+		"NEW_ITEM": { "artisan": "Add Detail", "technical": "New Item" },
+		"NEW_LAYER": { "artisan": "Add Ingredient", "technical": "New Layer" },
+		"NEW_LAYER_GROUP": { "artisan": "Group Ingredients", "technical": "New Group" },
+		"DUPLICATE_ITEM": { "artisan": "Clone Detail", "technical": "Duplicate Item" },
+		"DUPLICATE_LAYER": { "artisan": "Clone Ingredient", "technical": "Duplicate Layer" },
+		"DELETE_ITEM": { "artisan": "Remove Detail", "technical": "Delete Item" },
+		"DELETE_LAYER": { "artisan": "Spill Ingredient", "technical": "Delete Layer" },
 		"MOVE_ITEM_UP": "Move Up",
 		"MOVE_ITEM_DOWN": "Move Down",
 		"MOVE_ITEM_TOP": "Move to Top",
 		"MOVE_ITEM_BOTTOM": "Move to Bottom",
-		"MOVE_LAYER_UP": "Lift Infusion",
-		"MOVE_LAYER_DOWN": "Lower Infusion",
-		"MERGE_LAYERS": { "artisan": "Merge Infusion Down", "technical": "Merge Layer" },
-		"TOGGLE_LAYER_VISIBILITY": "Reveal/Hide Infusion (Ctrl+Alt+V)",
-		"TOGGLE_LAYER_LOCK": "Seal/Unseal Infusion",
-		"BRUSH_SIZE_INC": "Grind Larger",
-		"BRUSH_SIZE_DEC": "Grind Smaller",
-		"TOGGLE_PATTERN_BRUSH": { "artisan": "Vessel Stencil", "technical": "Pattern Brush" },
-		"TOGGLE_BRUSH_SHAPE": "Swap Vessel",
+		"MOVE_LAYER_UP": "Lift Ingredient",
+		"MOVE_LAYER_DOWN": "Lower Ingredient",
+		"MERGE_LAYERS": { "artisan": "Merge Ingredient Down", "technical": "Merge Layer" },
+		"MERGE_SELECTED_LAYERS": {
+			"artisan": "Combine Ingredients",
+			"technical": "Merge Selected Layers"
+		},
+		"MERGE_FRAMES": { "artisan": "Combine Servings", "technical": "Merge Selected Frames" },
+		"TOGGLE_LAYER_VISIBILITY": "Reveal/Hide Ingredient (Ctrl+Alt+V)",
+		"TOGGLE_LAYER_LOCK": "Seal/Unseal Ingredient",
+		"BRUSH_SIZE_INC": "Brush Larger",
+		"BRUSH_SIZE_DEC": "Brush Smaller",
+		"TOGGLE_PATTERN_BRUSH": { "artisan": "Artisan Stencil", "technical": "Pattern Brush" },
+		"TOGGLE_BRUSH_SHAPE": "Swap Shape",
 		"TOGGLE_HAND_TOOL": "Hand Tool",
-		"CYCLE_SYMMETRY": "Reflective Brewing",
-		"TOGGLE_TILING": { "artisan": "Infinite Pour", "technical": "Tiling Mode" },
+		"CYCLE_SYMMETRY": "Reflective Crafting",
+		"TOGGLE_TILING": { "artisan": "Infinite Flow", "technical": "Tiling Mode" },
 		"TOGGLE_AIRBRUSH": { "artisan": "The Mist", "technical": "Airbrush Mode" },
 		"TOGGLE_ALPHA_LOCK": "Seal Transparent",
-		"TOGGLE_COLOR_LOCK": "Seal Flavor",
-		"SHADE_LIGHTEN": "Light Roast (L)",
-		"SHADE_DARKEN": "Dark Roast (D)",
+		"TOGGLE_COLOR_LOCK": "Seal Pigment",
+		"SHADE_LIGHTEN": "Sun Glimmer (L)",
+		"SHADE_DARKEN": "Moon Shadow (D)",
 		"SHADE_DITHER": "Add Texture (X)",
-		"TOGGLE_SHADE_LIGHTEN": "Toggle Light Roast",
-		"TOGGLE_SHADE_DARKEN": "Toggle Dark Roast",
+		"TOGGLE_SHADE_LIGHTEN": "Toggle Sun Glimmer",
+		"TOGGLE_SHADE_DARKEN": "Toggle Moon Shadow",
 		"TOGGLE_SHADE_DITHER": "Toggle Texture",
-		"TOGGLE_PIXEL_PERFECT": "Pure Pour (Shift+P)",
-		"TOOL_BRUSH": "Vessel Etcher (Brush)",
-		"TOOL_ERASER": "Vessel Wiper (Eraser)",
-		"TOOL_SELECT": "Focus Area (Select)",
-		"TOOL_RECTANGLE": { "artisan": "Box Vessel", "technical": "Rectangle Tool" },
-		"TOOL_ELLIPSE": { "artisan": "Round Vessel", "technical": "Ellipse Tool" },
-		"TOOL_POLYGON": { "artisan": "Star Vessel", "technical": "Polygon Tool" },
+		"TOGGLE_PIXEL_PERFECT": "Pure Flow (Shift+P)",
+		"TOOL_BRUSH": "Artisan Brush",
+		"TOOL_ERASER": "Artisan Sweep (Eraser)",
+		"TOOL_SELECT": "Gather Area (Select)",
+		"TOOL_RECTANGLE": { "artisan": "Box Form", "technical": "Rectangle Tool" },
+		"TOOL_ELLIPSE": { "artisan": "Round Form", "technical": "Ellipse Tool" },
+		"TOOL_POLYGON": { "artisan": "Star Form", "technical": "Polygon Tool" },
 		"POLY_SIDES_INC": "Add Facet",
 		"POLY_SIDES_DEC": "Remove Facet",
 		"POLY_INDENT_INC": "Deepen Star (Alt+Shift+])",
@@ -357,34 +278,34 @@
 		"SET_SIDES_10": "Make Decagon",
 		"TOGGLE_UNDERLAY": "See Reference Underlay",
 		"OPEN_UNDERLAY_MENU": "Underlay Crate",
-		"TOOL_TRANSFORM": { "artisan": "Shift Focus Area", "technical": "Transform Selection" },
+		"TOOL_TRANSFORM": { "artisan": "Shift Gather Area", "technical": "Transform Selection" },
 		"OPEN_MENU": "Open Menu",
-		"OPEN_EXPORT": "Serving Tray",
-		"SAVE": "Store Recipe (Save)",
-		"OPEN": "Open Recipe",
-		"OPEN_SETTINGS": "Café Settings",
-		"OPEN_MANUAL": "Barista Manual",
-		"OPEN_PALETTE": "Flavor Station",
-		"OPEN_HELP": "Guide Book",
-		"OPEN_AUDIO": "Audio Settings",
-		"TOGGLE_MUTE": "Silence the Café (Ctrl+Shift+M)",
+		"OPEN_EXPORT": "Hantaran Tray",
+		"SAVE": "Preserve Record (Save)",
+		"OPEN": "Recall Record",
+		"OPEN_SETTINGS": "Sanctuary Settings",
+		"OPEN_MANUAL": "Artisan Manual",
+		"OPEN_PALETTE": "Pigment Station",
+		"OPEN_HELP": "Catalog",
+		"OPEN_AUDIO": "Atmosphere Settings",
+		"TOGGLE_MUTE": "Silence the Sanctuary (Ctrl+Shift+M)",
 		"TOGGLE_MINIMAP": "Toggle Surveyor's Glass",
 		"UNDO": "Rewind Action",
 		"REDO": "Fast-Forward Action",
 		"ESCAPE": "Clear Focus",
-		"TAB_TIMELINE": "Focus Timeline",
-		"TAB_LAYERS": "Focus Infusions",
+		"TAB_TIMELINE": "Focus Servings",
+		"TAB_LAYERS": "Focus Ingredients",
 		"SWITCH_FOCUS": "Switch Focus",
-		"SET_POSITION": "Set Etcher Position",
-		"SELECT_COLOR_1": "Select Flavor 1",
-		"SELECT_COLOR_2": "Select Flavor 2",
-		"SELECT_COLOR_3": "Select Flavor 3",
-		"SELECT_COLOR_4": "Select Flavor 4",
-		"SELECT_COLOR_5": "Select Flavor 5",
-		"SELECT_COLOR_6": "Select Flavor 6",
-		"SELECT_COLOR_7": "Select Flavor 7",
-		"SELECT_COLOR_8": "Select Flavor 8",
-		"SELECT_COLOR_9": "Select Flavor 9",
-		"SELECT_COLOR_0": "Select Flavor 0"
+		"SET_POSITION": "Set Brush Position",
+		"SELECT_COLOR_1": "Select Pigment 1",
+		"SELECT_COLOR_2": "Select Pigment 2",
+		"SELECT_COLOR_3": "Select Pigment 3",
+		"SELECT_COLOR_4": "Select Pigment 4",
+		"SELECT_COLOR_5": "Select Pigment 5",
+		"SELECT_COLOR_6": "Select Pigment 6",
+		"SELECT_COLOR_7": "Select Pigment 7",
+		"SELECT_COLOR_8": "Select Pigment 8",
+		"SELECT_COLOR_9": "Select Pigment 9",
+		"SELECT_COLOR_0": "Select Pigment 0"
 	}
 }

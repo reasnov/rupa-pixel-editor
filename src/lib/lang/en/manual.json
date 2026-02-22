@@ -1,0 +1,49 @@
+{
+	"title": "The Artisan's Sanctuary Manual",
+	"subtitle": "Chapter I: The Art of Moss & Stone",
+	"philosophy": {
+		"title": "The Way of the Forest",
+		"p1": "In the quiet of the morning, there is only the Washi—a pristine, untouched white void. Then came the Brush, guided by your breath, bringing the first drop of evergreen to the surface.",
+		"p2": "Rupa is your rural sanctuary. Here, pixels aren't just data—they are Leaves. Every mark you make is a deliberate act of tending a garden that requires patience, focus, and a peaceful heart.",
+		"p3": "\"We do not just paint pixels; we weave stories into the moss of time.\""
+	},
+	"pillars": {
+		"cursor": {
+			"title": "The Artisan's Brush",
+			"desc": "Your voice in the sanctuary. Move it with the Arrow Keys to guide your patterns with the precision of a master gardener."
+		},
+		"colors": {
+			"title": "The Natural Pigments",
+			"desc": "Rich extracts from forest flora. Apply them with Space and switch pigments using the numbers on your keyboard."
+		},
+		"layers": {
+			"title": "The Washi Sheets",
+			"desc": "Layers of depth. Like stacking fine washi paper, each sheet adds a new dimension to your story."
+		}
+	},
+	"techniques": {
+		"title": "Sanctuary Techniques",
+		"continuous": {
+			"title": "Fluid Moss-Painting",
+			"desc": "Hold Ctrl while moving to stream pigment across the washi."
+		},
+		"magic_select": {
+			"title": "Spirit Gathering",
+			"desc": "Press W to select all connected leaves of the same tone. A mystical way to rearrange your garden."
+		},
+		"timeline": {
+			"title": "The Seasons' Flow",
+			"desc": "Create sequences of servings to breathe life into your work. Press P to feel the pulse of nature."
+		},
+		"audio": {
+			"title": "Resonant Sanctuary",
+			"desc": "Listen. The sanctuary responds to your focus with piano melodies and distant wind chimes."
+		}
+	},
+	"footer": {
+		"quote": "May your brush be steady and your sanctuary ever-peaceful.",
+		"guild": "The Rupa Rural Artisan Circle",
+		"all_shortcuts": "Review the Records",
+		"enter": "Step into the Sanctuary"
+	}
+}

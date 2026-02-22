@@ -65,6 +65,10 @@ ipcMain.handle('file:autoSave', async (event, content) => {
 	return backupPath;
 });
 
+ipcMain.on('log:warn', (event, message) => {
+	console.warn(`[Renderer Warning] ${message}`);
+});
+
 app.whenReady().then(() => {
 	createWindow();
 

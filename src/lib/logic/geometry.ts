@@ -176,6 +176,47 @@ export class Geometry {
 	}
 
 	/**
+	 * Translates internal array coordinates to Artisan Cartesian coordinates.
+	 * Returns {x, y} where Y is inverted for display.
+	 */
+	static internalToCartesian(x: number, y: number, width: number, height: number) {
+		return {
+			x: this.toCartesianLabel(x, width),
+			y: this.toCartesianLabel(y, height, true)
+		};
+	}
+
+	/**
+	 * Translates Artisan Cartesian coordinates back to internal array indices.
+	 */
+	static cartesianToInternal(tx: number, ty: number, width: number, height: number) {
+		const midX = Math.floor(width / 2);
+		const midY = Math.floor(height / 2);
+
+		let ix, iy;
+
+		// X Conversion
+		if (width % 2 === 0) {
+			ix = tx < 0 ? tx + midX : tx + midX - 1;
+		} else {
+			ix = tx + midX;
+		}
+
+		// Y Conversion (Y is inverted in display)
+		const dispY = -ty;
+		if (height % 2 === 0) {
+			iy = dispY < 0 ? dispY + midY : dispY + midY - 1;
+		} else {
+			iy = dispY + midY;
+		}
+
+		return {
+			x: Math.max(0, Math.min(width - 1, ix)),
+			y: Math.max(0, Math.min(height - 1, iy))
+		};
+	}
+
+	/**
 	 * Calculates the percentage position for canvas grid guides.
 	 */
 	static getGuidePosition(offset: number, size: number): number {

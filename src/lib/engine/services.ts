@@ -111,6 +111,12 @@ export class ServiceCoordinator {
 	mergeLayerDown() {
 		this.project.mergeLayerDown();
 	}
+	mergeSelectedLayers() {
+		this.project.mergeSelectedLayers();
+	}
+	mergeFrames() {
+		this.project.mergeFrames();
+	}
 
 	// --- Clipboard Aliases ---
 

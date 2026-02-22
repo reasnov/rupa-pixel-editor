@@ -2,6 +2,7 @@ import { editor } from '../../state/editor.svelte.js';
 import { history } from '../history.js';
 import { sfx } from '../audio.js';
 import { ColorLogic } from '../../logic/color.js';
+import { PixelLogic } from '../../logic/pixel.js';
 
 export class ClipboardService {
 	copy() {
@@ -11,16 +12,8 @@ export class ClipboardService {
 
 		if (!bounds || points.length === 0) return;
 
-		const swatchData = new Uint32Array(bounds.width * bounds.height);
 		const source = editor.canvas.compositePixels; // Layer-Agnostic: Use merged image
-
-		points.forEach((p) => {
-			const sourceIndex = p.y * width + p.x;
-			const targetX = p.x - bounds.x1;
-			const targetY = p.y - bounds.y1;
-			const targetIndex = targetY * bounds.width + targetX;
-			swatchData[targetIndex] = source[sourceIndex];
-		});
+		const swatchData = PixelLogic.extractSubGrid(source, width, points, bounds);
 
 		editor.project.clipboard = {
 			width: bounds.width,
@@ -64,35 +57,28 @@ export class ClipboardService {
 		const { width: lw, height: lh } = editor.canvas;
 
 		history.beginBatch();
-		const currentPixels = new Uint32Array(editor.canvas.pixels);
-		let changed = false;
+		const { data: newData, changes } = PixelLogic.mergeSubGrid(
+			editor.canvas.pixels,
+			lw,
+			lh,
+			cb.data,
+			cb.width,
+			cb.height,
+			nx,
+			ny
+		);
 
-		for (let y = 0; y < cb.height; y++) {
-			for (let x = 0; x < cb.width; x++) {
-				const tx = nx + x;
-				const ty = ny + y;
+		if (changes.length > 0) {
+			changes.forEach((c) => {
+				const oldVal = editor.canvas.pixels[c.index];
+				history.push({
+					index: c.index,
+					oldColor: ColorLogic.uint32ToHex(oldVal),
+					newColor: ColorLogic.uint32ToHex(c.color)
+				});
+			});
 
-				if (tx >= 0 && tx < lw && ty >= 0 && ty < lh) {
-					const cbIdx = y * cb.width + x;
-					const val = cb.data[cbIdx];
-
-					if (val !== 0) {
-						const lIdx = ty * lw + tx;
-						const oldVal = currentPixels[lIdx];
-						history.push({
-							index: lIdx,
-							oldColor: ColorLogic.uint32ToHex(oldVal),
-							newColor: ColorLogic.uint32ToHex(val)
-						});
-						currentPixels[lIdx] = val;
-						changed = true;
-					}
-				}
-			}
-		}
-
-		if (changed) {
-			editor.canvas.pixels = currentPixels;
+			editor.canvas.pixels = newData;
 			editor.canvas.triggerPulse();
 			sfx.playDraw();
 		}

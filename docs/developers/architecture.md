@@ -2,7 +2,7 @@
 
 ## 1. Executive Summary
 
-**Rupa Pixel Editor** is a specialized desktop environment for pixel art, built with a "Keyboard-First, Mouse-Friendly" philosophy. The architecture follows a **Modular Layered Monolith** pattern, ensuring high cohesion within functional modules while maintaining a strict separation of concerns across technical layers. The system leverages **Svelte 5 (Runes)** for reactive UI management and **Electron** for a native desktop experience. The system is designed around the metaphor of "Barista Brewing," where the surface is treated as **The Foam** (Canvas) and the tool as **The Etcher** (Cursor).
+**Rupa Pixel Editor** is a specialized desktop environment for pixel art, built with a "Keyboard-First, Mouse-Friendly" philosophy. The architecture follows a **Modular Layered Monolith** pattern, ensuring high cohesion within functional modules while maintaining a strict separation of concerns across technical layers. The system is designed around the identity of a **Japanese Roadside Cafe x Retro 8-bit Aesthetic**. The canvas is treated as **The Washi** (or Moss), and the tool as **The Artisan's Brush** (the Cursor).
 
 ---
 
@@ -10,11 +10,11 @@
 
 Rupa Pixel Editor is structured into five distinct layers to ensure scalability and maintainability:
 
-1.  **UI Layer (`src/lib/components/`)**: Purely presentational Svelte components (HUD). They consume state and trigger intents.
-2.  **State Layer (`src/lib/state/`)**: Reactive data structures using Svelte 5 Runes (The Project). They hold the "Source of Truth" but contain no complex business logic.
-3.  **Service Layer (`src/lib/engine/services/`)**: The core drawing and project logic. Services manipulate state and orchestrate complex operations (e.g., Project management, Drawing algorithms).
-4.  **Engine Layer (`src/lib/engine/`)**: Low-level infrastructure and orchestrators (Input parsing, Audio generation, Service coordination).
-5.  **Logic Layer (`src/lib/logic/`)**: The "Brain" of the application. Pure, stateless algorithms and mathematical models (Geometry, Path processing, Color theory).
+1.  **UI Layer (`src/lib/components/`)**: Purely presentational Svelte components (HUD). They consume state and trigger intents from the **Roadside Sanctuary**.
+2.  **State Layer (`src/lib/state/`)**: Reactive data structures using Svelte 5 Runes (The Atelier). They hold the "Source of Truth" for the chronicles being woven.
+3.  **Service Layer (`src/lib/engine/services/`)**: The **Business Logic & Rules** container. Services manage state transitions, project-specific rules, and orchestrate complex workflows (e.g., Chronicle preservation, Ingredient management).
+4.  **Engine Layer (`src/lib/engine/`)**: The **Orchestrator & Entry-point**. Handles hardware bridges (Input, 8-bit Audio, Nature Ambience), input normalization, and high-level system coordination.
+5.  **Logic Layer (`src/lib/logic/`)**: **Pure, stateless algorithms**. Contains mathematical calculations and complex processing logic (Geometry, Color, Path, Rendering, Sorting, Filtering, Binary Manipulation).
 
 ---
 
@@ -23,7 +23,8 @@ Rupa Pixel Editor is structured into five distinct layers to ensure scalability 
 - **Runtime**: Node.js / Electron
 - **Frontend Framework**: Svelte 5 (utilizing Runes: `$state`, `$derived`, `$effect`)
 - **Build Tool**: Vite / SvelteKit (Static Adapter)
-- **Styling**: Tailwind CSS 4.0
+- **Styling**: Tailwind CSS 4.0 (Evergreen-Retro Palette)
+- **Audio**: Web Audio API (Low-fi Triangle/Square waves)
 - **Input Engines**:
   - **Keyboard Engine**: Keyboard-centric semantic action mapping (The Rhythm).
   - **Pointer Engine**: Mouse-based positional intent and "Continuous Flow" mapping.
@@ -88,7 +89,7 @@ The specialized engine for mouse and pointer interactions.
 The internationalization layer for the application.
 
 - **Reactive Translation**: Uses `i18next` integrated with Svelte Runes for real-time language switching.
-- **Global Helper**: Provides the `__()` global function for component-level translations without imports.
+- **Explicit Imports**: Provides the `__()` function for component-level translations. To ensure better error tracking and type safety, this function must be imported manually in every component where it is used.
 - **Barista Lexicon**: Manages localized strings for tools, metadata, and ambiance descriptions.
 
 ### 4.7 The Logic Layer (`src/lib/logic/`)
@@ -119,13 +120,24 @@ Viewport movement is achieved by applying CSS transforms to the **Canvas**. The 
 
 ---
 
-## 6. Data Flow
+## 6. Interaction Protocol: The Unified Intent Gateway
 
-`Keyboard Event` -> `KeyboardEngine` -> `ActionIntent` -> `EditorState / ModeEngine` -> `UI Reactivity (Runes)` -> `Canvas Rendering`.
+To maintain architectural integrity and ensure consistent side-effects (Audio, History), **Rupa** follows a strict gateway protocol:
+
+1.  **UI as a Consumer:** Svelte components may freely read from the **State Layer** to display information.
+2.  **Intent Gateway:** UI components **MUST NOT** trigger logic or mutate state directly. They must call methods on the **Engine Layer** (for hardware/orchestration) or the **Service Layer** (for business rules).
+3.  **Side-Effect Sovereignty:** Side-effects like sound (`audio.ts`) or undo/redo (`history.ts`) are managed exclusively within the Gateway (Engine/Service). This ensures the "Barista's Rhythm" is consistent across all input methods (Keyboard, Pointer, UI).
+4.  **Logic Isolation:** The **Logic Layer** is never called directly by the UI. It is a tool used by Engines and Services to perform heavy calculations.
 
 ---
 
-## 7. Performance & Integrity
+## 7. Data Flow
+
+`Keyboard/Pointer Event` -> `Engine (Normalization)` -> `ActionIntent` -> `Service (Business Rules)` -> `State Mutation (Runes)` -> `UI Reactivity`.
+
+---
+
+## 8. Performance & Integrity
 
 - **Input Latency**: Aiming for < 16ms (60fps) for smooth navigation.
 - **SVG Optimization**: Intelligent path-merging (rect-merging) to keep vector artifacts small.
@@ -150,17 +162,28 @@ To maintain visual harmony and code maintainability, Rupa Pixel Editor follows t
 
 ---
 
-## 9. Data Layer: Static Configuration (SSoT)
+## 9. Data & Persistence Layer
 
-To ensure the application is easily maintainable and scalable, all static data (Shortcuts, Palettes, Audio frequencies, Onboarding text) is stored in the **Data Layer** using JSON files in `src/lib/config/`.
+To ensure the application is easily maintainable, scalable, and resilient, Rupa categorizes data into three distinct tiers:
 
-### 9.1 Single Source of Truth (SSoT)
+### 9.1 Static Configuration (`src/lib/config/`)
 
-- **Consistency**: Centralizing data in JSON prevents hardcoded strings from scattering across UI components.
-- **Maintainability**: Tuning the "lore" or "vibe" of the café (e.g., changing sound frequencies or tutorial text) only requires editing a single JSON file.
+Contains orchestration settings, keyboard shortcuts, UI themes, and onboarding text stored as JSON.
 
-### 9.2 Access Restrictions
+- **Role**: Defines the "lore" and behavior of the studio.
+- **Access**: Only Engines/Services. UI consumes processed data from State.
 
-- **Engine/Service Sovereignty**: Only Engines or Services are permitted to import and process JSON configuration files.
-- **Normalization**: Engines act as "Data Brokers," responsible for normalizing raw JSON data (e.g., Title Casing shortcut labels) before exposing them to the State or UI layers.
-- **Passive UI**: Svelte components must remain "dumb" regarding static data. They should consume processed data from the State or through Engine method calls (e.g., `keyboard.getActions()`) rather than importing JSON directly.
+### 9.2 Pure Data Assets (`src/lib/data/`)
+
+Contains heavy, read-only datasets such as default color palettes, lookup tables, and project templates.
+
+- **Role**: Provides the raw "ingredients" for the editor.
+- **Access**: Accessible by Logic, Services, and Engines for processing.
+
+### 9.3 Dynamic Persistence (User Data)
+
+Handles the "Source of Truth" for user creations across different environments.
+
+- **Electron (Native)**: Direct File System (FS) access for `.rupa` project files.
+- **Web/Preview (IndexedDB)**: Browser-based storage for autosaves and temporary session state.
+- **Metadata**: Tracks `lastSaved`, `usageMinutes`, and versioning.

@@ -64,8 +64,8 @@ export class StudioState {
 	showColorPicker = $state(false);
 	showAudioSettings = $state(false);
 	showCommandPalette = $state(false);
-	showGuideMenu = $state(false);
-	showGuideBook = $state(false);
+	showShortcuts = $state(false);
+	showManual = $state(false);
 	showExportMenu = $state(false);
 	showPaletteLibrary = $state(false);
 	showCanvasSettings = $state(false);

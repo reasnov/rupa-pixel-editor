@@ -1,61 +1,61 @@
 {
 	"splash": {
 		"phases": [
-			"Roasting the beans...",
-			"Frothing the milk...",
-			"Polishing the cups...",
-			"Heating the etcher...",
-			"Café is ready for service."
+			"The morning mist clears over the village...",
+			"Preparing the aged wooden desk...",
+			"Listening to the distant wind chimes...",
+			"Waking the artisan's spirit...",
+			"The sanctuary is silent. Begin your story."
 		]
 	},
 	"manual": {
-		"title": "The Barista's Manual",
-		"subtitle": "Edition I: The Art of Crema",
+		"title": "The Artisan's Sanctuary Manual",
+		"subtitle": "Chapter I: The Art of Moss & Stone",
 		"philosophy": {
-			"title": "The Way of the Pour",
+			"title": "The Way of the Forest",
 			"paragraphs": [
-				"In the beginning, there was only the Foam—a pristine, untouched cream void. Then came the Etcher, guided by your rhythm, bringing the first drop of flavor to the surface.",
-				"Rupa is more than a tool; it is your sanctuary. Here, pixels aren't just data points—they are Drops. Every mark you make is a deliberate act of brewing that requires flow, focus, and a peaceful heart.",
-				"\"We do not just paint pixels; we etch moments into the crema of time.\""
+				"In the quiet of the morning, there is only the Washi—a pristine, untouched white void. Then came the Brush, guided by your breath, bringing the first drop of evergreen to the surface.",
+				"Rupa is your rural sanctuary. Here, pixels aren't just data—they are Leaves. Every mark you make is a deliberate act of tending a garden that requires patience, focus, and a peaceful heart.",
+				"\"We do not just paint pixels; we weave stories into the moss of time.\""
 			]
 		},
 		"pillars": [
 			{
-				"icon": "🖋️",
-				"title": "The Etcher",
-				"description": "Your voice on the foam. Move it with the Arrow Keys to guide your patterns with barista precision."
+				"icon": "🖌️",
+				"title": "The Artisan's Brush",
+				"description": "Your voice in the sanctuary. Move it with the Arrow Keys to guide your patterns with the precision of a master gardener."
 			},
 			{
-				"icon": "☕",
-				"title": "The Flavors",
-				"description": "Rich extracts and syrups. Apply them with Space and switch flavors using the numbers on your keyboard."
+				"icon": "🍵",
+				"title": "The Natural Pigments",
+				"description": "Rich extracts from forest flora. Apply them with Space and switch pigments using the numbers on your keyboard."
 			},
 			{
-				"icon": "🍶",
-				"title": "The Infusions",
-				"description": "Layers of depth. Like stacking fine flavors, each infusion adds a new dimension to your cup."
+				"icon": "📄",
+				"title": "The Washi Sheets",
+				"description": "Layers of depth. Like stacking fine washi paper, each sheet adds a new dimension to your story."
 			}
 		],
 		"techniques": [
 			{
-				"icon": "🌊",
-				"title": "Continuous Flow",
-				"description": "Hold Ctrl while moving to stream flavor across the foam. Flow with the rhythm of the bar."
+				"icon": "🎋",
+				"title": "Fluid Moss-Painting",
+				"description": "Hold Ctrl while moving to stream pigment across the washi. Flow like water in a stream."
 			},
 			{
-				"icon": "🪄",
-				"title": "Spirit Selection",
-				"description": "Press W to select all connected drops of the same tone. A magical way to move patterns."
+				"icon": "✨",
+				"title": "Spirit Gathering",
+				"description": "Press W to select all connected leaves of the same tone. A mystical way to rearrange your garden."
 			},
 			{
-				"icon": "⏳",
-				"title": "The Spindle",
-				"description": "The axis of time. Create sequences of cups to see your work in motion. Press P to feel the pulse."
+				"icon": "🌀",
+				"title": "The Seasons' Flow",
+				"description": "Create sequences of servings to breathe life into your work. Press P to feel the pulse of nature."
 			},
 			{
-				"icon": "🎹",
-				"title": "Resonance",
-				"description": "Listen. The café responds to your focus with piano melodies that grow as you work."
+				"icon": "🎐",
+				"title": "Resonant Sanctuary",
+				"description": "Listen. The sanctuary responds to your focus with piano melodies and distant wind chimes."
 			}
 		]
 	}

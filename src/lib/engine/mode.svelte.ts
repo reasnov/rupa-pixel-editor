@@ -20,7 +20,7 @@ export class ModeEngine {
 				type: 'PAN',
 				label: __({ key: 'labels.PAN_VIEWPORT' }),
 				icon: '🤚',
-				color: 'var(--color-brand)',
+				color: 'var(--color-lantern-gold)',
 				isPulse: false
 			};
 		}
@@ -29,8 +29,8 @@ export class ModeEngine {
 			return {
 				type: 'FLOW',
 				label: __({ key: 'timeline.mode_labels.brewing' }),
-				icon: '📑',
-				color: 'var(--color-brand)',
+				icon: '🌀',
+				color: 'var(--color-lantern-gold)',
 				isPulse: true
 			};
 		}
@@ -39,8 +39,8 @@ export class ModeEngine {
 			return {
 				type: 'PICK',
 				label: __({ key: 'timeline.mode_labels.tasting' }),
-				icon: '📍',
-				color: 'var(--color-brand)',
+				icon: '🏺',
+				color: 'var(--color-lantern-gold)',
 				isPulse: true
 			};
 		}
@@ -53,7 +53,7 @@ export class ModeEngine {
 				type: 'ERASE',
 				label: __({ key: 'timeline.mode_labels.clearing' }),
 				icon: '🧹',
-				color: 'var(--color-brand)',
+				color: 'var(--color-rust-clay)',
 				isPulse: true
 			};
 		}
@@ -63,7 +63,7 @@ export class ModeEngine {
 				type: 'SELECT',
 				label: __({ key: 'timeline.mode_labels.selecting' }),
 				icon: '✨',
-				color: 'var(--color-brand)',
+				color: 'var(--color-lantern-gold)',
 				isPulse: true
 			};
 		}
@@ -77,8 +77,8 @@ export class ModeEngine {
 			return {
 				type: 'PAINT',
 				label: __({ key: 'timeline.mode_labels.pouring' }),
-				icon: '☕',
-				color: 'var(--color-green-leaves)',
+				icon: '🖌️',
+				color: 'var(--color-fern-green)',
 				isPulse: true
 			};
 		}
@@ -87,7 +87,7 @@ export class ModeEngine {
 			type: 'READY',
 			label: __({ key: 'timeline.mode_labels.ready' }),
 			icon: '',
-			color: 'var(--color-studio-text)',
+			color: 'var(--color-evergreen)',
 			isPulse: false
 		};
 	});

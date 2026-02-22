@@ -1,103 +1,102 @@
-# UI/UX Guidelines: The Barista's Sanctuary
+# UI/UX Guidelines: Japanese Roadside Cafe x Retro 8-bit
 
-This document defines the principles for creating a meditative, cozy, and game-like experience within the **Rupa Pixel Editor** (Editor). Every interface element and interaction must contribute to the feeling of a peaceful sanctuary for digital baristas.
-
----
-
-## 1. Core Philosophy: Meditative Craft
-
-Rupa is not just a tool; it is a space for mindfulness. The UI should encourage a slow, intentional pace of creation.
-
-- **Non-Aggressive Feedback**: Avoid harsh alerts or flashing red errors. Use soft chimes, paper rustles, and gentle magenta glows.
-- **Structural Calmness**: Maintain a clean, balanced layout. High information density should be tucked away in sidebars (Ledgers) or overlays (Basins) to keep the central Canvas focused.
-- **Intentionality**: Every "pixel" (pixel) should feel like a deliberate act of craft, mirroring the rhythm of knitting or brewing.
+This document defines the principles for creating a meditative, rural, and aesthetic experience within the **Rupa Pixel Editor** (Editor). The identity is a deliberate intersection of a **Roadside Japanese Cafe** and a **Retro 8-bit Aesthetic**—where tranquil nature meets the charming limitations of vintage digital craft.
 
 ---
 
-## 2. The Game-Like Experience (Gamification of Craft)
+## 1. The Lore: The Roadside Sanctuary
 
-Interaction in Rupa should feel less like operating software and more like playing a cozy simulation game (e.g., _Stardew Valley_ or _Townscaper_).
+_"By a quiet country road, where the forest meets the village, stands a humble wooden cafe. Inside, the air smells of old paper and fresh tea. A vintage computer hums in the corner, its glowing screen showing patterns of leaves and stone. This is the Artisan's Sanctuary—a place where every pixel is a deliberate stitch in the fabric of a rural story."_
 
-- **The Playhead as an Avatar**: Treat the **Cursor** not just as a cursor, but as the barista's representative on the canvas. It should have weight and personality through smooth transitions.
-- **Physicality**: Elements should feel "tangible." Modals (Basins) should feel like scrolls or drawers opening. Frames should feel like pages of a physical sketchbook being turned.
-- **Rewarding Actions**: Applying a color should produce a satisfying tactile sound. Completing a frame or an artifact should feel like a small victory.
-- **Exploration**: Use "Easter Eggs" in the Pattern Catalog and hidden keyboard shortcuts to encourage baristas to discover the studio's depth.
+Every interaction in Rupa should feel like a moment of low-fi mindfulness in this sanctuary.
 
 ---
 
-## 3. Visual Identity: Cottagecore & Solarized Warmth
+## 2. Core Philosophy: The Lo-Fi Atelier
 
-The aesthetic is "Analog-Digital"—a digital grid with the warmth of natural materials.
+Rupa is a space for "Digital Ruralism." The UI balances organic warmth with mechanical precision.
 
-- **The Palette**: Strictly adhere to the **Solarized** base colors with **Barista Magenta** as the primary focus.
-  - _Background_: Natural Paper (`#fdf6e3`).
-  - _Borders_: Studio Cream / Grid Wood (`#eee8d5`).
-  - _Acent_: Botanical Pink / Magenta (`#d33682`).
-- **Textures**: Use subtle paper grains and soft shadows to give depth. Avoid flat, "clinical" tech designs.
-- **Typography**:
-  - **Tiny5**: For headers and brand identity (Pixel-art spirit).
-  - **EB Garamond**: For display and serif elegance (Old-world craft).
-  - **Lora**: For system labels and body text (Readability and warmth).
+- **8-bit Tactility**: Feedback should feel physical. Elements should "click" into place. Transitions should be sharp but smooth, like a well-oiled mechanical keyboard.
+- **Structural Calmness**: A balanced layout reminiscent of a clean cafe counter. High density is avoided; focus is maintained on the **Washi Canvas**.
+- **The Glow of the CRT**: Use subtle glows (like the Lantern Gold) to simulate the warmth of old monitors and cafe lanterns against the cool forest backdrop.
 
 ---
 
-## 4. Auditory Environment: The Atmosphere Protocol
+## 3. Visual Identity: Evergreen-Retro
 
-Sound is 50% of the Rupa experience. It anchors the barista in the meditative state.
+The aesthetic is "Evergreen-Retro"—the freshness of a village morning mixed with the sharp clarity of pixel art.
 
-- **Generative Soundscapes**: The **Ambient Engine** produces real-time piano melodies that evolve with the user's activity.
-- **Tactile SFX**:
-  - _Pixel_: A soft wooden "clack."
-  - _Unpixel_: A paper-like "rub."
-  - _Move_: A light "tap" or "slide."
-- **Silence as a Feature**: Respect the silence. SFX should be subdued and never overwhelm the generative music.
+### 3.1 The 20-Color Sanctuary Palette
+
+| Group      | No  | Name              | Hex       | Role                       |
+| ---------- | --- | ----------------- | --------- | -------------------------- |
+| **Nature** | 1   | **Washi White**   | `#fdf6e3` | Background (Paper)         |
+|            | 2   | **Rice Straw**    | `#f4f1bb` | Light Accent               |
+|            | 3   | **Bamboo Shoot**  | `#d1e0d0` | Soft UI                    |
+|            | 4   | **Sage Leaf**     | `#a3b18a` | Secondary Green            |
+|            | 5   | **Fern Green**    | `#588157` | Primary Green              |
+|            | 6   | **Deep Forest**   | `#3a5a40` | Deep Contrast              |
+|            | 7   | **Evergreen**     | `#344e41` | Text / Ink                 |
+|            | 8   | **Stone Path**    | `#dad7cd` | Borders / Grid             |
+|            | 9   | **Mist Gray**     | `#8d99ae` | Cool Ambient               |
+|            | 10  | **Night Indigo**  | `#2b2d42` | Deep Shadow                |
+| **Craft**  | 11  | **Lantern Gold**  | `#b58900` | **Primary Accent (Brand)** |
+|            | 12  | **Rust Clay**     | `#cb4b16` | Action / Alert             |
+|            | 13  | **Sakura Pink**   | `#e5989b` | Decorative                 |
+|            | 14  | **Ume Plum**      | `#6d597a` | Retro Accent               |
+|            | 15  | **Aged Oak**      | `#b08968` | UI Panel                   |
+|            | 16  | **Dark Walnut**   | `#7f5539` | Structure                  |
+|            | 17  | **Morning Amber** | `#d4a373` | Warm Wood                  |
+|            | 18  | **Matcha Dust**   | `#ccd5ae` | Olive Accent               |
+|            | 19  | **River Stone**   | `#6b705c` | Muted Border               |
+|            | 20  | **Forest Shadow** | `#333d29` | Deepest Neutral            |
 
 ---
 
-## 5. Interaction Design: Hybrid Brewing
+## 4. Auditory Environment: The 8-bit Nature Protocol
 
-Rupa follows a **"Keyboard-First, Mouse-Friendly"** model. This hybrid approach balances the precision of keyboard-row navigation with the organic flow of mouse-guided drawing.
+Sound is the "Soul" of the cafe. It anchors the user in the retro-rural state.
 
-- **The Keyboard (Keyboard)**: Provides the structural "Metronome." Perfect for geometric patterns, precise navigational jumps, and bulk project manipulations.
-- **The Mouse (Pointer)**: Provides **"Fluid Pixeling."** Enables baristas to draw freehand curves and organic patterns that would be physically exhausting via keyboard.
-- **Seamless Hand-off**: The Cursor follows both inputs instantly. An barista can move with arrow keys and immediately start a freehand line with the mouse without changing modes.
-- **Context Sovereignty**: UI overlays (Basins) respond to both keyboard shortcuts and mouse clicks, ensuring no barista is forced into a single input method.
+- **Retro-Natural SFX**:
+  - _Apply_: A fast triangle-wave "tink" (Ceramic/Wind chime).
+  - _Sweep_: Filtered white noise (Bamboo broom on stone).
+  - _Step_: Low-freq triangle "thump" (Step on tatami).
+- **Generative 8-bit Melodies**: The **Ambient Engine** produces real-time melodies using warm triangle and square waves, mirroring the sounds of a village piano or a vintage synthesizer.
 
 ---
 
-## 6. UX Checklist for Developers
+## 5. Interaction Design: Hybrid Crafting
+
+Rupa balances the precision of the **Keyboard** (The Metronome) with the organic flow of the **Mouse** (The Artisan's Brush).
+
+- **The Keyboard (The Structure)**: 100% sovereignty. Every action is a rhythmic chord.
+- **The Mouse (The Spirit)**: Provides **"Fluid Moss-Painting."** Enables freehand curves as if painting on a mossy stone.
+- **CRT Feel**: Hover states and active indicators use the "Lantern Gold" glow to guide the artisan's eye.
+
+---
+
+## 6. UX Checklist for the Rural Artisan
 
 When adding a new feature, ask:
 
-1. Is it reachable via a keyboard chord?
-2. Is it intuitive via mouse pointer (**Pointer**)?
-3. Does it have a tactile sound or visual glow?
-4. Does it fit within the Solarized/Cottagecore aesthetic?
-5. Does it make the user feel more relaxed or more stressed? (Goal: Relaxed).
-6. Does it feel like a "tool" or a "toy"? (Goal: A professional tool that feels like a toy).
+1. Does it feel like an object you would find in a rural Japanese cafe?
+2. Is it reachable via a keyboard chord?
+3. Does it have a tactile 8-bit sound or a soft, mossy glow?
+4. Does it balance the "Coolness" of green with the "Warmth" of gold?
+5. Does it make the user feel like they are weaving a story in a quiet village?
 
 ---
 
-## 7. Accessibility (A11y): The Inclusive Studio
+## 7. Accessibility (A11y): The Inclusive Sanctuary
 
-Accessibility in Rupa is not just about compliance, but about ensuring the "Sanctuary" is open to everyone.
-
-- **The Keyboard as an Assistive Tool**: Since Rupa is keyboard-first, most accessibility for motor-impaired users is built into the **Keyboard**. Ensure all chords are remappable and logical.
-- **Semantic ARIA with Craft Terminology**:
-  - Use `aria-label` to describe actions in the barista metaphor (e.g., `aria-label="Soak the canvas with color"` instead of `aria-label="Flood fill"`).
-  - The **Canvas** must be treated as a `role="grid"` or `role="img"` with an alt-description of the pattern being woven.
-- **Focus Management**: The **Cursor** acts as the primary focus anchor. When moving between panels (Ledgers), the focus should be clearly visible with a soft magenta outline.
-- **Color Contrast**: All text must meet WCAG AA standards against the Paper (`#fdf6e3`) background. Use Barista Magenta for high-contrast highlights.
+- **High Contrast 8-bit**: Text must be readable and sharp. Focus indicators use a solid 2px Forest Green or Lantern Gold outline.
+- **Rural ARIA**: Use `aria-label` with the cafe metaphor (e.g., `aria-label="Send hantaran tray"` for export).
+- **Color Contrast**: All text must meet WCAG AA standards against the Washi (`#fdf6e3`) background.
 
 ---
 
-## 8. Internationalization (i18n): Global Craft
+## 8. Internationalization (i18n): Global Village
 
-Rupa uses **i18next** to translate the "language of craft" for a global audience.
-
-- **Source of Truth**: All strings must live in `src/lib/lang/en/` (as the initial standard).
-- **Barista-Centric Keys**: Use semantic keys that reflect the studio's lore.
-  - _Bad_: `ui.button.save`, `ui.modal.header`
-  - _Good_: `hud.actions.preserve_weave`, `hud.basin.color_title`
-- **Interpolation**: Use i18next's interpolation for dynamic stats (e.g., `{{count}} pixels applied`).
-- **Implementation Rule**: Never hardcode text in Svelte components. Use the `$t` (translate) function provided by the i18n store.
+- **Artisan-Centric Keys**: Use semantic keys that reflect the cafe lore.
+  - _Good_: `hud.actions.pour_pigment`, `hud.basin.washi_settings`, `hud.ledger.chronicle_log`.
+- **Lore Integration**: Ensure translations capture the "Cool & Warm" tone of the Japanese roadside sanctuary.

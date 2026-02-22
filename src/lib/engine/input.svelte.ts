@@ -39,17 +39,25 @@ export class InputEngine {
 		// 1. Keyboard
 		const onKey = (e: KeyboardEvent) => {
 			if (!editor.isAppReady) return;
+
+			// Always update physical state to keep modifiers in sync
+			keyboard.updatePhysicalState(e, 'down');
+
 			const target = e.target as HTMLElement;
-			if (
-				target instanceof HTMLInputElement ||
-				target instanceof HTMLTextAreaElement ||
-				target.isContentEditable
-			) {
-				// Allow Escape to propagate even when an input is focused
-				if (e.key !== 'Escape') return;
+			const active = document.activeElement;
+			const isInputField =
+				target.tagName === 'INPUT' ||
+				target.tagName === 'TEXTAREA' ||
+				target.isContentEditable ||
+				target.closest('input, textarea, [contenteditable="true"]') ||
+				active?.tagName === 'INPUT' ||
+				active?.tagName === 'TEXTAREA' ||
+				(active as HTMLElement)?.isContentEditable;
+
+			if (isInputField && e.key !== 'Escape') {
+				return;
 			}
 
-			keyboard.updatePhysicalState(e, 'down');
 			const intent = keyboard.getIntent(e);
 			if (intent) {
 				e.preventDefault();

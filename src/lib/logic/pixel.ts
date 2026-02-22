@@ -329,6 +329,95 @@ export class PixelLogic {
 	}
 
 	/**
+	 * Extracts a sub-grid of pixels from a larger source array.
+	 * Used for copying selections to the clipboard.
+	 */
+	static extractSubGrid(
+		source: Uint32Array,
+		sourceWidth: number,
+		points: Point[],
+		bounds: { x1: number; y1: number; width: number; height: number }
+	): Uint32Array {
+		const target = new Uint32Array(bounds.width * bounds.height);
+
+		points.forEach((p) => {
+			const sourceIndex = p.y * sourceWidth + p.x;
+			const targetX = p.x - bounds.x1;
+			const targetY = p.y - bounds.y1;
+			const targetIndex = targetY * bounds.width + targetX;
+
+			if (targetIndex >= 0 && targetIndex < target.length) {
+				target[targetIndex] = source[sourceIndex];
+			}
+		});
+
+		return target;
+	}
+
+	/**
+	 * Merges a sub-grid back into a larger target array at a specific offset.
+	 * Returns the modified target array and a list of changed indices.
+	 */
+	static mergeSubGrid(
+		target: Uint32Array,
+		targetWidth: number,
+		targetHeight: number,
+		subGrid: Uint32Array,
+		subWidth: number,
+		subHeight: number,
+		offsetX: number,
+		offsetY: number
+	): { data: Uint32Array; changes: Array<{ index: number; color: number }> } {
+		const newData = new Uint32Array(target);
+		const changes: Array<{ index: number; color: number }> = [];
+
+		for (let y = 0; y < subHeight; y++) {
+			for (let x = 0; x < subWidth; x++) {
+				const tx = offsetX + x;
+				const ty = offsetY + y;
+
+				if (tx >= 0 && tx < targetWidth && ty >= 0 && ty < targetHeight) {
+					const subIdx = y * subWidth + x;
+					const val = subGrid[subIdx];
+
+					// Skip transparent pixels in the sub-grid (assumed 0)
+					if (val !== 0) {
+						const tIdx = ty * targetWidth + tx;
+						if (newData[tIdx] !== val) {
+							newData[tIdx] = val;
+							changes.push({ index: tIdx, color: val });
+						}
+					}
+				}
+			}
+		}
+
+		return { data: newData, changes };
+	}
+
+	/**
+	 * Merges a list of pixel arrays into a single target array.
+	 * Lower indices in the array represent lower layers (Bottom-to-Top).
+	 */
+	static mergeLayers(layers: Uint32Array[], width: number, height: number): Uint32Array {
+		const result = new Uint32Array(width * height);
+
+		// Render from bottom to top
+		for (const pixels of layers) {
+			for (let i = 0; i < result.length; i++) {
+				const pixel = pixels[i];
+				if (pixel !== 0) {
+					// Simple overwrite for now (since our system uses binary transparency)
+					// In a full blending system, we would use AlphaCompositing here.
+					result[i] = pixel;
+				}
+			}
+		}
+
+		return result;
+	}
+
+	/**
 	 * Returns points and their interpolation ratios (0-1) for a linear gradient.
 	 * It fills the entire bounding box or selection based on the axis p1-p2.
 	 */

@@ -1,5 +1,10 @@
 import i18next from 'i18next';
-import enCommon from '../lang/en/common.json' with { type: 'json' };
+
+// Automatically glob all JSON files in the lang/en directory
+const enResources: Record<string, any> = import.meta.glob('../lang/en/*.json', {
+	eager: true,
+	import: 'default'
+});
 
 /**
  * i18nState: Manages the studio's language and translations.
@@ -14,15 +19,24 @@ class I18nState {
 	}
 
 	private async init() {
+		const resources: Record<string, any> = { en: {} };
+		const namespaces: string[] = [];
+
+		// Process globbed resources
+		for (const path in enResources) {
+			// Extract filename without extension (e.g., '../lang/en/common.json' -> 'common')
+			const ns = path.split('/').pop()?.replace('.json', '');
+			if (ns) {
+				resources.en[ns] = enResources[path];
+				namespaces.push(ns);
+			}
+		}
+
 		await i18next.init({
 			lng: this.locale,
 			fallbackLng: 'en',
-			resources: {
-				en: {
-					common: enCommon
-				}
-			},
-			ns: ['common'],
+			resources,
+			ns: namespaces,
 			defaultNS: 'common',
 			interpolation: {
 				escapeValue: false
@@ -41,26 +55,41 @@ export const i18nState = new I18nState();
 
 /**
  * The Artisan's Translation Function
- * @param key The translation key (e.g., 'hud.actions.preserve_weave')
- * @param replace Object containing interpolation values
- * @param locale Optional locale override
+ * MUST be imported manually in every component.
+ * Supports: __('namespace:key', { replace: { ... } }) or backward compat __({ key: '...' })
  */
-export function __({
-	key,
-	replace = {},
-	locale
-}: {
-	key: string;
-	replace?: Record<string, any>;
-	locale?: string;
-}) {
-	if (!i18nState.isReady) return key;
+export function __(
+	keyOrOptions: string | { key: string; replace?: Record<string, any>; locale?: string },
+	options: { replace?: Record<string, any>; locale?: string } = {}
+) {
+	if (!i18nState.isReady) return typeof keyOrOptions === 'string' ? keyOrOptions : keyOrOptions.key;
+
+	let key: string;
+	let replace = options.replace || {};
+	let locale = options.locale || i18nState.locale;
+
+	if (typeof keyOrOptions === 'string') {
+		key = keyOrOptions;
+	} else {
+		key = keyOrOptions.key;
+		replace = keyOrOptions.replace || replace;
+		locale = keyOrOptions.locale || locale;
+	}
 
 	const val = i18next.t(key, {
 		...replace,
-		lng: locale || i18nState.locale,
+		lng: locale,
 		returnObjects: true
 	});
+
+	// Check if key exists and log warning if missing
+	if (!i18next.exists(key, { lng: locale })) {
+		const msg = `[i18n] Missing translation key: "${key}" for locale: "${locale}"`;
+		console.warn(msg);
+		if (typeof window !== 'undefined' && window.electronAPI?.logWarn) {
+			window.electronAPI.logWarn(msg);
+		}
+	}
 
 	if (typeof val === 'object' && val !== null) {
 		const { artisan, technical } = val as any;

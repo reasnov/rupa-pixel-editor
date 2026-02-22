@@ -1,6 +1,7 @@
 import { editor } from '../../state/editor.svelte.js';
 import { sfx } from '../audio.js';
 import { history } from '../history.js';
+import { PixelLogic } from '../../logic/pixel.js';
 
 /**
  * ProjectService: Manages Frames and Layers.
@@ -422,14 +423,11 @@ export class ProjectService {
 		const bottomLayer = frame.layers[bottomIdx];
 
 		const oldBottomPixels = new Uint32Array(bottomLayer.pixels);
-		const topPixels = topLayer.pixels;
-		const mergedPixels = new Uint32Array(bottomLayer.pixels);
-
-		// Painter's algorithm: Top overwrites non-zero bottom pixels
-		for (let i = 0; i < topPixels.length; i++) {
-			const p = topPixels[i];
-			if (p !== 0) mergedPixels[i] = p;
-		}
+		const mergedPixels = PixelLogic.mergeLayers(
+			[bottomLayer.pixels, topLayer.pixels],
+			frame.width,
+			frame.height
+		);
 
 		// Apply merge
 		bottomLayer.pixels = mergedPixels;
@@ -451,6 +449,103 @@ export class ProjectService {
 				frame.layers.splice(topIdx, 1);
 				frame.activeLayerIndex = bottomIdx;
 				editor.canvas.triggerPulse();
+			}
+		});
+
+		sfx.playDraw();
+	}
+
+	/**
+	 * Merges all currently selected layers into a single layer.
+	 */
+	mergeSelectedLayers() {
+		const frame = editor.project.activeFrame;
+		const selectedIndices = Array.from(frame.selectedLayerIndices).sort((a, b) => a - b);
+		if (selectedIndices.length <= 1) return;
+
+		const targetIdx = selectedIndices[0];
+		const targetLayer = frame.layers[targetIdx];
+		const oldTargetPixels = new Uint32Array(targetLayer.pixels);
+
+		const layersToMerge = selectedIndices.map((idx) => frame.layers[idx]);
+		const pixelsToMerge = layersToMerge.map((l) => l.pixels);
+
+		const mergedPixels = PixelLogic.mergeLayers(pixelsToMerge, frame.width, frame.height);
+
+		// Capture state for undo
+		const oldLayers = [...frame.layers];
+		const oldActiveIndex = frame.activeLayerIndex;
+		const oldSelection = new Set(frame.selectedLayerIndices);
+
+		// Perform merge
+		const newLayers = frame.layers.filter(
+			(_, idx) => !frame.selectedLayerIndices.has(idx) || idx === targetIdx
+		);
+		const newTargetIdx = newLayers.indexOf(targetLayer);
+
+		frame.layers = newLayers;
+		targetLayer.pixels = mergedPixels;
+		frame.activeLayerIndex = newTargetIdx;
+		frame.selectedLayerIndices = new Set([newTargetIdx]);
+		editor.canvas.triggerPulse();
+
+		history.push({
+			isStructural: true,
+			label: 'Merge Selected Layers',
+			undo: () => {
+				frame.layers = oldLayers;
+				targetLayer.pixels = oldTargetPixels;
+				frame.activeLayerIndex = oldActiveIndex;
+				frame.selectedLayerIndices = oldSelection;
+				editor.canvas.triggerPulse();
+			},
+			redo: () => {
+				frame.layers = newLayers;
+				targetLayer.pixels = mergedPixels;
+				frame.activeLayerIndex = newTargetIdx;
+				frame.selectedLayerIndices = new Set([newTargetIdx]);
+				editor.canvas.triggerPulse();
+			}
+		});
+
+		sfx.playDraw();
+	}
+
+	/**
+	 * Merges selected frames into one.
+	 * Each frame's composite image becomes a layer in the new frame.
+	 */
+	mergeFrames() {
+		const project = editor.project;
+		const selectedIndices = Array.from(project.selectedFrameIndices).sort((a, b) => a - b);
+		if (selectedIndices.length <= 1) return;
+
+		const firstIdx = selectedIndices[0];
+		const baseFrame = project.frames[firstIdx];
+
+		// Create a new frame to hold the merged results
+		const mergedFrame = project.addFrame(`${baseFrame.name} (Merged)`);
+		mergedFrame.layers = []; // Clear default layer
+
+		selectedIndices.forEach((idx, i) => {
+			const sourceFrame = project.frames[idx];
+			const newLayer = mergedFrame.addLayer(`Frame ${idx + 1}`);
+			newLayer.pixels = new Uint32Array(sourceFrame.compositePixels);
+		});
+
+		const newIdx = project.frames.indexOf(mergedFrame);
+		project.activeFrameIndex = newIdx;
+
+		history.push({
+			isStructural: true,
+			label: 'Merge Frames',
+			undo: () => {
+				project.frames.splice(newIdx, 1);
+				project.activeFrameIndex = firstIdx;
+			},
+			redo: () => {
+				project.frames.splice(newIdx, 0, mergedFrame);
+				project.activeFrameIndex = newIdx;
 			}
 		});
 

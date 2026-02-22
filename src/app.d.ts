@@ -8,6 +8,7 @@ declare global {
 			saveFile: (content: string, defaultPath?: string) => Promise<string | null>;
 			openFile: () => Promise<{ content: string; filePath: string } | null>;
 			autoSave: (content: string) => Promise<string>;
+			logWarn: (message: string) => void;
 		};
 	}
 	namespace App {

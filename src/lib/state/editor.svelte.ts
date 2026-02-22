@@ -147,18 +147,18 @@ export class EditorState {
 		this.studio.showCommandPalette = v;
 	}
 
-	get showGuideBook() {
-		return this.studio.showGuideBook;
+	get showManual() {
+		return this.studio.showManual;
 	}
-	set showGuideBook(v) {
-		this.studio.showGuideBook = v;
+	set showManual(v) {
+		this.studio.showManual = v;
 	}
 
-	get showGuideMenu() {
-		return this.studio.showGuideMenu;
+	get showShortcuts() {
+		return this.studio.showShortcuts;
 	}
-	set showGuideMenu(v) {
-		this.studio.showGuideMenu = v;
+	set showShortcuts(v) {
+		this.studio.showShortcuts = v;
 	}
 
 	get showExportMenu() {

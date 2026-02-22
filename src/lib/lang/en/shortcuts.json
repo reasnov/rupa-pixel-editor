@@ -1,0 +1,28 @@
+{
+	"title": "The Artisan's Catalog",
+	"subtitle": "Artisan Rhythms & Flows",
+	"header_title": "Mastering the Craft",
+	"header_desc": "In the Sanctuary, we play rhythms. These key combinations create a flow state, allowing your brush to dance across the washi with professional precision.",
+	"footer_quote": "A master artisan knows every leaf by heart.",
+	"groups": {
+		"rhythms": "Core Rhythms (Basics)",
+		"navigation": "Step the Brush (Navigation)",
+		"cursor": "The Brush (Cursor)",
+		"barista": "Artisan Skills",
+		"tools": "Artisan Tools (Drawing)",
+		"magic": "Artisan Magic (Special)",
+		"flow": "Continuous Flow",
+		"selection": "Focus Area (Selection)",
+		"etching": "Master Crafting (Advanced)",
+		"transform": "Transformation",
+		"geometry": "Forms & Geometry",
+		"timeline": "The Seasons' Flow (Timeline)",
+		"layers": "Washi Sheets (Layers)",
+		"edit": "Artisan Adjustments (Edit)",
+		"view": "Viewport & View",
+		"menu": "The Palette (Pigments)",
+		"vibes": "Atmosphere (Audio)",
+		"colors": "Select Pigments (Colors)",
+		"system": "Studio System"
+	}
+}

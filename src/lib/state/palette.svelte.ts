@@ -13,8 +13,8 @@ export interface PalettePreset {
  * PaletteState: Manages the colors and ingredients selection.
  */
 export class PaletteState {
-	activeColor = $state<ColorHex>(palettes.default[0] as ColorHex);
-	swatches = $state<ColorHex[]>(palettes.default as ColorHex[]);
+	activeColor = $state<ColorHex>(palettes.sanctuary_nature[0] as ColorHex);
+	swatches = $state<ColorHex[]>(palettes.sanctuary_nature as ColorHex[]);
 	presets = $state<PalettePreset[]>([]);
 
 	constructor() {

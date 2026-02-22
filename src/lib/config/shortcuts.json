@@ -222,6 +222,16 @@
 			"keys": ["Ctrl+Alt+m"],
 			"group": "Layers"
 		},
+		"MERGE_SELECTED_LAYERS": {
+			"label": "Merge Selected Layers",
+			"keys": ["Ctrl+Shift+m"],
+			"group": "Layers"
+		},
+		"MERGE_FRAMES": {
+			"label": "Merge Selected Frames",
+			"keys": ["Ctrl+Alt+Shift+m"],
+			"group": "Timeline"
+		},
 		"TOGGLE_LAYER_VISIBILITY": {
 			"label": "Show/Hide Layer",
 			"keys": ["Ctrl+Alt+v"],

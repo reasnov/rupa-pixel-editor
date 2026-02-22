@@ -64,6 +64,8 @@ export type ActionIntent =
 	| 'TOGGLE_LAYER_LOCK'
 	| 'TOGGLE_LAYER_VISIBILITY'
 	| 'MERGE_LAYERS'
+	| 'MERGE_SELECTED_LAYERS'
+	| 'MERGE_FRAMES'
 	| 'SWITCH_FOCUS'
 	| 'BRUSH_SIZE_INC'
 	| 'BRUSH_SIZE_DEC'
@@ -145,9 +147,9 @@ export class KeyboardEngine {
 				const { keys, group } = data as { label: string; keys: string[]; group: string };
 
 				// PROFESSIONAL KEYS: Use updated common.json keys
-				const label = __({ key: `labels.${intent}` });
+				const label = __(`common:labels.${intent}`);
 				const groupKey = group.toLowerCase().replace(/ & /g, '_').replace(/ /g, '_');
-				const translatedGroup = __({ key: `shortcut_groups.${groupKey}` });
+				const translatedGroup = __(`shortcuts:groups.${groupKey}`);
 
 				keys.forEach((keyCombo) => {
 					const lowerCombo = keyCombo.toLowerCase();
@@ -245,7 +247,7 @@ export class KeyboardEngine {
 			if (custom) {
 				if (!seenGroupedIntents.has(custom)) {
 					seenGroupedIntents.add(custom);
-					const cleanLabel = __({ key: `shortcut_groups.${custom}` });
+					const cleanLabel = __(`common:shortcut_groups.${custom}`);
 					finalActions.push({ ...a, label: cleanLabel, customKey: custom.toUpperCase() });
 				}
 			} else {
@@ -260,22 +262,22 @@ export class KeyboardEngine {
 
 		// PREDEFINED ORDER (For aesthetic sorting)
 		const predefinedOrder = [
-			__({ key: 'shortcut_groups.rhythms' }),
-			__({ key: 'shortcut_groups.navigation' }),
-			__({ key: 'shortcut_groups.tools' }),
-			__({ key: 'shortcut_groups.magic' }),
-			__({ key: 'shortcut_groups.etching' }),
-			__({ key: 'shortcut_groups.flow' }),
-			__({ key: 'shortcut_groups.selection' }),
-			__({ key: 'shortcut_groups.transform' }),
-			__({ key: 'shortcut_groups.geometry' }),
-			__({ key: 'shortcut_groups.timeline' }),
-			__({ key: 'shortcut_groups.layers' }),
-			__({ key: 'shortcut_groups.edit' }),
-			__({ key: 'shortcut_groups.view' }),
-			__({ key: 'shortcut_groups.menu' }),
-			__({ key: 'shortcut_groups.colors' }),
-			__({ key: 'shortcut_groups.system' })
+			__('shortcuts:groups.rhythms'),
+			__('shortcuts:groups.navigation'),
+			__('shortcuts:groups.tools'),
+			__('shortcuts:groups.magic'),
+			__('shortcuts:groups.etching'),
+			__('shortcuts:groups.flow'),
+			__('shortcuts:groups.selection'),
+			__('shortcuts:groups.transform'),
+			__('shortcuts:groups.geometry'),
+			__('shortcuts:groups.timeline'),
+			__('shortcuts:groups.layers'),
+			__('shortcuts:groups.edit'),
+			__('shortcuts:groups.view'),
+			__('shortcuts:groups.menu'),
+			__('shortcuts:groups.colors'),
+			__('shortcuts:groups.system')
 		];
 
 		// Collect all existing groups in the data

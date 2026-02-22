@@ -141,9 +141,9 @@ export class EditorEngine {
 			case 'OPEN_EXPORT':
 				return (state.showExportMenu = true);
 			case 'OPEN_HELP':
-				return (state.showGuideMenu = true);
+				return (state.showShortcuts = true);
 			case 'OPEN_MANUAL':
-				return (state.showGuideBook = true);
+				return (state.showManual = true);
 			case 'PLAY_PAUSE':
 				return animation.togglePlayback();
 			case 'TOGGLE_GHOST_LAYERS':
@@ -236,6 +236,10 @@ export class EditorEngine {
 				return;
 			case 'MERGE_LAYERS':
 				return services.project.mergeLayerDown();
+			case 'MERGE_SELECTED_LAYERS':
+				return services.project.mergeSelectedLayers();
+			case 'MERGE_FRAMES':
+				return services.project.mergeFrames();
 
 			case 'BRUSH_SIZE_INC':
 				state.studio.brushSize = Math.min(100, state.studio.brushSize + 1);

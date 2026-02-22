@@ -79,8 +79,8 @@
 />
 
 <Modal
-	title={__({ key: 'palette_library.title' })}
-	subtitle={__({ key: 'palette_library.subtitle' })}
+	title={__('common:palette_library.title')}
+	subtitle={__('common:palette_library.subtitle')}
 	icon="🎨"
 	{onClose}
 	width="600px"
@@ -89,48 +89,50 @@
 		<!-- Actions: New & Import -->
 		<div class="flex items-center gap-3">
 			<button
-				class="flex flex-1 items-center justify-center gap-2 rounded-xl border-2 border-dashed border-charcoal/10 bg-white/40 py-4 transition-all hover:border-brand/40 hover:bg-white"
+				class="flex flex-1 items-center justify-center gap-2 rounded-xl border-2 border-dashed border-evergreen/10 bg-white/40 py-4 transition-all hover:border-lantern-gold/40 hover:bg-white"
 				onclick={handleNewRecipe}
 			>
-				<span class="text-lg">🥣</span>
+				<span class="text-lg">🏺</span>
 				<div class="flex flex-col items-start">
-					<span class="font-serif text-[10px] font-bold tracking-widest text-charcoal/60 uppercase"
-						>New Recipe</span
+					<span class="font-serif text-[10px] font-bold tracking-widest text-evergreen/60 uppercase"
+						>New Pigment Set</span
 					>
-					<span class="font-serif text-[8px] text-charcoal/30 italic">Start from a blank cup</span>
+					<span class="font-serif text-[8px] text-evergreen/30 italic"
+						>Start from a blank washi</span
+					>
 				</div>
 			</button>
 
 			<button
-				class="flex flex-1 items-center justify-center gap-2 rounded-xl border-2 border-dashed border-charcoal/10 bg-white/40 py-4 transition-all hover:border-brand/40 hover:bg-white"
+				class="flex flex-1 items-center justify-center gap-2 rounded-xl border-2 border-dashed border-evergreen/10 bg-white/40 py-4 transition-all hover:border-lantern-gold/40 hover:bg-white"
 				onclick={triggerImport}
 			>
 				<span class="text-lg">📦</span>
 				<div class="flex flex-col items-start">
-					<span class="font-serif text-[10px] font-bold tracking-widest text-charcoal/60 uppercase"
+					<span class="font-serif text-[10px] font-bold tracking-widest text-evergreen/60 uppercase"
 						>Import Ingredients</span
 					>
-					<span class="font-serif text-[8px] text-charcoal/30 italic">Load .GPL or HEX list</span>
+					<span class="font-serif text-[8px] text-evergreen/30 italic">Load .GPL or HEX list</span>
 				</div>
 			</button>
 		</div>
 
 		<!-- Save Current Palette -->
-		<div class="flex flex-col gap-3 rounded-xl border border-brand/10 bg-brand/5 p-6">
+		<div class="flex flex-col gap-3 rounded-xl border border-lantern-gold/10 bg-lantern-gold/5 p-6">
 			<div class="flex flex-col gap-1">
-				<span class="font-serif text-[10px] font-bold tracking-widest text-brand uppercase"
-					>{__({ key: 'palette_library.save_label' })}</span
+				<span class="font-serif text-[10px] font-bold tracking-widest text-lantern-gold uppercase"
+					>{__('common:palette_library.save_label')}</span
 				>
-				<span class="font-serif text-[9px] text-brand/60 italic"
-					>{__({ key: 'palette_library.save_desc' })}</span
+				<span class="font-serif text-[9px] text-lantern-gold/60 italic"
+					>{__('common:palette_library.save_desc')}</span
 				>
 			</div>
 			<div class="flex gap-2">
 				<input
 					type="text"
 					bind:value={newPresetName}
-					placeholder={__({ key: 'palette_library.name_placeholder' })}
-					class="flex-1 rounded-lg border border-brand/20 bg-white px-4 py-2 font-serif text-sm focus:border-brand focus:outline-none"
+					placeholder={__('common:palette_library.name_placeholder')}
+					class="flex-1 rounded-lg border border-lantern-gold/20 bg-white px-4 py-2 font-serif text-sm focus:border-lantern-gold focus:outline-none"
 					onkeydown={(e) => e.key === 'Enter' && handleSave()}
 				/>
 				<button
@@ -138,29 +140,29 @@
 					onclick={handleSave}
 					disabled={!newPresetName.trim()}
 				>
-					{__({ key: 'palette_library.button.save' })}
+					{__('common:palette_library.button.save')}
 				</button>
 			</div>
 		</div>
 
 		<!-- Presets List -->
 		<div class="flex flex-col gap-4">
-			<span class="font-serif text-[10px] font-bold tracking-widest text-charcoal/30 uppercase"
-				>{__({ key: 'palette_library.list_title' })}</span
+			<span class="font-serif text-[10px] font-bold tracking-widest text-evergreen/30 uppercase"
+				>{__('common:palette_library.list_title')}</span
 			>
 
 			<div class="flex flex-col gap-2">
 				{#each editor.paletteState.presets as preset (preset.id)}
 					<div
 						transition:slide={{ duration: 200 }}
-						class="group flex items-center justify-between rounded-xl border border-black/5 bg-white/40 p-4 transition-all hover:bg-white/80"
+						class="group flex items-center justify-between rounded-xl border border-evergreen/5 bg-white/40 p-4 transition-all hover:bg-white/80"
 					>
 						<div class="flex flex-col gap-2 overflow-hidden">
 							<div class="flex items-center gap-3">
-								<span class="font-serif text-sm font-bold text-charcoal">{preset.name}</span>
+								<span class="font-serif text-sm font-bold text-evergreen">{preset.name}</span>
 								{#if preset.isDefault}
 									<span
-										class="rounded-full bg-charcoal/5 px-2 py-0.5 font-mono text-[8px] text-charcoal/40 uppercase"
+										class="rounded-full bg-evergreen/5 px-2 py-0.5 font-mono text-[8px] text-evergreen/40 uppercase"
 										>Default</span
 									>
 								{/if}
@@ -183,14 +185,14 @@
 							class="flex items-center gap-2 opacity-0 transition-opacity group-hover:opacity-100"
 						>
 							<button
-								class="rounded-lg border border-brand/20 bg-brand/5 px-4 py-1.5 font-serif text-[10px] font-bold text-brand uppercase transition-all hover:bg-brand hover:text-white"
+								class="rounded-lg border border-lantern-gold/20 bg-lantern-gold/5 px-4 py-1.5 font-serif text-[10px] font-bold text-lantern-gold uppercase transition-all hover:bg-lantern-gold hover:text-white"
 								onclick={() => handleApply(preset.id)}
 							>
-								{__({ key: 'palette_library.button.apply' })}
+								{__('common:palette_library.button.apply')}
 							</button>
 
 							<button
-								class="flex h-8 w-8 items-center justify-center rounded-lg border border-charcoal/10 bg-stone-light/50 text-[10px] transition-all hover:border-brand hover:bg-brand hover:text-white"
+								class="flex h-8 w-8 items-center justify-center rounded-lg border border-evergreen/10 bg-bamboo-shoot/20 text-[10px] transition-all hover:border-lantern-gold hover:bg-lantern-gold hover:text-white"
 								onclick={() => handleExport(preset.id)}
 								title="Export Recipe (.gpl)"
 							>
@@ -199,9 +201,9 @@
 
 							{#if !preset.isDefault}
 								<button
-									class="flex h-8 w-8 items-center justify-center rounded-lg border border-charcoal/10 bg-stone-light/50 text-[10px] transition-all hover:border-red-500 hover:bg-red-500 hover:text-white"
+									class="flex h-8 w-8 items-center justify-center rounded-lg border border-evergreen/10 bg-bamboo-shoot/20 text-[10px] transition-all hover:border-red-500 hover:bg-red-500 hover:text-white"
 									onclick={() => handleDelete(preset.id)}
-									title={__({ key: 'palette_library.button.delete' })}
+									title={__('common:palette_library.button.delete')}
 								>
 									🗑️
 								</button>

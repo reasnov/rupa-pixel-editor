@@ -23,7 +23,7 @@
 		{#if studio.isAlphaLocked || studio.isColorLocked || studio.isShadingLighten || studio.isShadingDarken || studio.isShadingDither}
 			<div
 				transition:scale
-				class="absolute -top-3 -right-3 flex items-center justify-center rounded-full border-2 border-white bg-brand p-1 text-[8px] font-bold text-white shadow-lg ring-1 ring-black/5"
+				class="absolute -top-3 -right-3 flex items-center justify-center rounded-full border-2 border-washi-white bg-lantern-gold p-1 text-[8px] font-bold text-white shadow-lg ring-1 ring-evergreen/10"
 			>
 				{#if studio.isAlphaLocked || studio.isColorLocked}
 					🔒
@@ -41,7 +41,7 @@
 		{#if editor.isPicking}
 			<div
 				transition:fade={{ duration: 400 }}
-				class="absolute inset-[-4px] z-0 animate-ping rounded-sm border-2 border-white opacity-20"
+				class="absolute inset-[-4px] z-0 animate-ping rounded-sm border-2 border-washi-white opacity-20"
 				style="background-color: {editor.activeColor};"
 			></div>
 
@@ -51,7 +51,7 @@
 				class="absolute -top-10 left-1/2 z-[110] flex -translate-x-1/2 flex-col items-center"
 			>
 				<div
-					class="relative h-7 w-7 overflow-hidden rounded-xl rounded-br-none border-4 border-white bg-white shadow-xl ring-1 ring-black/5"
+					class="relative h-7 w-7 overflow-hidden rounded-xl rounded-br-none border-4 border-washi-white bg-washi-white shadow-xl ring-1 ring-evergreen/10"
 					style="transform: rotate(45deg);"
 				>
 					<div
@@ -59,7 +59,7 @@
 						style="background-color: {editor.activeColor};"
 					></div>
 				</div>
-				<div class="-mt-0.5 h-2 w-0.5 rounded-xl bg-white opacity-80 shadow-sm"></div>
+				<div class="-mt-0.5 h-2 w-0.5 rounded-xl bg-washi-white opacity-80 shadow-sm"></div>
 			</div>
 		{/if}
 	</div>

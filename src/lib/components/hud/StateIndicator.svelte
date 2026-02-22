@@ -29,7 +29,7 @@
 
 				{#if mode.current.type === 'READY'}
 					<span
-						class="ml-1 border-l border-studio-text/20 pl-2 font-mono text-[9px] tracking-tighter not-italic"
+						class="ml-1 border-l border-evergreen/20 pl-2 font-mono text-[9px] tracking-tighter not-italic"
 					>
 						v{editor.version}
 					</span>
@@ -44,10 +44,10 @@
 			minute: '2-digit'
 		})}
 		<div
-			class="text-[8px] font-bold tracking-[0.2em] text-studio-text/20 uppercase"
-			aria-label={__({ key: 'project.saved', replace: { time } })}
+			class="text-[8px] font-bold tracking-[0.2em] text-evergreen/20 uppercase"
+			aria-label={__('common:project.saved', { replace: { time } })}
 		>
-			{__({ key: 'project.saved', replace: { time } })}
+			{__('common:project.saved', { replace: { time } })}
 		</div>
 	{/if}
 </div>

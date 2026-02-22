@@ -23,10 +23,10 @@
 </script>
 
 <div
-	class="minimap-container border-b border-charcoal/10 bg-charcoal/5 p-3 transition-all duration-300"
+	class="minimap-container border-b border-evergreen/10 bg-evergreen/5 p-3 transition-all duration-300"
 >
 	<div
-		class="relative flex items-center justify-center overflow-hidden rounded border border-charcoal/5 bg-stone-light/20 p-2 shadow-inner"
+		class="relative flex items-center justify-center overflow-hidden rounded border border-evergreen/5 bg-bamboo-shoot/20 p-2 shadow-inner"
 	>
 		<canvas
 			bind:this={canvasEl}
@@ -36,9 +36,9 @@
 			style="image-rendering: pixelated;"
 		></canvas>
 
-		<!-- Viewport Indicator (Magenta Box) -->
+		<!-- Viewport Indicator (Gold Box) -->
 		<div
-			class="pointer-events-none absolute inset-0 ring-1 ring-brand ring-inset"
+			class="pointer-events-none absolute inset-0 ring-1 ring-lantern-gold ring-inset"
 			style="opacity: 0.4;"
 		></div>
 	</div>

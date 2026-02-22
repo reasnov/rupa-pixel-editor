@@ -11,7 +11,7 @@
 
 <div class="flex flex-col gap-4">
 	<h3
-		class="border-b border-black/5 pb-2 font-serif text-sm font-bold tracking-[0.2em] text-brand/60 uppercase"
+		class="border-b border-evergreen/10 pb-2 font-serif text-sm font-bold tracking-[0.2em] text-evergreen/60 uppercase"
 	>
 		{group.group}
 	</h3>

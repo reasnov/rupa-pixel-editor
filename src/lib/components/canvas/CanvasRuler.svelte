@@ -54,7 +54,7 @@
 </script>
 
 <div
-	class="pointer-events-none relative h-full w-full overflow-hidden bg-latte-foam/80 backdrop-blur-sm"
+	class="pointer-events-none relative h-full w-full overflow-hidden bg-washi-white/80 backdrop-blur-sm"
 	role="presentation"
 >
 	<!-- 
@@ -79,7 +79,7 @@
 				: 'top-0 right-0 bottom-0 w-1/2'}"
 			style="
 				background-image: linear-gradient({orientation === 'horizontal' ? 'to right' : 'to bottom'}, 
-					var(--color-charcoal) 1px, transparent 1px);
+					var(--color-evergreen) 1px, transparent 1px);
 				background-size: {orientation === 'horizontal'
 				? `calc(100% / ${size}) 100%`
 				: `100% calc(100% / ${size})`};
@@ -93,7 +93,7 @@
 				: 'top-0 right-0 bottom-0 w-3/4'}"
 			style="
 				background-image: linear-gradient({orientation === 'horizontal' ? 'to right' : 'to bottom'}, 
-					var(--color-charcoal) 1.5px, transparent 1.5px);
+					var(--color-evergreen) 1.5px, transparent 1.5px);
 				background-size: {orientation === 'horizontal'
 				? `calc(100% / ${size} * ${majorInterval}) 100%`
 				: `100% calc(100% / ${size} * ${majorInterval})`};
@@ -112,7 +112,7 @@
 				"
 			>
 				<span
-					class="font-mono text-[8px] font-bold text-charcoal/40"
+					class="font-mono text-[8px] font-bold text-evergreen/40"
 					style="transform: {orientation === 'vertical' ? 'rotate(-90deg)' : 'none'};"
 				>
 					{marker.label}
@@ -124,7 +124,7 @@
 			Active Position Highlight
 		-->
 		<div
-			class="absolute z-20 bg-brand transition-all duration-75 ease-out"
+			class="absolute z-20 bg-lantern-gold transition-all duration-75 ease-out"
 			style="
 				{orientation === 'horizontal' ? 'left' : 'top'}: {((cursorCoord + 0.5) / size) * 100}%;
 				{orientation === 'horizontal'
@@ -133,7 +133,7 @@
 			"
 		>
 			<div
-				class="absolute top-1/2 left-1/2 rounded-sm bg-brand px-1 py-0.5 shadow-sm"
+				class="absolute top-1/2 left-1/2 rounded-sm bg-lantern-gold px-1 py-0.5 shadow-sm"
 				style="transform: translate(-50%, -50%) {orientation === 'vertical'
 					? 'rotate(-90deg)'
 					: ''};"

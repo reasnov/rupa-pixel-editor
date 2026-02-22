@@ -3,9 +3,9 @@
 	import { editor } from '../../../state/editor.svelte';
 </script>
 
-<div class="flex items-center gap-1.5" title={__({ key: 'timeline.duration' })}>
-	<span class="text-[9px] opacity-40" aria-hidden="true">⏱️</span>
-	<span class="font-mono text-[9px] font-bold text-charcoal/80 tabular-nums">
+<div class="flex items-center gap-1.5" title={__('common:timeline.duration')}>
+	<span class="text-[9px] opacity-40" aria-hidden="true">⏳</span>
+	<span class="font-mono text-[9px] font-bold text-evergreen/80 tabular-nums">
 		{editor.studio.sessionTimeLabel}
 	</span>
 </div>

@@ -18,7 +18,7 @@ export class ModeEngine {
 		if (editor.studio.isHandToolActive || keyboard.activeKeys.includes('q')) {
 			return {
 				type: 'PAN',
-				label: __({ key: 'labels.PAN_VIEWPORT' }),
+				label: __('common:labels.PAN_VIEWPORT'),
 				icon: '🤚',
 				color: 'var(--color-lantern-gold)',
 				isPulse: false
@@ -28,7 +28,7 @@ export class ModeEngine {
 		if (sequence.isActive) {
 			return {
 				type: 'FLOW',
-				label: __({ key: 'timeline.mode_labels.brewing' }),
+				label: __('common:timeline.mode_labels.brewing'),
 				icon: '🌀',
 				color: 'var(--color-lantern-gold)',
 				isPulse: true
@@ -38,7 +38,7 @@ export class ModeEngine {
 		if (editor.isPicking) {
 			return {
 				type: 'PICK',
-				label: __({ key: 'timeline.mode_labels.tasting' }),
+				label: __('common:timeline.mode_labels.tasting'),
 				icon: '🏺',
 				color: 'var(--color-lantern-gold)',
 				isPulse: true
@@ -51,7 +51,7 @@ export class ModeEngine {
 		) {
 			return {
 				type: 'ERASE',
-				label: __({ key: 'timeline.mode_labels.clearing' }),
+				label: __('common:timeline.mode_labels.clearing'),
 				icon: '🧹',
 				color: 'var(--color-rust-clay)',
 				isPulse: true
@@ -61,7 +61,7 @@ export class ModeEngine {
 		if (keyboard.isShiftActive || editor.studio.activeTool === 'SELECT') {
 			return {
 				type: 'SELECT',
-				label: __({ key: 'timeline.mode_labels.selecting' }),
+				label: __('common:timeline.mode_labels.selecting'),
 				icon: '✨',
 				color: 'var(--color-lantern-gold)',
 				isPulse: true
@@ -76,7 +76,7 @@ export class ModeEngine {
 		) {
 			return {
 				type: 'PAINT',
-				label: __({ key: 'timeline.mode_labels.pouring' }),
+				label: __('common:timeline.mode_labels.pouring'),
 				icon: '🖌️',
 				color: 'var(--color-fern-green)',
 				isPulse: true
@@ -85,7 +85,7 @@ export class ModeEngine {
 
 		return {
 			type: 'READY',
-			label: __({ key: 'timeline.mode_labels.ready' }),
+			label: __('common:timeline.mode_labels.ready'),
 			icon: '',
 			color: 'var(--color-evergreen)',
 			isPulse: false

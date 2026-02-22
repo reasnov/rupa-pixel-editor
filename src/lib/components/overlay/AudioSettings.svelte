@@ -10,40 +10,44 @@
 </script>
 
 <Modal
-	title="Audio Settings"
-	subtitle="Harmony & Ambiance Tuning"
-	icon="🔊"
+	title="Sanctuary Harmony"
+	subtitle="Tuning the Rural Atmosphere"
+	icon="🎐"
 	{onClose}
 	width="450px"
 >
 	<div class="flex flex-col gap-8">
 		<!-- Master Mute Toggle -->
 		<div
-			class="flex items-center justify-between rounded-xl border border-black/5 bg-white/40 p-6 shadow-sm"
+			class="flex items-center justify-between rounded-xl border border-evergreen/5 bg-white/40 p-6 shadow-sm"
 		>
 			<div class="flex flex-col">
-				<span class="font-serif text-sm font-bold tracking-tight uppercase opacity-60"
+				<span class="font-serif text-sm font-bold tracking-tight text-evergreen/60 uppercase"
 					>Master Mute</span
 				>
-				<span class="font-serif text-[10px] opacity-40">Silence all café resonance</span>
+				<span class="font-serif text-[10px] text-evergreen/40">Silence all sanctuary resonance</span
+				>
 			</div>
 			<button
-				class="editor-secondary-btn !px-6 !py-2 {editor.isMuted ? 'bg-brand text-white' : ''}"
+				class="editor-secondary-btn !px-6 !py-2 {editor.isMuted
+					? 'bg-lantern-gold text-white'
+					: ''}"
 				onclick={() => editor.toggleMute()}
 			>
-				{editor.isMuted ? '🔇 Muted' : '🔊 Active'}
+				{editor.isMuted ? '🔇 Muted' : '🎐 Active'}
 			</button>
 		</div>
 
 		<!-- Volume Sliders -->
-		<div class="flex flex-col gap-6 rounded-xl border border-black/5 bg-white/40 p-8">
+		<div class="flex flex-col gap-6 rounded-xl border border-evergreen/5 bg-white/40 p-8">
 			<!-- SFX Volume -->
 			<div class="flex flex-col gap-3">
 				<div class="flex items-center justify-between">
-					<span class="font-serif text-[10px] font-bold tracking-[0.2em] uppercase opacity-40"
-						>Sound Effects (SFX)</span
+					<span
+						class="font-serif text-[10px] font-bold tracking-[0.2em] text-evergreen/40 uppercase"
+						>Nature & Craft SFX</span
 					>
-					<span class="font-mono text-xs font-bold opacity-40"
+					<span class="font-mono text-xs font-bold text-evergreen/40"
 						>{Math.round(editor.sfxVolume * 100)}%</span
 					>
 				</div>
@@ -60,10 +64,11 @@
 			<!-- BGM Volume -->
 			<div class="flex flex-col gap-3">
 				<div class="flex items-center justify-between">
-					<span class="font-serif text-[10px] font-bold tracking-[0.2em] uppercase opacity-40"
-						>Ambient Piano (BGM)</span
+					<span
+						class="font-serif text-[10px] font-bold tracking-[0.2em] text-evergreen/40 uppercase"
+						>Village Melodies (BGM)</span
 					>
-					<span class="font-mono text-xs font-bold opacity-40"
+					<span class="font-mono text-xs font-bold text-evergreen/40"
 						>{Math.round(editor.bgmVolume * 100)}%</span
 					>
 				</div>
@@ -79,19 +84,19 @@
 		</div>
 
 		<!-- Ambient Status Info -->
-		<div class="rounded-xl bg-black/5 p-6">
-			<h3 class="font-tiny5 mb-2 text-lg text-brand">Ambiance Flow</h3>
-			<div class="flex flex-col gap-2 font-serif text-[11px] leading-relaxed opacity-60">
+		<div class="rounded-xl bg-evergreen/5 p-6">
+			<h3 class="font-tiny5 mb-2 text-lg text-lantern-gold">Atmosphere Flow</h3>
+			<div class="flex flex-col gap-2 font-serif text-[11px] leading-relaxed text-evergreen/60">
 				<div class="flex justify-between">
 					<span>Session Duration:</span>
 					<span class="font-mono">{editor.usageMinutes} minutes</span>
 				</div>
-				<p class="italic">
+				<p class="text-evergreen/50 italic">
 					{#if editor.usageMinutes < 30}
-						The piano awaits in silence. It will begin to play its melody after 30 minutes of
-						creativity.
+						The sanctuary awaits in silence. Village melodies will begin to play after 30 minutes of
+						focus.
 					{:else}
-						The piano has begun its flow. Volume will reach full depth at 60 minutes.
+						The village has begun its song. Melodies will reach full resonance at 60 minutes.
 					{/if}
 				</p>
 			</div>
@@ -105,7 +110,7 @@
 	.editor-range {
 		appearance: none;
 		height: 4px;
-		background: #eee8d5;
+		background: var(--color-stone-path);
 		border-radius: 10px;
 		outline: none;
 	}
@@ -114,15 +119,11 @@
 		appearance: none;
 		width: 16px;
 		height: 16px;
-		background: var(--color-brand);
+		background: var(--color-lantern-gold);
 		border: 3px solid white;
 		border-radius: 50%;
 		cursor: pointer;
 		box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 		transition: transform 0.1s ease;
-	}
-
-	.editor-range::-webkit-slider-thumb:hover {
-		transform: scale(1.2);
 	}
 </style>

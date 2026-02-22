@@ -4,9 +4,7 @@
 	import Minimap from './Minimap.svelte';
 </script>
 
-<aside
-	class="side-panel-left flex h-full w-full flex-col overflow-hidden border-r border-charcoal/10 bg-stone-light/50"
->
+<aside class="side-panel-left flex h-full w-full flex-col overflow-hidden bg-washi-white/50">
 	{#if editor.studio.showMinimap}
 		<Minimap />
 	{/if}

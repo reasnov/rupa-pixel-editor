@@ -4,23 +4,23 @@
 	import { slide } from 'svelte/transition';
 </script>
 
-<div class="editor-panel flex w-full flex-col gap-4 border-none bg-foam-white p-3 shadow-sm">
+<div class="editor-panel flex w-full flex-col gap-4 border-none bg-washi-white p-3 shadow-sm">
 	<!-- Active Color -->
 	<div class="flex flex-col items-center gap-2 py-2">
-		<span class="font-serif text-[8px] font-black tracking-widest text-charcoal/30 uppercase"
-			>Active Flavor</span
+		<span class="font-serif text-[8px] font-black tracking-widest text-evergreen/30 uppercase"
+			>Active Pigment</span
 		>
 		<div
-			class="editor-checker-small h-10 w-10 rounded border border-charcoal/10 shadow-inner transition-colors"
+			class="editor-checker-small h-10 w-10 rounded border border-evergreen/10 shadow-inner transition-colors"
 			style="background-color: {editor.paletteState.activeColor};"
 		></div>
 		<div class="flex items-center gap-2">
-			<span class="font-mono text-[9px] font-bold tracking-tight text-charcoal/40 uppercase">
+			<span class="font-mono text-[9px] font-bold tracking-tight text-evergreen/40 uppercase">
 				{editor.paletteState.activeColor}
 			</span>
 			<button
 				onclick={() => editor.paletteState.addSwatch(editor.paletteState.activeColor)}
-				class="flex h-4 w-4 items-center justify-center rounded bg-brand/10 text-[8px] text-brand transition-all hover:bg-brand hover:text-white"
+				class="flex h-4 w-4 items-center justify-center rounded bg-lantern-gold/10 text-[8px] text-lantern-gold transition-all hover:bg-lantern-gold hover:text-white"
 				title="Add to Current Palette"
 			>
 				＋
@@ -28,13 +28,13 @@
 		</div>
 	</div>
 
-	<div class="h-px w-full bg-charcoal/5"></div>
+	<div class="h-px w-full bg-evergreen/5"></div>
 
 	<!-- Used Colors -->
 	<div class="flex flex-col gap-2">
 		<span
-			class="text-center font-serif text-[8px] font-black tracking-widest text-charcoal/30 uppercase"
-			>Recent Brews</span
+			class="text-center font-serif text-[8px] font-black tracking-widest text-evergreen/30 uppercase"
+			>Recent Weaves</span
 		>
 
 		<div
@@ -43,7 +43,7 @@
 			{#each editor.usedColors as color (color)}
 				<button
 					transition:slide={{ duration: 200 }}
-					class="group editor-checker-small relative h-5 w-5 shrink-0 rounded border border-charcoal/10 shadow-sm transition-all hover:scale-110 active:scale-95"
+					class="group editor-checker-small relative h-5 w-5 shrink-0 rounded border border-evergreen/10 shadow-sm transition-all hover:scale-110 active:scale-95"
 					style="background-color: {color};"
 					onclick={() => services.color.setColor(color)}
 					title={color}
@@ -56,7 +56,7 @@
 				</button>
 			{:else}
 				<div
-					class="flex h-5 w-5 items-center justify-center rounded border border-dashed border-charcoal/10"
+					class="flex h-5 w-5 items-center justify-center rounded border border-dashed border-evergreen/10"
 				>
 					<span class="text-[8px] opacity-20">🎨</span>
 				</div>

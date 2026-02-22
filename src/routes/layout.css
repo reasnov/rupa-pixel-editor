@@ -1,59 +1,73 @@
 @import 'tailwindcss';
 
 @font-face {
-	font-family: 'EB Garamond';
-	src: url('../lib/fonts/EBGaramond.ttf') format('truetype');
+	font-family: 'Zen Maru Gothic';
+	src: url('/fonts/ZenMaruGothic-Regular.ttf') format('truetype');
 	font-weight: normal;
 	font-style: normal;
 }
 
 @font-face {
-	font-family: 'Lora';
-	src: url('../lib/fonts/Lora.ttf') format('truetype');
+	font-family: 'Courier Prime';
+	src: url('/fonts/CourierPrime-Regular.ttf') format('truetype');
 	font-weight: normal;
 	font-style: normal;
 }
+
 @font-face {
 	font-family: 'Tiny5';
-	src: url('../lib/fonts/Tiny5-Regular.ttf') format('truetype');
+	src: url('/fonts/Tiny5-Regular.ttf') format('truetype');
 	font-weight: normal;
 	font-style: normal;
 }
 
 @theme {
-	/* Barista Cafe: Soft Neutral Palette */
-	--color-latte-foam: #fdf6e3;
-	--color-foam-white: #ffffff;
-	--color-stone-light: #f5f5f5;
-	--color-stone-medium: #e0e0e0;
-	--color-stone-dark: #d1d1d1;
-	--color-charcoal: #333333;
-	--color-dust: #999999;
+	/* The Nature Sanctuary Palette */
+	--color-washi-white: #fdf6e3;
+	--color-rice-straw: #f4f1bb;
+	--color-bamboo-shoot: #d1e0d0;
+	--color-sage-leaf: #a3b18a;
+	--color-fern-green: #588157;
+	--color-deep-forest: #3a5a40;
+	--color-evergreen: #344e41;
+	--color-stone-path: #dad7cd;
+	--color-mist-gray: #8d99ae;
+	--color-night-indigo: #2b2d42;
 
-	/* Core Brand */
-	--color-brand: #d33682; /* Magenta Heart */
+	/* The Craft Atelier Palette */
+	--color-lantern-gold: #b58900;
+	--color-rust-clay: #cb4b16;
+	--color-sakura-pink: #e5989b;
+	--color-ume-plum: #6d597a;
+	--color-aged-oak: #b08968;
+	--color-dark-walnut: #7f5539;
+	--color-morning-amber: #d4a373;
+	--color-matcha-dust: #ccd5ae;
+	--color-river-stone: #6b705c;
+	--color-forest-shadow: #333d29;
 
-	/* Functional Aliases (Neutral Minimalist) */
-	--color-canvas-bg: var(--color-latte-foam);
-	--color-grid-border: var(--color-stone-medium);
-	--color-panel-bg: rgba(255, 255, 255, 0.98);
-	--color-sidebar-bg: var(--color-stone-light);
-	--color-sidebar-text: var(--color-charcoal);
-	--color-studio-text: var(--color-charcoal);
-	--color-ui-accent: var(--color-brand);
+	/* Functional Aliases (Rural Transition) */
+	--color-canvas-bg: var(--color-washi-white);
+	--color-grid-border: var(--color-stone-path);
+	--color-panel-bg: rgba(253, 246, 227, 0.95); /* Washi White with opacity */
+	--color-sidebar-bg: var(--color-bamboo-shoot);
+	--color-sidebar-text: var(--color-evergreen);
+	--color-studio-text: var(--color-evergreen);
+	--color-ui-accent: var(--color-lantern-gold);
 }
 
 :root {
 	background-color: var(--color-canvas-bg);
 	color: var(--color-studio-text);
-	font-family: 'Lora', serif;
+	font-family: 'Courier Prime', monospace;
+	--font-heading: 'Zen Maru Gothic', sans-serif;
 }
 
 h1,
 h2,
 h3,
 .font-serif {
-	font-family: 'EB Garamond', serif;
+	font-family: var(--font-heading);
 }
 
 .font-tiny5 {
@@ -66,8 +80,65 @@ body {
 	overflow: hidden;
 	height: 100vh;
 	width: 100vw;
-	background-color: var(--color-stone-light);
+	background-color: var(--color-stone-path);
 	background-image: url('https://www.transparenttextures.com/patterns/natural-paper.png');
+	pointer-events: auto;
+}
+
+/* CRT & Retro Filters Overlay */
+.crt-overlay {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100vw;
+	height: 100vh;
+	background:
+		linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.03) 50%),
+		linear-gradient(90deg, rgba(255, 0, 0, 0.01), rgba(0, 255, 0, 0.005), rgba(0, 0, 255, 0.01));
+	background-size:
+		100% 3px,
+		2px 100%;
+	z-index: 5000;
+	pointer-events: none;
+	opacity: 0.8;
+}
+
+.crt-overlay::after {
+	content: ' ';
+	display: block;
+	position: absolute;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	right: 0;
+	background: rgba(18, 16, 16, 0.03);
+	opacity: 0;
+	z-index: 5001;
+	pointer-events: none;
+	animation: flicker 0.15s infinite;
+}
+
+@keyframes flicker {
+	0% {
+		opacity: 0.1;
+	}
+	50% {
+		opacity: 0.05;
+	}
+	100% {
+		opacity: 0.1;
+	}
+}
+
+.vignette {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	box-shadow: inset 0 0 150px rgba(0, 0, 0, 0.1);
+	z-index: 4999;
+	pointer-events: none;
 }
 
 canvas,
@@ -75,223 +146,243 @@ canvas,
 	image-rendering: pixelated;
 }
 
+/* Redesigned Wooden Panels */
 .editor-panel {
 	background: var(--color-panel-bg);
-	border: 1px solid var(--color-stone-medium);
-	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-	backdrop-filter: blur(10px);
-	border-radius: 8px;
+	border: 2px solid var(--color-dark-walnut);
+	box-shadow:
+		inset 0 0 15px rgba(127, 85, 57, 0.1),
+		4px 4px 0px var(--color-dark-walnut);
+	border-radius: 4px;
 }
 
 .side-panel-left {
-	border-right: 1px solid var(--color-stone-medium);
-	background: var(--color-stone-light);
+	border-right: 2px solid var(--color-dark-walnut);
+	background: var(--color-washi-white);
 }
 
 .side-panel-right {
-	border-left: 1px solid var(--color-stone-medium);
-	background: var(--color-foam-white);
+	border-left: 2px solid var(--color-dark-walnut);
+	background: var(--color-washi-white);
 }
 
 .bottom-panel {
-	border-top: 1px solid var(--color-stone-medium);
-	background: var(--color-foam-white);
+	border-top: 2px solid var(--color-dark-walnut);
+	background: var(--color-washi-white);
 }
 
 .hud-panel {
-	background: var(--color-foam-white);
-	color: var(--color-charcoal);
-	border-bottom: 1px solid var(--color-stone-medium);
-	box-shadow: 0 1px 5px rgba(0, 0, 0, 0.02);
+	background: var(--color-washi-white);
+	color: var(--color-evergreen);
+	border-bottom: 2px solid var(--color-dark-walnut);
 }
 
-/* The Editor Frame (The Canvas) */
+/* The Washi Frame (The Canvas) */
 .editor-frame {
-	background: var(--color-latte-foam);
-	border: 8px solid var(--color-foam-white);
-	outline: 1px solid var(--color-stone-medium);
-	border-radius: 4px;
-	box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+	background: var(--color-washi-white);
+	border: 12px solid var(--color-aged-oak);
+	outline: 2px solid var(--color-dark-walnut);
+	border-radius: 2px;
+	box-shadow:
+		0 20px 50px rgba(0, 0, 0, 0.2),
+		inset 0 0 20px rgba(0, 0, 0, 0.05);
 	position: relative;
 }
 
 .editor-frame::after {
 	content: '';
 	position: absolute;
-	inset: -4px;
-	border: 1px solid rgba(0, 0, 0, 0.03);
-	border-radius: 4px;
+	inset: 0;
+	background-image: url('https://www.transparenttextures.com/patterns/paper-fibers.png');
+	opacity: 0.1;
 	pointer-events: none;
 }
 
 /* 
-	Optimized Pixel Grid Surface 
-	Combines Grid Lines and Transparent Checker into a single high-performance layer
+	Retro Pixel Grid 
 */
 .pixel-grid-surface {
-	--grid-line-color: rgba(0, 0, 0, 0.1);
+	--grid-line-color: rgba(52, 78, 65, 0.15);
 
 	background-image:
 		linear-gradient(var(--grid-line-color) 1px, transparent 1px),
 		linear-gradient(90deg, var(--grid-line-color) 1px, transparent 1px);
 
 	background-size: calc(100% / var(--grid-cols)) calc(100% / var(--grid-rows));
-
 	background-repeat: repeat;
 }
 
 .editor-checker-small {
-	/* Keep standalone for other UI elements if needed */
 	background-image:
-		linear-gradient(45deg, rgba(0, 0, 0, 0.02) 25%, transparent 25%),
-		linear-gradient(-45deg, rgba(0, 0, 0, 0.02) 25%, transparent 25%),
-		linear-gradient(45deg, transparent 75%, rgba(0, 0, 0, 0.02) 75%),
-		linear-gradient(-45deg, transparent 75%, rgba(0, 0, 0, 0.02) 75%);
-	background-size: 4px 4px;
-	background-position:
-		0 0,
-		0 2px,
-		2px -2px,
-		-2px 0px;
+		linear-gradient(45deg, rgba(0, 0, 0, 0.03) 25%, transparent 25%),
+		linear-gradient(-45deg, rgba(0, 0, 0, 0.03) 25%, transparent 25%),
+		linear-gradient(45deg, transparent 75%, rgba(0, 0, 0, 0.03) 75%),
+		linear-gradient(-45deg, transparent 75%, rgba(0, 0, 0, 0.03) 75%);
+	background-size: 8px 8px;
 }
 
 .status-tag {
-	background: var(--color-foam-white);
+	background: var(--color-washi-white);
 	padding: 4px 12px;
-	border-radius: 6px;
+	border-radius: 2px;
 	font-size: 10px;
-	color: var(--color-charcoal);
+	color: var(--color-evergreen);
 	text-transform: uppercase;
 	letter-spacing: 0.1em;
-	border: 1px solid var(--color-stone-medium);
+	border: 1px solid var(--color-dark-walnut);
+	box-shadow: 2px 2px 0px var(--color-dark-walnut);
 }
 
+/* Clicky Retro Buttons */
 .editor-tool-btn {
-	background: var(--color-foam-white);
-	border: 1px solid var(--color-stone-medium);
-	color: var(--color-charcoal);
+	background: var(--color-washi-white);
+	border: 1px solid var(--color-dark-walnut);
+	color: var(--color-evergreen);
 	padding: 6px 12px;
-	border-radius: 6px;
-	font-family: 'EB Garamond', serif;
-	font-style: italic;
-	font-size: 13px;
-	transition: all 0.2s ease;
+	border-radius: 4px;
+	font-family: var(--font-heading);
+	font-weight: 700;
+	font-size: 12px;
+	transition: all 0.1s steps(2);
 	display: flex;
 	align-items: center;
 	gap: 6px;
-	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+	box-shadow: 2px 2px 0px var(--color-dark-walnut);
 }
 
 .editor-tool-btn:hover {
-	background: var(--color-brand);
+	background: var(--color-lantern-gold);
 	color: white;
-	border-color: var(--color-brand);
-	transform: translateY(-1px);
-	box-shadow: 0 4px 10px rgba(211, 54, 130, 0.2);
+	transform: translate(-1px, -1px);
+	box-shadow: 3px 3px 0px var(--color-dark-walnut);
 }
 
 .editor-tool-btn:active {
-	transform: translateY(0);
-}
-
-.rounded-editor {
-	border-radius: 8px;
+	transform: translate(1px, 1px);
+	box-shadow: 0px 0px 0px var(--color-dark-walnut);
 }
 
 .editor-primary-btn {
-	background: var(--color-brand);
+	background: var(--color-lantern-gold);
 	color: white;
 	padding: 12px 24px;
-	border-radius: 8px;
+	border-radius: 4px;
 	font-family: 'Tiny5', system-ui;
 	text-transform: uppercase;
-	letter-spacing: 0.1em;
-	transition: all 0.2s ease;
-	border: 1px solid rgba(255, 255, 255, 0.2);
-	box-shadow: 0 4px 15px rgba(211, 54, 130, 0.2);
+	letter-spacing: 0.15em;
+	transition: all 0.1s steps(2);
+	border: 2px solid var(--color-dark-walnut);
+	box-shadow: 4px 4px 0px var(--color-dark-walnut);
 }
 
 .editor-primary-btn:hover {
-	transform: translateY(-1px);
-	box-shadow: 0 6px 20px rgba(211, 54, 130, 0.3);
+	transform: translate(-2px, -2px);
+	box-shadow: 6px 6px 0px var(--color-dark-walnut);
+	filter: brightness(1.1);
+}
+
+.editor-primary-btn:active {
+	transform: translate(2px, 2px);
+	box-shadow: 0px 0px 0px var(--color-dark-walnut);
 }
 
 .editor-secondary-btn {
 	background: white;
-	color: var(--color-charcoal);
+	color: var(--color-evergreen);
 	padding: 12px 24px;
-	border-radius: 8px;
-	font-family: 'EB Garamond', serif;
-	font-style: italic;
-	transition: all 0.2s ease;
-	border: 1px solid var(--color-stone-medium);
+	border-radius: 4px;
+	font-family: var(--font-heading);
+	font-weight: 700;
+	transition: all 0.1s steps(2);
+	border: 2px solid var(--color-dark-walnut);
+	box-shadow: 4px 4px 0px var(--color-dark-walnut);
 }
 
 .editor-secondary-btn:hover {
-	background: var(--color-latte-foam);
-	border-color: var(--color-brand);
+	background: var(--color-rice-straw);
+	transform: translate(-1px, -1px);
 }
 
-/* Custom Styled Inputs for Properties Panels */
-.editor-slider {
-	-webkit-appearance: none;
-	width: 100%;
-	height: 4px;
-	background: var(--color-stone-medium);
-	border-radius: 2px;
-	outline: none;
-	transition: background 0.2s;
+.editor-secondary-btn:active {
+	transform: translate(2px, 2px);
+	box-shadow: 0px 0px 0px var(--color-dark-walnut);
 }
 
-.editor-slider::-webkit-slider-thumb {
-	-webkit-appearance: none;
-	appearance: none;
-	width: 12px;
-	height: 12px;
-	background: var(--color-brand);
-	border: 2px solid white;
-	border-radius: 50%;
-	cursor: pointer;
-	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-	transition: transform 0.1s ease;
+/* VFX: Lantern Glow Pulse */
+@keyframes lantern-pulse {
+	0% {
+		box-shadow:
+			0 0 10px rgba(181, 137, 0, 0.2),
+			2px 2px 0px var(--color-dark-walnut);
+	}
+	50% {
+		box-shadow:
+			0 0 20px rgba(181, 137, 0, 0.5),
+			2px 2px 0px var(--color-dark-walnut);
+	}
+	100% {
+		box-shadow:
+			0 0 10px rgba(181, 137, 0, 0.2),
+			2px 2px 0px var(--color-dark-walnut);
+	}
 }
 
-.editor-slider::-webkit-slider-thumb:hover {
-	transform: scale(1.2);
+.is-active.tool-button,
+.is-active-pigment {
+	animation: lantern-pulse 3s infinite ease-in-out;
 }
 
-.editor-input-number {
-	background: white;
-	border: 1px solid var(--color-stone-medium);
-	border-radius: 4px;
-	font-family: 'Tiny5', system-ui;
-	font-size: 11px;
-	color: var(--color-charcoal);
-	padding: 2px 4px;
-	text-align: center;
-	transition: all 0.2s ease;
+/* VFX: Pixel Steam */
+@keyframes steam-drift {
+	0% {
+		transform: translateY(0) translateX(0) scale(1);
+		opacity: 0;
+	}
+	20% {
+		opacity: 0.4;
+	}
+	80% {
+		opacity: 0.2;
+	}
+	100% {
+		transform: translateY(-40px) translateX(10px) scale(1.5);
+		opacity: 0;
+	}
 }
 
-.editor-input-number:focus {
-	border-color: var(--color-brand);
-	outline: none;
-	box-shadow: 0 0 0 2px rgba(211, 54, 130, 0.1);
-}
-
-/* Scrollbar Styling */
-.custom-scrollbar::-webkit-scrollbar {
+.pixel-steam {
+	position: absolute;
 	width: 4px;
+	height: 4px;
+	background: var(--color-washi-white);
+	border-radius: 1px;
+	filter: blur(1px);
+	pointer-events: none;
 }
 
-.custom-scrollbar::-webkit-scrollbar-track {
-	background: transparent;
+/* VFX: 8-bit Rain */
+@keyframes rain-fall {
+	from {
+		transform: translateY(-100vh) translateX(-20px);
+	}
+	to {
+		transform: translateY(100vh) translateX(20px);
+	}
 }
 
-.custom-scrollbar::-webkit-scrollbar-thumb {
-	background: var(--color-stone-medium);
-	border-radius: 10px;
+.rain-particle {
+	position: fixed;
+	width: 1px;
+	height: 6px;
+	background: var(--color-mist-gray);
+	opacity: 0.2;
+	pointer-events: none;
+	z-index: 1;
 }
 
-.custom-scrollbar::-webkit-scrollbar-thumb:hover {
-	background: var(--color-dust);
+/* Updated Button Hover for Tactile Feel */
+.editor-tool-btn:active,
+.editor-primary-btn:active {
+	transform: translate(2px, 2px);
+	box-shadow: 0px 0px 0px var(--color-dark-walnut) !important;
 }

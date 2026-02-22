@@ -66,7 +66,7 @@ ipcMain.handle('file:autoSave', async (event, content) => {
 });
 
 ipcMain.on('log:warn', (event, message) => {
-	console.warn(`[Renderer Warning] ${message}`);
+	console.warn(message);
 });
 
 app.whenReady().then(() => {

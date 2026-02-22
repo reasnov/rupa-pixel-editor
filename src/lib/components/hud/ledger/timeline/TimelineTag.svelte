@@ -17,16 +17,16 @@
 <!-- svelte-ignore a11y_click_events_have_key_events -->
 <!-- svelte-ignore a11y_no_static_element_interactions -->
 <div
-	class="group absolute top-0 flex h-4 items-center justify-center rounded-t border-x border-t border-black/10 px-2 transition-all hover:h-5"
+	class="group absolute top-0 flex h-4 items-center justify-center rounded-t border-x border-t border-evergreen/10 px-2 transition-all hover:h-5"
 	style="left: {left}px; width: {width}px; background-color: {tag.color}44; border-top-color: {tag.color};"
 	title={tag.name}
 >
-	<span class="truncate font-serif text-[8px] font-black text-studio-text/60 uppercase"
+	<span class="truncate font-serif text-[8px] font-black text-evergreen/60 uppercase"
 		>{tag.name}</span
 	>
 	<button
 		onclick={remove}
-		class="ml-1 hidden h-3 w-3 items-center justify-center rounded-full bg-black/10 text-[6px] group-hover:flex hover:bg-brand hover:text-white"
+		class="ml-1 hidden h-3 w-3 items-center justify-center rounded-full bg-evergreen/10 text-[6px] group-hover:flex hover:bg-lantern-gold hover:text-white"
 	>
 		✕
 	</button>

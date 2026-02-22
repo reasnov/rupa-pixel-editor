@@ -2,13 +2,19 @@
 	import { __ } from '$lib/state/i18n.svelte.js';
 	import { editor } from '../../state/editor.svelte.js';
 	import { editor as engine } from '../../engine/editor.svelte.js';
+	import { sfx } from '../../engine/audio.js';
 	import { fade, scale } from 'svelte/transition';
 
 	const studio = editor.studio;
 
+	function handleToolClick(intent: any) {
+		sfx.playCeramicSlide();
+		engine.handleIntent(intent);
+	}
+
 	// Tool Definitions
 	const tools = [
-		{ id: 'BRUSH', icon: '🖋️', intent: 'TOOL_BRUSH' as const, label: 'TOOL_BRUSH' },
+		{ id: 'BRUSH', icon: '🖌️', intent: 'TOOL_BRUSH' as const, label: 'TOOL_BRUSH' },
 		{ id: 'ERASER', icon: '🧹', intent: 'TOOL_ERASER' as const, label: 'TOOL_ERASER' },
 		{ id: 'SELECT', icon: '✨', intent: 'TOOL_SELECT' as const, label: 'TOOL_SELECT' },
 		{ id: 'RECTANGLE', icon: '📦', intent: 'TOOL_RECTANGLE' as const, label: 'TOOL_RECTANGLE' },
@@ -98,67 +104,71 @@
 	<!-- Main Vessels (Geometric Tools) -->
 	<div class="flex flex-col gap-1.5">
 		{#each tools as tool}
-			<button
-				class="tool-button {studio.activeTool === tool.id ? 'is-active' : ''}"
-				title={__({ key: `labels.${tool.label}` })}
-				onclick={() => engine.handleIntent(tool.intent)}
-			>
-				<span class="text-sm">{tool.icon}</span>
-			</button>
-
-			<!-- Polygon Sides Controller -->
-			{#if tool.id === 'POLYGON' && studio.activeTool === 'POLYGON'}
-				<div
-					transition:fade
-					class="absolute top-0 -left-12 flex flex-col items-center gap-1 rounded-md bg-white p-1 shadow-md ring-1 ring-black/5"
+			<div class="relative">
+				<button
+					class="tool-button {studio.activeTool === tool.id ? 'is-active' : ''}"
+					title={__(`common:labels.${tool.label}`)}
+					onclick={() => handleToolClick(tool.intent)}
 				>
-					<button
-						class="flex h-4 w-4 items-center justify-center text-[10px] hover:text-brand"
-						onclick={() => engine.handleIntent('POLY_SIDES_INC')}
-					>
-						+
-					</button>
-					<span class="font-tiny5 text-[8px] text-brand">{studio.polygonSides}</span>
-					<button
-						class="flex h-4 w-4 items-center justify-center text-[10px] hover:text-brand"
-						onclick={() => engine.handleIntent('POLY_SIDES_DEC')}
-					>
-						-
-					</button>
+					<span class="text-sm">{tool.icon}</span>
+				</button>
 
-					<div class="my-1 h-px w-2 bg-charcoal/10"></div>
+				<!-- Polygon Sides Controller -->
+				{#if tool.id === 'POLYGON' && studio.activeTool === 'POLYGON'}
+					<div
+						transition:fade
+						class="absolute top-0 -left-12 flex flex-col items-center gap-1 rounded-md bg-washi-white p-1 shadow-md ring-1 ring-evergreen/10"
+					>
+						<button
+							class="flex h-4 w-4 items-center justify-center text-[10px] hover:text-fern-green"
+							onclick={() => engine.handleIntent('POLY_SIDES_INC')}
+						>
+							+
+						</button>
+						<span class="font-tiny5 text-[8px] text-fern-green">{studio.polygonSides}</span>
+						<button
+							class="flex h-4 w-4 items-center justify-center text-[10px] hover:text-fern-green"
+							onclick={() => engine.handleIntent('POLY_SIDES_DEC')}
+						>
+							-
+						</button>
 
-					<!-- Indentation Control -->
-					<div class="flex flex-col items-center gap-0.5">
-						<button
-							class="text-[8px] hover:text-brand"
-							onclick={() =>
-								(studio.polygonIndentation = Math.min(100, studio.polygonIndentation + 10))}
-						>
-							▴
-						</button>
-						<span class="text-[7px] font-bold text-brand/60">{studio.polygonIndentation}%</span>
-						<button
-							class="text-[8px] hover:text-brand"
-							onclick={() =>
-								(studio.polygonIndentation = Math.max(0, studio.polygonIndentation - 10))}
-						>
-							▾
-						</button>
+						<div class="my-1 h-px w-2 bg-evergreen/10"></div>
+
+						<!-- Indentation Control -->
+						<div class="flex flex-col items-center gap-0.5">
+							<button
+								class="text-[8px] hover:text-fern-green"
+								onclick={() =>
+									(studio.polygonIndentation = Math.min(100, studio.polygonIndentation + 10))}
+							>
+								▴
+							</button>
+							<span class="text-[7px] font-bold text-fern-green/60"
+								>{studio.polygonIndentation}%</span
+							>
+							<button
+								class="text-[8px] hover:text-fern-green"
+								onclick={() =>
+									(studio.polygonIndentation = Math.max(0, studio.polygonIndentation - 10))}
+							>
+								▾
+							</button>
+						</div>
 					</div>
-				</div>
-			{/if}
+				{/if}
+			</div>
 		{/each}
 	</div>
 
-	<div class="h-px w-4 bg-charcoal/10"></div>
+	<div class="h-px w-4 bg-evergreen/10"></div>
 
 	<!-- Shading & Toning -->
 	<div class="flex flex-col gap-1.5">
 		{#each shading as tool}
 			<button
 				class="tool-button {tool.active() ? 'is-active' : ''}"
-				title={__({ key: `labels.${tool.label}` })}
+				title={__(`common:labels.${tool.label}`)}
 				onclick={() => engine.handleIntent(tool.intent)}
 			>
 				<span class="text-sm">{tool.icon}</span>
@@ -166,7 +176,7 @@
 		{/each}
 	</div>
 
-	<div class="h-px w-4 bg-charcoal/10"></div>
+	<div class="h-px w-4 bg-evergreen/10"></div>
 
 	<!-- Stance Toggles -->
 	<div class="flex flex-col gap-1.5">
@@ -175,7 +185,7 @@
 				class="tool-button {toggle.active() ? 'is-active' : ''} {toggle.disabled?.()
 					? 'cursor-not-allowed opacity-20 grayscale'
 					: ''}"
-				title={__({ key: `labels.${toggle.label}` })}
+				title={__(`common:labels.${toggle.label}`)}
 				onclick={() => !toggle.disabled?.() && engine.handleIntent(toggle.intent)}
 			>
 				<span class="text-sm">{toggle.icon}</span>
@@ -183,14 +193,14 @@
 		{/each}
 	</div>
 
-	<div class="h-px w-4 bg-charcoal/10"></div>
+	<div class="h-px w-4 bg-evergreen/10"></div>
 
 	<!-- Seals (Locks) -->
 	<div class="flex flex-col gap-1.5">
 		{#each locks as lock}
 			<button
 				class="tool-button {lock.active() ? 'is-active' : ''} font-bold"
-				title={__({ key: `labels.${lock.label}` })}
+				title={__(`common:labels.${lock.label}`)}
 				onclick={() => engine.handleIntent(lock.intent)}
 			>
 				<span class="text-[10px]">{lock.icon}</span>
@@ -219,17 +229,17 @@
 		align-items: center;
 		justify-content: center;
 		border-radius: 8px;
-		background: var(--color-foam-white);
-		border: 1px solid var(--color-stone-medium);
-		color: var(--color-charcoal);
+		background: var(--color-washi-white);
+		border: 1px solid var(--color-stone-path);
+		color: var(--color-evergreen);
 		transition: all 0.2s cubic-bezier(0.23, 1, 0.32, 1);
 		box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 	}
 
 	.tool-button:hover {
 		transform: translateY(-1px);
-		border-color: var(--color-brand);
-		box-shadow: 0 4px 12px rgba(211, 54, 130, 0.15);
+		border-color: var(--color-lantern-gold);
+		box-shadow: 0 4px 12px rgba(181, 137, 0, 0.15);
 	}
 
 	.tool-button:active {
@@ -237,9 +247,9 @@
 	}
 
 	.tool-button.is-active {
-		background: var(--color-brand);
+		background: var(--color-lantern-gold);
 		color: white;
-		border-color: var(--color-brand);
-		box-shadow: 0 4px 15px rgba(211, 54, 130, 0.3);
+		border-color: var(--color-lantern-gold);
+		box-shadow: 0 4px 15px rgba(181, 137, 0, 0.3);
 	}
 </style>

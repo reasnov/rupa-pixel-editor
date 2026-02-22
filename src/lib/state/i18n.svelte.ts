@@ -85,9 +85,9 @@ export function __(
 	// Check if key exists and log warning if missing
 	if (!i18next.exists(key, { lng: locale })) {
 		const msg = `[i18n] Missing translation key: "${key}" for locale: "${locale}"`;
-		console.warn(msg);
 		if (typeof window !== 'undefined' && window.electronAPI?.logWarn) {
-			window.electronAPI.logWarn(msg);
+			// ANSI Yellow (plain) for terminal visibility
+			window.electronAPI.logWarn(`\x1b[33m${msg}\x1b[0m`);
 		}
 	}
 

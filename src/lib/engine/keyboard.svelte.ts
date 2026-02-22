@@ -247,7 +247,7 @@ export class KeyboardEngine {
 			if (custom) {
 				if (!seenGroupedIntents.has(custom)) {
 					seenGroupedIntents.add(custom);
-					const cleanLabel = __(`common:shortcut_groups.${custom}`);
+					const cleanLabel = __(`shortcuts:groups.${custom}`);
 					finalActions.push({ ...a, label: cleanLabel, customKey: custom.toUpperCase() });
 				}
 			} else {

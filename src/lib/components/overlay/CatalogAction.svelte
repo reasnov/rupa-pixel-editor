@@ -8,8 +8,8 @@
 
 <button
 	class="editor-action-btn flex items-center justify-between rounded-xl px-6 py-4 transition-all {isSelected
-		? 'active bg-brand text-white shadow-lg'
-		: 'hover:bg-black/5'}"
+		? 'active bg-lantern-gold text-white shadow-lg'
+		: 'hover:bg-evergreen/5'}"
 	onclick={() => {
 		action.action();
 		onSelect();

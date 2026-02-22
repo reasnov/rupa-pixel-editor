@@ -90,11 +90,11 @@
 </script>
 
 <div
-	class="relative flex min-h-0 flex-1 flex-col overflow-hidden rounded border border-charcoal/10 bg-stone-light/30 shadow-inner"
+	class="relative flex min-h-0 flex-1 flex-col overflow-hidden rounded border border-evergreen/10 bg-bamboo-shoot/30 shadow-inner"
 >
 	<!-- Top Row: Tags -->
 	{#if editor.project.tags.length > 0}
-		<div class="h-4 shrink-0 overflow-hidden bg-black/5">
+		<div class="h-4 shrink-0 overflow-hidden bg-evergreen/5">
 			<div
 				class="relative h-full"
 				style="width: {maxRulerWidth}px; margin-left: 128px; transform: translateX(-{scrollLeft}px);"
@@ -107,11 +107,11 @@
 	{/if}
 
 	<!-- Top Row: Corner + Ruler -->
-	<div class="flex h-6 shrink-0 border-b border-charcoal/5 bg-foam-white/95">
+	<div class="flex h-6 shrink-0 border-b border-evergreen/5 bg-washi-white/95">
 		<div
-			class="z-40 flex w-32 shrink-0 items-center border-r border-charcoal/10 bg-foam-white px-2 font-serif text-[8px] font-black tracking-widest text-charcoal/30 uppercase"
+			class="z-40 flex w-32 shrink-0 items-center border-r border-evergreen/10 bg-washi-white px-2 font-serif text-[8px] font-black tracking-widest text-evergreen/30 uppercase"
 		>
-			Infusions
+			Ingredients
 		</div>
 		<div class="relative flex-1 overflow-hidden" onclick={handleScrub} role="presentation">
 			<div
@@ -125,15 +125,15 @@
 							: 'opacity-100'}"
 						style="left: {mark.index * currentFrameWidth}px; width: {currentFrameWidth}px;"
 					>
-						<div class="w-px bg-charcoal/20 {mark.isMajor ? 'h-2' : 'h-1'}"></div>
+						<div class="w-px bg-evergreen/20 {mark.isMajor ? 'h-2' : 'h-1'}"></div>
 						{#if mark.label}
 							<span
 								class="font-mono text-[7px] font-black {mark.isMajor && !mark.isFuture
-									? 'text-brand'
-									: 'text-charcoal/40'} mt-0.5 leading-none">{mark.label}</span
+									? 'text-lantern-gold'
+									: 'text-evergreen/40'} mt-0.5 leading-none">{mark.label}</span
 							>
 						{:else if mark.index % 5 === 0}
-							<span class="mt-0.5 font-mono text-[7px] leading-none font-bold text-charcoal/20"
+							<span class="mt-0.5 font-mono text-[7px] leading-none font-bold text-evergreen/20"
 								>{mark.index + 1}</span
 							>
 						{/if}
@@ -159,15 +159,15 @@
 		>
 			<!-- Sticky Sidebar -->
 			<div
-				class="sticky left-0 z-30 flex w-32 shrink-0 flex-col border-r border-charcoal/10 bg-foam-white/95 shadow-sm"
+				class="sticky left-0 z-30 flex w-32 shrink-0 flex-col border-r border-evergreen/10 bg-washi-white/95 shadow-sm"
 			>
 				{#each editor.project.activeFrame.layers as layer, i}
 					<button
 						onclick={() => (editor.project.activeFrame.activeLayerIndex = i)}
 						class="flex h-6 w-full items-center px-2 text-left transition-colors {i ===
 						editor.project.activeFrame.activeLayerIndex
-							? 'bg-brand/5 text-brand'
-							: 'text-charcoal/60 hover:bg-black/5'}"
+							? 'bg-lantern-gold/5 text-lantern-gold'
+							: 'text-evergreen/60 hover:bg-evergreen/5'}"
 					>
 						<span class="truncate font-serif text-[9px] font-bold uppercase">{layer.name}</span>
 					</button>
@@ -177,7 +177,7 @@
 			<!-- Grid Content -->
 			<div class="relative flex flex-1 flex-col">
 				{#each editor.project.activeFrame.layers as _, layerIdx}
-					<div class="flex h-6 border-b border-black/5">
+					<div class="flex h-6 border-b border-evergreen/5">
 						{#each editor.project.frames as frame, frameIdx}
 							<TimelineDrop
 								layer={frame.layers[layerIdx]}
@@ -192,11 +192,11 @@
 
 				<!-- Playhead -->
 				<div
-					class="pointer-events-none absolute top-0 bottom-0 z-20 w-px bg-brand transition-all duration-75 ease-linear"
+					class="pointer-events-none absolute top-0 bottom-0 z-20 w-px bg-lantern-gold transition-all duration-75 ease-linear"
 					style="left: {playheadOffset}px;"
 				>
 					<div
-						class="absolute -top-0.5 -left-1 h-2 w-2 rotate-45 rounded-sm bg-brand shadow-sm"
+						class="absolute -top-0.5 -left-1 h-2 w-2 rotate-45 rounded-sm bg-lantern-gold shadow-sm"
 					></div>
 				</div>
 			</div>
@@ -213,10 +213,10 @@
 		background: transparent;
 	}
 	.custom-scrollbar::-webkit-scrollbar-thumb {
-		background: rgba(0, 0, 0, 0.05);
+		background: rgba(52, 78, 65, 0.1);
 		border-radius: 10px;
 	}
 	.custom-scrollbar::-webkit-scrollbar-thumb:hover {
-		background: rgba(211, 54, 130, 0.2);
+		background: rgba(181, 137, 0, 0.2);
 	}
 </style>

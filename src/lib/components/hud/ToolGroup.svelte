@@ -9,65 +9,65 @@
 		<button
 			class="editor-tool-btn"
 			onclick={() => (editor.showCommandPalette = true)}
-			title="{__({ key: 'hud.menu.catalog_title' })} (Ctrl+K)"
+			title="{__('common:hud.menu.catalog_title')} (Ctrl+K)"
 		>
 			<span aria-hidden="true">📖</span>
-			<span class="hidden xl:inline">{__({ key: 'hud.menu.catalog_title' })}</span>
+			<span class="hidden xl:inline">{__('common:hud.menu.catalog_title')}</span>
 		</button>
 
 		<button
 			class="editor-tool-btn"
 			onclick={() => (editor.showExportMenu = true)}
-			title="{__({ key: 'export.title' })} (Ctrl+E)"
+			title="{__('common:export.title')} (Ctrl+E)"
 		>
-			<span aria-hidden="true">🍶</span>
-			<span class="hidden xl:inline">{__({ key: 'export.title' })}</span>
+			<span aria-hidden="true">📦</span>
+			<span class="hidden xl:inline">{__('common:export.title')}</span>
 		</button>
 	</div>
 
-	<div class="mx-2 h-4 w-px bg-charcoal/10" aria-hidden="true"></div>
+	<div class="mx-2 h-4 w-px bg-evergreen/10" aria-hidden="true"></div>
 
 	<!-- System Control -->
 	<div class="flex gap-1.5" role="group">
 		<button
 			class="editor-tool-btn"
 			onclick={() => editor.clearCanvas()}
-			title="{__({ key: 'hud.actions.clear_canvas' })} (Ctrl+L)"
+			title="{__('common:hud.actions.clear_canvas')} (Ctrl+L)"
 		>
-			<span aria-hidden="true">🧼</span>
-			<span class="hidden xl:inline">{__({ key: 'hud.actions.clear_canvas' })}</span>
+			<span aria-hidden="true">🍃</span>
+			<span class="hidden xl:inline">{__('common:hud.actions.clear_canvas')}</span>
 		</button>
 
 		<button
 			class="editor-tool-btn"
 			onclick={() => (editor.showAudioSettings = true)}
-			title="{__({ key: 'hud.audio.title' })} (Ctrl+Shift+A)"
+			title="{__('common:hud.audio.title')} (Ctrl+Shift+A)"
 		>
 			<span aria-hidden="true">{editor.isMuted ? '🔇' : '🔊'}</span>
-			<span class="hidden xl:inline">{__({ key: 'hud.audio.title' })}</span>
+			<span class="hidden xl:inline">{__('common:hud.audio.title')}</span>
 		</button>
 	</div>
 
-	<div class="mx-2 h-4 w-px bg-charcoal/10" aria-hidden="true"></div>
+	<div class="mx-2 h-4 w-px bg-evergreen/10" aria-hidden="true"></div>
 
 	<!-- Knowledge & Help -->
 	<div class="flex gap-1.5" role="group">
 		<button
 			class="editor-tool-btn"
-			onclick={() => (editor.showGuideBook = true)}
-			title="{__({ key: 'manual.title' })} (F1)"
+			onclick={() => (editor.showManual = true)}
+			title="{__('manual:title')} (F1)"
 		>
 			<span aria-hidden="true">📜</span>
-			<span class="hidden xl:inline">{__({ key: 'manual.title' })}</span>
+			<span class="hidden xl:inline">{__('manual:title')}</span>
 		</button>
 
 		<button
 			class="editor-tool-btn"
-			onclick={() => (editor.showGuideMenu = true)}
-			title="{__({ key: 'shortcuts.title' })} (F2)"
+			onclick={() => (editor.showShortcuts = true)}
+			title="{__('shortcuts:title')} (F2)"
 		>
 			<span aria-hidden="true">⌨️</span>
-			<span class="hidden xl:inline">{__({ key: 'shortcuts.title' })}</span>
+			<span class="hidden xl:inline">{__('shortcuts:title')}</span>
 		</button>
 	</div>
 </nav>

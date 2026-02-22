@@ -13,11 +13,11 @@
 	<button
 		class="editor-primary-btn flex items-center gap-2 !px-4 !py-1.5 text-xs {editor.project
 			.isPlaying
-			? 'bg-brand'
-			: 'bg-slate-700'}"
+			? 'bg-lantern-gold'
+			: 'bg-evergreen/80'}"
 		onclick={() => animation.togglePlayback()}
-		title={__({ key: 'labels.PLAY_PAUSE' }) + ' (P)'}
-		aria-label={__({ key: 'labels.PLAY_PAUSE' })}
+		title={__('common:labels.PLAY_PAUSE') + ' (P)'}
+		aria-label={__('common:labels.PLAY_PAUSE')}
 	>
 		<span class="text-xs" aria-hidden="true">{editor.project.isPlaying ? '⏹' : '▶'}</span>
 		<span class="font-tiny5 tracking-widest uppercase">
@@ -26,12 +26,12 @@
 	</button>
 
 	<!-- FPS Control -->
-	<div class="flex items-center gap-2 rounded-xl bg-black/5 px-3 py-1 ring-1 ring-black/5">
+	<div class="flex items-center gap-2 rounded-xl bg-evergreen/5 px-3 py-1 ring-1 ring-evergreen/10">
 		<label
 			for="pace-input"
-			class="font-serif text-[11px] font-black tracking-tight text-studio-text/50 uppercase"
+			class="font-serif text-[11px] font-black tracking-tight text-evergreen/50 uppercase"
 		>
-			{__({ key: 'export.fps_label' })}
+			{__('common:export.fps_label')}
 		</label>
 		<input
 			id="pace-input"
@@ -39,30 +39,29 @@
 			bind:value={editor.project.fps}
 			min="1"
 			max="60"
-			class="w-10 bg-transparent text-center font-mono text-sm font-bold text-studio-text focus:outline-none"
+			class="w-10 bg-transparent text-center font-mono text-sm font-bold text-evergreen focus:outline-none"
 		/>
-		<span class="font-serif text-[10px] font-black text-studio-text/30" aria-hidden="true">FPS</span
-		>
+		<span class="font-serif text-[10px] font-black text-evergreen/30" aria-hidden="true">FPS</span>
 	</div>
 
 	<!-- Ghost Layers Toggle -->
 	<button
 		class="flex items-center gap-2 rounded-xl px-3 py-1.5 transition-all {editor.studio
 			.showGhostLayers
-			? 'bg-brand/10 text-brand ring-1 ring-brand/20'
-			: 'bg-black/5 opacity-40 shadow-sm hover:bg-white/60 hover:opacity-100'}"
+			? 'bg-lantern-gold/10 text-lantern-gold ring-1 ring-lantern-gold/20'
+			: 'bg-evergreen/5 opacity-40 shadow-sm hover:bg-white/60 hover:opacity-100'}"
 		onclick={() => (editor.studio.showGhostLayers = !editor.studio.showGhostLayers)}
-		title={__({ key: 'labels.TOGGLE_GHOST_LAYERS' }) + ' (Alt+G)'}
-		aria-label={__({ key: 'labels.TOGGLE_GHOST_LAYERS' })}
+		title={__('common:labels.TOGGLE_GHOST_LAYERS') + ' (Alt+G)'}
+		aria-label={__('common:labels.TOGGLE_GHOST_LAYERS')}
 	>
 		<span class="text-xs" aria-hidden="true">👻</span>
-		<span class="font-serif text-[11px] font-black tracking-wider text-studio-text/70 uppercase"
+		<span class="font-serif text-[11px] font-black tracking-wider text-evergreen/70 uppercase"
 			>Ghosts</span
 		>
 	</button>
 
 	<!-- Timeline Zoom -->
-	<div class="flex items-center gap-2 border-l border-black/5 pl-4">
+	<div class="flex items-center gap-2 border-l border-evergreen/10 pl-4">
 		<span class="text-xs opacity-40" aria-hidden="true">🔍</span>
 		<input
 			type="range"
@@ -73,7 +72,7 @@
 			class="editor-range w-20"
 			title="Timeline Zoom"
 		/>
-		<span class="w-8 font-mono text-[10px] font-bold text-studio-text/40"
+		<span class="w-8 font-mono text-[10px] font-bold text-evergreen/40"
 			>{Math.round(editor.studio.timelineZoom * 100)}%</span
 		>
 	</div>
@@ -83,7 +82,7 @@
 	.editor-range {
 		appearance: none;
 		height: 3px;
-		background: #eee8d5;
+		background: var(--color-stone-path);
 		border-radius: 10px;
 		outline: none;
 	}
@@ -92,7 +91,7 @@
 		appearance: none;
 		width: 12px;
 		height: 12px;
-		background: var(--color-brand);
+		background: var(--color-lantern-gold);
 		border: 2px solid white;
 		border-radius: 50%;
 		cursor: pointer;

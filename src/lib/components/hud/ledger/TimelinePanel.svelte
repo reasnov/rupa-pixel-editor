@@ -27,12 +27,12 @@
 	aria-label="Timeline"
 >
 	<!-- Panel Header -->
-	<div class="flex items-center justify-between border-b border-charcoal/5 pb-1">
+	<div class="flex items-center justify-between border-b border-evergreen/5 pb-1">
 		<div class="flex items-center gap-6">
 			<div class="flex items-center gap-2">
-				<span class="text-[10px] opacity-30" aria-hidden="true">⏳</span>
-				<span class="font-tiny5 text-[9px] tracking-[0.2em] text-charcoal/40 uppercase"
-					>{__({ key: 'timeline.title' })}</span
+				<span class="text-[10px] opacity-30" aria-hidden="true">🌀</span>
+				<span class="font-tiny5 text-[9px] tracking-[0.2em] text-evergreen/40 uppercase"
+					>{__('common:timeline.title')}</span
 				>
 			</div>
 
@@ -41,16 +41,16 @@
 
 		<div class="flex items-center gap-4">
 			<div class="mr-4 flex flex-col items-end">
-				<span class="font-serif text-[7px] font-black tracking-widest text-charcoal/20 uppercase">
-					{__({ key: 'timeline.track' })}
+				<span class="font-serif text-[7px] font-black tracking-widest text-evergreen/20 uppercase">
+					{__('common:timeline.track')}
 				</span>
-				<span class="font-mono text-[9px] font-bold text-brand/40">
-					{__({ key: 'timeline.frame_count', replace: { count: editor.project.frames.length } })}
+				<span class="font-mono text-[9px] font-bold text-lantern-gold/40">
+					{__('common:timeline.frame_count', { replace: { count: editor.project.frames.length } })}
 				</span>
 			</div>
 
 			<!-- Action Buttons -->
-			<div class="flex items-center gap-1 border-l border-charcoal/10 pl-4">
+			<div class="flex items-center gap-1 border-l border-evergreen/10 pl-4">
 				<button
 					onclick={toggleMinimize}
 					class="flex h-5 w-5 items-center justify-center rounded transition-colors hover:bg-black/5"

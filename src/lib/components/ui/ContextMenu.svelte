@@ -45,7 +45,7 @@
 <div
 	bind:this={menuEl}
 	transition:scale={{ duration: 100, start: 0.95, opacity: 0 }}
-	class="fixed z-[2000] min-w-[160px] overflow-hidden rounded-lg border border-charcoal/10 bg-foam-white/95 p-1 shadow-xl backdrop-blur-md"
+	class="fixed z-[2000] min-w-[160px] overflow-hidden rounded-lg border border-evergreen/10 bg-washi-white/95 p-1 shadow-xl backdrop-blur-md"
 	style="left: {adjustedX}px; top: {adjustedY}px;"
 	oncontextmenu={(e) => e.preventDefault()}
 	role="menu"
@@ -63,7 +63,7 @@
 				disabled={item.disabled}
 				class="flex w-full items-center justify-between rounded px-3 py-2 text-left transition-colors {item.danger
 					? 'text-red-600 hover:bg-red-50'
-					: 'text-charcoal hover:bg-brand/5'} {item.disabled
+					: 'text-evergreen hover:bg-lantern-gold/5'} {item.disabled
 					? 'cursor-not-allowed opacity-30 grayscale'
 					: ''}"
 			>

@@ -152,7 +152,9 @@
 		"preview_label": "Visual Sampling (Preview)",
 		"settings_label": "Craft Settings",
 		"wiggle_modifier": "Mist Intensity",
-		"sway_modifier": "Flow Sway"
+		"sway_modifier": "Flow Sway",
+		"file_label": "{{format}} Artifact",
+		"dimensions_label": "{{width}} x {{height}} pixels"
 	},
 	"palette_library": {
 		"title": "Pigment Library",

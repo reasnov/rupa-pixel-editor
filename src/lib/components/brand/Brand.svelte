@@ -13,14 +13,28 @@
 	let direction = $derived(size === 'sm' ? 'flex-row items-center' : 'flex-col items-center');
 </script>
 
-<div class="flex {direction} {current.gap} justify-center text-center select-none">
-	<h1 class="font-tiny5 leading-none text-brand {current.h1} tracking-tighter">Rupa</h1>
+<div class="relative flex {direction} {current.gap} justify-center text-center select-none">
+	<!-- VFX: Subtle Steam -->
+	<div class="absolute -top-4 left-1/2 -translate-x-1/2">
+		{#each Array.from({ length: 3 }) as _, i}
+			<div
+				class="pixel-steam"
+				style="
+					animation: steam-drift {2 + i}s infinite ease-out; 
+					animation-delay: {i * 0.8}s;
+					left: {i * 10 - 10}px;
+				"
+			></div>
+		{/each}
+	</div>
+
+	<h1 class="font-tiny5 leading-none text-fern-green {current.h1} tracking-tighter">Rupa</h1>
 
 	{#if size === 'sm'}
-		<div class="h-3 w-px bg-brand/20" aria-hidden="true"></div>
+		<div class="h-3 w-px bg-fern-green/20" aria-hidden="true"></div>
 	{/if}
 
-	<p class="font-serif font-bold tracking-[0.4em] text-charcoal/40 uppercase {current.p}">
-		The Barista's Café
+	<p class="font-serif font-bold tracking-[0.4em] text-evergreen/40 uppercase {current.p}">
+		The Rural Sanctuary
 	</p>
 </div>

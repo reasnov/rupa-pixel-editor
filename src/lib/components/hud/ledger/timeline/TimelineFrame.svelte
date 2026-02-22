@@ -56,8 +56,8 @@
 	style="width: {blockWidth}px;"
 >
 	<div
-		class="group relative h-full w-full cursor-pointer overflow-hidden rounded-md border border-black/10 transition-all {isActive
-			? 'border-brand bg-white shadow-lg ring-2 ring-brand/20'
+		class="group relative h-full w-full cursor-pointer overflow-hidden rounded-md border border-evergreen/10 transition-all {isActive
+			? 'border-lantern-gold bg-white shadow-lg ring-2 ring-lantern-gold/20'
 			: 'bg-white/60 hover:bg-white/90 hover:shadow-md'}"
 		onclick={() => (editor.project.activeFrameIndex = index)}
 		role="button"
@@ -66,20 +66,20 @@
 	>
 		<div
 			class="absolute inset-1 rounded-sm shadow-inner transition-colors {isActive
-				? 'bg-brand/10'
-				: 'bg-black/5'}"
+				? 'bg-lantern-gold/10'
+				: 'bg-evergreen/5'}"
 		></div>
 
 		<!-- Top Label: Index -->
 		<div
-			class="absolute top-1 left-1 flex h-4 min-w-4 items-center justify-center rounded-sm bg-black/40 px-1 backdrop-blur-sm"
+			class="absolute top-1 left-1 flex h-4 min-w-4 items-center justify-center rounded-sm bg-evergreen/40 px-1 backdrop-blur-sm"
 		>
 			<span class="font-mono text-[9px] font-black text-white">{index + 1}</span>
 		</div>
 
 		<!-- Duration Badge -->
 		<div
-			class="absolute right-1 bottom-1 rounded bg-white/80 px-1.5 py-0.5 font-mono text-[9px] font-bold text-black/50 shadow-sm"
+			class="absolute right-1 bottom-1 rounded bg-white/80 px-1.5 py-0.5 font-mono text-[9px] font-bold text-evergreen/50 shadow-sm"
 		>
 			{frame.duration}ms
 		</div>
@@ -88,11 +88,11 @@
 	<!-- Resize Handle -->
 	<!-- svelte-ignore a11y_no_static_element_interactions -->
 	<div
-		class="absolute top-0 right-0 bottom-0 z-30 w-2 cursor-col-resize rounded-r-md transition-colors hover:bg-brand/40 active:bg-brand"
+		class="absolute top-0 right-0 bottom-0 z-30 w-2 cursor-col-resize rounded-r-md transition-colors hover:bg-lantern-gold/40 active:bg-lantern-gold"
 		onmousedown={startResize}
 	>
 		<div
-			class="absolute top-1/2 left-1/2 h-6 w-0.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-black/10 group-hover:bg-white/60"
+			class="absolute top-1/2 left-1/2 h-6 w-0.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-evergreen/10 group-hover:bg-white/60"
 		></div>
 	</div>
 </div>

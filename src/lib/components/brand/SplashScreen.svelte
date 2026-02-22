@@ -23,7 +23,7 @@
 		visible = false;
 		setTimeout(() => {
 			editor.isAppReady = true;
-			editor.showGuideBook = true;
+			editor.showManual = true;
 		}, 800);
 	}
 
@@ -61,11 +61,11 @@
 		role="dialog"
 		aria-modal="true"
 		aria-busy={!isReadyToEnter}
-		aria-label={__({ key: 'manual.title' })}
+		aria-label={__('manual:title')}
 	>
 		<!-- Minimalist Neutral Glow -->
 		<div
-			class="absolute h-[500px] w-[500px] animate-pulse rounded-full bg-charcoal/5 blur-[120px]"
+			class="absolute h-[500px] w-[500px] animate-pulse rounded-full bg-deep-forest/5 blur-[120px]"
 			aria-hidden="true"
 		></div>
 
@@ -92,27 +92,25 @@
 			<!-- Professional Neutral Progress Bar -->
 			<div class="flex flex-col items-center gap-4">
 				<div
-					class="h-1 w-48 overflow-hidden rounded-full bg-charcoal/5 ring-1 ring-charcoal/10"
+					class="h-1 w-48 overflow-hidden rounded-full bg-deep-forest/5 ring-1 ring-deep-forest/10"
 					role="progressbar"
 					aria-valuenow={progress}
 					aria-valuemin="0"
 					aria-valuemax="100"
 				>
 					<div
-						class="h-full bg-charcoal/20 transition-all duration-500 ease-out {isReadyToEnter
-							? 'bg-brand/40'
+						class="h-full bg-fern-green/40 transition-all duration-500 ease-out {isReadyToEnter
+							? 'bg-lantern-gold/60'
 							: ''}"
 						style="width: {progress}%"
 					></div>
 				</div>
 				<div class="flex flex-col items-center gap-1 text-center">
-					<span class="h-4 font-serif text-[11px] tracking-wide text-charcoal/60 italic">
-						{isReadyToEnter
-							? __({ key: 'splash.welcome' })
-							: __({ key: `splash.phases.${phaseIndex}` })}
+					<span class="h-4 font-serif text-[11px] tracking-wide text-evergreen/80 italic">
+						{isReadyToEnter ? __('splash:welcome') : __(`splash:phases.${phaseIndex}`)}
 					</span>
-					<span class="font-mono text-[8px] font-bold tracking-[0.3em] text-charcoal/20 uppercase">
-						{__({ key: 'splash.version', replace: { version: editor.version } })}
+					<span class="font-mono text-[8px] font-bold tracking-[0.3em] text-evergreen/40 uppercase">
+						{__('splash:version', { replace: { version: editor.version } })}
 					</span>
 				</div>
 			</div>

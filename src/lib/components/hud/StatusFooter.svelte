@@ -4,7 +4,7 @@
 	import TimelinePanel from './ledger/TimelinePanel.svelte';
 </script>
 
-<footer class="hud-panel flex w-full flex-col border-t border-charcoal/10 bg-foam-white p-1">
+<footer class="hud-panel flex w-full flex-col border-t border-evergreen/10 bg-washi-white p-1">
 	<TimelinePanel />
 
 	<div class="flex h-7 w-full items-center justify-between px-4">
@@ -18,8 +18,8 @@
 
 <style>
 	footer {
-		/* Specific footer override for the neutral theme */
-		background-color: var(--color-foam-white);
-		border-top: 1px solid var(--color-stone-medium);
+		/* Specific footer override for the Rural Sanctuary theme */
+		background-color: var(--color-washi-white);
+		border-top: 1px solid var(--color-stone-path);
 	}
 </style>

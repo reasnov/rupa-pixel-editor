@@ -13,16 +13,16 @@
 >
 	<div class="flex items-center gap-4">
 		<ChordIndicator />
-		<div class="h-3 w-px bg-charcoal/20"></div>
+		<div class="h-3 w-px bg-evergreen/20"></div>
 		<ModeIndicator />
-		<div class="h-3 w-px bg-charcoal/20"></div>
+		<div class="h-3 w-px bg-evergreen/20"></div>
 
 		<div class="flex items-center gap-3">
 			<EtchingIndicator />
-			<div class="h-3 w-px bg-charcoal/20"></div>
+			<div class="h-3 w-px bg-evergreen/20"></div>
 			<SessionTimer />
 			<AtmosphereIndicator />
-			<div class="h-3 w-px bg-charcoal/20"></div>
+			<div class="h-3 w-px bg-evergreen/20"></div>
 			<SelectionInfo />
 		</div>
 	</div>

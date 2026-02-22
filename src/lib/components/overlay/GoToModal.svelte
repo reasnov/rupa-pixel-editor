@@ -33,12 +33,12 @@
 	width="400px"
 >
 	<div class="flex flex-col gap-8" role="form">
-		<div class="flex flex-col gap-6 rounded-xl border border-black/5 bg-white/40 p-8">
+		<div class="flex flex-col gap-6 rounded-xl border border-evergreen/5 bg-white/40 p-8">
 			<div class="grid grid-cols-2 gap-8">
 				<div class="flex flex-col gap-2">
 					<label
 						for="goto-x"
-						class="font-serif text-[10px] font-bold tracking-widest text-studio-text/40 uppercase"
+						class="font-serif text-[10px] font-bold tracking-widest text-evergreen/40 uppercase"
 					>
 						{__({ key: 'goto.label_x' })}
 					</label>
@@ -47,13 +47,13 @@
 						type="number"
 						bind:value={targetX}
 						onkeydown={handleKey}
-						class="rounded-xl border border-black/10 bg-white px-4 py-3 font-mono text-xl text-studio-text focus:border-brand focus:outline-none"
+						class="rounded-xl border border-evergreen/10 bg-white px-4 py-3 font-mono text-xl text-evergreen focus:border-lantern-gold focus:outline-none"
 					/>
 				</div>
 				<div class="flex flex-col gap-2">
 					<label
 						for="goto-y"
-						class="font-serif text-[10px] font-bold tracking-widest text-studio-text/40 uppercase"
+						class="font-serif text-[10px] font-bold tracking-widest text-evergreen/40 uppercase"
 					>
 						{__({ key: 'goto.label_y' })}
 					</label>
@@ -62,11 +62,11 @@
 						type="number"
 						bind:value={targetY}
 						onkeydown={handleKey}
-						class="rounded-xl border border-black/10 bg-white px-4 py-3 font-mono text-xl text-studio-text focus:border-brand focus:outline-none"
+						class="rounded-xl border border-evergreen/10 bg-white px-4 py-3 font-mono text-xl text-evergreen focus:border-lantern-gold focus:outline-none"
 					/>
 				</div>
 			</div>
-			<p class="font-serif text-[10px] leading-relaxed text-studio-text/40 italic">
+			<p class="font-serif text-[10px] leading-relaxed text-evergreen/40 italic">
 				{__({
 					key: 'goto.current',
 					replace: { x: editor.displayCoords.x, y: editor.displayCoords.y }

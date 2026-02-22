@@ -26,7 +26,7 @@
 		const frames = editor.project.frames;
 		const results = [];
 
-		// Past Echoes (1 to 3 cups back) - Tinted Blue
+		// Past Echoes (1 to 3 cups back) - Tinted Cool Mist
 		for (let i = 1; i <= 3; i++) {
 			const idx = activeIdx - i;
 			if (idx >= 0) {
@@ -34,12 +34,12 @@
 					id: `past-${idx}`,
 					pixels: frames[idx].compositePixels,
 					opacity: 0.4 / i,
-					tint: '#268bd2'
+					tint: '#8d99ae'
 				});
 			}
 		}
 
-		// Future Echoes (1 to 3 cups forward) - Tinted Green
+		// Future Echoes (1 to 3 cups forward) - Tinted Sage Leaf
 		for (let i = 1; i <= 3; i++) {
 			const idx = activeIdx + i;
 			if (idx < frames.length) {
@@ -47,7 +47,7 @@
 					id: `future-${idx}`,
 					pixels: frames[idx].compositePixels,
 					opacity: 0.4 / i,
-					tint: '#859900'
+					tint: '#a3b18a'
 				});
 			}
 		}
@@ -108,22 +108,24 @@
 >
 	<!-- Corner Piece -->
 	<div
-		class="z-[110] border-r border-b border-charcoal/10 bg-foam-white/90 backdrop-blur-md"
+		class="z-[110] border-r border-b border-evergreen/10 bg-washi-white/90 backdrop-blur-md"
 		aria-hidden="true"
 	></div>
 
 	<!-- Top Ruler -->
-	<div class="relative z-[100] border-b border-charcoal/10">
+	<div class="relative z-[100] border-b border-evergreen/10">
 		<CanvasRuler orientation="horizontal" />
 	</div>
 
 	<!-- Left Ruler -->
-	<div class="relative z-[100] border-r border-charcoal/10">
+	<div class="relative z-[100] border-r border-evergreen/10">
 		<CanvasRuler orientation="vertical" />
 	</div>
 
 	<!-- The Main Working Area -->
-	<div class="relative flex flex-1 items-center justify-center overflow-hidden bg-charcoal/[0.02]">
+	<div
+		class="relative flex flex-1 items-center justify-center overflow-hidden bg-deep-forest/[0.02]"
+	>
 		{#if showTiling}
 			<!-- Tiled Preview (3x3 grid) - Using CSS repeat for performance -->
 			<div
@@ -151,7 +153,7 @@
 		>
 			<div
 				bind:this={gridEl}
-				class="relative h-full w-full shadow-[0_20px_60px_rgba(0,0,0,0.12)] ring-1 ring-charcoal/5 outline-none focus:ring-2 focus:ring-brand"
+				class="relative h-full w-full shadow-[0_20px_60px_rgba(0,0,0,0.12)] ring-1 ring-evergreen/5 outline-none focus:ring-2 focus:ring-fern-green"
 				style="
 										background-color: {editor.backgroundColor};
 										touch-action: none;
@@ -230,7 +232,7 @@
 								width={rw}
 								height={rh}
 								fill="none"
-								stroke="var(--color-brand)"
+								stroke="var(--color-fern-green)"
 								stroke-width="0.1"
 								stroke-dasharray="0.2, 0.2"
 								class="marching-ants"
@@ -242,7 +244,7 @@
 								rx={rw / 2}
 								ry={rh / 2}
 								fill="none"
-								stroke="var(--color-brand)"
+								stroke="var(--color-fern-green)"
 								stroke-width="0.1"
 								stroke-dasharray="0.2, 0.2"
 								class="marching-ants"
@@ -264,7 +266,7 @@
 							<polyline
 								points={polyPoints.join(' ')}
 								fill="none"
-								stroke="var(--color-brand)"
+								stroke="var(--color-fern-green)"
 								stroke-width="0.1"
 								stroke-dasharray="0.2, 0.2"
 								class="marching-ants"
@@ -297,7 +299,7 @@
 											: r)}
 								x2={xc + 0.5 + Math.cos(-Math.PI / 2) * r}
 								y2={yc + 0.5 + Math.sin(-Math.PI / 2) * r}
-								stroke="var(--color-brand)"
+								stroke="var(--color-fern-green)"
 								stroke-width="0.1"
 								stroke-dasharray="0.2, 0.2"
 								class="marching-ants"

@@ -6,11 +6,11 @@
 	const studio = editor.studio;
 </script>
 
-<div class="flex items-center gap-3 font-serif text-[10px] tracking-wide text-charcoal/60">
+<div class="flex items-center gap-3 font-serif text-[10px] tracking-wide text-evergreen/60">
 	<!-- Brush Size & Shape -->
-	<div class="flex items-center gap-1" title={__({ key: 'labels.BRUSH_SIZE_INC' })}>
-		<span class="text-[8px] uppercase opacity-40">{__({ key: 'shortcut_groups.etching' })}</span>
-		<span class="font-bold text-brand">{studio.brushSize}px</span>
+	<div class="flex items-center gap-1" title={__('common:labels.BRUSH_SIZE_INC')}>
+		<span class="text-[8px] uppercase opacity-40">{__('shortcuts:groups.etching')}</span>
+		<span class="font-bold text-lantern-gold">{studio.brushSize}px</span>
 		<span class="opacity-40">{studio.brushShape === 'SQUARE' ? '■' : '●'}</span>
 	</div>
 
@@ -18,8 +18,8 @@
 	{#if studio.symmetryMode !== 'OFF'}
 		<div
 			transition:fade
-			class="flex items-center gap-1 rounded-sm bg-brand/5 px-1.5 py-0.5 text-brand"
-			title={__({ key: 'labels.CYCLE_SYMMETRY' })}
+			class="flex items-center gap-1 rounded-sm bg-lantern-gold/5 px-1.5 py-0.5 text-lantern-gold"
+			title={__('common:labels.CYCLE_SYMMETRY')}
 		>
 			<span class="text-[8px] font-bold">SYM:</span>
 			<span class="font-black">
@@ -32,12 +32,12 @@
 
 	<!-- Locks -->
 	{#if studio.isAlphaLocked || studio.isColorLocked}
-		<div transition:fade class="flex items-center gap-1 text-brand">
+		<div transition:fade class="flex items-center gap-1 text-lantern-gold">
 			{#if studio.isAlphaLocked}
-				<span title={__({ key: 'labels.TOGGLE_ALPHA_LOCK' })}>🔒A</span>
+				<span title={__('common:labels.TOGGLE_ALPHA_LOCK')}>🔒A</span>
 			{/if}
 			{#if studio.isColorLocked}
-				<span title={__({ key: 'labels.TOGGLE_COLOR_LOCK' })}>🔒C</span>
+				<span title={__('common:labels.TOGGLE_COLOR_LOCK')}>🔒C</span>
 			{/if}
 		</div>
 	{/if}
@@ -46,8 +46,8 @@
 	{#if studio.isTilingEnabled}
 		<div
 			transition:fade
-			class="flex items-center gap-1 rounded-sm bg-brand/10 px-1.5 py-0.5 font-bold text-brand"
-			title={__({ key: 'labels.TOGGLE_TILING' })}
+			class="flex items-center gap-1 rounded-sm bg-lantern-gold/10 px-1.5 py-0.5 font-bold text-lantern-gold"
+			title={__('common:labels.TOGGLE_TILING')}
 		>
 			∞
 		</div>
@@ -57,8 +57,8 @@
 	{#if studio.isAirbrushActive}
 		<div
 			transition:fade
-			class="flex items-center gap-1 rounded-sm bg-brand/10 px-1.5 py-0.5 font-bold text-brand"
-			title={__({ key: 'labels.TOGGLE_AIRBRUSH' })}
+			class="flex items-center gap-1 rounded-sm bg-lantern-gold/10 px-1.5 py-0.5 font-bold text-lantern-gold"
+			title={__('common:labels.TOGGLE_AIRBRUSH')}
 		>
 			☁️ MIST
 		</div>
@@ -68,8 +68,8 @@
 	{#if studio.isPixelPerfect}
 		<div
 			transition:fade
-			class="bg-green-leaves/10 text-green-leaves flex items-center gap-1 rounded-sm px-1.5 py-0.5 font-bold"
-			title={__({ key: 'labels.TOGGLE_PIXEL_PERFECT' })}
+			class="flex items-center gap-1 rounded-sm bg-fern-green/10 px-1.5 py-0.5 font-bold text-fern-green"
+			title={__('common:labels.TOGGLE_PIXEL_PERFECT')}
 		>
 			✨ PURE
 		</div>
@@ -79,10 +79,10 @@
 	{#if studio.isTransforming}
 		<div
 			transition:fade
-			class="flex animate-pulse items-center gap-1 rounded-sm bg-brand/20 px-1.5 py-0.5 font-bold text-brand"
-			title={__({ key: 'labels.TOOL_TRANSFORM' })}
+			class="flex animate-pulse items-center gap-1 rounded-sm bg-lantern-gold/20 px-1.5 py-0.5 font-bold text-lantern-gold"
+			title={__('common:labels.TOOL_TRANSFORM')}
 		>
-			🚚 MOVING
+			🧺 MOVING
 		</div>
 	{/if}
 
@@ -90,8 +90,8 @@
 	{#if studio.isPatternBrushActive}
 		<div
 			transition:fade
-			class="flex items-center gap-1 rounded-sm bg-brand/10 px-1.5 py-0.5 font-bold text-brand"
-			title={__({ key: 'labels.TOGGLE_PATTERN_BRUSH' })}
+			class="flex items-center gap-1 rounded-sm bg-lantern-gold/10 px-1.5 py-0.5 font-bold text-lantern-gold"
+			title={__('common:labels.TOGGLE_PATTERN_BRUSH')}
 		>
 			🎨 STENCIL
 		</div>
@@ -101,10 +101,10 @@
 	{#if studio.isDitherBlendActive}
 		<div
 			transition:fade
-			class="flex items-center gap-1 rounded-sm bg-brand/10 px-1.5 py-0.5 font-bold text-brand"
-			title={__({ key: 'labels.TOGGLE_DITHER_BLEND' })}
+			class="flex items-center gap-1 rounded-sm bg-lantern-gold/10 px-1.5 py-0.5 font-bold text-lantern-gold"
+			title={__('common:labels.TOGGLE_DITHER_BLEND')}
 		>
-			🍷 BLEND ({studio.brushHardness}%)
+			🌿 BLEND ({studio.brushHardness}%)
 		</div>
 	{/if}
 
@@ -112,8 +112,8 @@
 	{#if studio.activeTool === 'RECTANGLE'}
 		<div
 			transition:fade
-			class="flex items-center gap-1 rounded-sm bg-brand/10 px-1.5 py-0.5 font-bold text-brand"
-			title={__({ key: 'labels.TOOL_RECTANGLE' })}
+			class="flex items-center gap-1 rounded-sm bg-lantern-gold/10 px-1.5 py-0.5 font-bold text-lantern-gold"
+			title={__('common:labels.TOOL_RECTANGLE')}
 		>
 			📦 BOX
 		</div>
@@ -122,8 +122,8 @@
 	{#if studio.activeTool === 'ELLIPSE'}
 		<div
 			transition:fade
-			class="flex items-center gap-1 rounded-sm bg-brand/10 px-1.5 py-0.5 font-bold text-brand"
-			title={__({ key: 'labels.TOOL_ELLIPSE' })}
+			class="flex items-center gap-1 rounded-sm bg-lantern-gold/10 px-1.5 py-0.5 font-bold text-lantern-gold"
+			title={__('common:labels.TOOL_ELLIPSE')}
 		>
 			⭕ ROUND
 		</div>
@@ -132,8 +132,8 @@
 	{#if studio.activeTool === 'POLYGON'}
 		<div
 			transition:fade
-			class="flex items-center gap-1 rounded-sm bg-brand/10 px-1.5 py-0.5 font-bold text-brand"
-			title={__({ key: 'labels.TOOL_POLYGON' })}
+			class="flex items-center gap-1 rounded-sm bg-lantern-gold/10 px-1.5 py-0.5 font-bold text-lantern-gold"
+			title={__('common:labels.TOOL_POLYGON')}
 		>
 			⭐ POLY ({studio.polygonSides})
 		</div>
@@ -143,8 +143,8 @@
 	{#if studio.isShadingLighten}
 		<div
 			transition:fade
-			class="flex items-center gap-1 rounded-sm bg-brand/10 px-1.5 py-0.5 font-bold text-brand"
-			title={__({ key: 'labels.TOGGLE_SHADE_LIGHTEN' })}
+			class="flex items-center gap-1 rounded-sm bg-lantern-gold/10 px-1.5 py-0.5 font-bold text-lantern-gold"
+			title={__('common:labels.TOGGLE_SHADE_LIGHTEN')}
 		>
 			☀️ LIGHT
 		</div>
@@ -152,8 +152,8 @@
 	{#if studio.isShadingDarken}
 		<div
 			transition:fade
-			class="flex items-center gap-1 rounded-sm bg-brand/10 px-1.5 py-0.5 font-bold text-brand"
-			title={__({ key: 'labels.TOGGLE_SHADE_DARKEN' })}
+			class="flex items-center gap-1 rounded-sm bg-lantern-gold/10 px-1.5 py-0.5 font-bold text-lantern-gold"
+			title={__('common:labels.TOGGLE_SHADE_DARKEN')}
 		>
 			🌙 DARK
 		</div>
@@ -161,8 +161,8 @@
 	{#if studio.isShadingDither}
 		<div
 			transition:fade
-			class="flex items-center gap-1 rounded-sm bg-brand/10 px-1.5 py-0.5 font-bold text-brand"
-			title={__({ key: 'labels.TOGGLE_SHADE_DITHER' })}
+			class="flex items-center gap-1 rounded-sm bg-lantern-gold/10 px-1.5 py-0.5 font-bold text-lantern-gold"
+			title={__('common:labels.TOGGLE_SHADE_DITHER')}
 		>
 			🏁 DITHER
 		</div>

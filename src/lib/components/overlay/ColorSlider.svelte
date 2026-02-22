@@ -47,7 +47,7 @@
 		appearance: none;
 		width: 100%;
 		height: 10px;
-		background: #eee8d5;
+		background: var(--color-stone-path);
 		border-radius: 5px;
 		outline: none;
 		border: 1px solid rgba(0, 0, 0, 0.05);
@@ -58,7 +58,7 @@
 		width: 24px;
 		height: 24px;
 		background: #fff;
-		border: 3px solid var(--color-brand);
+		border: 3px solid var(--color-lantern-gold);
 		border-radius: 8px;
 		cursor: pointer;
 		box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);

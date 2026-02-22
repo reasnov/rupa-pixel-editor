@@ -2,6 +2,7 @@
 	import { __ } from '$lib/state/i18n.svelte.js';
 	import { editor } from '../../state/editor.svelte.js';
 	import { services } from '../../engine/services.js';
+	import { sfx } from '../../engine/audio.js';
 	import { fade } from 'svelte/transition';
 	import PropertiesPanel from './layering/PropertiesPanel.svelte';
 
@@ -16,8 +17,15 @@
 	let activePropertiesType = $state<'layer' | 'frame' | null>(null);
 	let activePropertiesIndex = $state<number | null>(null);
 
+	function setTab(tab: 'frames' | 'layers') {
+		if (editor.studio.projectActiveTab === tab) return;
+		sfx.playPaperFlip();
+		editor.studio.projectActiveTab = tab;
+	}
+
 	function toggleProperties(type: 'layer' | 'frame', index: number, event: MouseEvent) {
 		event.stopPropagation();
+		sfx.playPaperFlip();
 		if (activePropertiesType === type && activePropertiesIndex === index) {
 			activePropertiesType = null;
 			activePropertiesIndex = null;
@@ -139,13 +147,22 @@
 				{
 					label: isMulti
 						? `Duplicate ${project.selectedFrameIndices.size} Cups`
-						: __({ key: 'hud.actions.duplicate' }),
+						: __('common:hud.actions.duplicate'),
 					icon: '📋',
 					action: () => {
 						// Logic for multi-duplicate if needed
 						services.project.duplicateFrame(index);
 					}
 				},
+				...(isMulti
+					? [
+							{
+								label: __('common:labels.MERGE_FRAMES'),
+								icon: '🍵',
+								action: () => services.project.mergeFrames()
+							}
+						]
+					: []),
 				{
 					label: 'Add Flavor Tag',
 					icon: '🏷️',
@@ -160,7 +177,7 @@
 				{
 					label: isMulti
 						? `Spill ${project.selectedFrameIndices.size} Cups`
-						: __({ key: 'hud.actions.delete' }),
+						: __('common:hud.actions.delete'),
 					icon: '🗑️',
 					danger: true,
 					disabled: project.frames.length <= project.selectedFrameIndices.size,
@@ -209,10 +226,21 @@
 				{
 					label: isMulti
 						? `Duplicate ${frame.selectedLayerIndices.size} Infusions`
-						: __({ key: 'hud.actions.duplicate' }),
+						: __('common:hud.actions.duplicate'),
 					icon: '📋',
 					disabled: isMulti, // Keep it simple for now
 					action: () => services.project.duplicateLayer(index)
+				},
+				{
+					label: isMulti
+						? __('common:labels.MERGE_SELECTED_LAYERS')
+						: __('common:labels.MERGE_LAYERS'),
+					icon: '🎨',
+					disabled: !isMulti && index === 0, // Cannot merge down from bottom
+					action: () => {
+						if (isMulti) services.project.mergeSelectedLayers();
+						else services.project.mergeLayerDown();
+					}
 				},
 				{
 					label: isMulti
@@ -241,7 +269,7 @@
 					}
 				},
 				{
-					label: __({ key: 'hud.actions.delete' }),
+					label: __('common:hud.actions.delete'),
 					icon: '🗑️',
 					danger: true,
 					disabled: frame.layers.length <= frame.selectedLayerIndices.size,
@@ -262,32 +290,32 @@
 	aria-label="Project Explorer"
 >
 	<!-- Minimalist Tab Switcher -->
-	<div class="flex border-b border-charcoal/10 bg-charcoal/5 p-1" role="tablist">
+	<div class="flex border-b border-evergreen/10 bg-evergreen/5 p-1" role="tablist">
 		<button
-			onclick={() => (editor.studio.projectActiveTab = 'frames')}
+			onclick={() => setTab('frames')}
 			role="tab"
 			aria-selected={editor.studio.projectActiveTab === 'frames'}
-			title={__({ key: 'labels.TAB_TIMELINE' }) + ' (Alt+1)'}
+			title={__('common:labels.TAB_TIMELINE') + ' (Alt+1)'}
 			class="flex flex-1 items-center justify-center gap-2 py-2 text-[10px] font-bold tracking-widest uppercase transition-all {editor
 				.studio.projectActiveTab === 'frames'
-				? 'rounded bg-foam-white text-brand shadow-sm'
-				: 'text-charcoal opacity-40 hover:opacity-60'}"
+				? 'rounded bg-washi-white text-lantern-gold shadow-sm'
+				: 'text-evergreen opacity-40 hover:opacity-60'}"
 		>
-			<span aria-hidden="true">🖼️</span>
-			{__({ key: 'hud.project_panel.frames' })}
+			<span aria-hidden="true">📜</span>
+			{__('common:hud.project_panel.frames')}
 		</button>
 		<button
-			onclick={() => (editor.studio.projectActiveTab = 'layers')}
+			onclick={() => setTab('layers')}
 			role="tab"
 			aria-selected={editor.studio.projectActiveTab === 'layers'}
-			title={__({ key: 'labels.TAB_LAYERS' }) + ' (Alt+2)'}
+			title={__('common:labels.TAB_LAYERS') + ' (Alt+2)'}
 			class="flex flex-1 items-center justify-center gap-2 py-2 text-[10px] font-bold tracking-widest uppercase transition-all {editor
 				.studio.projectActiveTab === 'layers'
-				? 'rounded bg-foam-white text-brand shadow-sm'
-				: 'text-charcoal opacity-40 hover:opacity-60'}"
+				? 'rounded bg-washi-white text-lantern-gold shadow-sm'
+				: 'text-evergreen opacity-40 hover:opacity-60'}"
 		>
 			<span aria-hidden="true">🧵</span>
-			{__({ key: 'hud.project_panel.layers' })}
+			{__('common:hud.project_panel.layers')}
 		</button>
 	</div>
 
@@ -319,11 +347,11 @@
 						class="group flex cursor-grab items-center justify-between rounded px-2 transition-all {editor.project.selectedFrameIndices.has(
 							i
 						)
-							? 'bg-brand/10 text-brand ring-1 ring-brand/20'
-							: 'hover:bg-charcoal/5'} {i === editor.project.activeFrameIndex
-							? 'bg-brand/5 font-bold'
+							? 'bg-lantern-gold/10 text-lantern-gold ring-1 ring-lantern-gold/20'
+							: 'hover:bg-evergreen/5'} {i === editor.project.activeFrameIndex
+							? 'bg-lantern-gold/5 font-bold'
 							: ''} {dropTargetIndex === i && draggedIndex !== i
-							? 'shadow-[0_-2px_0_var(--color-brand)]'
+							? 'shadow-[0_-2px_0_var(--color-lantern-gold)]'
 							: ''} {draggedIndex === i ? 'opacity-40' : ''}"
 						aria-current={i === editor.project.activeFrameIndex ? 'true' : undefined}
 					>
@@ -343,7 +371,7 @@
 								{frame.isVisible ? '👁️' : '🕶️'}
 							</button>
 							<button
-								class="flex-1 truncate py-2 text-left font-serif text-sm font-medium text-charcoal {frame.isVisible
+								class="flex-1 truncate py-2 text-left font-serif text-sm font-medium text-evergreen {frame.isVisible
 									? ''
 									: 'opacity-40'}"
 								onclick={(e) => selectFrame(i, e)}
@@ -353,9 +381,10 @@
 									<input
 										type="text"
 										bind:value={tempName}
-										class="w-full bg-brand/5 font-serif text-sm font-medium text-brand ring-1 ring-brand/30 outline-none"
+										class="w-full bg-lantern-gold/5 font-serif text-sm font-medium text-lantern-gold ring-1 ring-lantern-gold/30 outline-none"
 										onblur={commitRename}
 										onkeydown={(e) => {
+											e.stopPropagation();
 											if (e.key === 'Enter') commitRename();
 											if (e.key === 'Escape') editingIndex = null;
 										}}
@@ -369,7 +398,7 @@
 						<div class="flex items-center gap-2">
 							<button
 								onclick={(e) => toggleProperties('frame', i, e)}
-								class="text-[10px] opacity-0 transition-opacity group-hover:opacity-40 hover:text-brand"
+								class="hover:text-brand text-[10px] opacity-0 transition-opacity group-hover:opacity-40"
 								title="Cup Properties"
 							>
 								{activePropertiesType === 'frame' && activePropertiesIndex === i ? '🔼' : '⚙️'}
@@ -379,8 +408,8 @@
 									e.stopPropagation();
 									services.project.duplicateFrame(i);
 								}}
-								class="text-[10px] opacity-0 transition-opacity group-hover:opacity-40 hover:text-brand"
-								title={__({ key: 'hud.actions.duplicate' })}
+								class="hover:text-brand text-[10px] opacity-0 transition-opacity group-hover:opacity-40"
+								title={__('common:hud.actions.duplicate')}
 							>
 								📋
 							</button>
@@ -390,8 +419,8 @@
 										e.stopPropagation();
 										services.project.removeFrame(i);
 									}}
-									class="text-[10px] opacity-0 transition-opacity group-hover:opacity-40 hover:text-brand"
-									title={__({ key: 'hud.actions.delete' })}
+									class="hover:text-brand text-[10px] opacity-0 transition-opacity group-hover:opacity-40"
+									title={__('common:hud.actions.delete')}
 								>
 									🗑️
 								</button>
@@ -429,11 +458,11 @@
 							class="group flex cursor-grab items-center justify-between rounded px-2 transition-all {editor.project.activeFrame.selectedLayerIndices.has(
 								i
 							)
-								? 'bg-brand/10 text-brand ring-1 ring-brand/20'
-								: 'hover:bg-charcoal/5'} {i === editor.project.activeFrame.activeLayerIndex
-								? 'bg-brand/5 font-bold'
+								? 'bg-lantern-gold/10 text-lantern-gold ring-1 ring-lantern-gold/20'
+								: 'hover:bg-evergreen/5'} {i === editor.project.activeFrame.activeLayerIndex
+								? 'bg-lantern-gold/5 font-bold'
 								: ''} {dropTargetIndex === i && draggedIndex !== i
-								? 'shadow-[0_-2px_0_var(--color-brand)]'
+								? 'shadow-[0_-2px_0_var(--color-lantern-gold)]'
 								: ''} {draggedIndex === i ? 'opacity-40' : ''}"
 							style={isChild ? 'margin-left: 12px;' : ''}
 							aria-current={i === editor.project.activeFrame.activeLayerIndex ? 'true' : undefined}
@@ -460,7 +489,7 @@
 									class="text-xs transition-opacity {layer.isVisible
 										? 'opacity-100'
 										: 'opacity-20'}"
-									title={__({ key: 'hud.project_panel.visibility' })}
+									title={__('common:hud.project_panel.visibility')}
 								>
 									{layer.isVisible
 										? layer.type === 'FOLDER'
@@ -471,7 +500,7 @@
 											: '🕶️'}
 								</button>
 								<button
-									class="flex-1 truncate py-2 text-left font-serif text-sm font-medium text-charcoal {layer.isVisible
+									class="flex-1 truncate py-2 text-left font-serif text-sm font-medium text-evergreen {layer.isVisible
 										? ''
 										: 'opacity-40'}"
 									onclick={(e) => selectLayer(i, e)}
@@ -481,9 +510,10 @@
 										<input
 											type="text"
 											bind:value={tempName}
-											class="w-full bg-brand/5 font-serif text-sm font-medium text-brand ring-1 ring-brand/30 outline-none"
+											class="w-full bg-lantern-gold/5 font-serif text-sm font-medium text-lantern-gold ring-1 ring-lantern-gold/30 outline-none"
 											onblur={commitRename}
 											onkeydown={(e) => {
+												e.stopPropagation();
 												if (e.key === 'Enter') commitRename();
 												if (e.key === 'Escape') editingIndex = null;
 											}}
@@ -497,7 +527,7 @@
 							<div class="flex items-center gap-2">
 								<button
 									onclick={(e) => toggleProperties('layer', i, e)}
-									class="text-[10px] opacity-0 transition-opacity group-hover:opacity-40 hover:text-brand"
+									class="hover:text-brand text-[10px] opacity-0 transition-opacity group-hover:opacity-40"
 									title="Infusion Properties"
 								>
 									{activePropertiesType === 'layer' && activePropertiesIndex === i ? '🔼' : '⚙️'}
@@ -510,7 +540,7 @@
 									class="text-[10px] transition-opacity {layer.isLocked
 										? 'opacity-100'
 										: 'opacity-20'}"
-									title={__({ key: 'hud.project_panel.lock' })}
+									title={__('common:hud.project_panel.lock')}
 								>
 									{layer.isLocked ? '🔒' : '🔓'}
 								</button>
@@ -519,8 +549,8 @@
 										e.stopPropagation();
 										services.project.removeLayer(i);
 									}}
-									class="text-[10px] opacity-0 transition-opacity group-hover:opacity-40 hover:text-brand"
-									title={__({ key: 'hud.actions.delete' })}
+									class="hover:text-brand text-[10px] opacity-0 transition-opacity group-hover:opacity-40"
+									title={__('common:hud.actions.delete')}
 								>
 									🗑️
 								</button>
@@ -538,32 +568,34 @@
 	</div>
 
 	<!-- Simplified Footer -->
-	<div class="flex items-center justify-between border-t border-charcoal/5 bg-charcoal/5 px-4 py-2">
+	<div
+		class="flex items-center justify-between border-t border-evergreen/5 bg-evergreen/5 px-4 py-2"
+	>
 		<div class="flex items-center gap-3">
 			<button
 				onclick={() => {
 					if (editor.studio.projectActiveTab === 'frames') services.project.addFrame();
 					else services.project.addLayer();
 				}}
-				class="flex items-center gap-1 font-serif text-[9px] font-bold tracking-[0.1em] text-charcoal/40 uppercase hover:text-charcoal/80"
+				class="flex items-center gap-1 font-serif text-[9px] font-bold tracking-[0.1em] text-evergreen/40 uppercase hover:text-evergreen/80"
 			>
 				<span aria-hidden="true">＋</span>
 				{editor.studio.projectActiveTab === 'frames'
-					? __({ key: 'hud.actions.add_frame' })
-					: __({ key: 'hud.actions.add_layer' })}
+					? __('common:hud.actions.add_frame')
+					: __('common:hud.actions.add_layer')}
 			</button>
 
 			{#if editor.studio.projectActiveTab === 'layers'}
 				<button
 					onclick={() => services.project.addGroup()}
-					class="flex items-center gap-1 font-serif text-[9px] font-bold tracking-[0.1em] text-charcoal/40 uppercase hover:text-charcoal/80"
+					class="flex items-center gap-1 font-serif text-[9px] font-bold tracking-[0.1em] text-evergreen/40 uppercase hover:text-evergreen/80"
 				>
 					<span aria-hidden="true">📁</span>
 					Group
 				</button>
 			{/if}
 		</div>
-		<span class="font-mono text-[8px] font-bold text-charcoal/20 uppercase">
+		<span class="font-mono text-[8px] font-bold text-evergreen/20 uppercase">
 			{editor.studio.projectActiveTab === 'frames'
 				? editor.project.frames.length
 				: editor.project.activeFrame.layers.length}

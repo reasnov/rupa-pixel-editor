@@ -17,13 +17,13 @@
 	import ColorPicker from '$lib/components/overlay/ColorPicker.svelte';
 	import CommandPalette from '$lib/components/overlay/CommandPalette.svelte';
 	import ExportMenu from '$lib/components/overlay/ExportMenu.svelte';
-	import GuideMenu from '$lib/components/overlay/GuideMenu.svelte';
+	import GuideMenu from '$lib/components/overlay/Shortcuts.svelte';
 	import PersistenceMenu from '$lib/components/overlay/PersistenceMenu.svelte';
 	import CanvasSettings from '$lib/components/overlay/CanvasSettings.svelte';
 	import PaletteLibrary from '$lib/components/overlay/PaletteLibrary.svelte';
 	import GoToModal from '$lib/components/overlay/GoToModal.svelte';
 	import AudioSettings from '$lib/components/overlay/AudioSettings.svelte';
-	import GuideBook from '$lib/components/overlay/GuideBook.svelte';
+	import GuideBook from '$lib/components/overlay/Manual.svelte';
 	import UnderlayMenu from '$lib/components/overlay/UnderlayMenu.svelte';
 	import PourBasin from '$lib/components/overlay/PourBasin.svelte';
 	import ContextMenu from '$lib/components/ui/ContextMenu.svelte';
@@ -38,8 +38,8 @@
 
 <SplashScreen />
 
-{#if editor.showGuideBook}
-	<GuideBook onClose={() => (editor.showGuideBook = false)} />
+{#if editor.showManual}
+	<GuideBook onClose={() => (editor.showManual = false)} />
 {/if}
 
 {#if editor.showCommandPalette}
@@ -84,8 +84,8 @@
 	<AudioSettings onClose={() => (editor.showAudioSettings = false)} />
 {/if}
 
-{#if editor.showGuideMenu}
-	<GuideMenu onClose={() => (editor.showGuideMenu = false)} />
+{#if editor.showShortcuts}
+	<GuideMenu onClose={() => (editor.showShortcuts = false)} />
 {/if}
 
 {#if editor.studio.showUnderlayMenu}
@@ -104,7 +104,7 @@
 <Toast />
 
 <!-- HUD Layout -->
-<div class="flex h-screen w-screen flex-col overflow-hidden bg-canvas-bg selection:bg-brand/20">
+<div class="selection:bg-brand/20 flex h-screen w-screen flex-col overflow-hidden bg-canvas-bg">
 	<EditorHeader />
 
 	<div class="flex flex-1 overflow-hidden">

@@ -35,7 +35,7 @@
 				y1={edge.y1}
 				x2={edge.x2}
 				y2={edge.y2}
-				stroke={isSelecting ? 'var(--color-brand)' : 'rgba(211, 54, 130, 0.8)'}
+				stroke={isSelecting ? 'var(--color-lantern-gold)' : 'rgba(181, 137, 0, 0.8)'}
 				stroke-width={0.08}
 				stroke-dasharray="0.2, 0.2"
 				class="marching-ants-svg"
@@ -46,14 +46,14 @@
 		{#if vertices.length > 0}
 			{#each vertices as v, i}
 				{@const nextV = vertices[i + 1] || vertices[0]}
-				<circle cx={v.x + 0.5} cy={v.y + 0.5} r="0.2" fill="var(--color-brand)" />
+				<circle cx={v.x + 0.5} cy={v.y + 0.5} r="0.2" fill="var(--color-lantern-gold)" />
 				{#if vertices.length > 1 && i < vertices.length - (vertices.length >= 3 ? 0 : 1)}
 					<line
 						x1={v.x + 0.5}
 						y1={v.y + 0.5}
 						x2={nextV.x + 0.5}
 						y2={nextV.y + 0.5}
-						stroke="var(--color-brand)"
+						stroke="var(--color-lantern-gold)"
 						stroke-width="0.05"
 						stroke-dasharray="0.1, 0.1"
 					/>
@@ -74,7 +74,7 @@
 				.getPoints(editor.canvas.width)
 				.map((p) => `M${p.x},${p.y}h1v1h-1z`)
 				.join(' ')}
-			fill="var(--color-brand)"
+			fill="var(--color-lantern-gold)"
 			fill-opacity="0.1"
 		/>
 	</svg>

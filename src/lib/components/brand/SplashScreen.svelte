@@ -61,7 +61,7 @@
 		role="dialog"
 		aria-modal="true"
 		aria-busy={!isReadyToEnter}
-		aria-label={__('manual:title')}
+		aria-label="User Guide"
 	>
 		<!-- Minimalist Neutral Glow -->
 		<div

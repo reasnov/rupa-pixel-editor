@@ -19,8 +19,8 @@
 </script>
 
 <Modal
-	title={__('common:export.propagation.title')}
-	subtitle={__('common:export.propagation.subtitle')}
+	title={__('export:propagation.title')}
+	subtitle={__('export:propagation.subtitle')}
 	icon="🌀"
 	{onClose}
 	width="400px"
@@ -33,10 +33,10 @@
 					for="cups-input"
 					class="font-serif text-sm font-bold tracking-tight text-evergreen/60 uppercase"
 				>
-					{__('common:export.propagation.frames_label')}
+					{__('export:propagation.frames_label')}
 				</label>
 				<span class="font-serif text-[10px] text-evergreen/40">
-					{__('common:export.propagation.frames_desc')}
+					{__('export:propagation.frames_desc')}
 				</span>
 			</div>
 			<input
@@ -53,10 +53,10 @@
 		<div class="flex flex-col gap-4">
 			<div class="flex flex-col gap-1">
 				<span class="font-serif text-sm font-bold tracking-tight text-evergreen/60 uppercase">
-					{__('common:export.propagation.offset_label')}
+					{__('export:propagation.offset_label')}
 				</span>
 				<span class="font-serif text-[10px] text-evergreen/40">
-					{__('common:export.propagation.offset_desc')}
+					{__('export:propagation.offset_desc')}
 				</span>
 			</div>
 
@@ -85,7 +85,7 @@
 			onclick={execute}
 			disabled={cups <= 0}
 		>
-			{__('common:export.propagation.action')}
+			{__('export:propagation.action')}
 		</button>
 	</div>
 </Modal>

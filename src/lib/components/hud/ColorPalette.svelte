@@ -11,7 +11,7 @@
 >
 	<span
 		class="text-center font-serif text-[8px] font-black tracking-widest text-evergreen/30 uppercase"
-		>{__({ key: 'shortcuts:groups.colors' })}</span
+		>{__('shortcuts:groups.colors')}</span
 	>
 
 	<div class="grid grid-cols-4 gap-2" role="radiogroup">
@@ -38,8 +38,8 @@
 						]
 					};
 				}}
-				aria-label={__(`labels.SELECT_COLOR_${(i + 1) % 10}`)}
-				title={__(`labels.SELECT_COLOR_${(i + 1) % 10}`) + ` (${(i + 1) % 10})`}
+				aria-label={__(`common:labels.SELECT_COLOR_${(i + 1) % 10}`)}
+				title={__(`common:labels.SELECT_COLOR_${(i + 1) % 10}`) + ` (${(i + 1) % 10})`}
 				role="radio"
 				aria-checked={editor.activeColor === color}
 			></button>
@@ -48,8 +48,8 @@
 		<button
 			class="flex h-8 w-8 items-center justify-center rounded border border-dashed border-evergreen/20 bg-evergreen/5 transition-all hover:scale-110 hover:border-lantern-gold/40 hover:bg-white"
 			onclick={() => (editor.showColorPicker = true)}
-			title={__('color_picker.title') + ' (B)'}
-			aria-label={__('color_picker.title')}
+			title={__('tools:color_picker.title') + ' (B)'}
+			aria-label={__('tools:color_picker.title')}
 		>
 			<span class="text-xs opacity-40" aria-hidden="true">＋</span>
 		</button>
@@ -57,8 +57,8 @@
 		<button
 			class="flex h-8 w-8 items-center justify-center rounded border border-dashed border-evergreen/20 bg-evergreen/5 transition-all hover:scale-110 hover:border-lantern-gold/40 hover:bg-white"
 			onclick={() => (editor.studio.showPaletteLibrary = true)}
-			title={__('palette_library.title')}
-			aria-label={__('palette_library.title')}
+			title={__('tools:palette_library.title')}
+			aria-label={__('tools:palette_library.title')}
 		>
 			<span class="text-xs opacity-40" aria-hidden="true">🎨</span>
 		</button>

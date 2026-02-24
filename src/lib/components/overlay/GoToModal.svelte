@@ -26,8 +26,8 @@
 </script>
 
 <Modal
-	title={__({ key: 'goto.title' })}
-	subtitle={__({ key: 'goto.subtitle' })}
+	title={__('common:navigation.title')}
+	subtitle={__('common:navigation.subtitle')}
 	icon="📍"
 	{onClose}
 	width="400px"
@@ -40,7 +40,7 @@
 						for="goto-x"
 						class="font-serif text-[10px] font-bold tracking-widest text-evergreen/40 uppercase"
 					>
-						{__({ key: 'goto.label_x' })}
+						{__('common:navigation.label_x')}
 					</label>
 					<input
 						id="goto-x"
@@ -55,7 +55,7 @@
 						for="goto-y"
 						class="font-serif text-[10px] font-bold tracking-widest text-evergreen/40 uppercase"
 					>
-						{__({ key: 'goto.label_y' })}
+						{__('common:navigation.label_y')}
 					</label>
 					<input
 						id="goto-y"
@@ -67,15 +67,14 @@
 				</div>
 			</div>
 			<p class="font-serif text-[10px] leading-relaxed text-evergreen/40 italic">
-				{__({
-					key: 'goto.current',
+				{__('common:navigation.current', {
 					replace: { x: editor.displayCoords.x, y: editor.displayCoords.y }
 				})}
 			</p>
 		</div>
 
 		<button class="editor-primary-btn w-full py-4 text-lg" onclick={jump}>
-			{__({ key: 'goto.action' })}
+			{__('common:navigation.action')}
 		</button>
 	</div>
 </Modal>

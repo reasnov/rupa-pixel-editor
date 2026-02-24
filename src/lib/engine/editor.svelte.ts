@@ -82,7 +82,10 @@ export class EditorEngine {
 				return feedback.emit('READY');
 
 			case 'PAINT':
-				if (state.selection.isActive) return services.commitSelection();
+				if (state.selection.isActive) {
+					services.selection.fillSelection();
+					return;
+				}
 				if (state.studio.activeTool !== 'BRUSH') {
 					services.draw.commitShape();
 					return;
@@ -90,6 +93,10 @@ export class EditorEngine {
 				return services.draw.draw();
 
 			case 'ERASE':
+				if (state.selection.isActive) {
+					services.selection.eraseSelection();
+					return;
+				}
 				return services.draw.erase();
 			case 'FLOOD_FILL':
 				return services.color.floodFill();
@@ -114,6 +121,8 @@ export class EditorEngine {
 				return services.clipboard.cut();
 			case 'PASTE':
 				return services.clipboard.paste();
+			case 'SELECT_ALL':
+				return services.selection.selectAll();
 			case 'RECOLOR':
 				return services.manipulation.bleach();
 
@@ -369,6 +378,15 @@ export class EditorEngine {
 				state.studio.activeTool = 'ELLIPSE';
 				state.studio.shapeAnchor = { ...state.cursor.pos };
 				return feedback.emit('READY');
+			case 'TOOL_RECT_SELECT':
+				state.studio.activeTool = 'RECT_SELECT';
+				return feedback.emit('READY');
+			case 'TOOL_LASSO_SELECT':
+				state.studio.activeTool = 'LASSO_SELECT';
+				return feedback.emit('READY');
+			case 'TOOL_POLY_SELECT':
+				state.studio.activeTool = 'POLY_SELECT';
+				return feedback.emit('READY');
 			case 'TOOL_BRUSH':
 				state.studio.activeTool = 'BRUSH';
 				return feedback.emit('READY');
@@ -431,14 +449,26 @@ export class EditorEngine {
 			return;
 		}
 
+		// Priority 1: Continuous Erasing (Stream Sweeping) - Ctrl + Shift
+		const isEraseFlow = keyboard.isCtrlActive && keyboard.isShiftActive;
+		// Priority 2: Continuous Painting (Stream Painting) - Ctrl
+		const isPaintFlow = keyboard.isCtrlActive && !keyboard.isShiftActive;
+		// Priority 3: Rectangle Selection - Shift (without Ctrl)
+		const isSelecting = keyboard.isShiftActive && !keyboard.isCtrlActive;
+
+		if (isSelecting && !state.selection.start) {
+			state.studio.activeTool = 'RECT_SELECT';
+			services.startSelection();
+		}
+
 		if (services.movement.move(dx, dy)) {
-			const currentMode = mode.current.type;
-			if (currentMode === 'SELECT') {
-				if (!state.selection.isActive) services.startSelection();
+			if (isSelecting) {
 				services.updateSelection();
+			} else if (isEraseFlow) {
+				services.draw.erase();
+			} else if (isPaintFlow) {
+				services.draw.draw();
 			}
-			if (currentMode === 'PAINT') services.draw.draw();
-			if (currentMode === 'ERASE') services.draw.erase();
 		}
 	}
 

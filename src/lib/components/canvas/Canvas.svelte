@@ -108,17 +108,17 @@
 >
 	<!-- Corner Piece -->
 	<div
-		class="z-[110] border-r border-b border-evergreen/10 bg-washi-white/90 backdrop-blur-md"
+		class="z-[30] border-r border-b border-evergreen/10 bg-washi-white/90 backdrop-blur-md"
 		aria-hidden="true"
 	></div>
 
 	<!-- Top Ruler -->
-	<div class="relative z-[100] border-b border-evergreen/10">
+	<div class="relative z-[20] border-b border-evergreen/10">
 		<CanvasRuler orientation="horizontal" />
 	</div>
 
 	<!-- Left Ruler -->
-	<div class="relative z-[100] border-r border-evergreen/10">
+	<div class="relative z-[20] border-r border-evergreen/10">
 		<CanvasRuler orientation="vertical" />
 	</div>
 

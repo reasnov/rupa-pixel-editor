@@ -18,38 +18,41 @@ Every interaction is mapped to a `ActionIntent` to ensure semantic consistency. 
 ### 2.1 Navigation & Viewport
 
 - `MOVE_UP`, `MOVE_DOWN`, `MOVE_LEFT`, `MOVE_RIGHT`: Keyboard-driven step movement.
-- `SET_POSITION`: Pointer-driven absolute positioning (Screen-to-Canvas mapping).
-- `JUMP_HOME`: Reset position to center.
+- `SET_POSITION`: Pointer-driven absolute positioning.
+- `JUMP_HOME`: Reset position to center (**`Ctrl + H`**).
 - `GOTO`: Jump to specific coordinate (**`Alt + J`**).
 - `PAN_VIEWPORT`: Free-form canvas panning (**`Q`**).
-- `ZOOM_IN`, `ZOOM_OUT`: Control viewport scale.
-- `TOGGLE_MINIMAP`: Show/Hide the **Minimap** (Surveyor's Glass).
+- `ZOOM_IN`, `ZOOM_OUT`: Control viewport scale (**`+`** and **`-`**).
+- `TOGGLE_MINIMAP`: Show/Hide the **Minimap** (**`Ctrl + M`**).
 
 ### 2.2 Painting & Etching (Drawing Tools)
 
 - `PAINT`: Apply color (Space/Enter/Click).
-- `ERASE`: Remove color (Backspace/Delete/Right-click).
+- `ERASE`: Remove color (Backspace/Delete/Right-click or **`E`**).
+- `TOOL_BRUSH`: Activate Brush tool (**`B`**).
 - `BRUSH_SIZE_INC`, `BRUSH_SIZE_DEC`: Adjust brush diameter (**`[`** and **`]`**).
 - `TOGGLE_BRUSH_SHAPE`: Switch between Square and Circle vessels (**`Alt + B`**).
 - `TOGGLE_AIRBRUSH`: Enable 'The Mist' spray mode (**`Alt + A`**).
-- `CYCLE_SYMMETRY`: Toggle Horizontal, Vertical, and Quadrant symmetry (**`S`**).
+- `CYCLE_SYMMETRY`: Toggle Horizontal, Vertical, and Quadrant symmetry (**`V`**).
 - `TOGGLE_TILING`: Enable seamless coordinate wrapping (**`T`**).
 - `TOGGLE_PIXEL_PERFECT`: Automated line cleaning (**`Shift + P`**).
-- `SHADE_LIGHTEN`, `SHADE_DARKEN`, `SHADE_DITHER`: Real-time color modification modifiers (**`L`**, **`D`**, **`X`**).
+- `SHADE_LIGHTEN`, `SHADE_DARKEN`, `SHADE_DITHER`: Real-time color modification (**`U`**, **`D`**, **`X`**).
 - `TOGGLE_ALPHA_LOCK`, `TOGGLE_COLOR_LOCK`: Pixel protection modes (**`A`**, **`Shift + A`**).
 - `BIND_VERTEX`, `SEAL_BINDING`: Polygon construction steps.
 
 ### 2.3 Manipulation & Magic
 
-- `UNDO`, `REDO`: History traversal.
-- `FLOOD_FILL`: Connected color fill.
-- `RECOLOR`: Global color replacement.
-- `SELECT_SAME`: Magic wand selection.
+- `UNDO`, `REDO`: History traversal (**`Ctrl + Z`**, **`Ctrl + Y`**).
+- `FLOOD_FILL`: Connected color fill (**`F`**).
+- `RECOLOR`: Global color replacement (**`Alt + R`**).
+- `SELECT_ALL`: Two-step selection (Layer -> Frame) (**`Ctrl + A`**).
+- `SELECT_SAME`: Magic Wand selection (**`W`**). Supports **Smart Hole-Filling** on repeat click.
+- `TOOL_RECT_SELECT`: Rectangle selection tool (**`S`**).
+- `TOOL_LASSO_SELECT`: Freehand lasso selection tool (**`L`**).
+- `TOOL_POLY_SELECT`: Polygon selection tool (**`Alt + L`**).
 - `TOGGLE_DITHER_BLEND`: Professional dithered brush blending (**`Alt + G`**).
-- `TOOL_RECTANGLE`, `TOOL_ELLIPSE`, `TOOL_POLYGON`: Geometric shape vessels.
-- `TOOL_TRANSFORM`: Nudge and reposition selected pixels.
-- `TOOL_SELECT`: Area focus tool (**`Shift + S`**).
-- `SYRUP_FLOW`: Selection propagation across frames (HUD Action).
+- `TOOL_TRANSFORM`: Nudge and reposition selected pixels (**`M`**).
+- `COPY`, `CUT`, `PASTE`: Standard clipboard operations.
 
 ### 2.4 Project & Layering (Order Management)
 
@@ -63,13 +66,13 @@ Every interaction is mapped to a `ActionIntent` to ensure semantic consistency. 
 
 ### 2.5 UI & Environment Intents
 
-- `OPEN_MENU`: Show Command Palette (Ctrl+K).
-- `OPEN_PALETTE`: Show Color Picker (b).
-- `OPEN_AUDIO`: Show Audio Settings (Ctrl+Shift+A).
-- `OPEN_EXPORT`: Show Export Menu (Ctrl+E).
-- `OPEN_MANUAL`: Show Barista Manual (F1).
-- `OPEN_HELP`: Show Quick Guide (F2).
-- `TOGGLE_GHOST_LAYERS`: Onion Skinning toggle.
+- `OPEN_MENU`: Show Command Palette (**`Ctrl + K`**).
+- `OPEN_PALETTE`: Show Color Picker (**`F3`**).
+- `OPEN_AUDIO`: Show Audio Settings (**`Ctrl + Shift + A`**).
+- `OPEN_EXPORT`: Show Export Menu (**`Ctrl + E`**).
+- `OPEN_MANUAL`: Show Barista Manual (**`F1`**).
+- `OPEN_HELP`: Show Quick Guide (**`F2`**).
+- `TOGGLE_GHOST_LAYERS`: Onion Skinning toggle (**`Alt + O`**).
 - `TOGGLE_UNDERLAY`: Reference image visibility toggle.
 
 ### 2.6 Convention: Reserved Shortcuts
@@ -106,11 +109,25 @@ To maintain cross-platform integrity, the following chord patterns are reserved 
   - Interactive elements must have descriptive `aria-label` attributes.
 - **Focus Indicators**: All focusable elements must display a `2px` solid Barista Magenta outline when active.
 
-## 6. File Formats
+## 7. Technical Governance & Compliance (3S)
 
-- **Recipe Book (.rupa):** JSON-based schema storing:
-  - Version metadata.
-  - Canvas dimensions.
-  - Palette array.
-  - Hierarchical Frame/Layer data.
-  - Creation/Modification timestamps.
+To ensure high standards of quality and resilience, all technical implementations must pass the **3S Gate**:
+
+-   **Secure (S1)**:
+    -   All imported project data (.rupa, .gpl, PNG, SVG) must be validated against a schema before processing.
+    -   External file access is strictly managed via Electron's **Main-Renderer IPC bridge**, enforcing isolation.
+    -   Sanitize all UI-rendered user input to prevent XSS.
+-   **Sustain (S2)**:
+    -   **English-Only** documentation and code for global maintainability.
+    -   Strict adherence to the **Japanese Roadside Cafe** aesthetic to maintain cognitive and visual harmony.
+    -   Mandatory unit test coverage for the **Logic Layer** to prevent regression.
+-   **Scalable (S3)**:
+    -   Selection system uses a **Bitmask Buffer** (`Uint8Array`) to maintain $O(1)$ performance even on large canvases.
+    -   SVG exports must use **path-merging algorithms** to keep file sizes small for complex pixel patterns.
+    -   Support for up to 500 undo/redo actions without excessive memory overhead.
+
+---
+
+## 8. Final Reminder: ISO-IEC-12207 Compliance
+
+Every technical addition must align with the **Modular Layered Monolith** pattern and preserve the **Barista's Rhythm** (responsiveness and tactile feedback).

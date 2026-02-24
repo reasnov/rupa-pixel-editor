@@ -1,10 +1,27 @@
 # Development Conventions: Rupa Pixel Editor
 
-To maintain the quality and consistency of the **Editor**, all developers must adhere to these established conventions.
+To maintain the quality and consistency of the **Editor**, all developers must adhere to these established conventions, strictly following the **Core Construction Philosophy (3S)**.
 
 ---
 
-## 1. Architectural Integrity (SOC)
+## 1. The 3S Standards (S3)
+
+1.  **Secure (S1)**:
+    -   Treat all external input (file imports, clipboard data, user-provided values) as untrusted.
+    -   Sanitize and validate all data at boundaries before it enters the **Logic** or **State** layers.
+    -   Never expose sensitive environment details in error messages or logs.
+2.  **Sustain (S2)**:
+    -   **Sync or Sink**: Code changes without corresponding documentation updates are incomplete.
+    -   Adhere to the **Aesthetic-Natural** principle: focus on structural calmness, minimal abstraction, and high comprehensibility.
+    -   Every public method and service MUST include descriptive JSDoc for intent, parameters, and behavior.
+3.  **Scalable (S3)**:
+    -   Design features to handle industrial-scale projects (e.g., large canvas sizes, high frame counts) without performance degradation.
+    -   Maintain modularity to allow easy refactoring or replacement of individual services.
+    -   Optimize reactive projections (Svelte 5 Runes) to avoid unnecessary re-renders or computation.
+
+---
+
+## 2. Architectural Integrity (SOC)
 
 Rupa Pixel Editor follows a strict **Separation of Concerns (SOC)** across its layered monolith:
 
@@ -29,13 +46,23 @@ To prevent "spaghetti" data flow, adhere to these access rules:
 
 ## 3. Coding Standards
 
-### 2.1 Svelte 5 Runes
+### 2.1 Svelte 5 Runes & Snippets
 
 - Always use **Runes** (`$state`, `$derived`, `$effect`, `$props`, `$bindable`).
 - Favor `$derived.by` for complex reactive projections to keep logic encapsulated.
+- Use **Snippets** (`{#snippet ...}`) for layout-level components to ensure clean separation between containers and content.
 - Use `untrack()` within `$effect` when registering/unregistering listeners or global stacks to avoid circular reactivity.
 
-### 2.2 TypeScript & Metadata
+### 2.2 Layout & Shell
+
+- All major UI parts must be wrapped within the **AppShell** components (`AppHeader`, `AppSidebar`, `AppViewport`, `AppFooter`, `AppOverlay`).
+- Maintain strict **Z-index boundaries**:
+  - Viewport/Canvas: `z-10` to `z-30`.
+  - Sidebars/Header/Footer: `z-30`.
+  - Overlays: `z-[500]`.
+- Use `pointer-events-none` on overlay roots to prevent interaction blocking.
+
+### 2.3 TypeScript & Metadata
 
 - **English-Only**: All code, comments, and documentation must be in English.
 - **Type Safety**: Avoid `any`. Define interfaces for all data structures (e.g., `HistoryAction`, `ColorHex`).

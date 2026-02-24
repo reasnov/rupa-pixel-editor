@@ -40,7 +40,7 @@ export class DrawService {
 						const index = editor.canvas.getIndex(targetX, targetY);
 
 						// Filters
-						if (editor.selection.isActive && !editor.selection.activeIndicesSet.has(index))
+						if (editor.selection.isActive && !editor.selection.isSelected(index))
 							continue;
 						if (
 							editor.studio.isAlphaLocked &&
@@ -113,7 +113,7 @@ export class DrawService {
 						return;
 
 					// Selection Masking
-					if (editor.selection.isActive && !editor.selection.activeIndicesSet.has(index)) return;
+					if (editor.selection.isActive && !editor.selection.isSelected(index)) return;
 
 					// Alpha Lock
 					if (
@@ -185,7 +185,7 @@ export class DrawService {
 		pointsToDraw.forEach((p) => {
 			const index = editor.canvas.getIndex(p.x, p.y);
 
-			if (editor.selection.isActive && !editor.selection.activeIndicesSet.has(index)) return;
+			if (editor.selection.isActive && !editor.selection.isSelected(index)) return;
 
 			if (editor.studio.isAlphaLocked && !editor.project.activeFrame.activeLayer.hasPixel(index))
 				return;
@@ -360,7 +360,7 @@ export class DrawService {
 
 							const index = editor.canvas.getIndex(targetX, targetY);
 
-							if (editor.selection.isActive && !editor.selection.activeIndicesSet.has(index))
+							if (editor.selection.isActive && !editor.selection.isSelected(index))
 								continue;
 							if (
 								editor.studio.isAlphaLocked &&
@@ -429,7 +429,7 @@ export class DrawService {
 
 						if (!PixelLogic.orderedDither(finalPos.x, finalPos.y, threshold)) return;
 
-						if (editor.selection.isActive && !editor.selection.activeIndicesSet.has(index)) return;
+						if (editor.selection.isActive && !editor.selection.isSelected(index)) return;
 
 						if (
 							editor.studio.isAlphaLocked &&

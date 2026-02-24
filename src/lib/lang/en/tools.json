@@ -1,0 +1,39 @@
+{
+	"color_picker": {
+		"title": "Pigment Station",
+		"subtitle": "Mix your unique extracts",
+		"label": {
+			"hex": "HEX CODE",
+			"hue": "Nature (Hue)",
+			"saturation": "Depth (Saturation)",
+			"lightness": "Brightness (Lightness)",
+			"alpha": "Opacity (Alpha)"
+		},
+		"button": {
+			"eye_dropper": "Taste from Washi",
+			"confirm": "Seal the Pigment"
+		}
+	},
+	"palette_library": {
+		"title": "Pigment Library",
+		"subtitle": "Store and manage your unique extracts",
+		"save_label": "Seal Current Swatch",
+		"save_desc": "Save your active pigments as a new chronicle",
+		"name_placeholder": "Give this set a name...",
+		"list_title": "Stored Pigments",
+		"button": {
+			"save": "Store Record",
+			"apply": "Sample",
+			"delete": "Spill"
+		}
+	},
+	"brush_settings": {
+		"title": "Brush Settings",
+		"shape_square": "Square Vessel",
+		"shape_circle": "Circle Vessel",
+		"size_label": "Stroke Size",
+		"dither_label": "Moss Blend",
+		"dither_desc": "Textured dithering",
+		"hardness_label": "Diffusion"
+	}
+}

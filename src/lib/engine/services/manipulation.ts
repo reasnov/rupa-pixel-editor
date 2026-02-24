@@ -18,6 +18,7 @@ export class ManipulationService {
 			}
 		}
 		editor.canvas.reset(newWidth, newHeight, newPixels);
+		editor.selection.initMask(newWidth, newHeight);
 		history.clear();
 		sfx.playDraw();
 	}

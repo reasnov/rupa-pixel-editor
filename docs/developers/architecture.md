@@ -6,13 +6,21 @@
 
 ---
 
-## 2. Architectural Pattern: Modular Layered Monolith
+## 2. Core Construction Philosophy (3S)
 
-Rupa Pixel Editor is structured into five distinct layers to ensure scalability and maintainability:
+To ensure the longevity and excellence of the Rupa technical ecosystem, the architecture adheres to the **3S (S3)** principle:
 
-1.  **UI Layer (`src/lib/components/`)**: Purely presentational Svelte components (HUD). They consume state and trigger intents from the **Roadside Sanctuary**.
-2.  **State Layer (`src/lib/state/`)**: Reactive data structures using Svelte 5 Runes (The Atelier). They hold the "Source of Truth" for the chronicles being woven.
-3.  **Service Layer (`src/lib/engine/services/`)**: The **Business Logic & Rules** container. Services manage state transitions, project-specific rules, and orchestrate complex workflows (e.g., Chronicle preservation, Ingredient management).
+-   **Secure**: All code is engineered for resilience. We apply zero-trust principles, sanitize all data boundaries (especially file I/O and user input), and enforce robust authorization for project operations.
+-   **Sustain**: Code must be maintainable, clear, and thoroughly documented. We adhere to the **Aesthetic-Natural** principle, ensuring structural calmness and minimalism to reduce cognitive load for developers.
+-   **Scalable**: Designed for growth. The modular layered monolith allows for feature expansion, performance optimization for industrial-scale projects, and architectural modularity without systemic degradation.
+
+---
+
+## 3. Architectural Pattern: Modular Layered Monolith
+
+1.  **UI Layer (`src/lib/components/`)**: Purely presentational Svelte components (HUD). They consume state and trigger intents from the **Roadside Sanctuary**. Utilizes a modular **AppShell** architecture powered by Svelte 5 Snippets.
+2.  **State Layer (`src/lib/state/`)**: Reactive data structures using Svelte 5 Runes (The Atelier). They hold the "Source of Truth" for the chronicles being woven. Includes an optimized **Bitmask Selection Buffer** (`Uint8Array`).
+3.  **Service Layer (`src/lib/engine/services/`)**: The **Business Logic & Rules** container. Services manage state transitions, project-specific rules, and orchestrate complex workflows (e.g., Chronicle preservation, Ingredient management, Boolean Selection logic).
 4.  **Engine Layer (`src/lib/engine/`)**: The **Orchestrator & Entry-point**. Handles hardware bridges (Input, 8-bit Audio, Nature Ambience), input normalization, and high-level system coordination.
 5.  **Logic Layer (`src/lib/logic/`)**: **Pure, stateless algorithms**. Contains mathematical calculations and complex processing logic (Geometry, Color, Path, Rendering, Sorting, Filtering, Binary Manipulation).
 
@@ -102,19 +110,29 @@ The "Brain" of the application. This layer contains pure, side-effect-free algor
 
 ---
 
-## 5. UI & Rendering Strategy
+## 5. UI & Layout Strategy
 
-### 5.1 Professional Workspace Layout
+### 5.1 Modular AppShell Architecture
 
-The HUD follows a solid container architecture (similar to professional editors like Figma):
+The editor follows an industry-standard layout system to ensure ergonomics and maintainability:
 
-- **Editor Header (Top)**: Central command center for identity, tools, and project metadata.
-- **Frame Sidebar (Left)**: Management of **Frames** (Cups) and **Layers** (Infusions). Includes the **Minimap** (Surveyor's Glass) at the top and support for Drag-and-Drop.
-- **Inspector Sidebar (Right)**: Property panels for **Color** (Flavor) selection, history, and cursor statistics.
-- **Properties Panel (Contextual)**: Specialized panel for fine-tuning **Infusion** (Layer) properties like opacity and blend modes.
-- **Status Footer (Bottom)**: Houses the **TechLedger** with modular indicators for Modes, Working Time, and Ambiance status.
+- **AppHeader (Top)**: Central command center for identity and global project metadata.
+- **AppSidebar Left (The Serving Table)**: Focuses on project structure (**Frames** & **Layers**). Includes the **Minimap** and the **Primary Vessel Toolbar** (Artisan's tools).
+- **AppViewport (Center)**: The dedicated workspace for **The Washi** (Canvas).
+- **AppSidebar Right (Artisan's Atelier)**: Detail-oriented panels for **Color** (Flavor) selection, history, and the **Secondary Vessel Toolbar** (Modifiers & Seals).
+- **AppFooter (Bottom)**: Houses the **TechLedger** and the **Timeline Panel**.
+- **AppOverlay (Z-Layer)**: A dedicated layer for floating elements (Modals, Toasts, Command Palette) using `pointer-events` isolation.
 
-### 5.2 The Camera Protocol
+### 5.2 Selection System: Bitmask Buffer
+
+To support industrial-scale projects, the selection system is built on a buffer-based approach:
+
+- **Data Structure**: A `Uint8Array` mask matching canvas dimensions.
+- **Boolean Operations**: Native support for **ADD (Shift)** and **SUBTRACT (Alt)** modes via mask manipulation.
+- **Smart Logic**: Implements **Hole-Filling (Solid Selection)** using an Inverse External Flood Fill algorithm.
+- **Efficiency**: Constant time $O(1)$ lookup for drawing operations.
+
+### 5.3 The Camera Protocol
 
 Viewport movement is achieved by applying CSS transforms to the **Canvas**. The system ensures that zooming focal points are always centered on the current `cursorPos`, maintaining the artist's focus.
 

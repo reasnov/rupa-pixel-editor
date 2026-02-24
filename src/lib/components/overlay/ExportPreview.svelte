@@ -70,11 +70,11 @@
 	</div>
 
 	<div class="flex flex-col items-center gap-1 text-center">
-		<span class="font-tiny5 text-lantern-gold text-[10px] tracking-widest uppercase">
-			{__('common:export.file_label', { replace: { format } })}
+		<span class="font-tiny5 text-[10px] tracking-widest text-lantern-gold uppercase">
+			{__('export:file_label', { replace: { format } })}
 		</span>
 		<span class="font-mono text-[8px] font-bold tracking-tighter opacity-30">
-			{__('common:export.dimensions_label', {
+			{__('export:dimensions_label', {
 				replace: {
 					width: Math.round(editor.canvas.width * scale),
 					height: Math.round(editor.canvas.height * scale)

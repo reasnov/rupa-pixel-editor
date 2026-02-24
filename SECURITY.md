@@ -1,8 +1,16 @@
 # Security Policy: Protecting the Café
 
-The security of the **Rupa Pixel Editor** and the privacy of our baristas are of utmost importance. While Rupa is an offline-first desktop application, we take potential vulnerabilities seriously.
+The security of the **Rupa Pixel Editor** and the privacy of our baristas are of utmost importance. The system operates under the **3S (Secure, Sustain, Scalable)** protocol, ensuring a resilient and trustworthy studio environment.
 
-## 🛡️ Supported Versions
+## 🛡️ 3S Security Protocol (S1)
+
+Rupa adheres to strict security standards to protect user data and system integrity:
+
+- **Zero-Trust Boundaries**: All external data (project files, palettes, images) is treated as untrusted and validated before processing.
+- **Environment Isolation**: Native file system access is brokered through a secure IPC bridge, preventing unauthorized access.
+- **Input Sanitization**: User-provided strings (project names, layer names) are sanitized to prevent injection attacks.
+
+## 📦 Supported Versions
 
 We currently provide security updates for the following versions:
 

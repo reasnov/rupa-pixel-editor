@@ -29,8 +29,13 @@
 
 ## 🏗️ Architectural Sovereignty
 
-Rupa follows a strict **5-Layer Modular Monolith** pattern:
+Rupa follows a strict **5-Layer Modular Monolith** pattern, governed by the **3S (S3) Philosophy**:
 
+1.  **Secure (S1)**: Zero-trust data sanitization and boundary-first security.
+2.  **Sustain (S2)**: Maintainable, clear code aligned with the **Aesthetic-Natural** principle.
+3.  **Scalable (S3)**: High-performance algorithms and modularity for industrial-scale projects.
+
+### System Layers:
 1. **UI Layer**: Pure presentational Svelte components.
 2. **State Layer**: Reactive source of truth using Svelte 5 Runes.
 3. **Service Layer**: Business logic and state orchestration.

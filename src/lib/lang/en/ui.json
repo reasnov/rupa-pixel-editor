@@ -1,0 +1,23 @@
+{
+	"labels": {
+		"CLOSE": "Close Panel",
+		"CONFIRM": "Confirm Action",
+		"CANCEL": "Discard Changes",
+		"SELECT_OPTION": "Select an Option",
+		"SEARCH": "Search records...",
+		"PROGRESS": "Brewing in progress...",
+		"ON": "ON",
+		"OFF": "OFF",
+		"SELECTED": "Selected"
+	},
+	"accessibility": {
+		"BUTTON": "Action Button",
+		"INPUT": "Text Input",
+		"SLIDER": "Adjustment Slider",
+		"CHECKBOX": "Toggle Selection",
+		"TOGGLE": "Switch Status",
+		"SELECT": "Choice Selector",
+		"RADIO": "Option Selection",
+		"TABS": "Navigation Tabs"
+	}
+}

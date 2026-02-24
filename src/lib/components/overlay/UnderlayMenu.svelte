@@ -22,7 +22,10 @@
 	}
 </script>
 
-<Modal title={__('common:labels.OPEN_UNDERLAY_MENU')} onClose={() => (studio.showUnderlayMenu = false)}>
+<Modal
+	title={__('common:labels.OPEN_UNDERLAY_MENU')}
+	onClose={() => (studio.showUnderlayMenu = false)}
+>
 	<div class="flex flex-col gap-6 p-2">
 		<div class="flex flex-col gap-2">
 			<label class="text-xs font-bold text-evergreen/60 uppercase" for="underlay-file"

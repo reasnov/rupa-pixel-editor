@@ -2,14 +2,14 @@
 	import ColorInspector from './ColorInspector.svelte';
 	import CursorStats from './CursorStats.svelte';
 	import ColorPalette from './ColorPalette.svelte';
-	import VesselToolbar from './VesselToolbar.svelte';
+	import Toolbar from './Toolbar.svelte';
 	import BrushSettings from './BrushSettings.svelte';
 </script>
 
 <aside class="side-panel-right flex h-full w-full bg-washi-white/50">
-	<!-- Vessel Tools (Quick Access) -->
+	<!-- Tools (Quick Access - Right) -->
 	<div class="flex h-full flex-col border-r border-evergreen/5 bg-deep-forest/[0.02] px-2">
-		<VesselToolbar />
+		<Toolbar side="right" />
 	</div>
 
 	<!-- Main Inspector Content -->

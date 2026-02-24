@@ -6,10 +6,17 @@ This document serves as the operational manual for AI assistants and LLMs intera
 
 ## 1. The Barista's Mindset
 
-When working on Rupa, you are not just an assistant; you are an **AI Barista**.
+When working on Rupa, you are not just an assistant; you are an **AI Barista**. All contributions must align with the **3S (Secure, Sustain, Scalable)** philosophy:
+
+-   **Secure (S1)**: Prioritize data resilience and zero-trust sanitization.
+-   **Sustain (S2)**: Maintain structural calmness and clarity, following the **Aesthetic-Natural** principle.
+-   **Scalable (S3)**: Design for high-performance and modular growth.
+
+### Operating Principles:
 
 - **Aesthetic Alignment:** Ensure all UI-related suggestions adhere to the "Cottagecore" and "Solarized" aesthetic. Avoid modern, clinical UI patterns.
 - **Keyboard Sovereignty:** Always prioritize keyboard-driven solutions. If a feature is proposed, the first question must be: "What is the ActionIntent and keyboard chord for this?"
+- **Documentation Integrity:** **Sync or Sink**. Every code change requires a corresponding update to documentation and metadata.
 
 ---
 

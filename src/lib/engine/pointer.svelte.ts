@@ -57,10 +57,44 @@ export class PointerEngine {
 
 		const tool = state.studio.activeTool;
 
-		// Selection Tool Support
-		if (this.buttonType === 'primary' && tool === 'SELECT') {
-			services.selection.begin(state.cursor.pos.x, state.cursor.pos.y);
-			return;
+		// --- Selection Mode Detection (Standard Industry) ---
+		if (
+			tool === 'RECT_SELECT' ||
+			tool === 'LASSO_SELECT' ||
+			tool === 'POLY_SELECT' ||
+			tool === 'MAGIC_WAND'
+		) {
+			if (e.shiftKey) {
+				state.selection.selectionMode = 'ADD';
+			} else if (e.altKey) {
+				state.selection.selectionMode = 'SUBTRACT';
+			} else {
+				state.selection.selectionMode = 'NEW';
+			}
+		}
+
+		// --- Specialized Selection Tool Handling ---
+		if (this.buttonType === 'primary') {
+			if (tool === 'RECT_SELECT') {
+				services.selection.begin(state.cursor.pos.x, state.cursor.pos.y);
+				return;
+			}
+			if (tool === 'LASSO_SELECT') {
+				services.selection.lassoBegin(state.cursor.pos.x, state.cursor.pos.y);
+				return;
+			}
+			if (tool === 'MAGIC_WAND') {
+				services.selection.spiritPick();
+				this.isPointerDown = false; // Wand is a single-click tool
+				this.isPointerDownActive = false;
+				return;
+			}
+			if (tool === 'POLY_SELECT') {
+				services.selection.addVertex(state.cursor.pos.x, state.cursor.pos.y);
+				this.isPointerDown = false; // Polygon adds vertices per click
+				this.isPointerDownActive = false;
+				return;
+			}
 		}
 
 		// Geometric Tool Support
@@ -113,10 +147,17 @@ export class PointerEngine {
 
 			state.cursor.pos = { x: Math.floor(pos.x), y: Math.floor(pos.y) };
 
-			if (this.buttonType === 'primary' && tool === 'SELECT') {
-				services.selection.update(state.cursor.pos.x, state.cursor.pos.y);
-				this.rafId = null;
-				return;
+			if (this.buttonType === 'primary') {
+				if (tool === 'RECT_SELECT') {
+					services.selection.update(state.cursor.pos.x, state.cursor.pos.y);
+					this.rafId = null;
+					return;
+				}
+				if (tool === 'LASSO_SELECT') {
+					services.selection.lassoUpdate(state.cursor.pos.x, state.cursor.pos.y);
+					this.rafId = null;
+					return;
+				}
 			}
 
 			const isShading =
@@ -169,8 +210,10 @@ export class PointerEngine {
 			['RECTANGLE', 'ELLIPSE', 'POLYGON', 'GRADIENT'].includes(tool)
 		) {
 			services.draw.commitShape();
-		} else if (this.buttonType === 'primary' && tool === 'SELECT') {
+		} else if (this.buttonType === 'primary' && tool === 'RECT_SELECT') {
 			services.selection.commit();
+		} else if (this.buttonType === 'primary' && tool === 'LASSO_SELECT') {
+			services.selection.lassoEnd();
 		} else if (this.buttonType === 'primary' && currentMode !== 'SELECT') {
 			services.draw.endStroke();
 		} else {

@@ -70,48 +70,50 @@
 
 			<div class="h-px w-full bg-evergreen/5" aria-hidden="true"></div>
 
-						<!-- Stabilization -->
-						<div class="flex flex-col gap-3">
-							<div class="flex items-center justify-between">
-								<div class="flex flex-col gap-1">
-									<label
-										for="stab-input"
-										class="font-serif text-sm font-bold tracking-tight text-evergreen/60 uppercase"
-									>
-										{__('common:settings.stabilization')}
-									</label>
-									<span class="font-serif text-[10px] text-evergreen/40">
-										{__('common:settings.stabilization_desc')}
-									</span>
-								</div>
-								<span class="font-mono text-sm font-bold text-lantern-gold">{editor.studio.stabilization}%</span>
-							</div>
-							<input
-								id="stab-input"
-								type="range"
-								bind:value={editor.studio.stabilization}
-								min="0"
-								max="100"
-								class="h-1.5 w-full cursor-pointer appearance-none rounded-lg bg-evergreen/5 accent-lantern-gold"
-							/>
-						</div>
-			
-						<div class="h-px w-full bg-evergreen/5" aria-hidden="true"></div>
-			
-						<!-- Flow Pace (FPS) -->
-						<div class="flex items-center justify-between">
-							<div class="flex flex-col gap-1">
-								<label
-									for="fps-input"
-									class="font-serif text-sm font-bold tracking-tight text-evergreen/60 uppercase"
-								>
-									{__('common:settings.fps_label')}
-								</label>
-								<span class="font-serif text-[10px] text-evergreen/40">
-									{__('common:settings.fps_desc')}
-								</span>
-							</div>
-			
+			<!-- Stabilization -->
+			<div class="flex flex-col gap-3">
+				<div class="flex items-center justify-between">
+					<div class="flex flex-col gap-1">
+						<label
+							for="stab-input"
+							class="font-serif text-sm font-bold tracking-tight text-evergreen/60 uppercase"
+						>
+							{__('common:settings.stabilization')}
+						</label>
+						<span class="font-serif text-[10px] text-evergreen/40">
+							{__('common:settings.stabilization_desc')}
+						</span>
+					</div>
+					<span class="font-mono text-sm font-bold text-lantern-gold"
+						>{editor.studio.stabilization}%</span
+					>
+				</div>
+				<input
+					id="stab-input"
+					type="range"
+					bind:value={editor.studio.stabilization}
+					min="0"
+					max="100"
+					class="h-1.5 w-full cursor-pointer appearance-none rounded-lg bg-evergreen/5 accent-lantern-gold"
+				/>
+			</div>
+
+			<div class="h-px w-full bg-evergreen/5" aria-hidden="true"></div>
+
+			<!-- Flow Pace (FPS) -->
+			<div class="flex items-center justify-between">
+				<div class="flex flex-col gap-1">
+					<label
+						for="fps-input"
+						class="font-serif text-sm font-bold tracking-tight text-evergreen/60 uppercase"
+					>
+						{__('common:settings.fps_label')}
+					</label>
+					<span class="font-serif text-[10px] text-evergreen/40">
+						{__('common:settings.fps_desc')}
+					</span>
+				</div>
+
 				<input
 					id="fps-input"
 					type="number"

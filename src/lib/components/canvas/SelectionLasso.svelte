@@ -5,6 +5,16 @@
 	let edges = $derived(editor.selection.getBoundaryEdges(editor.canvas.width));
 	let vertices = $derived(editor.selection.vertices);
 	let isSelecting = $derived(mode.current.type === 'SELECT');
+
+	// Create a single path string for the selection fill (optimized)
+	// We only do this when not actively dragging to keep it smooth
+	let fillPath = $derived.by(() => {
+		if (editor.selection.maskCount > 5000) return ''; // Skip fill for extremely large areas
+		return editor.selection
+			.getPoints(editor.canvas.width)
+			.map((p) => `M${p.x},${p.y}h1v1h-1z`)
+			.join(' ');
+	});
 </script>
 
 {#if editor.selection.isActive}
@@ -69,14 +79,7 @@
 		viewBox="0 0 {editor.canvas.width} {editor.canvas.height}"
 		shape-rendering="crispEdges"
 	>
-		<path
-			d={editor.selection
-				.getPoints(editor.canvas.width)
-				.map((p) => `M${p.x},${p.y}h1v1h-1z`)
-				.join(' ')}
-			fill="var(--color-lantern-gold)"
-			fill-opacity="0.1"
-		/>
+		<path d={fillPath} fill="var(--color-lantern-gold)" fill-opacity="0.1" />
 	</svg>
 {/if}
 

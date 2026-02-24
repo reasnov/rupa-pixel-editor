@@ -10,10 +10,10 @@
 			class="font-serif text-[8px] font-black tracking-widest text-evergreen/60 uppercase italic"
 		>
 			{__(
-				editor.selection.indices.length > 1
+				editor.selection.maskCount > 1
 					? 'common:timeline.pixel_count_plural'
 					: 'common:timeline.pixel_count',
-				{ replace: { count: editor.selection.indices.length } }
+				{ replace: { count: editor.selection.maskCount } }
 			)}
 		</span>
 	</div>

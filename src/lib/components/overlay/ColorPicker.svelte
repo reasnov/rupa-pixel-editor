@@ -57,12 +57,12 @@
 				<span class="text-3xl" aria-hidden="true"> 🏺 </span>
 				<div class="flex flex-col">
 					<h2 id="flavor-basin-title" class="font-tiny5 text-3xl leading-none text-lantern-gold">
-						{__('common:color_picker.title')}
+						{__('tools:color_picker.title')}
 					</h2>
 					<span
 						class="mt-1 font-serif text-[10px] font-bold tracking-[0.2em] text-evergreen/40 uppercase"
 					>
-						{__('common:color_picker.subtitle')}
+						{__('tools:color_picker.subtitle')}
 					</span>
 				</div>
 			</div>
@@ -75,7 +75,7 @@
 
 		<div class="flex flex-col gap-6">
 			<ColorSlider
-				label={__('common:color_picker.label.hue')}
+				label={__('tools:color_picker.label.hue')}
 				icon="🌈"
 				bind:value={h}
 				max={360}
@@ -83,21 +83,21 @@
 				isHue={true}
 			/>
 			<ColorSlider
-				label={__('common:color_picker.label.saturation')}
+				label={__('tools:color_picker.label.saturation')}
 				icon="💧"
 				bind:value={s}
 				max={100}
 				unit="%"
 			/>
 			<ColorSlider
-				label={__('common:color_picker.label.lightness')}
+				label={__('tools:color_picker.label.lightness')}
 				icon="☀️"
 				bind:value={l}
 				max={100}
 				unit="%"
 			/>
 			<ColorSlider
-				label={__('common:color_picker.label.alpha')}
+				label={__('tools:color_picker.label.alpha')}
 				icon="🌬️"
 				bind:value={a}
 				min={0}
@@ -110,7 +110,7 @@
 		<div class="flex flex-col gap-4">
 			<div class="flex items-center gap-4 rounded-xl border border-evergreen/5 bg-white/50 p-4">
 				<label for="hex-input" class="font-mono text-xs font-bold text-evergreen/40">
-					{__('common:color_picker.label.hex')}
+					{__('tools:color_picker.label.hex')}
 				</label>
 				<input
 					id="hex-input"
@@ -126,13 +126,13 @@
 						services.pickColor();
 						onClose();
 					}}
-					title={__('common:color_picker.button.eye_dropper')}
-					aria-label={__('common:color_picker.button.eye_dropper')}
+					title={__('tools:color_picker.button.eye_dropper')}
+					aria-label={__('tools:color_picker.button.eye_dropper')}
 				>
 					<span aria-hidden="true"> 🖌️ </span>
 				</button>
 				<button class="editor-primary-btn flex-1 py-4" onclick={onClose}>
-					{__('common:color_picker.button.confirm')}
+					{__('tools:color_picker.button.confirm')}
 				</button>
 			</div>
 		</div>

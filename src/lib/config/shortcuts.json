@@ -59,12 +59,12 @@
 		},
 		"PICK_COLOR": {
 			"label": "Sample Color",
-			"keys": ["Alt+i", "Alt+Space"],
+			"keys": ["Alt+i", "Alt+Space", "i"],
 			"group": "Tools"
 		},
 		"FLOOD_FILL": {
 			"label": "Color Fill",
-			"keys": ["Alt+f"],
+			"keys": ["Alt+f", "f"],
 			"group": "Magic"
 		},
 		"RECOLOR": {
@@ -101,6 +101,11 @@
 		}
 	},
 	"manipulation": {
+		"SELECT_ALL": {
+			"label": "Select All",
+			"keys": ["Ctrl+a"],
+			"group": "Edit"
+		},
 		"COPY": {
 			"label": "Copy",
 			"keys": ["Ctrl+c"],
@@ -266,7 +271,7 @@
 		},
 		"CYCLE_SYMMETRY": {
 			"label": "Cycle Symmetry Mode",
-			"keys": ["s"],
+			"keys": ["v"],
 			"group": "Etching"
 		},
 		"TOGGLE_TILING": {
@@ -291,7 +296,7 @@
 		},
 		"SHADE_LIGHTEN": {
 			"label": "Shade: Lighten",
-			"keys": ["l"],
+			"keys": ["u"],
 			"group": "Etching"
 		},
 		"SHADE_DARKEN": {
@@ -311,7 +316,7 @@
 		},
 		"TOOL_BRUSH": {
 			"label": "Brush Tool",
-			"keys": ["Shift+b"],
+			"keys": ["b", "Shift+b"],
 			"group": "Etching"
 		},
 		"TOOL_ERASER": {
@@ -319,9 +324,19 @@
 			"keys": ["e"],
 			"group": "Etching"
 		},
-		"TOOL_SELECT": {
-			"label": "Select Tool",
-			"keys": ["Shift+s"],
+		"TOOL_RECT_SELECT": {
+			"label": "Rectangle Selection",
+			"keys": ["s"],
+			"group": "Etching"
+		},
+		"TOOL_LASSO_SELECT": {
+			"label": "Lasso Selection",
+			"keys": ["l"],
+			"group": "Etching"
+		},
+		"TOOL_POLY_SELECT": {
+			"label": "Polygon Selection",
+			"keys": ["Alt+l"],
 			"group": "Etching"
 		},
 		"TOGGLE_HAND_TOOL": {
@@ -416,7 +431,7 @@
 		},
 		"OPEN_PALETTE": {
 			"label": "Color Picker",
-			"keys": ["b"],
+			"keys": ["F3"],
 			"group": "System"
 		},
 		"OPEN_HELP": {

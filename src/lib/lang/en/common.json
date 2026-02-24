@@ -47,21 +47,6 @@
 	"project": {
 		"saved": "Chronicle Preserved {{time}}"
 	},
-	"color_picker": {
-		"title": "Pigment Station",
-		"subtitle": "Mix your unique extracts",
-		"label": {
-			"hex": "HEX CODE",
-			"hue": "Nature (Hue)",
-			"saturation": "Depth (Saturation)",
-			"lightness": "Brightness (Lightness)",
-			"alpha": "Opacity (Alpha)"
-		},
-		"button": {
-			"eye_dropper": "Taste from Washi",
-			"confirm": "Seal the Pigment"
-		}
-	},
 	"timeline": {
 		"audio_status": {
 			"title": "Atmosphere Flow",
@@ -96,79 +81,6 @@
 		"current": "Currently at: {{x}}, {{y}}",
 		"action": "Move Brush"
 	},
-	"export": {
-		"title": "Hantaran Tray",
-		"subtitle": "Prepare Servings for the Village",
-		"tabs": {
-			"image": "Static Art",
-			"video": "Animated Flows"
-		},
-		"label": {
-			"scale": "Serving Scale",
-			"fps": "Village Pace (FPS)",
-			"selection": "Serving Selection",
-			"borders": "Brush Borders",
-			"background": "Washi Base"
-		},
-		"description": {
-			"scale": "Multiplier for final output size",
-			"fps": "Leaves per second",
-			"selection": "Choose which servings to send",
-			"borders": "Include grid lines on colored leaves",
-			"background": "Fill empty washi with base color"
-		},
-		"selection": {
-			"active": "In Service Only (Active)",
-			"visible": "Visible Servings",
-			"selected": "Selected Servings",
-			"all": "All Servings in Records"
-		},
-		"background": {
-			"transparent": "Crystal Clear (Transparent)",
-			"cream": "Washi Cream",
-			"black": "Forest Shadow",
-			"custom": "Custom Pigment",
-			"match_canvas": "Match Table Color"
-		},
-		"format": {
-			"png": "Polaroid PNG",
-			"webp": "WebP Extract",
-			"jpg": "Vintage JPG",
-			"svg_static": "Vector Blueprint",
-			"svg_kinetic": "Animated SVG",
-			"webm": "WebM Motion",
-			"gif": "Looping GIF",
-			"mp4": "MP4 Reel"
-		},
-		"button": {
-			"submit": "Craft & Send"
-		},
-		"status": {
-			"preparing": "Preparing Serving...",
-			"progress": "Crafting Progress",
-			"brewing": "Crafting Artifact...",
-			"requires_frames": "Requires multiple servings"
-		},
-		"preview_label": "Visual Sampling (Preview)",
-		"settings_label": "Craft Settings",
-		"wiggle_modifier": "Mist Intensity",
-		"sway_modifier": "Flow Sway",
-		"file_label": "{{format}} Artifact",
-		"dimensions_label": "{{width}} x {{height}} pixels"
-	},
-	"palette_library": {
-		"title": "Pigment Library",
-		"subtitle": "Store and manage your unique extracts",
-		"save_label": "Seal Current Swatch",
-		"save_desc": "Save your active pigments as a new chronicle",
-		"name_placeholder": "Give this set a name...",
-		"list_title": "Stored Pigments",
-		"button": {
-			"save": "Store Record",
-			"apply": "Sample",
-			"delete": "Spill"
-		}
-	},
 	"settings": {
 		"title": "Sanctuary Settings",
 		"subtitle": "Configure the Craft Table",
@@ -184,6 +96,12 @@
 		"note": "Note: Resizing will center your current art on the new washi. Large servings may slow down the flow."
 	},
 	"labels": {
+		"CLOSE": "Close Panel",
+		"CONFIRM": "Confirm Action",
+		"CANCEL": "Discard Changes",
+		"SELECT_OPTION": "Select an Option",
+		"SEARCH": "Search records...",
+		"PROGRESS": "Brewing in progress...",
 		"MOVE_UP": "Move Brush Up",
 		"MOVE_DOWN": "Move Brush Down",
 		"MOVE_LEFT": "Move Brush Left",
@@ -262,6 +180,9 @@
 		"TOGGLE_PIXEL_PERFECT": "Pure Flow (Shift+P)",
 		"TOOL_BRUSH": "Artisan Brush",
 		"TOOL_ERASER": "Artisan Sweep (Eraser)",
+		"TOOL_RECT_SELECT": { "artisan": "Looming Area", "technical": "Rectangle Selection" },
+		"TOOL_LASSO_SELECT": { "artisan": "Freehand Motif", "technical": "Lasso Selection" },
+		"TOOL_POLY_SELECT": { "artisan": "Binding Thread", "technical": "Polygon Selection" },
 		"TOOL_SELECT": "Gather Area (Select)",
 		"TOOL_RECTANGLE": { "artisan": "Box Form", "technical": "Rectangle Tool" },
 		"TOOL_ELLIPSE": { "artisan": "Round Form", "technical": "Ellipse Tool" },

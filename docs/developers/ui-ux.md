@@ -17,7 +17,10 @@ Every interaction in Rupa should feel like a moment of low-fi mindfulness in thi
 Rupa is a space for "Digital Ruralism." The UI balances organic warmth with mechanical precision.
 
 - **8-bit Tactility**: Feedback should feel physical. Elements should "click" into place. Transitions should be sharp but smooth, like a well-oiled mechanical keyboard.
-- **Structural Calmness**: A balanced layout reminiscent of a clean cafe counter. High density is avoided; focus is maintained on the **Washi Canvas**.
+- **Structural Calmness**: A balanced layout reminiscent of a clean cafe counter.
+- **Bi-Lateral Workspace**: Tools and project structure are split to optimize focus:
+  - **Left (The Serving Table)**: Project hierarchy (**Frames** & **Layers**) and **Primary Vessels** (Core drawing & selection tools).
+  - **Right (Artisan's Atelier)**: Artistic refinement (**Color**, **History**) and **Secondary Vessels** (Modifiers & Seals).
 - **The Glow of the CRT**: Use subtle glows (like the Lantern Gold) to simulate the warmth of old monitors and cafe lanterns against the cool forest backdrop.
 
 ---

@@ -55,10 +55,10 @@
 		<button
 			class="editor-tool-btn"
 			onclick={() => (editor.showManual = true)}
-			title="{__('manual:title')} (F1)"
+			title="User Guide (F1)"
 		>
 			<span aria-hidden="true">📜</span>
-			<span class="hidden xl:inline">{__('manual:title')}</span>
+			<span class="hidden xl:inline">User Guide</span>
 		</button>
 
 		<button

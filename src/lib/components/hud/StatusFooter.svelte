@@ -1,6 +1,6 @@
 <script lang="ts">
 	import StateIndicator from './StateIndicator.svelte';
-	import TechLedger from './TechLedger.svelte';
+	import StatusBar from './StatusBar.svelte';
 	import TimelinePanel from './ledger/TimelinePanel.svelte';
 </script>
 
@@ -12,7 +12,7 @@
 			<StateIndicator />
 		</div>
 
-		<TechLedger />
+		<StatusBar />
 	</div>
 </footer>
 

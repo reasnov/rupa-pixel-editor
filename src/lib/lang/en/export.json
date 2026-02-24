@@ -1,0 +1,69 @@
+{
+	"title": "Hantaran Tray",
+	"subtitle": "Prepare Servings for the Village",
+	"tabs": {
+		"image": "Static Art",
+		"video": "Animated Flows"
+	},
+	"label": {
+		"scale": "Serving Scale",
+		"fps": "Village Pace (FPS)",
+		"selection": "Serving Selection",
+		"borders": "Brush Borders",
+		"background": "Washi Base"
+	},
+	"description": {
+		"scale": "Multiplier for final output size",
+		"fps": "Leaves per second",
+		"selection": "Choose which servings to send",
+		"borders": "Include grid lines on colored leaves",
+		"background": "Fill empty washi with base color"
+	},
+	"selection": {
+		"active": "In Service Only (Active)",
+		"visible": "Visible Servings",
+		"selected": "Selected Servings",
+		"all": "All Servings in Records"
+	},
+	"background": {
+		"transparent": "Crystal Clear (Transparent)",
+		"cream": "Washi Cream",
+		"black": "Forest Shadow",
+		"custom": "Custom Pigment",
+		"match_canvas": "Match Table Color"
+	},
+	"format": {
+		"png": "Polaroid PNG",
+		"webp": "WebP Extract",
+		"jpg": "Vintage JPG",
+		"svg_static": "Vector Blueprint",
+		"svg_kinetic": "Animated SVG",
+		"webm": "WebM Motion",
+		"gif": "Looping GIF",
+		"mp4": "MP4 Reel"
+	},
+	"button": {
+		"submit": "Craft & Send"
+	},
+	"status": {
+		"preparing": "Preparing Serving...",
+		"progress": "Crafting Progress",
+		"brewing": "Crafting Artifact...",
+		"requires_frames": "Requires multiple servings"
+	},
+	"preview_label": "Visual Sampling (Preview)",
+	"settings_label": "Craft Settings",
+	"wiggle_modifier": "Mist Intensity",
+	"sway_modifier": "Flow Sway",
+	"file_label": "{{format}} Artifact",
+	"dimensions_label": "{{width}} x {{height}} pixels",
+	"propagation": {
+		"title": "Aroma Diffusion",
+		"subtitle": "Spread pigments across the chronicle",
+		"frames_label": "Affected Servings",
+		"frames_desc": "How many future servings will receive the aroma",
+		"offset_label": "Diffusion Pace",
+		"offset_desc": "Delay between each serving's reaction",
+		"action": "Diffuse Aroma"
+	}
+}

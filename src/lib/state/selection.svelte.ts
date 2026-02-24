@@ -5,46 +5,59 @@ import { editor } from './editor.svelte.js';
  * Supports rectangular bounds, arbitrary pixel sets, and polygon vertices.
  */
 export class SelectionState {
-	// Traditional rectangular bounds
+	// Traditional rectangular bounds for "Construction Mode"
 	start = $state<{ x: number; y: number } | null>(null);
 	end = $state<{ x: number; y: number } | null>(null);
 
-	// The actual set of selected indices
-	indices = $state<number[]>([]);
+	// The actual Bitmask Selection Buffer (Uint8Array)
+	// 0 = Not Selected, 1 = Selected
+	private _mask = $state.raw<Uint8Array>(new Uint8Array(0));
+	maskCount = $state(0);
+
+	get mask() {
+		return this._mask;
+	}
+	set mask(v: Uint8Array) {
+		this._mask = v;
+		let count = 0;
+		for (let i = 0; i < v.length; i++) {
+			if (v[i] === 1) count++;
+		}
+		this.maskCount = count;
+	}
+
+	// Selection Modes for Boolean Operations
+	selectionMode = $state<'NEW' | 'ADD' | 'SUBTRACT'>('NEW');
 
 	// Polygon vertices for "Binding Thread" (Poly-Lasso)
 	vertices = $state<{ x: number; y: number }[]>([]);
 
 	/**
-	 * Returns the set of all currently selected pixel indices.
-	 * Optimized for O(1) lookup during drawing operations.
+	 * Ensures the mask buffer matches the canvas dimensions.
 	 */
-	activeIndicesSet = $derived.by(() => {
-		const set = new Set<number>();
-		const width = editor.canvas.width;
-
-		// Add points from arbitrary selection (Spirit Pick)
-		this.indices.forEach((idx) => set.add(idx));
-
-		// Add points from rectangular selection (Looming)
-		const b = this.rectangularBounds;
-		if (b) {
-			for (let y = b.y1; y <= b.y2; y++) {
-				for (let x = b.x1; x <= b.x2; x++) {
-					set.add(y * width + x);
-				}
-			}
+	initMask(width: number, height: number) {
+		if (this._mask.length !== width * height) {
+			this._mask = new Uint8Array(width * height);
+			this.maskCount = 0;
 		}
+	}
 
-		return set;
-	});
+	/**
+	 * Optimized check to see if an index is selected.
+	 * $O(1)$ lookup directly from the bitmask.
+	 */
+	isSelected(index: number): boolean {
+		return this._mask[index] === 1;
+	}
 
 	get isActive(): boolean {
-		return this.indices.length > 0 || this.start !== null || this.vertices.length > 0;
+		return this.start !== null || this.vertices.length > 0 || this.maskCount > 0;
 	}
 
 	begin(x: number, y: number) {
-		this.clear();
+		if (this.selectionMode === 'NEW') {
+			this.clear();
+		}
 		this.start = { x, y };
 		this.end = { x, y };
 	}
@@ -58,58 +71,87 @@ export class SelectionState {
 	clear() {
 		this.start = null;
 		this.end = null;
-		this.indices = [];
 		this.vertices = [];
+		const newMask = new Uint8Array(this._mask.length);
+		newMask.fill(0);
+		this._mask = newMask;
+		this.maskCount = 0;
 	}
 
 	/**
 	 * Returns all currently selected points as {x, y} coordinates.
 	 */
 	getPoints(width: number) {
-		const pointsMap = new Map<number, { x: number; y: number }>();
+		const points: { x: number; y: number }[] = [];
 
-		// Add points from arbitrary selection (Spirit Pick)
-		this.indices.forEach((idx) => {
-			pointsMap.set(idx, {
-				x: idx % width,
-				y: Math.floor(idx / width)
-			});
-		});
+		// 1. Collect points from Bitmask
+		for (let i = 0; i < this._mask.length; i++) {
+			if (this._mask[i] === 1) {
+				points.push({
+					x: i % width,
+					y: Math.floor(i / width)
+				});
+			}
+		}
 
-		// Add points from rectangular selection (Looming)
+		// 2. Add points from construction bounds (if NEW mode)
+		// Otherwise, they'll be added to the mask on commit.
 		const b = this.rectangularBounds;
 		if (b) {
+			const set = new Set(points.map((p) => p.y * width + p.x));
 			for (let y = b.y1; y <= b.y2; y++) {
 				for (let x = b.x1; x <= b.x2; x++) {
 					const idx = y * width + x;
-					pointsMap.set(idx, { x, y });
+					if (!set.has(idx)) {
+						points.push({ x, y });
+					}
 				}
 			}
 		}
 
-		return Array.from(pointsMap.values());
+		return points;
 	}
 
 	/**
 	 * Identifies all outer and inner edges of the selected motif.
+	 * Optimized to use the Bitmask Buffer.
 	 */
 	getBoundaryEdges(width: number) {
 		const edges: { x1: number; y1: number; x2: number; y2: number }[] = [];
-		const points = this.getPoints(width);
-		if (points.length === 0) return edges;
+		const height = Math.floor(this._mask.length / width);
 
-		const pointSet = new Set(points.map((p) => `${p.x},${p.y}`));
+		// Scan all pixels in the mask
+		for (let i = 0; i < this._mask.length; i++) {
+			if (this._mask[i] === 1) {
+				const x = i % width;
+				const y = Math.floor(i / width);
 
-		points.forEach((p) => {
-			if (!pointSet.has(`${p.x},${p.y - 1}`))
-				edges.push({ x1: p.x, y1: p.y, x2: p.x + 1, y2: p.y });
-			if (!pointSet.has(`${p.x},${p.y + 1}`))
-				edges.push({ x1: p.x, y1: p.y + 1, x2: p.x + 1, y2: p.y + 1 });
-			if (!pointSet.has(`${p.x - 1},${p.y}`))
-				edges.push({ x1: p.x, y1: p.y, x2: p.x, y2: p.y + 1 });
-			if (!pointSet.has(`${p.x + 1},${p.y}`))
-				edges.push({ x1: p.x + 1, y1: p.y, x2: p.x + 1, y2: p.y + 1 });
-		});
+				// Top neighbor
+				if (y === 0 || this._mask[(y - 1) * width + x] === 0)
+					edges.push({ x1: x, y1: y, x2: x + 1, y2: y });
+				// Bottom neighbor
+				if (y === height - 1 || this._mask[(y + 1) * width + x] === 0)
+					edges.push({ x1: x, y1: y + 1, x2: x + 1, y2: y + 1 });
+				// Left neighbor
+				if (x === 0 || this._mask[y * width + (x - 1)] === 0)
+					edges.push({ x1: x, y1: y, x2: x, y2: y + 1 });
+				// Right neighbor
+				if (x === width - 1 || this._mask[y * width + (x + 1)] === 0)
+					edges.push({ x1: x + 1, y1: y, x2: x + 1, y2: y + 1 });
+			}
+		}
+
+		// Also scan construction bounds for visual feedback
+		const b = this.rectangularBounds;
+		if (b) {
+			const rectEdges = [
+				{ x1: b.x1, y1: b.y1, x2: b.x2 + 1, y2: b.y1 }, // Top
+				{ x1: b.x1, y1: b.y2 + 1, x2: b.x2 + 1, y2: b.y2 + 1 }, // Bottom
+				{ x1: b.x1, y1: b.y1, x2: b.x1, y2: b.y2 + 1 }, // Left
+				{ x1: b.x2 + 1, y1: b.y1, x2: b.x2 + 1, y2: b.y2 + 1 } // Right
+			];
+			edges.push(...rectEdges);
+		}
 
 		return edges;
 	}
@@ -129,20 +171,25 @@ export class SelectionState {
 	 * Unified bounds for operations like Copy/Paste.
 	 */
 	getEffectiveBounds(width: number) {
-		const points = this.getPoints(width);
-		if (points.length === 0) return null;
-
 		let x1 = Infinity,
 			x2 = -Infinity,
 			y1 = Infinity,
 			y2 = -Infinity;
-		points.forEach((p) => {
-			if (p.x < x1) x1 = p.x;
-			if (p.x > x2) x2 = p.x;
-			if (p.y < y1) y1 = p.y;
-			if (p.y > y2) y2 = p.y;
-		});
+		let found = false;
 
+		for (let i = 0; i < this._mask.length; i++) {
+			if (this._mask[i] === 1) {
+				const x = i % width;
+				const y = Math.floor(i / width);
+				if (x < x1) x1 = x;
+				if (x > x2) x2 = x;
+				if (y < y1) y1 = y;
+				if (y > y2) y2 = y;
+				found = true;
+			}
+		}
+
+		if (!found) return null;
 		return { x1, x2, y1, y2, width: x2 - x1 + 1, height: y2 - y1 + 1 };
 	}
 }

@@ -4,7 +4,7 @@
 	import { ExportEngine } from '../../engine/export.js';
 	import Modal from '../ui/Modal.svelte';
 	import ColorPicker from './ColorPicker.svelte';
-	import ArtifactPreview from './ArtifactPreview.svelte';
+	import ExportPreview from './ExportPreview.svelte';
 
 	import { onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
@@ -54,7 +54,7 @@
 		const isKinetic =
 			['webm', 'gif', 'mp4'].includes(format) || (format === 'svg' && activeTab === 'video');
 		if (isKinetic && !canUseVideo) {
-			editor.studio.show(__('common:export.status.requires_frames'));
+			editor.studio.show(__('export:status.requires_frames'));
 			return;
 		}
 
@@ -86,8 +86,8 @@
 {/if}
 
 <Modal
-	title={__('common:export.title')}
-	subtitle={__('common:export.subtitle')}
+	title={__('export:title')}
+	subtitle={__('export:subtitle')}
 	icon="📦"
 	onClose={handleClose}
 	width="1000px"
@@ -98,9 +98,9 @@
 		<div
 			class="flex aspect-square w-[420px] shrink-0 items-center justify-center rounded-2xl bg-evergreen/5 p-6 ring-1 ring-evergreen/5"
 			role="img"
-			aria-label={__('common:export.preview_label')}
+			aria-label={__('export:preview_label')}
 		>
-			<ArtifactPreview
+			<ExportPreview
 				{format}
 				scale={editor.studio.exportScale}
 				bgColor={editor.studio.exportBgColor}
@@ -111,7 +111,7 @@
 		<div
 			class="custom-scrollbar flex h-full flex-1 flex-col gap-6 overflow-y-auto pr-4"
 			role="group"
-			aria-label={__('common:export.settings_label')}
+			aria-label={__('export:settings_label')}
 		>
 			<!-- Tab Switcher -->
 			<div
@@ -126,7 +126,7 @@
 						? 'bg-white text-lantern-gold shadow-sm'
 						: 'text-evergreen/40 hover:text-evergreen'}"
 				>
-					{__('common:export.tabs.image')}
+					{__('export:tabs.image')}
 				</button>
 				<button
 					onclick={() => setTab('video')}
@@ -135,7 +135,7 @@
 						? 'bg-white text-lantern-gold shadow-sm'
 						: 'text-evergreen/40 hover:text-evergreen'}"
 				>
-					{__('common:export.tabs.video')}
+					{__('export:tabs.video')}
 				</button>
 			</div>
 
@@ -158,7 +158,7 @@
 							<span class="text-2xl" aria-hidden="true">🖼️</span>
 							<div class="text-center">
 								<h3 class="font-serif text-[10px] font-bold tracking-tight uppercase">
-									{__('common:export.format.png')}
+									{__('export:format.png')}
 								</h3>
 							</div>
 						</button>
@@ -174,7 +174,7 @@
 							<span class="text-2xl" aria-hidden="true">🕸️</span>
 							<div class="text-center">
 								<h3 class="font-serif text-[10px] font-bold tracking-tight uppercase">
-									{__('common:export.format.webp')}
+									{__('export:format.webp')}
 								</h3>
 							</div>
 						</button>
@@ -190,7 +190,7 @@
 							<span class="text-2xl" aria-hidden="true">📷</span>
 							<div class="text-center">
 								<h3 class="font-serif text-[10px] font-bold tracking-tight uppercase">
-									{__('common:export.format.jpg')}
+									{__('export:format.jpg')}
 								</h3>
 							</div>
 						</button>
@@ -206,7 +206,7 @@
 							<span class="text-2xl" aria-hidden="true">📐</span>
 							<div class="text-center">
 								<h3 class="font-serif text-[10px] font-bold tracking-tight uppercase">
-									{__('common:export.format.svg_static')}
+									{__('export:format.svg_static')}
 								</h3>
 							</div>
 						</button>
@@ -222,10 +222,10 @@
 							<span
 								class="font-serif text-[10px] font-bold tracking-widest text-evergreen/60 uppercase"
 							>
-								{__('common:export.label.selection')}
+								{__('export:label.selection')}
 							</span>
 							<span class="font-serif text-[9px] text-evergreen/40">
-								{__('common:export.description.selection')}
+								{__('export:description.selection')}
 							</span>
 						</div>
 						<div class="grid grid-cols-2 gap-2" role="radiogroup">
@@ -262,7 +262,7 @@
 					{#if !canUseVideo}
 						<div class="rounded-xl border border-lantern-gold/20 bg-lantern-gold/5 p-4 text-center">
 							<span class="font-serif text-xs font-bold text-lantern-gold italic">
-								{__('common:export.status.requires_frames')}
+								{__('export:status.requires_frames')}
 							</span>
 						</div>
 					{/if}
@@ -284,7 +284,7 @@
 							<span class="text-2xl" aria-hidden="true">🎀</span>
 							<div class="text-center">
 								<h3 class="font-serif text-[10px] font-bold tracking-tight uppercase">
-									{__('common:export.format.gif')}
+									{__('export:format.gif')}
 								</h3>
 							</div>
 						</button>
@@ -300,7 +300,7 @@
 							<span class="text-2xl" aria-hidden="true">🎬</span>
 							<div class="text-center">
 								<h3 class="font-serif text-[10px] font-bold tracking-tight uppercase">
-									{__('common:export.format.webm')}
+									{__('export:format.webm')}
 								</h3>
 							</div>
 						</button>
@@ -316,7 +316,7 @@
 							<span class="text-2xl" aria-hidden="true">📽️</span>
 							<div class="text-center">
 								<h3 class="font-serif text-[10px] font-bold tracking-tight uppercase">
-									{__('common:export.format.mp4')}
+									{__('export:format.mp4')}
 								</h3>
 							</div>
 						</button>
@@ -332,7 +332,7 @@
 							<span class="text-2xl" aria-hidden="true">📐</span>
 							<div class="text-center">
 								<h3 class="font-serif text-[10px] font-bold tracking-tight uppercase">
-									{__('common:export.format.svg_kinetic')}
+									{__('export:format.svg_kinetic')}
 								</h3>
 							</div>
 						</button>
@@ -349,10 +349,10 @@
 								for="fps-input"
 								class="font-serif text-[10px] font-bold tracking-widest text-evergreen/60 uppercase"
 							>
-								{__('common:export.label.fps')}
+								{__('export:label.fps')}
 							</label>
 							<span class="font-serif text-[9px] text-evergreen/40">
-								{__('common:export.description.fps')}
+								{__('export:description.fps')}
 							</span>
 						</div>
 						<input
@@ -380,10 +380,10 @@
 							for="scale-input"
 							class="font-serif text-[10px] font-bold tracking-widest text-evergreen/60 uppercase"
 						>
-							{__('common:export.label.scale')}
+							{__('export:label.scale')}
 						</label>
 						<span class="font-serif text-[9px] text-evergreen/40">
-							{__('common:export.description.scale')}
+							{__('export:description.scale')}
 						</span>
 					</div>
 					<input
@@ -404,10 +404,10 @@
 						<span
 							class="font-serif text-[10px] font-bold tracking-widest text-evergreen/60 uppercase"
 						>
-							{__('common:export.label.borders')}
+							{__('export:label.borders')}
 						</span>
 						<span class="font-serif text-[9px] text-evergreen/40">
-							{__('common:export.description.borders')}
+							{__('export:description.borders')}
 						</span>
 					</div>
 					<button
@@ -416,7 +416,7 @@
 							? 'bg-lantern-gold'
 							: 'bg-evergreen/10'}"
 						onclick={() => (editor.studio.includePixelBorders = !editor.studio.includePixelBorders)}
-						aria-label={__('common:export.label.borders')}
+						aria-label={__('export:label.borders')}
 					>
 						<div
 							class="h-4 w-4 rounded-full bg-white shadow-sm transition-transform {editor.studio
@@ -435,10 +435,10 @@
 						<span
 							class="font-serif text-[10px] font-bold tracking-widest text-evergreen/60 uppercase"
 						>
-							{__('common:export.label.background')}
+							{__('export:label.background')}
 						</span>
 						<span class="font-serif text-[9px] text-evergreen/40">
-							{__('common:export.description.background')}
+							{__('export:description.background')}
 						</span>
 					</div>
 					<div class="flex flex-wrap items-center gap-3" role="radiogroup">
@@ -451,7 +451,7 @@
 								editor.studio.exportBgColor = 'transparent';
 								isCustomSelected = false;
 							}}
-							title={__('common:export.background.transparent')}
+							title={__('export:background.transparent')}
 							role="radio"
 							aria-checked={editor.studio.exportBgColor === 'transparent'}
 						></button>
@@ -463,7 +463,7 @@
 								editor.studio.exportBgColor = '#fdf6e3';
 								isCustomSelected = false;
 							}}
-							title={__('common:export.background.cream')}
+							title={__('export:background.cream')}
 							role="radio"
 							aria-checked={editor.studio.exportBgColor === '#fdf6e3'}
 						></button>
@@ -475,7 +475,7 @@
 								editor.studio.exportBgColor = '#333d29';
 								isCustomSelected = false;
 							}}
-							title={__('common:export.background.black')}
+							title={__('export:background.black')}
 							role="radio"
 							aria-checked={editor.studio.exportBgColor === '#333d29'}
 						></button>
@@ -491,7 +491,7 @@
 									editor.studio.exportBgColor = customBg;
 									showPicker = true;
 								}}
-								title={__('common:export.background.custom')}
+								title={__('export:background.custom')}
 								role="radio"
 								aria-checked={isCustomSelected}
 							></button>
@@ -507,7 +507,7 @@
 							class="flex items-center gap-2 font-serif text-[10px] font-bold tracking-widest text-lantern-gold uppercase opacity-60 hover:opacity-100"
 						>
 							<span aria-hidden="true">🎨</span>
-							{__('common:export.background.match_canvas')}
+							{__('export:background.match_canvas')}
 						</button>
 					{/if}
 				</div>
@@ -519,7 +519,7 @@
 						<div
 							class="flex items-center justify-between font-serif text-[10px] font-bold tracking-widest text-lantern-gold uppercase"
 						>
-							<span>{__('common:export.status.progress')}</span>
+							<span>{__('export:status.progress')}</span>
 							<span>{editor.studio.exportProgress}%</span>
 						</div>
 						<div
@@ -542,9 +542,9 @@
 				>
 					{#if isExporting}
 						<span class="animate-spin text-2xl">⏳</span>
-						<span>{__('common:export.status.brewing')}</span>
+						<span>{__('export:status.brewing')}</span>
 					{:else}
-						<span>{__('common:export.button.submit')}</span>
+						<span>{__('export:button.submit')}</span>
 					{/if}
 				</button>
 			</div>

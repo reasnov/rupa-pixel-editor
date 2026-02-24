@@ -2,6 +2,8 @@
 	import { __ } from '$lib/state/i18n.svelte.js';
 	import { editor } from '../../state/editor.svelte.js';
 	import { services } from '../../engine/services.js';
+	import { FrameState } from '../../state/frame.svelte.js';
+	import { StorageLogic } from '../../logic/storage.js';
 	import Dialog from '../elements/Dialog.svelte';
 	import Button from '../elements/Button.svelte';
 
@@ -15,14 +17,15 @@
 		onResolve();
 	}
 
-	function handleDiscard() {
+	async function handleDiscard() {
+		await StorageLogic.saveProject('autosave_session', '');
 		onResolve();
 	}
 </script>
 
 <Dialog
-	title={__('ui:labels.recovery_title')}
-	subtitle={__('ui:labels.recovery_subtitle')}
+	title="ui:labels.recovery_title"
+	subtitle="ui:labels.recovery_subtitle"
 	isOpen={true}
 	onClose={handleDiscard}
 	width="450px"
@@ -33,7 +36,7 @@
 		</p>
 
 		<div class="flex justify-end gap-3 border-t border-text-main/5 pt-4">
-			<Button variant="ghost" onclick={handleDiscard} ariaLabel="ui:labels.cancel">
+			<Button variant="danger" onclick={handleDiscard} ariaLabel="ui:labels.cancel">
 				{__('ui:labels.cancel')}
 			</Button>
 			<Button variant="primary" onclick={handleRestore} ariaLabel="ui:labels.confirm">

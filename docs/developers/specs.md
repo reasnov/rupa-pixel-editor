@@ -83,13 +83,13 @@ To maintain cross-platform integrity, the following chord patterns are reserved 
 
 ## 3. Visual Identity & Design System
 
-- **Core Aesthetic:** Cottagecore / Retro-Barista.
-- **Primary Brand Color:** Barista Magenta `#D33682`.
-- **Background:** Natural Paper texture with Solarized Base 3 (`#fdf6e3`).
+- **Core Aesthetic:** Retro-Aesthetic / Japanese Roadside Cafe.
+- **Primary Accent Color:** Lantern Gold `#b58900` (Light) / `#ffc107` (Dark).
+- **Background:** Functional Canvas Background (`#fdf6e3` Light / `#121412` Dark).
 - **Typography:**
   - **Brand/Headers:** Tiny5 (Pixel-art font).
-  - **Serif/Display:** EB Garamond.
-  - **Body/System:** Lora.
+  - **Serif/Display:** Zen Maru Gothic.
+  - **Body/Technical:** Courier Prime (Monospace).
 - **Rendering:** `image-rendering: pixelated` must be applied to all canvas views to maintain sharpness.
 
 ## 4. Performance Requirements

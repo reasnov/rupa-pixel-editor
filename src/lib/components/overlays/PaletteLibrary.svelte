@@ -93,7 +93,7 @@
 		<!-- Actions: New & Import -->
 		<div class="flex items-center gap-3">
 			<button
-				class="flex flex-1 items-center justify-center gap-2 rounded-xl border-2 border-dashed border-text-main/10 bg-white/40 py-4 transition-all hover:border-ui-accent/40 hover:bg-white"
+				class="flex flex-1 items-center justify-center gap-2 rounded-xl border-2 border-dashed border-text-main/10 bg-text-main/[0.05] py-4 transition-all hover:border-ui-accent/40 hover:bg-ui-highlight/20"
 				onclick={handleNewRecipe}
 				aria-label={__('tools:palette_library.new_set')}
 			>
@@ -109,7 +109,7 @@
 			</button>
 
 			<button
-				class="flex flex-1 items-center justify-center gap-2 rounded-xl border-2 border-dashed border-text-main/10 bg-white/40 py-4 transition-all hover:border-ui-accent/40 hover:bg-white"
+				class="flex flex-1 items-center justify-center gap-2 rounded-xl border-2 border-dashed border-text-main/10 bg-text-main/[0.05] py-4 transition-all hover:border-ui-accent/40 hover:bg-ui-highlight/20"
 				onclick={triggerImport}
 				aria-label={__('tools:palette_library.import')}
 			>

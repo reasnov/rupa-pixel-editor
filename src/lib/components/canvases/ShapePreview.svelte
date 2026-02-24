@@ -31,7 +31,7 @@
 				width={rw}
 				height={rh}
 				fill="none"
-				stroke="var(--color-fern-green)"
+				stroke="var(--color-ui-accent)"
 				stroke-width="0.1"
 				stroke-dasharray="0.2, 0.2"
 				class="marching-ants"
@@ -43,7 +43,7 @@
 				rx={rw / 2}
 				ry={rh / 2}
 				fill="none"
-				stroke="var(--color-fern-green)"
+				stroke="var(--color-ui-accent)"
 				stroke-width="0.1"
 				stroke-dasharray="0.2, 0.2"
 				class="marching-ants"
@@ -62,7 +62,7 @@
 			<polyline
 				points={polyPoints.join(' ')}
 				fill="none"
-				stroke="var(--color-fern-green)"
+				stroke="var(--color-ui-accent)"
 				stroke-width="0.1"
 				stroke-dasharray="0.2, 0.2"
 				class="marching-ants"
@@ -94,7 +94,7 @@
 							: r)}
 				x2={xc + 0.5 + Math.cos(-Math.PI / 2) * r}
 				y2={yc + 0.5 + Math.sin(-Math.PI / 2) * r}
-				stroke="var(--color-fern-green)"
+				stroke="var(--color-ui-accent)"
 				stroke-width="0.1"
 				stroke-dasharray="0.2, 0.2"
 				class="marching-ants"

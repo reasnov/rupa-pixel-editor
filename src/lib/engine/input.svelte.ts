@@ -35,7 +35,7 @@ export class InputEngine {
 		this.listeners.forEach((fn) => fn(signal));
 	}
 
-	mount(window: Window, canvasElement: HTMLElement | null) {
+	mount(window: Window) {
 		// 1. Keyboard
 		const onKey = (e: KeyboardEvent) => {
 			if (!editor.isAppReady) return;
@@ -69,34 +69,43 @@ export class InputEngine {
 			keyboard.updatePhysicalState(e, 'up');
 		};
 
-		// 2. Pointer
-		if (canvasElement) {
-			const onPointerDown = (e: PointerEvent) => {
-				const source =
-					e.pointerType === 'pen' ? 'PEN' : e.pointerType === 'touch' ? 'TOUCH' : 'MOUSE';
-				pointer.handleStart(e, canvasElement);
-				this.activeSource = source;
-			};
-
-			const onPointerMove = (e: PointerEvent) => {
-				pointer.handleMove(e, canvasElement);
-			};
-
-			const onPointerUp = (e: PointerEvent) => {
-				pointer.handleEnd();
-			};
-
-			canvasElement.addEventListener('pointerdown', onPointerDown);
-			window.addEventListener('pointermove', onPointerMove);
-			window.addEventListener('pointerup', onPointerUp);
-		}
-
 		window.addEventListener('keydown', onKey);
 		window.addEventListener('keyup', onKeyUp);
 
 		return () => {
 			window.removeEventListener('keydown', onKey);
 			window.removeEventListener('keyup', onKeyUp);
+		};
+	}
+
+	/**
+	 * Binds the pointer events to a specific canvas element.
+	 * This can be called after mount() when the UI is ready.
+	 */
+	bindCanvas(canvasElement: HTMLElement) {
+		const onPointerDown = (e: PointerEvent) => {
+			const source =
+				e.pointerType === 'pen' ? 'PEN' : e.pointerType === 'touch' ? 'TOUCH' : 'MOUSE';
+			pointer.handleStart(e, canvasElement);
+			this.activeSource = source;
+		};
+
+		const onPointerMove = (e: PointerEvent) => {
+			pointer.handleMove(e, canvasElement);
+		};
+
+		const onPointerUp = (e: PointerEvent) => {
+			pointer.handleEnd();
+		};
+
+		canvasElement.addEventListener('pointerdown', onPointerDown);
+		window.addEventListener('pointermove', onPointerMove);
+		window.addEventListener('pointerup', onPointerUp);
+
+		return () => {
+			canvasElement.removeEventListener('pointerdown', onPointerDown);
+			window.removeEventListener('pointermove', onPointerMove);
+			window.removeEventListener('pointerup', onPointerUp);
 		};
 	}
 }

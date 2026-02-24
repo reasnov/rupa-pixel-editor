@@ -15,9 +15,7 @@
 	variant="ghost"
 	size="sm"
 	onclick={handleToggle}
-	ariaLabel={studio.theme === 'light'
-		? 'Switch to Midnight Sanctuary'
-		: 'Switch to Evergreen Sanctuary'}
+	ariaLabel="ui:labels.switch_theme"
 	class="relative h-8 w-8 !p-0"
 >
 	<div class="relative flex h-full w-full items-center justify-center overflow-hidden">

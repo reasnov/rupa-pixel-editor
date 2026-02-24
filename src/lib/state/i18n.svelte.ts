@@ -62,6 +62,7 @@ export function __(
 	keyOrOptions: string | { key: string; replace?: Record<string, any>; locale?: string },
 	options: { replace?: Record<string, any>; locale?: string } = {}
 ) {
+	if (!keyOrOptions) return '';
 	if (!i18nState.isReady) return typeof keyOrOptions === 'string' ? keyOrOptions : keyOrOptions.key;
 
 	let key: string;

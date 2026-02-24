@@ -115,9 +115,9 @@
 					variant="primary"
 					class="flex-1 py-4"
 					onclick={onClose}
-					ariaLabel="tools:color_picker.button.confirm"
+					ariaLabel="ui:labels.confirm"
 				>
-					{__('tools:color_picker.button.confirm')}
+					{__('ui:labels.confirm')}
 				</Button>
 			</div>
 		</div>

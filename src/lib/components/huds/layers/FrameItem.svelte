@@ -77,7 +77,7 @@
 		: ''} {isDragged ? 'opacity-40' : ''}"
 	aria-current={isActive ? 'true' : undefined}
 >
-	<div class="flex flex-1 items-center gap-2 overflow-hidden">
+	<div class="flex min-w-0 flex-1 items-center gap-2 overflow-hidden">
 		<span
 			class="w-4 shrink-0 text-center font-mono text-[9px] font-bold opacity-20"
 			aria-hidden="true">{index + 1}</span
@@ -87,7 +87,7 @@
 				e.stopPropagation();
 				services.project.toggleFrameVisibility(index);
 			}}
-			class="text-xs transition-opacity {frame.isVisible ? 'opacity-100' : 'opacity-20'}"
+			class="shrink-0 text-xs transition-opacity {frame.isVisible ? 'opacity-100' : 'opacity-20'}"
 			title={frame.isVisible
 				? __('workspace:hud.project_panel.active')
 				: __('workspace:hud.project_panel.visibility')}
@@ -95,7 +95,7 @@
 			{frame.isVisible ? '👁️' : '🕶️'}
 		</button>
 		<button
-			class="flex-1 truncate py-2 text-left font-serif text-sm font-medium text-text-main {frame.isVisible
+			class="min-w-0 flex-1 truncate py-2 text-left font-serif text-sm font-medium text-text-main {frame.isVisible
 				? ''
 				: 'opacity-40'}"
 			onclick={(e) => onSelect(index, e)}
@@ -119,10 +119,10 @@
 			{/if}
 		</button>
 	</div>
-	<div class="flex items-center gap-2">
+	<div class="flex shrink-0 items-center gap-1.5 pl-2">
 		<button
 			onclick={(e) => onToggleProperties(index, e)}
-			class="text-[10px] opacity-0 transition-opacity group-hover:opacity-40 hover:text-ui-accent"
+			class="shrink-0 text-[10px] opacity-0 transition-opacity group-hover:opacity-40 hover:text-ui-accent"
 			title={__('workspace:hud.project_panel.properties')}
 		>
 			{activePropertiesType === 'frame' && activePropertiesIndex === index ? '🔼' : '⚙️'}
@@ -132,7 +132,7 @@
 				e.stopPropagation();
 				services.project.duplicateFrame(index);
 			}}
-			class="text-[10px] opacity-0 transition-opacity group-hover:opacity-40 hover:text-ui-accent"
+			class="shrink-0 text-[10px] opacity-0 transition-opacity group-hover:opacity-40 hover:text-ui-accent"
 			title={__('workspace:hud.actions.duplicate')}
 		>
 			📋
@@ -143,7 +143,7 @@
 					e.stopPropagation();
 					services.project.removeFrame(index);
 				}}
-				class="text-[10px] opacity-0 transition-opacity group-hover:opacity-40 hover:text-ui-accent"
+				class="shrink-0 text-[10px] opacity-0 transition-opacity group-hover:opacity-40 hover:text-ui-accent"
 				title={__('workspace:hud.actions.delete')}
 			>
 				🗑️

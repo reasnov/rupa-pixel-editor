@@ -61,7 +61,7 @@
 </script>
 
 <div
-	class="bg-hud-shadow/10 fixed inset-0 z-[1200] flex items-start justify-center pt-[15vh] backdrop-blur-sm"
+	class="fixed inset-0 z-[1200] flex items-start justify-center bg-ui-structural/10 pt-[15vh] backdrop-blur-sm"
 	onmousedown={(e) => e.target === e.currentTarget && onClose()}
 	onkeydown={handleKey}
 	role="presentation"

@@ -18,9 +18,9 @@
 	width="400px"
 >
 	<div class="flex flex-col gap-6">
-		<div class="rounded-xl border border-text-main/5 bg-white/40 p-6">
+		<div class="rounded-xl border border-text-main/5 bg-text-main/[0.05] p-6">
 			<h3 class="mb-2 font-serif text-sm font-bold tracking-tight text-text-main/60 uppercase">
-				Chronicle Book (.rupa)
+				Project File (.rupa)
 			</h3>
 			<p class="font-serif text-sm leading-relaxed text-text-main/50">
 				{__('generic:loading')}

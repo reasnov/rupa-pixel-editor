@@ -173,13 +173,13 @@
 						? __('workspace:hud.context_menu.delete_frames', {
 								replace: { count: project.selectedFrameIndices.size }
 							})
-						: __('workspace:hud.actions.delete'),
+						: __('actions:delete_frame'),
 					icon: '🗑️',
 					danger: true,
 					disabled: project.frames.length <= project.selectedFrameIndices.size,
 					action: () => {
-						const indices = Array.from(project.selectedFrameIndices).sort((a, b) => b - a);
-						indices.forEach((idx) => services.project.removeFrame(idx));
+						const indices = Array.from(project.selectedFrameIndices).sort((a, b) => a - b);
+						indices.reverse().forEach((idx) => services.project.removeFrame(idx));
 						project.selectedFrameIndices = new Set([project.activeFrameIndex]);
 					}
 				}
@@ -267,7 +267,7 @@
 					}
 				},
 				{
-					label: __('workspace:hud.actions.delete'),
+					label: __('actions:delete_layer'),
 					icon: '🗑️',
 					danger: true,
 					disabled: frame.layers.length <= frame.selectedLayerIndices.size,
@@ -295,7 +295,7 @@
 	<Tabs
 		tabs={explorerTabs}
 		bind:activeTab={editor.studio.projectActiveTab}
-		ariaLabel="Project Explorer Tabs"
+		ariaLabel="ui:labels.project_tabs"
 		onchange={() => {
 			sfx.playPaperFlip();
 		}}
@@ -393,14 +393,14 @@
 					else services.project.addLayer();
 				}}
 				ariaLabel={editor.studio.projectActiveTab === 'frames'
-					? 'workspace:hud.actions.add_frame'
-					: 'workspace:hud.actions.add_layer'}
+					? 'actions:new_frame'
+					: 'actions:new_layer'}
 				class="!p-0 text-[9px] font-bold tracking-[0.1em] text-text-main/40 uppercase hover:text-text-main/80"
 			>
 				<span aria-hidden="true">＋</span>
 				{editor.studio.projectActiveTab === 'frames'
-					? __('workspace:hud.actions.add_frame')
-					: __('workspace:hud.actions.add_layer')}
+					? __('actions:new_frame')
+					: __('actions:new_layer')}
 			</Button>
 
 			{#if editor.studio.projectActiveTab === 'layers'}

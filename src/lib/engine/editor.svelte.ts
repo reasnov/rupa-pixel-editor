@@ -23,18 +23,25 @@ export class EditorEngine {
 	private autoSaveTimer: any = null;
 	private unsubscribeInput: (() => void) | null = null;
 
-	mount(canvasElement: HTMLElement | null = null) {
+	mount() {
 		this.backupInterval = setInterval(() => services.persistence.backup(), 10 * 60 * 1000);
 
 		state.studio.mount();
 		state.canvas.mount();
 		ambient.start();
 
+		// Link Pointer activity to Editor logic (No circular import)
+		pointer.onActivity = () => {
+			state.cursor.resetInactivityTimer();
+			this.resetAutoSaveTimer();
+		};
+
 		// Check for recoverable session (v0.9.3)
 		import('./services/persistence.js').then(async ({ PersistenceService }) => {
 			const persistence = new PersistenceService();
 			const hasBackup = await StorageLogic.loadProject('autosave_session');
-			if (hasBackup) {
+			if (hasBackup && hasBackup.length > 1000) {
+				// Only show prompt if backup exists and is not an empty/tiny file
 				state.studio.showRecoveryPrompt = true;
 			}
 			persistence.loadGlobalPalettes();
@@ -44,7 +51,7 @@ export class EditorEngine {
 			this.handleIntent(signal.intent as ActionIntent);
 		});
 
-		const cleanupInput = input.mount(window, canvasElement);
+		const cleanupInput = input.mount(window);
 
 		return () => {
 			if (this.unsubscribeInput) this.unsubscribeInput();
@@ -52,6 +59,13 @@ export class EditorEngine {
 			clearInterval(this.backupInterval);
 			if (this.autoSaveTimer) clearTimeout(this.autoSaveTimer);
 		};
+	}
+
+	/**
+	 * Connects the physical canvas element to the input engine.
+	 */
+	connectCanvas(el: HTMLElement) {
+		return input.bindCanvas(el);
 	}
 
 	handleIntent(intent: ActionIntent) {

@@ -29,12 +29,12 @@
 		{/each}
 	</div>
 
-	<h1 class="font-tiny5 leading-none text-fern-green {current.h1} tracking-tighter">
+	<h1 class="font-tiny5 leading-none text-text-main {current.h1} tracking-tighter">
 		{__('common:app.name')}
 	</h1>
 
 	{#if size === 'sm'}
-		<div class="h-3 w-px bg-fern-green/20" aria-hidden="true"></div>
+		<div class="h-3 w-px bg-text-main/20" aria-hidden="true"></div>
 	{/if}
 
 	<p class="font-serif font-bold tracking-[0.4em] text-text-main/40 uppercase {current.p}">

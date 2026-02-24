@@ -19,8 +19,8 @@ Rupa is a space for "Digital Ruralism." The UI balances organic warmth with mech
 - **8-bit Tactility**: Feedback should feel physical. Elements should "click" into place with a 2px offset on active states. Transitions use `steps(2)` or sharp cubic-beziers.
 - **Structural Calmness**: A balanced layout reminiscent of a clean cafe counter.
 - **Bi-Lateral Workspace**: Tools and project structure are split to optimize focus:
-  - **Left (The Serving Table)**: Project hierarchy (**Frames** & **Layers**) and **Primary Vessels** (Core drawing & selection tools).
-  - **Right (Artisan's Atelier)**: Artistic refinement (**Color**, **History**) and **Secondary Vessels** (Modifiers & Seals).
+  - **Left Sidebar**: Project hierarchy (**Frames** & **Layers**) and **Primary Toolbar** (Core drawing & selection tools).
+  - **Right Sidebar**: Artistic refinement (**Color**, **History**) and **Secondary Toolbar** (Modifiers & Locks).
 - **Atmospheric Layering**: The UI is wrapped in a "CRT Glow" containing scanlines and a subtle vignette to simulate vintage hardware.
 
 ---

@@ -45,7 +45,7 @@
 				y1={edge.y1}
 				x2={edge.x2}
 				y2={edge.y2}
-				stroke={isSelecting ? 'var(--color-ui-accent)' : 'rgba(181, 137, 0, 0.8)'}
+				stroke={isSelecting ? 'var(--color-ui-accent)' : 'var(--color-ui-structural)'}
 				stroke-width={0.08}
 				stroke-dasharray="0.2, 0.2"
 				class="marching-ants-svg"

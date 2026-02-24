@@ -23,7 +23,7 @@
 
 @theme {
 	/* The Nature Sanctuary Palette (Base) */
-	--color-washi-white: #fdf6e3;
+	--color-washi-white: #e8e3d0;
 	--color-rice-straw: #f4f1bb;
 	--color-bamboo-shoot: #d1e0d0;
 	--color-sage-leaf: #a3b18a;
@@ -47,9 +47,9 @@
 	--color-forest-shadow: #333d29;
 
 	/* Functional Aliases (Default: Light Mode) */
-	--color-canvas-bg: #fdf6e3;
+	--color-canvas-bg: #e8e3d0;
 	--color-text-main: #344e41;
-	--color-panel-bg: rgba(253, 246, 227, 0.95);
+	--color-panel-bg: rgba(232, 227, 208, 0.95);
 	--color-grid-border: #dad7cd;
 	--color-ui-accent: #b58900;
 	--color-ui-danger: #cb4b16;
@@ -292,4 +292,27 @@ canvas,
 .is-active.tool-button,
 .is-active-pigment {
 	animation: accent-pulse 3s infinite ease-in-out;
+}
+
+/* Global Custom Scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+	width: 10px;
+	height: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+	background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+	background: rgba(52, 78, 65, 0.15);
+	border-radius: 10px;
+}
+
+:root[data-theme='dark'] .custom-scrollbar::-webkit-scrollbar-thumb {
+	background: rgba(224, 229, 224, 0.1);
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+	background: rgba(52, 78, 65, 0.3);
 }

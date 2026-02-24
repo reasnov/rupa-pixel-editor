@@ -13,8 +13,17 @@
 
 	import { fade } from 'svelte/transition';
 
+	import { editor as engine } from '../../engine/editor.svelte.js';
+
 	let gridEl = $state<HTMLElement | null>(null);
 	let canvasEl = $state<HTMLCanvasElement | null>(null);
+
+	$effect(() => {
+		if (gridEl) {
+			const cleanup = engine.connectCanvas(gridEl);
+			return () => cleanup();
+		}
+	});
 
 	// Dimensions
 	let w = $derived(editor.canvas.width);
@@ -36,7 +45,8 @@
 	 * High-Performance Render Loop for the Main Canvas.
 	 */
 	$effect(() => {
-		if (editor.canvas.version === -1) return;
+		const version = editor.canvas.version;
+		if (version === -1) return;
 
 		const ctx = canvasEl?.getContext('2d', { alpha: true });
 		const pixels = editor.canvas.compositePixels;
@@ -79,7 +89,7 @@
 	</div>
 
 	<div
-		class="bg-hud-shadow/[0.02] relative flex flex-1 items-center justify-center overflow-hidden"
+		class="relative flex flex-1 items-center justify-center overflow-hidden bg-ui-structural/[0.05]"
 	>
 		{#if showTiling}
 			<div
@@ -107,7 +117,7 @@
 		>
 			<div
 				bind:this={gridEl}
-				class="relative h-full w-full shadow-[0_20px_60px_rgba(0,0,0,0.12)] ring-1 ring-text-main/5 outline-none focus:ring-2 focus:ring-fern-green"
+				class="relative h-full w-full shadow-[0_20px_60px_rgba(0,0,0,0.12)] ring-1 ring-text-main/5 outline-none focus:ring-2 focus:ring-ui-accent"
 				style="
 										background-color: {editor.backgroundColor};
 										touch-action: none;
@@ -170,7 +180,7 @@
 
 <style>
 	.canvas-viewport {
-		background-color: var(--color-stone-light);
+		background-color: var(--color-panel-bg);
 		container-type: size;
 	}
 

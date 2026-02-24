@@ -1,69 +1,70 @@
 {
-	"title": "Hantaran Tray",
-	"subtitle": "Prepare Servings for the Village",
+	"title": "Export Project",
+	"subtitle": "Prepare files for export",
 	"tabs": {
 		"image": "Static Art",
 		"video": "Animated Flows"
 	},
 	"label": {
-		"scale": "Serving Scale",
-		"fps": "Village Pace (FPS)",
-		"selection": "Serving Selection",
-		"borders": "Brush Borders",
-		"background": "Washi Base"
+		"scale": "Export Scale",
+		"fps": "Project FPS",
+		"selection": "Frame Selection",
+		"borders": "Pixel Borders",
+		"background": "Background Base"
 	},
 	"description": {
 		"scale": "Multiplier for final output size",
-		"fps": "Leaves per second",
-		"selection": "Choose which servings to send",
-		"borders": "Include grid lines on colored leaves",
-		"background": "Fill empty washi with base color"
+		"fps": "Frames per second",
+		"selection": "Choose which frames to export",
+		"borders": "Include grid lines on pixels",
+		"background": "Fill empty canvas with base color"
 	},
 	"selection": {
-		"active": "In Service Only (Active)",
-		"visible": "Visible Servings",
-		"selected": "Selected Servings",
-		"all": "All Servings in Records"
+		"active": "Active Frame",
+		"visible": "Visible Frames",
+		"selected": "Selected Frames",
+		"all": "All Frames"
 	},
 	"background": {
-		"transparent": "Crystal Clear (Transparent)",
-		"cream": "Washi Cream",
-		"black": "Forest Shadow",
-		"custom": "Custom Pigment",
-		"match_canvas": "Match Table Color"
+		"transparent": "Transparent",
+		"cream": "Canvas Cream",
+		"black": "Canvas Dark",
+		"custom": "Custom Color",
+		"match_canvas": "Match Canvas Color"
 	},
 	"format": {
-		"png": "Polaroid PNG",
-		"webp": "WebP Extract",
-		"jpg": "Vintage JPG",
-		"svg_static": "Vector Blueprint",
+		"png": "PNG Image",
+		"webp": "WebP Image",
+		"jpg": "JPG Image",
+		"svg_static": "Static SVG",
 		"svg_kinetic": "Animated SVG",
-		"webm": "WebM Motion",
-		"gif": "Looping GIF",
-		"mp4": "MP4 Reel"
+		"webm": "WebM Video",
+		"gif": "GIF Animation",
+		"mp4": "MP4 Video"
 	},
 	"button": {
-		"submit": "Craft & Send"
+		"submit": "Export Files",
+		"export_recipe": "Export Palette (.gpl)"
 	},
 	"status": {
-		"preparing": "Preparing Serving...",
-		"progress": "Crafting Progress",
-		"brewing": "Crafting Artifact...",
-		"requires_frames": "Requires multiple servings"
+		"preparing": "Preparing Export...",
+		"progress": "Export Progress",
+		"brewing": "Exporting Files...",
+		"requires_frames": "Requires multiple frames"
 	},
-	"preview_label": "Visual Sampling (Preview)",
-	"settings_label": "Craft Settings",
-	"wiggle_modifier": "Mist Intensity",
-	"sway_modifier": "Flow Sway",
-	"file_label": "{{format}} Artifact",
+	"preview_label": "Export Preview",
+	"settings_label": "Export Settings",
+	"wiggle_modifier": "Wiggle Amount",
+	"sway_modifier": "Sway Amount",
+	"file_label": "{{format}} File",
 	"dimensions_label": "{{width}} x {{height}} pixels",
 	"propagation": {
-		"title": "Aroma Diffusion",
-		"subtitle": "Spread pigments across the chronicle",
-		"frames_label": "Affected Servings",
-		"frames_desc": "How many future servings will receive the aroma",
-		"offset_label": "Diffusion Pace",
-		"offset_desc": "Delay between each serving's reaction",
-		"action": "Diffuse Aroma"
+		"title": "Selection Propagation",
+		"subtitle": "Copy selection to subsequent frames",
+		"frames_label": "Affected Frames",
+		"frames_desc": "Number of future frames to receive selection",
+		"offset_label": "Offset Amount",
+		"offset_desc": "Positional nudge between frames",
+		"action": "Propagate Selection"
 	}
 }

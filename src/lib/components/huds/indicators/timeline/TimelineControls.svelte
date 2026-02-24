@@ -8,7 +8,7 @@
 </script>
 
 <div
-	class="flex items-center gap-4 border-r border-black/5 pr-4"
+	class="flex min-w-0 items-center gap-4 border-r border-text-main/5 pr-4"
 	role="toolbar"
 	aria-label="Timeline Controls"
 >
@@ -26,16 +26,19 @@
 	</Button>
 
 	<!-- FPS Control -->
-	<div class="flex items-center gap-2 rounded-xl bg-text-main/5 px-3 py-1 ring-1 ring-text-main/10">
+	<div class="flex items-center gap-2 rounded-lg bg-text-main/5 px-2 py-1 ring-1 ring-text-main/10">
+		<span class="font-serif text-[8px] font-bold text-text-main/40 uppercase"
+			>{__('workspace:settings.fps_label')}</span
+		>
 		<Input
-			label="workspace:settings.fps_label"
 			type="number"
 			bind:value={editor.project.fps}
 			min={1}
 			max={60}
 			ariaLabel="workspace:settings.fps_label"
-			class="w-16"
+			class="!h-6 w-12 !border-none !bg-transparent !p-0 !text-center !text-[10px] !shadow-none"
 		/>
+		<span class="font-tiny5 text-[8px] text-text-main/30">{__('ui:units.fps')}</span>
 	</div>
 
 	<!-- Ghost Layers Toggle -->
@@ -44,23 +47,23 @@
 		isActive={editor.studio.showGhostLayers}
 		onclick={() => (editor.studio.showGhostLayers = !editor.studio.showGhostLayers)}
 		ariaLabel="actions:toggle_ghost_layers"
-		class="!px-3 !py-1.5"
+		class="!h-8 !px-3"
 	>
 		<span class="text-xs" aria-hidden="true">👻</span>
-		<span class="font-serif text-[11px] font-black tracking-wider uppercase"
-			>{__('timeline:ghosts_label')}</span
-		>
 	</Button>
 
 	<!-- Timeline Zoom -->
-	<div class="flex items-center gap-2 border-l border-text-main/10 pl-4">
+	<div class="flex items-center gap-3 border-l border-text-main/10 pl-4">
+		<span class="font-serif text-[8px] font-bold text-text-main/40 uppercase"
+			>{__('ui:labels.timeline_zoom')}</span
+		>
 		<Slider
 			min={0.5}
 			max={4}
 			step={0.1}
 			bind:value={editor.studio.timelineZoom}
-			ariaLabel="Timeline Zoom"
-			class="w-32"
+			ariaLabel="ui:labels.timeline_zoom"
+			class="w-64"
 		/>
 	</div>
 </div>

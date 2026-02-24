@@ -21,7 +21,7 @@
 
 <div
 	transition:slide={{ duration: 200 }}
-	class="group flex items-center justify-between rounded-xl border border-text-main/5 bg-white/40 p-4 transition-all hover:bg-white/80"
+	class="group flex items-center justify-between rounded-xl border border-text-main/5 bg-text-main/[0.05] p-4 transition-all hover:bg-ui-highlight/10"
 >
 	<div class="flex flex-col gap-2 overflow-hidden">
 		<div class="flex items-center gap-3">
@@ -55,7 +55,7 @@
 			variant="secondary"
 			size="sm"
 			onclick={() => onExport(preset.id)}
-			ariaLabel="Export Recipe (.gpl)"
+			ariaLabel="export:button.export_recipe"
 			class="h-8 w-8 !p-0"
 		>
 			📥

@@ -78,7 +78,7 @@
 	style={isChild ? 'margin-left: 12px;' : ''}
 	aria-current={isActive ? 'true' : undefined}
 >
-	<div class="flex flex-1 items-center gap-2 overflow-hidden">
+	<div class="flex min-w-0 flex-1 items-center gap-2 overflow-hidden">
 		{#if layer.type === 'FOLDER'}
 			<button
 				onclick={(e) => {
@@ -97,7 +97,7 @@
 				e.stopPropagation();
 				services.project.toggleVisibility(index);
 			}}
-			class="text-xs transition-opacity {layer.isVisible ? 'opacity-100' : 'opacity-20'}"
+			class="shrink-0 text-xs transition-opacity {layer.isVisible ? 'opacity-100' : 'opacity-20'}"
 			title={__('workspace:hud.project_panel.visibility')}
 		>
 			{layer.isVisible
@@ -109,7 +109,7 @@
 					: '🕶️'}
 		</button>
 		<button
-			class="flex-1 truncate py-2 text-left font-serif text-sm font-medium text-text-main {layer.isVisible
+			class="min-w-0 flex-1 truncate py-2 text-left font-serif text-sm font-medium text-text-main {layer.isVisible
 				? ''
 				: 'opacity-40'}"
 			onclick={(e) => onSelect(index, e)}
@@ -133,10 +133,10 @@
 			{/if}
 		</button>
 	</div>
-	<div class="flex items-center gap-2">
+	<div class="flex shrink-0 items-center gap-1.5 pl-2">
 		<button
 			onclick={(e) => onToggleProperties(index, e)}
-			class="text-[10px] opacity-0 transition-opacity group-hover:opacity-40 hover:text-ui-accent"
+			class="shrink-0 text-[10px] opacity-0 transition-opacity group-hover:opacity-40 hover:text-ui-accent"
 			title={__('workspace:hud.project_panel.properties')}
 		>
 			{activePropertiesType === 'layer' && activePropertiesIndex === index ? '🔼' : '⚙️'}
@@ -146,7 +146,9 @@
 				e.stopPropagation();
 				services.project.toggleLock(index);
 			}}
-			class="text-[10px] transition-opacity {layer.isLocked ? 'opacity-100' : 'opacity-20'}"
+			class="shrink-0 text-[10px] transition-opacity {layer.isLocked
+				? 'opacity-100'
+				: 'opacity-20'}"
 			title={__('workspace:hud.project_panel.lock')}
 		>
 			{layer.isLocked ? '🔒' : '🔓'}
@@ -156,7 +158,7 @@
 				e.stopPropagation();
 				services.project.removeLayer(index);
 			}}
-			class="text-[10px] opacity-0 transition-opacity group-hover:opacity-40 hover:text-ui-accent"
+			class="shrink-0 text-[10px] opacity-0 transition-opacity group-hover:opacity-40 hover:text-ui-accent"
 			title={__('workspace:hud.actions.delete')}
 		>
 			🗑️

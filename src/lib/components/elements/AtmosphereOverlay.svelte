@@ -25,7 +25,7 @@
 							animation: rain-fall {p.duration}s linear infinite; 
 							animation-delay: {p.delay}s;
 							opacity: {p.opacity};
-							box-shadow: 0 0 2px var(--color-mist-gray);
+							box-shadow: 0 0 2px var(--color-text-main);
 						"
 			></div>
 		{/each}

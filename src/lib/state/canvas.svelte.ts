@@ -80,6 +80,7 @@ export class CanvasState {
 				}
 			});
 		}
+		this.incrementVersion();
 	}
 
 	// --- Buffer Management ---

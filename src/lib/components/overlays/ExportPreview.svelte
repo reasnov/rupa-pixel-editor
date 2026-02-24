@@ -64,7 +64,7 @@
 
 <div class="flex flex-col items-center gap-3">
 	<div
-		class="editor-checker-small flex items-center justify-center overflow-hidden rounded-xl border-4 border-white bg-white/10 p-2 shadow-inner"
+		class="editor-checker-small flex items-center justify-center overflow-hidden rounded-xl border-4 border-ui-structural bg-text-main/5 p-2 shadow-inner"
 	>
 		<canvas bind:this={canvasEl} class="rounded-sm shadow-sm"></canvas>
 	</div>

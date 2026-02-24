@@ -17,30 +17,30 @@
 
 	// Tool Definitions
 	const primaryTools = [
-		{ id: 'BRUSH', icon: '🖌️', intent: 'TOOL_BRUSH' as const, label: 'TOOL_BRUSH' },
-		{ id: 'ERASER', icon: '🧹', intent: 'TOOL_ERASER' as const, label: 'TOOL_ERASER' },
+		{ id: 'BRUSH', icon: '🖌️', intent: 'TOOL_BRUSH' as const, label: 'tool_brush' },
+		{ id: 'ERASER', icon: '🧹', intent: 'TOOL_ERASER' as const, label: 'tool_eraser' },
 		{
 			id: 'RECT_SELECT',
 			icon: '✨',
 			intent: 'TOOL_RECT_SELECT' as const,
-			label: 'TOOL_RECT_SELECT'
+			label: 'tool_rect_select'
 		},
 		{
 			id: 'LASSO_SELECT',
 			icon: '➰',
 			intent: 'TOOL_LASSO_SELECT' as const,
-			label: 'TOOL_LASSO_SELECT'
+			label: 'tool_lasso_select'
 		},
 		{
 			id: 'POLY_SELECT',
 			icon: '📐',
 			intent: 'TOOL_POLY_SELECT' as const,
-			label: 'TOOL_POLY_SELECT'
+			label: 'tool_poly_select'
 		},
-		{ id: 'RECTANGLE', icon: '📦', intent: 'TOOL_RECTANGLE' as const, label: 'TOOL_RECTANGLE' },
-		{ id: 'ELLIPSE', icon: '⭕', intent: 'TOOL_ELLIPSE' as const, label: 'TOOL_ELLIPSE' },
-		{ id: 'POLYGON', icon: '⭐', intent: 'TOOL_POLYGON' as const, label: 'TOOL_POLYGON' },
-		{ id: 'HAND', icon: '🤚', intent: 'TOGGLE_HAND_TOOL' as const, label: 'TOGGLE_HAND_TOOL' }
+		{ id: 'RECTANGLE', icon: '📦', intent: 'TOOL_RECTANGLE' as const, label: 'tool_rectangle' },
+		{ id: 'ELLIPSE', icon: '⭕', intent: 'TOOL_ELLIPSE' as const, label: 'tool_ellipse' },
+		{ id: 'POLYGON', icon: '⭐', intent: 'TOOL_POLYGON' as const, label: 'tool_polygon' },
+		{ id: 'HAND', icon: '🤚', intent: 'TOGGLE_HAND_TOOL' as const, label: 'toggle_hand_tool' }
 	];
 
 	const shading = [
@@ -49,21 +49,21 @@
 			icon: '☀️',
 			intent: 'SHADE_LIGHTEN' as const,
 			active: () => studio.isShadingLighten,
-			label: 'SHADE_LIGHTEN'
+			label: 'shade_lighten'
 		},
 		{
 			id: 'darken',
 			icon: '🌙',
 			intent: 'SHADE_DARKEN' as const,
 			active: () => studio.isShadingDarken,
-			label: 'SHADE_DARKEN'
+			label: 'shade_darken'
 		},
 		{
 			id: 'dither',
 			icon: '🏁',
 			intent: 'SHADE_DITHER' as const,
 			active: () => studio.isShadingDither,
-			label: 'SHADE_DITHER'
+			label: 'shade_dither'
 		}
 	];
 
@@ -74,28 +74,28 @@
 			icon: '🪞',
 			intent: 'CYCLE_SYMMETRY' as const,
 			active: () => studio.symmetryMode !== 'OFF',
-			label: 'CYCLE_SYMMETRY'
+			label: 'cycle_symmetry'
 		},
 		{
 			id: 'tiling',
 			icon: '∞',
 			intent: 'TOGGLE_TILING' as const,
 			active: () => studio.isTilingEnabled,
-			label: 'TOGGLE_TILING'
+			label: 'toggle_tiling'
 		},
 		{
 			id: 'perfect',
 			icon: '✨',
 			intent: 'TOGGLE_PIXEL_PERFECT' as const,
 			active: () => studio.isPixelPerfect,
-			label: 'TOGGLE_PIXEL_PERFECT'
+			label: 'toggle_pixel_perfect'
 		},
 		{
 			id: 'stencil',
 			icon: '🎨',
 			intent: 'TOGGLE_PATTERN_BRUSH' as const,
 			active: () => studio.isPatternBrushActive,
-			label: 'TOGGLE_PATTERN_BRUSH',
+			label: 'toggle_pattern_brush',
 			disabled: () => !editor.project.clipboard
 		}
 	];
@@ -106,14 +106,14 @@
 			icon: 'A',
 			intent: 'TOGGLE_ALPHA_LOCK' as const,
 			active: () => studio.isAlphaLocked,
-			label: 'TOGGLE_ALPHA_LOCK'
+			label: 'toggle_alpha_lock'
 		},
 		{
 			id: 'color',
 			icon: 'C',
 			intent: 'TOGGLE_COLOR_LOCK' as const,
 			active: () => studio.isColorLocked,
-			label: 'TOGGLE_COLOR_LOCK'
+			label: 'toggle_color_lock'
 		}
 	];
 </script>
@@ -127,7 +127,7 @@
 					<Button
 						variant="tool"
 						isActive={studio.activeTool === tool.id}
-						ariaLabel={__(`actions:${tool.label}`)}
+						ariaLabel={`actions:${tool.label}`}
 						onclick={() => handleToolClick(tool.intent)}
 						class="h-8 w-8 !p-0"
 					>
@@ -141,14 +141,14 @@
 							class="absolute top-0 -right-12 z-50 flex flex-col items-center gap-1 rounded-md bg-canvas-bg p-1 shadow-md ring-1 ring-text-main/10"
 						>
 							<button
-								class="flex h-4 w-4 items-center justify-center text-[10px] hover:text-fern-green"
+								class="flex h-4 w-4 items-center justify-center text-[10px] hover:text-ui-accent"
 								onclick={() => engine.handleIntent('POLY_SIDES_INC')}
 							>
 								+
 							</button>
-							<span class="font-tiny5 text-[8px] text-fern-green">{studio.polygonSides}</span>
+							<span class="font-tiny5 text-[8px] text-ui-accent">{studio.polygonSides}</span>
 							<button
-								class="flex h-4 w-4 items-center justify-center text-[10px] hover:text-fern-green"
+								class="flex h-4 w-4 items-center justify-center text-[10px] hover:text-ui-accent"
 								onclick={() => engine.handleIntent('POLY_SIDES_DEC')}
 							>
 								-
@@ -159,16 +159,16 @@
 							<!-- Indentation Control -->
 							<div class="flex flex-col items-center gap-0.5">
 								<button
-									class="text-[8px] hover:text-fern-green"
+									class="text-[8px] hover:text-ui-accent"
 									onclick={() => engine.handleIntent('POLY_INDENT_INC')}
 								>
 									▴
 								</button>
-								<span class="text-[7px] font-bold text-fern-green/60"
+								<span class="text-[7px] font-bold text-ui-accent/60"
 									>{studio.polygonIndentation}%</span
 								>
 								<button
-									class="text-[8px] hover:text-fern-green"
+									class="text-[8px] hover:text-ui-accent"
 									onclick={() => engine.handleIntent('POLY_INDENT_DEC')}
 								>
 									▾
@@ -186,7 +186,7 @@
 				<Button
 					variant="tool"
 					isActive={tool.active()}
-					ariaLabel={__(`actions:${tool.label}`)}
+					ariaLabel={`actions:${tool.label}`}
 					onclick={() => engine.handleIntent(tool.intent)}
 					class="h-8 w-8 !p-0"
 				>
@@ -204,7 +204,7 @@
 					variant="tool"
 					isActive={toggle.active()}
 					disabled={toggle.disabled?.()}
-					ariaLabel={__(`actions:${toggle.label}`)}
+					ariaLabel={`actions:${toggle.label}`}
 					onclick={() => !toggle.disabled?.() && engine.handleIntent(toggle.intent)}
 					class="h-8 w-8 !p-0"
 				>
@@ -221,7 +221,7 @@
 				<Button
 					variant="tool"
 					isActive={lock.active()}
-					ariaLabel={__(`actions:${lock.label}`)}
+					ariaLabel={`actions:${lock.label}`}
 					onclick={() => engine.handleIntent(lock.intent)}
 					class="h-8 w-8 !p-0 font-bold"
 				>

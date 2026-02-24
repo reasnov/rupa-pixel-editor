@@ -30,7 +30,7 @@
 						>Technical Trace</span
 					>
 					<pre
-						class="max-h-40 overflow-auto rounded-lg bg-black/5 p-4 font-mono text-[11px] whitespace-pre-wrap text-text-main/60">
+						class="max-h-40 overflow-auto rounded-lg bg-text-main/5 p-4 font-mono text-[11px] whitespace-pre-wrap text-text-main/60">
 						{error.technical}
 					</pre>
 				</div>

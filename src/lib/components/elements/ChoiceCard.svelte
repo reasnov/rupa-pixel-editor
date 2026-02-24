@@ -31,10 +31,9 @@
 	class="
         flex flex-col items-center gap-3 rounded-xl border-2 p-4 transition-all
         disabled:cursor-not-allowed disabled:opacity-20
-        {isSelected
+        		{isSelected
 		? 'border-ui-accent bg-ui-accent/5 text-ui-accent'
-		: 'border-text-main/5 bg-white/40 text-text-main/40 hover:bg-white/60 hover:text-text-main/70 hover:opacity-100'}
-        {className}
+		: 'border-text-main/5 bg-text-main/[0.05] text-text-main/40 hover:bg-text-main/10 hover:text-text-main/70 hover:opacity-100'}        {className}
     "
 	onclick={() => onclick(id)}
 >

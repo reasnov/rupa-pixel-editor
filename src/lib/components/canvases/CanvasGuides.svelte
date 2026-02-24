@@ -16,13 +16,13 @@
 	{#if studio.symmetryMode === 'HORIZONTAL' || studio.symmetryMode === 'QUADRANT'}
 		<div
 			transition:fade
-			class="absolute top-0 bottom-0 left-1/2 z-30 w-px -translate-x-1/2 border-l border-dashed border-fern-green shadow-sm"
+			class="absolute top-0 bottom-0 left-1/2 z-30 w-px -translate-x-1/2 border-l border-dashed border-ui-accent/50 shadow-sm"
 		></div>
 	{/if}
 	{#if studio.symmetryMode === 'VERTICAL' || studio.symmetryMode === 'QUADRANT'}
 		<div
 			transition:fade
-			class="absolute top-1/2 right-0 left-0 z-30 h-px -translate-y-1/2 border-t border-dashed border-fern-green shadow-sm"
+			class="absolute top-1/2 right-0 left-0 z-30 h-px -translate-y-1/2 border-t border-dashed border-ui-accent/50 shadow-sm"
 		></div>
 	{/if}
 

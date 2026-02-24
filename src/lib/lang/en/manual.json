@@ -1,49 +1,49 @@
 {
 	"title": "The Artisan's Sanctuary Manual",
-	"subtitle": "Chapter I: The Art of Moss & Stone",
+	"subtitle": "Chapter I: Mastering Pixel Art",
 	"philosophy": {
-		"title": "The Way of the Forest",
-		"p1": "In the quiet of the morning, there is only the Washi—a pristine, untouched white void. Then came the Brush, guided by your breath, bringing the first drop of evergreen to the surface.",
-		"p2": "Rupa is your rural sanctuary. Here, pixels aren't just data—they are Leaves. Every mark you make is a deliberate act of tending a garden that requires patience, focus, and a peaceful heart.",
-		"p3": "\"We do not just paint pixels; we weave stories into the moss of time.\""
+		"title": "The Design Philosophy",
+		"p1": "In the quiet of the morning, there is only the Canvas—a pristine, untouched void. Then came the Brush, guided by your breath, bringing the first drop of color to the surface.",
+		"p2": "Rupa is your creative sanctuary. Here, pixels are the building blocks of your story. Every mark you make is a deliberate act of creation that requires patience, focus, and a peaceful heart.",
+		"p3": "\"We do not just paint pixels; we weave stories into the flow of time.\""
 	},
 	"pillars": {
 		"cursor": {
-			"title": "The Artisan's Brush",
-			"desc": "Your voice in the sanctuary. Move it with the Arrow Keys to guide your patterns with the precision of a master gardener."
+			"title": "The Editor Cursor",
+			"desc": "Your voice in the sanctuary. Move it with the Arrow Keys to guide your patterns with the precision of a master artisan."
 		},
 		"colors": {
-			"title": "The Natural Pigments",
-			"desc": "Rich extracts from forest flora. Apply them with Space and switch pigments using the numbers on your keyboard."
+			"title": "The Color Palette",
+			"desc": "Rich colors extracted from forest flora. Apply them with Space and switch colors using the numbers on your keyboard."
 		},
 		"layers": {
-			"title": "The Washi Sheets",
-			"desc": "Layers of depth. Like stacking fine washi paper, each sheet adds a new dimension to your story."
+			"title": "The Layer System",
+			"desc": "Layers of depth. Like stacking fine paper, each layer adds a new dimension to your project."
 		}
 	},
 	"techniques": {
-		"title": "Sanctuary Techniques",
+		"title": "Editor Techniques",
 		"continuous": {
-			"title": "Fluid Moss-Painting",
-			"desc": "Hold Ctrl while moving to stream pigment across the washi."
+			"title": "Continuous Painting",
+			"desc": "Hold Ctrl while moving to stream color across the canvas."
 		},
 		"magic_select": {
-			"title": "Spirit Gathering",
-			"desc": "Press W to select all connected leaves of the same tone. A mystical way to rearrange your garden."
+			"title": "Color Selection",
+			"desc": "Press W to select all connected pixels of the same tone. A powerful way to rearrange your project."
 		},
 		"timeline": {
-			"title": "The Seasons' Flow",
-			"desc": "Create sequences of servings to breathe life into your work. Press P to feel the pulse of nature."
+			"title": "The Animation Flow",
+			"desc": "Create sequences of frames to breathe life into your work. Press P to feel the pulse of your animation."
 		},
 		"audio": {
-			"title": "Resonant Sanctuary",
-			"desc": "Listen. The sanctuary responds to your focus with piano melodies and distant wind chimes."
+			"title": "Reactive Audio",
+			"desc": "Listen. The application responds to your focus with piano melodies and nature soundscapes."
 		}
 	},
 	"footer": {
 		"quote": "May your brush be steady and your sanctuary ever-peaceful.",
-		"guild": "The Rupa Rural Artisan Circle",
-		"all_shortcuts": "Review the Records",
-		"enter": "Step into the Sanctuary"
+		"guild": "The Rupa Development Team",
+		"all_shortcuts": "Keyboard Shortcuts",
+		"enter": "Start Creating"
 	}
 }

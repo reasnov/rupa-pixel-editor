@@ -17,6 +17,9 @@ export class DrawService {
 		const x = tx !== undefined ? Math.floor(tx) : editor.cursor.pos.x;
 		const y = ty !== undefined ? Math.floor(ty) : editor.cursor.pos.y;
 
+		const activeColor = editor.paletteState.activeColor;
+		if (!activeColor) return;
+
 		const currentPixels = new Uint32Array(editor.canvas.pixels);
 		let hasChanges = false;
 		history.beginBatch();

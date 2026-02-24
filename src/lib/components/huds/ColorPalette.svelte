@@ -30,7 +30,7 @@
 						y: e.clientY,
 						items: [
 							{
-								label: __('workspace:hud.context_menu.delete_pigment'),
+								label: __('workspace:hud.context_menu.delete_color'),
 								icon: '🗑️',
 								danger: true,
 								disabled: editor.palette.length <= 1,
@@ -47,7 +47,7 @@
 		{/each}
 
 		<button
-			class="flex h-8 w-8 items-center justify-center rounded border border-dashed border-text-main/20 bg-text-main/5 transition-all hover:scale-110 hover:border-ui-accent/40 hover:bg-white"
+			class="flex h-8 w-8 items-center justify-center rounded border border-dashed border-text-main/20 bg-text-main/5 transition-all hover:scale-110 hover:border-ui-accent/40 hover:bg-ui-highlight/20"
 			onclick={() => (editor.showColorPicker = true)}
 			title={__('tools:color_picker.title') + ' (B)'}
 			aria-label={__('tools:color_picker.title')}
@@ -56,7 +56,7 @@
 		</button>
 
 		<button
-			class="flex h-8 w-8 items-center justify-center rounded border border-dashed border-text-main/20 bg-text-main/5 transition-all hover:scale-110 hover:border-ui-accent/40 hover:bg-white"
+			class="flex h-8 w-8 items-center justify-center rounded border border-dashed border-text-main/20 bg-text-main/5 transition-all hover:scale-110 hover:border-ui-accent/40 hover:bg-ui-highlight/20"
 			onclick={() => (editor.studio.showPaletteLibrary = true)}
 			title={__('tools:palette_library.title')}
 			aria-label={__('tools:palette_library.title')}

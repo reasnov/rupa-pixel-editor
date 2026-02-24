@@ -50,8 +50,8 @@
 	aria-label={__(ariaLabel)}
 	title={__(ariaLabel)}
 	class="
-        relative flex cursor-pointer items-center justify-center gap-2
-        select-none focus:ring-2 focus:ring-ui-accent
+        relative flex cursor-pointer flex-nowrap items-center justify-center gap-2
+        whitespace-nowrap select-none focus:ring-2 focus:ring-ui-accent
         focus:ring-offset-2 focus:outline-none disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50
         {variantClasses[variant]}
         {variant !== 'ghost' && sizeClasses[size]}

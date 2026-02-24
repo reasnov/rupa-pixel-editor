@@ -1,5 +1,4 @@
 import { editor as state } from '../state/editor.svelte.js';
-import { editor as engine } from './editor.svelte.js';
 import { keyboard } from './keyboard.svelte.js';
 import { input } from './input.svelte.js';
 import { mode } from './mode.svelte.js';
@@ -10,6 +9,7 @@ import { Geometry } from '../logic/geometry.js';
  * PointerEngine: Manages fluid pointer interactions.
  */
 export class PointerEngine {
+	onActivity: (() => void) | null = null;
 	private isPointerDown = false;
 	isPointerDownActive = $state(false);
 	private lastPosition = { x: -1, y: -1 };
@@ -32,7 +32,7 @@ export class PointerEngine {
 	}
 
 	handleStart(e: PointerEvent, canvasElement: HTMLElement) {
-		engine.resetAutoSaveTimer();
+		if (this.onActivity) this.onActivity();
 		this.isPointerDown = true;
 		this.isPointerDownActive = true;
 		this.isSnapped = false;
@@ -121,7 +121,7 @@ export class PointerEngine {
 
 	handleMove(e: PointerEvent, canvasElement: HTMLElement) {
 		if (!this.isPointerDown) return;
-		engine.resetAutoSaveTimer();
+		if (this.onActivity) this.onActivity();
 
 		if (this.rafId) return;
 

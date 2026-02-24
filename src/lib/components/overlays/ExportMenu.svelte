@@ -118,10 +118,10 @@
 	onClose={handleClose}
 	width="1000px"
 >
-	<div class="flex h-[550px] items-start gap-12 overflow-hidden">
+	<div class="flex flex-col items-start gap-12 overflow-hidden lg:flex-row">
 		<!-- Left: Live Preview -->
 		<div
-			class="flex aspect-square w-[420px] shrink-0 items-center justify-center rounded-2xl bg-text-main/5 p-6 ring-1 ring-text-main/5"
+			class="flex aspect-square w-full shrink-0 items-center justify-center rounded-2xl bg-text-main/5 p-6 ring-1 ring-text-main/5 lg:w-[420px]"
 			role="img"
 			aria-label={__('export:preview_label')}
 		>
@@ -248,7 +248,7 @@
 
 			<!-- Global Settings -->
 			<div
-				class="flex flex-col gap-5 rounded-xl border border-text-main/5 bg-white/40 p-6 {isExporting
+				class="flex flex-col gap-5 rounded-xl border border-text-main/5 bg-text-main/[0.05] p-6 {isExporting
 					? 'pointer-events-none opacity-50'
 					: ''}"
 			>

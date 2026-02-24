@@ -18,9 +18,9 @@ To ensure the longevity and excellence of the Rupa technical ecosystem, the arch
 
 ## 3. Architectural Pattern: Modular Layered Monolith
 
-1.  **UI Layer (`src/lib/components/`)**: Purely presentational Svelte components (HUD). They consume state and trigger intents from the **Roadside Sanctuary**. Utilizes a modular **AppShell** architecture powered by Svelte 5 Snippets.
-2.  **State Layer (`src/lib/state/`)**: Reactive data structures using Svelte 5 Runes (The Atelier). They hold the "Source of Truth" for the chronicles being woven. Includes an optimized **Bitmask Selection Buffer** (`Uint8Array`).
-3.  **Service Layer (`src/lib/engine/services/`)**: The **Business Logic & Rules** container. Services manage state transitions, project-specific rules, and orchestrate complex workflows (e.g., Chronicle preservation, Ingredient management, Boolean Selection logic).
+1.  **UI Layer (`src/lib/components/`)**: Purely presentational Svelte components (HUD). They consume state and trigger intents from the **Engine**. Utilizes a modular **AppShell** architecture powered by Svelte 5 Snippets.
+2.  **State Layer (`src/lib/state/`)**: Reactive data structures using Svelte 5 Runes. They hold the "Source of Truth" for the project. Includes an optimized **Bitmask Selection Buffer** (`Uint8Array`).
+3.  **Service Layer (`src/lib/engine/services/`)**: The **Business Logic & Rules** container. Services manage state transitions, project-specific rules, and orchestrate complex workflows (e.g., project preservation, layer management, Boolean Selection logic).
 4.  **Engine Layer (`src/lib/engine/`)**: The **Orchestrator & Entry-point**. Handles hardware bridges (Input, 8-bit Audio, Nature Ambience), input normalization, and high-level system coordination.
 5.  **Logic Layer (`src/lib/logic/`)**: **Pure, stateless algorithms**. Contains mathematical calculations and complex processing logic (Geometry, Color, Path, Rendering, Sorting, Filtering, Binary Manipulation).
 6.  **Persistence Layer**: **Data management & Storage**. Handles the lifecycle of static "ingredients", studio configuration, and dynamic user creations (FileSystem, LocalStorage, IndexedDB).
@@ -118,10 +118,10 @@ The "Brain" of the application. This layer contains pure, side-effect-free algor
 The editor follows an industry-standard layout system to ensure ergonomics and maintainability:
 
 - **AppHeader (Top)**: Central command center for identity and global project metadata.
-- **AppSidebar Left (The Serving Table)**: Focuses on project structure (**Frames** & **Layers**). Includes the **Minimap** and the **Primary Vessel Toolbar** (Artisan's tools).
-- **AppViewport (Center)**: The dedicated workspace for **The Washi** (Canvas).
-- **AppSidebar Right (Artisan's Atelier)**: Detail-oriented panels for **Color** (Flavor) selection, history, and the **Secondary Vessel Toolbar** (Modifiers & Seals).
-- **AppFooter (Bottom)**: Houses the **TechLedger** and the **Timeline Panel**.
+- **AppSidebar Left**: Focuses on project structure (**Frames** & **Layers**). Includes the **Minimap** and the **Primary Toolbar**.
+- **AppViewport (Center)**: The dedicated workspace for the **Canvas**.
+- **AppSidebar Right**: Detail-oriented panels for **Color** selection, history, and the **Secondary Toolbar**.
+- **AppFooter (Bottom)**: Houses the **Status Bar** and the **Timeline Panel**.
 - **AppOverlay (Z-Layer)**: A dedicated layer for floating elements (Modals, Toasts, Command Palette) using `pointer-events` isolation.
 
 ### 6.2 Selection System: Bitmask Buffer

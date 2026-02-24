@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { __ } from '$lib/state/i18n.svelte.js';
 	import { editor } from '../../state/editor.svelte.js';
-	import Dialog from '../elements/Dialog.svelte';
+	import Drawer from '../elements/Drawer.svelte';
 	import Button from '../elements/Button.svelte';
 
 	let { onClose = () => (editor.showManual = false) } = $props<{
@@ -9,7 +9,7 @@
 	}>();
 </script>
 
-<Dialog title="manual:title" subtitle="manual:subtitle" isOpen={true} {onClose} width="850px">
+<Drawer title="manual:title" isOpen={true} {onClose} width="850px">
 	<div class="flex flex-col gap-12">
 		<!-- Philosophy Section -->
 		<section class="flex flex-col gap-6" aria-labelledby="philosophy-title">
@@ -17,7 +17,7 @@
 				<span class="text-3xl" aria-hidden="true">🌿</span>
 				<h3
 					id="philosophy-title"
-					class="font-tiny5 text-3xl tracking-tighter text-fern-green uppercase"
+					class="font-tiny5 text-3xl tracking-tighter text-ui-accent uppercase"
 				>
 					{__('manual:philosophy.title')}
 				</h3>
@@ -33,11 +33,11 @@
 		<!-- Core Pillars -->
 		<div class="grid grid-cols-3 gap-6" role="list">
 			<div
-				class="flex flex-col gap-3 rounded-2xl border border-text-main/5 bg-white/40 p-6 shadow-sm transition-all hover:bg-white/60"
+				class="flex flex-col gap-3 rounded-2xl border border-text-main/5 bg-text-main/[0.05] p-6 shadow-sm transition-all hover:bg-text-main/10"
 				role="listitem"
 			>
 				<div class="text-2xl" aria-hidden="true">🖌️</div>
-				<h4 class="font-tiny5 text-lg tracking-tight text-fern-green uppercase">
+				<h4 class="font-tiny5 text-lg tracking-tight text-ui-accent uppercase">
 					{__('manual:pillars.cursor.title')}
 				</h4>
 				<p class="font-serif text-[12px] leading-relaxed text-text-main/60">
@@ -46,11 +46,11 @@
 			</div>
 
 			<div
-				class="flex flex-col gap-3 rounded-2xl border border-text-main/5 bg-white/40 p-6 shadow-sm transition-all hover:bg-white/60"
+				class="flex flex-col gap-3 rounded-2xl border border-text-main/5 bg-text-main/[0.05] p-6 shadow-sm transition-all hover:bg-text-main/10"
 				role="listitem"
 			>
 				<div class="text-2xl" aria-hidden="true">🍵</div>
-				<h4 class="font-tiny5 text-lg tracking-tight text-fern-green uppercase">
+				<h4 class="font-tiny5 text-lg tracking-tight text-ui-accent uppercase">
 					{__('manual:pillars.colors.title')}
 				</h4>
 				<p class="font-serif text-[12px] leading-relaxed text-text-main/60">
@@ -59,11 +59,11 @@
 			</div>
 
 			<div
-				class="flex flex-col gap-3 rounded-2xl border border-text-main/5 bg-white/40 p-6 shadow-sm transition-all hover:bg-white/60"
+				class="flex flex-col gap-3 rounded-2xl border border-text-main/5 bg-text-main/[0.05] p-6 shadow-sm transition-all hover:bg-text-main/10"
 				role="listitem"
 			>
 				<div class="text-2xl" aria-hidden="true">📄</div>
-				<h4 class="font-tiny5 text-lg tracking-tight text-fern-green uppercase">
+				<h4 class="font-tiny5 text-lg tracking-tight text-ui-accent uppercase">
 					{__('manual:pillars.layers.title')}
 				</h4>
 				<p class="font-serif text-[12px] leading-relaxed text-text-main/60">
@@ -74,12 +74,12 @@
 
 		<!-- Skills & Techniques -->
 		<section
-			class="flex flex-col gap-8 rounded-3xl bg-fern-green/5 p-10 ring-1 ring-fern-green/10"
+			class="flex flex-col gap-8 rounded-3xl bg-ui-accent/5 p-10 ring-1 ring-ui-accent/10"
 			aria-labelledby="techniques-title"
 		>
 			<h3
 				id="techniques-title"
-				class="font-tiny5 text-2xl tracking-tighter text-fern-green uppercase"
+				class="font-tiny5 text-2xl tracking-tighter text-ui-accent uppercase"
 			>
 				{__('manual:techniques.title')}
 			</h3>
@@ -87,7 +87,7 @@
 			<div class="grid grid-cols-2 gap-x-12 gap-y-8">
 				<div class="flex gap-5">
 					<div
-						class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-white text-2xl shadow-sm"
+						class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-canvas-bg text-2xl shadow-sm"
 						aria-hidden="true"
 					>
 						🎋
@@ -104,7 +104,7 @@
 
 				<div class="flex gap-5">
 					<div
-						class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-white text-2xl shadow-sm"
+						class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-canvas-bg text-2xl shadow-sm"
 						aria-hidden="true"
 					>
 						✨
@@ -121,7 +121,7 @@
 
 				<div class="flex gap-5">
 					<div
-						class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-white text-2xl shadow-sm"
+						class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-canvas-bg text-2xl shadow-sm"
 						aria-hidden="true"
 					>
 						🌀
@@ -138,7 +138,7 @@
 
 				<div class="flex gap-5">
 					<div
-						class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-white text-2xl shadow-sm"
+						class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-canvas-bg text-2xl shadow-sm"
 						aria-hidden="true"
 					>
 						🎐
@@ -188,4 +188,4 @@
 			</div>
 		</footer>
 	</div>
-</Dialog>
+</Drawer>

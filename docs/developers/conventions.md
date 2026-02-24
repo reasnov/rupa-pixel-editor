@@ -78,11 +78,13 @@ To prevent "spaghetti" data flow, adhere to these access rules:
 - **Standard Technical Terms**:
   - `Project` instead of `Chronicle`
   - `Canvas` instead of `Washi` or `Moss`
-  - `Frame` instead of `Serving`
-  - `Layer` instead of `Ingredient`
+  - `Frame` instead of `Serving` or `Cup`
+  - `Layer` instead of `Ingredient` or `Infusion`
   - `Brush` instead of `Artisan's Brush`
-  - `Palette` instead of `Pigment Station`
-  - `Export` instead of `Hantaran Tray`
+  - `Color` instead of `Pigment` or `Flavor`
+  - `Palette` instead of `Recipe` or `Pigment Station`
+  - `Export` instead of `Hantaran Tray` or `Artifact`
+  - `Command Palette` instead of `Catalog` or `Sanctuary Records`
 - **State Modules**: Suffix with `State` (e.g., `CanvasState`).
 - **Services**: Suffix with `Service` (e.g., `ProjectService`).
 - **Components**: PascalCase (e.g., `ColorPalette.svelte`).

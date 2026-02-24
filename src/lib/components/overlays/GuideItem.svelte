@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { __ } from '$lib/state/i18n.svelte.js';
 	import { keyboard } from '../../engine/keyboard.svelte.js';
 
 	let { intent, label, customKey } = $props<{
@@ -9,7 +10,7 @@
 </script>
 
 <div class="flex items-center justify-between">
-	<span class="font-serif text-sm text-text-main/80">{label}</span>
+	<span class="font-serif text-sm text-text-main/80">{__(label)}</span>
 	<kbd
 		class="rounded border border-ui-structural/20 bg-canvas-bg px-2 py-1 font-mono text-[10px] font-bold text-ui-structural shadow-sm ring-1 ring-ui-structural/10"
 	>

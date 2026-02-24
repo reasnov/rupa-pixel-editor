@@ -16,9 +16,9 @@
 		secondary:
 			'bg-canvas-bg text-text-main border border-ui-structural shadow-[2px_2px_0px_var(--color-ui-structural)]',
 		accent:
-			'bg-sakura-pink text-white border border-ui-structural shadow-[2px_2px_0px_var(--color-ui-structural)]',
+			'bg-ui-highlight text-text-main border border-ui-structural shadow-[2px_2px_0px_var(--color-ui-structural)]',
 		danger:
-			'bg-rust-clay text-white border border-ui-structural shadow-[2px_2px_0px_var(--color-ui-structural)]',
+			'bg-ui-danger text-white border border-ui-structural shadow-[2px_2px_0px_var(--color-ui-structural)]',
 		ghost: 'bg-transparent text-text-main border border-ui-structural'
 	};
 
@@ -31,8 +31,8 @@
 
 <span
 	class="
-        inline-flex items-center justify-center rounded-sm font-bold
-        uppercase select-none
+        inline-flex flex-nowrap items-center justify-center rounded-sm font-bold
+        whitespace-nowrap uppercase select-none
         {variantClasses[variant]}
         {sizeClasses[size]}
         {className}

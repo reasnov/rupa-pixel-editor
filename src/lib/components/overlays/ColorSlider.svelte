@@ -57,7 +57,7 @@
 		appearance: none;
 		width: 24px;
 		height: 24px;
-		background: #fff;
+		background: var(--color-canvas-bg);
 		border: 3px solid var(--color-ui-accent);
 		border-radius: 8px;
 		cursor: pointer;

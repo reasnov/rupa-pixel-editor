@@ -47,7 +47,7 @@
                 absolute left-1 h-4 w-4 rounded-full border border-ui-structural
                 bg-canvas-bg shadow-[1px_1px_0px_var(--color-ui-structural)] transition-transform duration-100
                 ease-in-out
-                {checked ? 'translate-x-4 bg-white' : ''}
+                {checked ? 'translate-x-4' : ''}
             "
 		></div>
 	</button>

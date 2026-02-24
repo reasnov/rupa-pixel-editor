@@ -150,6 +150,7 @@ export class PersistenceService {
 	}
 
 	async autoSaveSession() {
+		if (!this.hasSignificantWork()) return;
 		try {
 			const blob = await this.serialize();
 			const reader = new FileReader();
@@ -171,6 +172,27 @@ export class PersistenceService {
 			await this.deserialize(blob);
 			return true;
 		}
+		return false;
+	}
+
+	/**
+	 * Checks if the current project has enough data to be worth recovering.
+	 * Significant = > 10 pixels painted OR > 1 layer OR > 1 frame.
+	 */
+	hasSignificantWork(): boolean {
+		const project = editor.project;
+		if (project.frames.length > 1) return true;
+		if (project.frames[0].layers.length > 1) return true;
+
+		const pixels = project.frames[0].layers[0].pixels;
+		let coloredCount = 0;
+		for (let i = 0; i < pixels.length; i++) {
+			if (pixels[i] !== 0) {
+				coloredCount++;
+				if (coloredCount > 10) return true;
+			}
+		}
+
 		return false;
 	}
 

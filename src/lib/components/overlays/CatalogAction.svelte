@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { __ } from '$lib/state/i18n.svelte.js';
 	let { action, isSelected, onSelect } = $props<{
 		action: { label: string; shortcut: string; action: () => void };
 		isSelected: boolean;
@@ -8,7 +9,7 @@
 
 <button
 	class="editor-action-btn flex items-center justify-between rounded-xl px-6 py-4 transition-all {isSelected
-		? 'active bg-ui-accent text-white shadow-lg'
+		? 'active bg-ui-accent text-canvas-bg shadow-lg'
 		: 'hover:bg-text-main/5'}"
 	onclick={() => {
 		action.action();
@@ -16,7 +17,7 @@
 	}}
 	onmouseenter={onSelect}
 >
-	<span class="font-serif text-sm font-bold tracking-tight">{action.label}</span>
+	<span class="font-serif text-sm font-bold tracking-tight">{__(action.label)}</span>
 	{#if action.shortcut}
 		<span
 			class="font-mono text-[10px] font-bold uppercase {isSelected

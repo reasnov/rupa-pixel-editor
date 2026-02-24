@@ -39,7 +39,7 @@
 	width="400px"
 >
 	<div class="flex flex-col gap-8">
-		<div class="flex flex-col gap-6 rounded-xl border border-text-main/5 bg-white/40 p-8">
+		<div class="flex flex-col gap-6 rounded-xl border border-text-main/5 bg-text-main/[0.05] p-8">
 			<div class="grid grid-cols-2 gap-8">
 				<Input
 					id="goto-x"

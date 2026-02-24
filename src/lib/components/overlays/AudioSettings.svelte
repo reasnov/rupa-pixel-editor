@@ -20,7 +20,7 @@
 	<div class="flex flex-col gap-8">
 		<!-- Master Mute Toggle -->
 		<div
-			class="flex items-center justify-between rounded-xl border border-text-main/5 bg-white/40 p-6 shadow-sm"
+			class="flex items-center justify-between rounded-xl border border-text-main/5 bg-text-main/[0.05] p-6 shadow-sm"
 		>
 			<div class="flex flex-col">
 				<span class="font-serif text-sm font-bold tracking-tight text-text-main/60 uppercase"
@@ -41,7 +41,7 @@
 		</div>
 
 		<!-- Volume Sliders -->
-		<div class="flex flex-col gap-6 rounded-xl border border-text-main/5 bg-white/40 p-8">
+		<div class="flex flex-col gap-6 rounded-xl border border-text-main/5 bg-text-main/[0.05] p-8">
 			<!-- SFX Volume -->
 			<Slider
 				label="workspace:hud.audio.sfx_label"

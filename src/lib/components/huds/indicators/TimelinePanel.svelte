@@ -29,8 +29,8 @@
 >
 	<!-- Panel Header -->
 	<div class="flex items-center justify-between border-b border-text-main/5 pb-1">
-		<div class="flex items-center gap-6">
-			<div class="flex items-center gap-2">
+		<div class="flex min-w-0 flex-1 items-center gap-6">
+			<div class="flex shrink-0 items-center gap-2">
 				<span class="text-[10px] opacity-30" aria-hidden="true">🌀</span>
 				<span class="font-tiny5 text-[9px] tracking-[0.2em] text-text-main/40 uppercase"
 					>{__('timeline:title')}</span
@@ -56,7 +56,7 @@
 					variant="ghost"
 					size="sm"
 					onclick={toggleMinimize}
-					ariaLabel={editor.studio.isTimelineMinimized ? 'Restore' : 'Minimize'}
+					ariaLabel={editor.studio.isTimelineMinimized ? 'ui:labels.confirm' : 'ui:labels.minimize'}
 					class="h-5 w-5 !p-0"
 				>
 					<span class="text-[10px] opacity-40"
@@ -67,7 +67,7 @@
 					variant="ghost"
 					size="sm"
 					onclick={toggleMaximize}
-					ariaLabel={editor.studio.isTimelineMaximized ? 'Restore' : 'Maximize'}
+					ariaLabel={editor.studio.isTimelineMaximized ? 'ui:labels.confirm' : 'ui:labels.maximize'}
 					class="h-5 w-5 !p-0"
 				>
 					<span class="text-[10px] opacity-40"

@@ -8,7 +8,7 @@
 	<!-- Active Color -->
 	<div class="flex flex-col items-center gap-2 py-2">
 		<span class="font-serif text-[8px] font-black tracking-widest text-text-main/30 uppercase"
-			>{__('workspace:hud.active_pigment')}</span
+			>{__('workspace:hud.active_color')}</span
 		>
 		<div
 			class="editor-checker-small h-10 w-10 rounded border border-text-main/10 shadow-inner transition-colors"
@@ -20,8 +20,8 @@
 			</span>
 			<button
 				onclick={() => editor.paletteState.addSwatch(editor.paletteState.activeColor)}
-				class="flex h-4 w-4 items-center justify-center rounded bg-ui-accent/10 text-[8px] text-ui-accent transition-all hover:bg-ui-accent hover:text-white"
-				title={__('actions:hud.add_layer')}
+				class="flex h-4 w-4 items-center justify-center rounded bg-ui-accent/10 text-[8px] text-ui-accent transition-all hover:bg-ui-accent hover:text-canvas-bg"
+				title={__('workspace:hud.actions.add_color')}
 			>
 				＋
 			</button>
@@ -34,7 +34,7 @@
 	<div class="flex flex-col gap-2">
 		<span
 			class="text-center font-serif text-[8px] font-black tracking-widest text-text-main/30 uppercase"
-			>{__('workspace:hud.recent_weaves')}</span
+			>{__('workspace:hud.recent_colors')}</span
 		>
 
 		<UsedColorList colors={editor.usedColors} />

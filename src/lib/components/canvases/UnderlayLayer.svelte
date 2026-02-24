@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { fade } from 'svelte/transition';
 	import { editor } from '../../state/editor.svelte.js';
+	import { __ } from '../../state/i18n.svelte.js';
 
 	const studio = editor.studio;
 </script>
@@ -13,7 +14,7 @@
 	>
 		<img
 			src={studio.underlayImage}
-			alt="Underlay"
+			alt={__('workspace:underlay')}
 			class="absolute origin-top-left"
 			style="
                 transform: translate({studio.underlayOffset.x}px, {studio.underlayOffset

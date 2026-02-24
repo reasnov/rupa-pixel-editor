@@ -120,7 +120,7 @@
 						onclick={() => select(option)}
 						class="
                             w-full px-3 py-2 text-left text-[10px] font-bold tracking-wider
-                            uppercase hover:bg-ui-accent hover:text-white
+                            uppercase hover:bg-ui-accent hover:text-canvas-bg
                             {value === option.value
 							? 'bg-sidebar-bg text-text-main'
 							: 'text-text-main/70'}

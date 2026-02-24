@@ -41,7 +41,9 @@ export class FrameState {
 	get compositePixels() {
 		// We access reactive properties to ensure Svelte tracks them,
 		// but we still use the cache for the heavy pixel-pushing logic.
-		const structuralKey = this.layers.map((l) => `${l.id}-${l.isVisible}-${l.parentId}`).join('|');
+		const structuralKey = this.layers
+			.map((l) => `${l.id}-${l.isVisible}-${l.parentId}-${l.pixels}`)
+			.join('|');
 		const time = animation.elapsedTime / 1000;
 		const timeKey = Math.floor(time * 60); // 60fps time key
 

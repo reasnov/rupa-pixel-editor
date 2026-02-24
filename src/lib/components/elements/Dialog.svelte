@@ -27,7 +27,7 @@
 		children,
 		footer,
 		width = 'auto',
-		maxWidth = '450px',
+		maxWidth = '95vw',
 		class: className = ''
 	}: Props = $props();
 
@@ -53,7 +53,7 @@
 	<!-- svelte-ignore a11y_click_events_have_key_events -->
 	<div
 		transition:fade={{ duration: 150 }}
-		class="bg-hud-shadow/40 fixed inset-0 z-[1500] flex items-center justify-center p-6 backdrop-blur-[2px]"
+		class="fixed inset-0 z-[1500] flex items-center justify-center bg-ui-structural/40 p-4 backdrop-blur-[2px] md:p-8"
 		onmousedown={(e) => {
 			e.stopPropagation();
 			if (e.target === e.currentTarget) onClose();
@@ -62,8 +62,8 @@
 		<div
 			transition:scale={{ duration: 300, easing: quintOut, start: 0.9 }}
 			class="
-                flex flex-col overflow-hidden rounded-sm border-2 border-ui-structural
-                bg-canvas-bg shadow-[8px_8px_0px_var(--color-ui-structural)]
+                flex max-h-[90vh] flex-col overflow-hidden rounded-sm border-2
+                border-ui-structural bg-canvas-bg shadow-[8px_8px_0px_var(--color-ui-structural)]
                 {className}
             "
 			style="width: {width}; max-width: {maxWidth};"
@@ -74,17 +74,17 @@
 		>
 			<!-- Header -->
 			<div
-				class="flex items-center justify-between border-b-2 border-ui-structural bg-sidebar-bg/30 px-6 py-5"
+				class="flex shrink-0 items-center justify-between border-b-2 border-ui-structural bg-sidebar-bg/30 px-6 py-5"
 			>
 				<div class="flex flex-col">
 					<h2 class="font-tiny5 text-2xl leading-none tracking-wider text-text-main">
-						{__(title)}
+						{title ? __(title) : ''}
 					</h2>
 					{#if subtitle}
 						<span
 							class="mt-1 font-serif text-[9px] font-black tracking-[0.2em] text-text-main/40 uppercase"
 						>
-							{__(subtitle)}
+							{subtitle ? __(subtitle) : ''}
 						</span>
 					{/if}
 				</div>
@@ -103,7 +103,7 @@
 			</div>
 
 			<!-- Content -->
-			<div class="custom-scrollbar max-h-[70vh] overflow-y-auto px-6 py-6">
+			<div class="custom-scrollbar flex-1 overflow-y-auto px-6 py-6">
 				{#if children}
 					{@render children()}
 				{/if}
@@ -112,7 +112,7 @@
 			<!-- Footer -->
 			{#if footer}
 				<div
-					class="flex items-center justify-end gap-3 border-t-2 border-ui-structural bg-grid-border/20 px-6 py-4"
+					class="flex shrink-0 items-center justify-end gap-3 border-t-2 border-ui-structural bg-grid-border/20 px-6 py-4"
 				>
 					{@render footer()}
 				</div>
@@ -122,14 +122,4 @@
 {/if}
 
 <style>
-	.custom-scrollbar::-webkit-scrollbar {
-		width: 6px;
-	}
-	.custom-scrollbar::-webkit-scrollbar-track {
-		background: transparent;
-	}
-	.custom-scrollbar::-webkit-scrollbar-thumb {
-		background: rgba(52, 78, 65, 0.15);
-		border-radius: 0px;
-	}
 </style>

@@ -28,7 +28,11 @@
 	}
 
 	onMount(() => {
-		feedback.emit('STARTUP');
+		try {
+			feedback.emit('STARTUP');
+		} catch (e) {
+			console.warn('Feedback engine failed to start:', e);
+		}
 
 		// Simulated "Natural" Loading Sequence
 		const interval = setInterval(() => {
@@ -60,7 +64,7 @@
 		role="dialog"
 		aria-modal="true"
 		aria-busy={!isReadyToEnter}
-		aria-label={__('manual:title')}
+		aria-label={__('splash:title')}
 	>
 		<!-- Grain Texture Filter (GitHub Pages Compatible) -->
 		<svg
@@ -80,7 +84,7 @@
 
 		<!-- Minimalist Neutral Glow -->
 		<div
-			class="bg-hud-shadow/5 absolute h-[500px] w-[500px] animate-pulse rounded-full blur-[120px]"
+			class="absolute h-[500px] w-[500px] animate-pulse rounded-full bg-ui-structural/5 blur-[120px]"
 			aria-hidden="true"
 		></div>
 
@@ -107,14 +111,14 @@
 			<!-- Professional Neutral Progress Bar -->
 			<div class="flex flex-col items-center gap-4">
 				<div
-					class="bg-hud-shadow/5 ring-hud-shadow/10 h-1 w-48 overflow-hidden rounded-full ring-1"
+					class="h-1 w-48 overflow-hidden rounded-full bg-ui-structural/5 ring-1 ring-grid-border/10"
 					role="progressbar"
 					aria-valuenow={progress}
 					aria-valuemin="0"
 					aria-valuemax="100"
 				>
 					<div
-						class="h-full bg-fern-green/40 transition-all duration-500 ease-out {isReadyToEnter
+						class="h-full bg-text-main/40 transition-all duration-500 ease-out {isReadyToEnter
 							? 'bg-ui-accent/60'
 							: ''}"
 						style="width: {progress}%"

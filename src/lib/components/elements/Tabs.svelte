@@ -47,12 +47,12 @@
 			aria-selected={activeTab === tab.id}
 			onclick={() => select(tab.id)}
 			class="
-                relative flex items-center gap-3 px-6 py-3
+                relative flex flex-1 items-center justify-center gap-3 px-6 py-3
                 text-[10px] font-bold tracking-widest uppercase transition-all
-                {activeTab === tab.id
+                				{activeTab === tab.id
 				? 'border-ui-structural bg-canvas-bg text-text-main'
-				: 'text-text-main/40 hover:bg-black/5 hover:text-text-main/70'}
-                {variant === 'horizontal'
+				: 'text-text-main/40 hover:bg-text-main/5 hover:text-text-main/70'}                {variant ===
+			'horizontal'
 				? '-mb-0.5 border-x-2 border-t-2 first:border-l-0 last:border-r-0'
 				: '-mr-0.5 border-y-2 border-l-2 first:border-t-0 last:border-b-0'}
             "

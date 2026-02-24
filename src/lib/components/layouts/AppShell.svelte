@@ -13,7 +13,7 @@
 	let { header, footer, sidebarLeft, sidebarRight, viewport, overlay }: Props = $props();
 </script>
 
-<div class="app-shell bg-washi-paper font-lora h-screen w-screen overflow-hidden text-text-main">
+<div class="app-shell h-screen w-screen overflow-hidden bg-canvas-bg font-serif text-text-main">
 	<!-- Top: Header Area -->
 	{#if header}
 		<header

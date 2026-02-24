@@ -66,7 +66,7 @@
 		<!-- Header -->
 		<div class="flex items-center justify-between border-b border-ui-structural/10 px-6 py-4">
 			<h2 class="font-tiny5 text-xl tracking-wider text-text-main uppercase">
-				{__(title)}
+				{title ? __(title) : ''}
 			</h2>
 			<Button variant="ghost" size="sm" onclick={onClose} ariaLabel="ui:labels.close">
 				<span class="text-lg opacity-40">✕</span>
@@ -83,14 +83,4 @@
 {/if}
 
 <style>
-	.custom-scrollbar::-webkit-scrollbar {
-		width: 4px;
-	}
-	.custom-scrollbar::-webkit-scrollbar-track {
-		background: transparent;
-	}
-	.custom-scrollbar::-webkit-scrollbar-thumb {
-		background: var(--color-ui-structural);
-		opacity: 0.2;
-	}
 </style>

@@ -433,7 +433,7 @@ export class ProjectService {
 		bottomLayer.pixels = mergedPixels;
 		frame.layers.splice(topIdx, 1);
 		frame.activeLayerIndex = bottomIdx;
-		editor.canvas.triggerPulse();
+		editor.canvas.incrementVersion();
 
 		history.push({
 			isStructural: true,
@@ -442,13 +442,13 @@ export class ProjectService {
 				bottomLayer.pixels = oldBottomPixels;
 				frame.layers.splice(topIdx, 0, topLayer);
 				frame.activeLayerIndex = topIdx;
-				editor.canvas.triggerPulse();
+				editor.canvas.incrementVersion();
 			},
 			redo: () => {
 				bottomLayer.pixels = mergedPixels;
 				frame.layers.splice(topIdx, 1);
 				frame.activeLayerIndex = bottomIdx;
-				editor.canvas.triggerPulse();
+				editor.canvas.incrementVersion();
 			}
 		});
 
@@ -487,7 +487,7 @@ export class ProjectService {
 		targetLayer.pixels = mergedPixels;
 		frame.activeLayerIndex = newTargetIdx;
 		frame.selectedLayerIndices = new Set([newTargetIdx]);
-		editor.canvas.triggerPulse();
+		editor.canvas.incrementVersion();
 
 		history.push({
 			isStructural: true,
@@ -497,14 +497,14 @@ export class ProjectService {
 				targetLayer.pixels = oldTargetPixels;
 				frame.activeLayerIndex = oldActiveIndex;
 				frame.selectedLayerIndices = oldSelection;
-				editor.canvas.triggerPulse();
+				editor.canvas.incrementVersion();
 			},
 			redo: () => {
 				frame.layers = newLayers;
 				targetLayer.pixels = mergedPixels;
 				frame.activeLayerIndex = newTargetIdx;
 				frame.selectedLayerIndices = new Set([newTargetIdx]);
-				editor.canvas.triggerPulse();
+				editor.canvas.incrementVersion();
 			}
 		});
 

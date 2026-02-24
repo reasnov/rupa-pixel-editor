@@ -4,6 +4,15 @@
 	"header_title": "Mastering the Craft",
 	"header_desc": "In the Sanctuary, we play rhythms. These key combinations create a flow state, allowing your brush to dance across the washi with professional precision.",
 	"footer_quote": "A master artisan knows every leaf by heart.",
+	"glossary_meaning": "meaning {{tech}}",
+	"glossary": [
+		["Serving", "Frame"],
+		["Ingredient", "Layer"],
+		["Pigment", "Color"],
+		["Brush", "Tool"],
+		["Apply", "Paint"],
+		["Spill", "Delete"]
+	],
 	"groups": {
 		"rhythms": "Core Rhythms (Basics)",
 		"navigation": "Step the Brush (Navigation)",

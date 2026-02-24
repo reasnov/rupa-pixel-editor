@@ -37,7 +37,7 @@ export class AudioEngine {
 
 	playMove() {
 		const { freq, duration, volume } = audioConfig.tones.move;
-		// The Tatami Step: Low-freq square wave with a heavy low-pass filter
+		// Low-frequency square wave with a heavy low-pass filter
 		const osc = this.ctx.createOscillator();
 		const filter = this.ctx.createBiquadFilter();
 		filter.type = 'lowpass';
@@ -48,16 +48,15 @@ export class AudioEngine {
 
 	playDraw() {
 		const { freq, duration, volume } = audioConfig.tones.draw;
-		// Mechanical Click: High-pitch square with very short decay
+		// High-pitch square with very short decay and tink overtone
 		this.playTone(freq, 0.05, 'square', volume, 0.0001);
-		// Resonant tink overtone
 		setTimeout(() => this.playTone(freq * 1.5, 0.1, 'triangle', volume * 0.3, 0.0001), 10);
 	}
 
 	playScale(index: number) {
 		const scale = audioConfig.scales['c-major'];
 		const freq = scale[index % scale.length];
-		// Retro-FM synth style: Square + Triangle
+		// Square + Triangle FM synth style
 		this.playTone(freq, 0.2, 'square', 0.05, 0.001);
 		this.playTone(freq, 0.2, 'triangle', 0.08, 0.001);
 	}
@@ -65,14 +64,13 @@ export class AudioEngine {
 	playErase() {
 		if (editor.isMuted) return;
 
-		// Bit-crushed Bamboo Sweep
+		// White noise sweep
 		const duration = 0.4;
 		const bufferSize = this.ctx.sampleRate * duration;
 		const buffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
 		const data = buffer.getChannelData(0);
 
 		for (let i = 0; i < bufferSize; i++) {
-			// Lo-fi noise generation
 			data[i] = Math.round((Math.random() * 2 - 1) * 4) / 4;
 		}
 
@@ -99,14 +97,14 @@ export class AudioEngine {
 
 	playStartup() {
 		const { freq, duration, volume } = audioConfig.tones.startup;
-		// 8-bit Temple Bell: Harmonized Square waves
+		// Harmonized Square waves
 		this.playTone(freq, duration, 'square', volume * 0.6, 0.0001);
 		this.playTone(freq * 0.5, duration * 2, 'triangle', volume * 0.4, 0.0001);
 	}
 
 	playReady() {
 		const notes = audioConfig.tones.ready;
-		// The Furin (Wind Chime): Cascading 8-bit arpeggio
+		// Cascading 8-bit arpeggio
 		notes.forEach((freq, i) => {
 			setTimeout(() => {
 				this.playTone(freq, 0.8, 'triangle', 0.03, 0.0001);
@@ -117,7 +115,7 @@ export class AudioEngine {
 
 	playPaperFlip() {
 		if (editor.isMuted) return;
-		// A soft, short parchment rustle
+		// Short white noise burst for UI feedback
 		const duration = 0.15;
 		const bufferSize = this.ctx.sampleRate * duration;
 		const buffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
@@ -143,7 +141,7 @@ export class AudioEngine {
 
 	playCeramicSlide() {
 		if (editor.isMuted) return;
-		// A dull, heavy friction sound
+		// Friction sound simulation
 		this.playTone(150, 0.2, 'triangle', 0.08, 0.001);
 		this.playTone(100, 0.3, 'sine', 0.05, 0.001);
 	}

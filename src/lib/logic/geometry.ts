@@ -167,7 +167,7 @@ export class Geometry {
 	}
 
 	/**
-	 * Converts internal grid coordinates to artisan Cartesian labels (Center-relative).
+	 * Converts internal grid coordinates to center-relative labels.
 	 */
 	static toCartesianLabel(pos: number, size: number, invert = false): number {
 		const mid = Math.floor(size / 2);
@@ -176,7 +176,7 @@ export class Geometry {
 	}
 
 	/**
-	 * Translates internal array coordinates to Artisan Cartesian coordinates.
+	 * Translates internal array coordinates to Cartesian coordinates.
 	 * Returns {x, y} where Y is inverted for display.
 	 */
 	static internalToCartesian(x: number, y: number, width: number, height: number) {
@@ -187,7 +187,7 @@ export class Geometry {
 	}
 
 	/**
-	 * Translates Artisan Cartesian coordinates back to internal array indices.
+	 * Translates Cartesian coordinates back to internal array indices.
 	 */
 	static cartesianToInternal(tx: number, ty: number, width: number, height: number) {
 		const midX = Math.floor(width / 2);

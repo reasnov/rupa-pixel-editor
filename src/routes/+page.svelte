@@ -4,40 +4,42 @@
 	import { editor as engine } from '$lib/engine/editor.svelte.js';
 
 	// Layout Containers
-	import EditorHeader from '$lib/components/hud/EditorHeader.svelte';
-	import FrameSidebar from '$lib/components/hud/FrameSidebar.svelte';
-	import InspectorSidebar from '$lib/components/hud/InspectorSidebar.svelte';
-	import StatusFooter from '$lib/components/hud/StatusFooter.svelte';
+	import EditorHeader from '$lib/components/huds/EditorHeader.svelte';
+	import FrameSidebar from '$lib/components/huds/FrameSidebar.svelte';
+	import InspectorSidebar from '$lib/components/huds/InspectorSidebar.svelte';
+	import StatusFooter from '$lib/components/huds/StatusFooter.svelte';
 
 	// Canvas
-	import Canvas from '$lib/components/canvas/Canvas.svelte';
-	import SplashScreen from '$lib/components/brand/SplashScreen.svelte';
+	import Canvas from '$lib/components/canvases/Canvas.svelte';
+	import SplashScreen from '$lib/components/brands/SplashScreen.svelte';
 
 	// Overlay Modules
-	import ColorPicker from '$lib/components/overlay/ColorPicker.svelte';
-	import CommandPalette from '$lib/components/overlay/CommandPalette.svelte';
-	import ExportMenu from '$lib/components/overlay/ExportMenu.svelte';
-	import GuideMenu from '$lib/components/overlay/Shortcuts.svelte';
-	import PersistenceMenu from '$lib/components/overlay/PersistenceMenu.svelte';
-	import CanvasSettings from '$lib/components/overlay/CanvasSettings.svelte';
-	import PaletteLibrary from '$lib/components/overlay/PaletteLibrary.svelte';
-	import GoToModal from '$lib/components/overlay/GoToModal.svelte';
-	import AudioSettings from '$lib/components/overlay/AudioSettings.svelte';
-	import UserGuide from '$lib/components/overlay/UserGuide.svelte';
-	import UnderlayMenu from '$lib/components/overlay/UnderlayMenu.svelte';
-	import ImportZone from '$lib/components/overlay/ImportZone.svelte';
-	import ContextMenu from '$lib/components/ui/ContextMenu.svelte';
-	import Toast from '$lib/components/ui/Toast.svelte';
+	import ColorPicker from '$lib/components/overlays/ColorPicker.svelte';
+	import CommandPalette from '$lib/components/overlays/CommandPalette.svelte';
+	import ExportMenu from '$lib/components/overlays/ExportMenu.svelte';
+	import GuideMenu from '$lib/components/overlays/Shortcuts.svelte';
+	import PersistenceMenu from '$lib/components/overlays/PersistenceMenu.svelte';
+	import CanvasSettings from '$lib/components/overlays/CanvasSettings.svelte';
+	import PaletteLibrary from '$lib/components/overlays/PaletteLibrary.svelte';
+	import GoToModal from '$lib/components/overlays/GoToModal.svelte';
+	import AudioSettings from '$lib/components/overlays/AudioSettings.svelte';
+	import UserGuide from '$lib/components/overlays/UserGuide.svelte';
+	import UnderlayMenu from '$lib/components/overlays/UnderlayMenu.svelte';
+	import ImportZone from '$lib/components/overlays/ImportZone.svelte';
+	import ErrorDialog from '$lib/components/overlays/ErrorDialog.svelte';
+	import RecoveryPrompt from '$lib/components/overlays/RecoveryPrompt.svelte';
+	import ContextMenu from '$lib/components/elements/ContextMenu.svelte';
+	import Toast from '$lib/components/elements/Toast.svelte';
 
 	import { onMount } from 'svelte';
 
 	// Industry-Standard Layout Components
-	import AppShell from '$lib/components/layout/AppShell.svelte';
-	import AppHeader from '$lib/components/layout/AppHeader.svelte';
-	import AppFooter from '$lib/components/layout/AppFooter.svelte';
-	import AppSidebar from '$lib/components/layout/AppSidebar.svelte';
-	import AppViewport from '$lib/components/layout/AppViewport.svelte';
-	import AppOverlay from '$lib/components/layout/AppOverlay.svelte';
+	import AppShell from '$lib/components/layouts/AppShell.svelte';
+	import AppHeader from '$lib/components/layouts/AppHeader.svelte';
+	import AppFooter from '$lib/components/layouts/AppFooter.svelte';
+	import AppSidebar from '$lib/components/layouts/AppSidebar.svelte';
+	import AppViewport from '$lib/components/layouts/AppViewport.svelte';
+	import AppOverlay from '$lib/components/layouts/AppOverlay.svelte';
 
 	onMount(() => {
 		return engine.mount();
@@ -142,6 +144,14 @@
 
 			{#if editor.studio.showUnderlayMenu}
 				<UnderlayMenu />
+			{/if}
+
+			{#if editor.studio.showErrorDialog}
+				<ErrorDialog onClose={() => (editor.studio.showErrorDialog = false)} />
+			{/if}
+
+			{#if editor.studio.showRecoveryPrompt}
+				<RecoveryPrompt onResolve={() => (editor.studio.showRecoveryPrompt = false)} />
 			{/if}
 
 			{#if editor.studio.contextMenu}

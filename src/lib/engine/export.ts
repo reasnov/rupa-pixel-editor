@@ -1,10 +1,39 @@
-import { Path } from '../logic/path.js';
 import { ColorLogic } from '../logic/color.js';
+import ExportWorker from './workers/export.worker?worker';
 
 export class ExportEngine {
 	/**
+	 * Runs cluster tracing in a background worker to prevent UI blocking.
+	 */
+	private static async runWorkerTask(
+		type: string,
+		payload: any,
+		onProgress?: (p: number) => void
+	): Promise<any> {
+		return new Promise((resolve, reject) => {
+			const worker = new ExportWorker();
+
+			worker.onmessage = (e) => {
+				const { type: resType, payload: resPayload } = e.data;
+				if (resType === 'PROGRESS' && onProgress) {
+					onProgress(resPayload);
+				} else if (resType === 'DONE') {
+					worker.terminate();
+					resolve(resPayload);
+				}
+			};
+
+			worker.onerror = (err) => {
+				worker.terminate();
+				reject(err);
+			};
+
+			worker.postMessage({ type, payload });
+		});
+	}
+
+	/**
 	 * Generates an optimized SVG string.
-	 * If includeBorders is true, it draws individual rects with strokes instead of merged paths.
 	 */
 	static async toSVG(
 		width: number,
@@ -21,7 +50,6 @@ export class ExportEngine {
 		}
 
 		if (includeBorders) {
-			// Draw individual pixels with borders
 			data.forEach((val, i) => {
 				if (val === 0) return;
 				const color = ColorLogic.uint32ToHex(val);
@@ -31,28 +59,18 @@ export class ExportEngine {
 			});
 			if (onProgress) onProgress(1);
 		} else {
-			// Draw optimized clusters
-			const clustersByColor: Map<string, Set<number>> = new Map();
-			for (let i = 0; i < data.length; i++) {
-				const val = data[i];
-				if (val === 0) continue;
-				const color = ColorLogic.uint32ToHex(val)!;
-				if (!clustersByColor.has(color)) clustersByColor.set(color, new Set());
-				clustersByColor.get(color)!.add(i);
-			}
+			// Offload tracing to worker
+			const clusters: Array<{ color: string; pathData: string }> = await this.runWorkerTask(
+				'TRACE_CLUSTERS',
+				{ width, data },
+				onProgress
+			);
 
-			const colors = Array.from(clustersByColor.keys());
-			for (let i = 0; i < colors.length; i++) {
-				const color = colors[i];
-				const indices = clustersByColor.get(color)!;
-				const pathData = Path.traceCluster(indices, width);
+			clusters.forEach(({ color, pathData }) => {
 				if (pathData) {
 					svg += `<path d="${pathData}" fill="${color}" />`;
 				}
-				if (onProgress) onProgress((i + 1) / colors.length);
-				// Yield to UI
-				await new Promise((r) => setTimeout(r, 0));
-			}
+			});
 		}
 
 		svg += '</svg>';
@@ -152,17 +170,13 @@ export class ExportEngine {
 					svg += `<rect x="${x}" y="${y}" width="1" height="1" fill="${color}" stroke="rgba(0,0,0,0.15)" stroke-width="0.05" />`;
 				});
 			} else {
-				const clustersByColor: Map<string, Set<number>> = new Map();
-				for (let idx = 0; idx < data.length; idx++) {
-					const val = data[idx];
-					if (val === 0) continue;
-					const color = ColorLogic.uint32ToHex(val)!;
-					if (!clustersByColor.has(color)) clustersByColor.set(color, new Set());
-					clustersByColor.get(color)!.add(idx);
-				}
+				// Offload tracing to worker for each frame
+				const clusters: Array<{ color: string; pathData: string }> = await this.runWorkerTask(
+					'TRACE_CLUSTERS',
+					{ width, data }
+				);
 
-				clustersByColor.forEach((indices, color) => {
-					const pathData = Path.traceCluster(indices, width);
+				clusters.forEach(({ color, pathData }) => {
 					if (pathData) {
 						svg += `<path d="${pathData}" fill="${color}" />`;
 					}
@@ -180,7 +194,6 @@ export class ExportEngine {
 
 			elapsedMs += durationMs;
 			if (onProgress) onProgress((i + 1) / framesData.length);
-			await new Promise((r) => setTimeout(r, 0));
 		}
 
 		svg += '</svg>';
@@ -189,7 +202,6 @@ export class ExportEngine {
 
 	/**
 	 * Renders a sequence of frames to a video Blob.
-	 * Phase 1 of The Chronos Protocol: Deterministic Frame Assembly.
 	 */
 	static async toVideo(
 		width: number,
@@ -208,7 +220,6 @@ export class ExportEngine {
 		canvas.width = finalWidth;
 		canvas.height = finalHeight;
 
-		// Visible Buffer Strategy: Briefly attach to DOM to prevent throttling
 		canvas.style.position = 'fixed';
 		canvas.style.left = '-10000px';
 		canvas.style.top = '-10000px';
@@ -222,7 +233,6 @@ export class ExportEngine {
 				? 'video/mp4;codecs=h264'
 				: 'video/webm;codecs=vp8';
 
-		// Chronos Protocol: captureStream(0) for manual frame requests
 		const stream = (canvas as any).captureStream(0);
 		const track = stream.getVideoTracks()[0];
 		const recorder = new MediaRecorder(stream, {
@@ -240,14 +250,13 @@ export class ExportEngine {
 				document.body.removeChild(canvas);
 				const rawBlob = new Blob(chunks, { type: mimeType });
 
-				// Chronos Phase 3: Metadata Injection (Header Patching)
 				try {
 					const { EbmlLogic } = await import('../logic/ebml.js');
 					const totalDuration = frameDurations.reduce((a, b) => a + b, 0);
 					const fixedBlob = await EbmlLogic.injectMetadata(rawBlob, totalDuration);
 					resolve(fixedBlob);
 				} catch (e) {
-					console.warn('Metadata injection failed, returning raw video:', e);
+					console.warn('Metadata injection failed:', e);
 					resolve(rawBlob);
 				}
 			};
@@ -283,26 +292,21 @@ export class ExportEngine {
 						ctx.strokeRect(px + 0.5, py + 0.5, pw - 1, ph - 1);
 					}
 				}
-				// Force GPU Flush
 				ctx.getImageData(0, 0, 1, 1);
 			};
 
 			(async () => {
-				// Warm-up delay
 				await new Promise((r) => setTimeout(r, 200));
 
 				for (let i = 0; i < framesData.length; i++) {
 					drawFrame(i);
-					// Explicitly request the frame
 					if (track && (track as any).requestFrame) {
 						(track as any).requestFrame();
 					}
-					// Wait for the duration of the frame
 					await new Promise((r) => setTimeout(r, frameDurations[i]));
 					if (onProgress) onProgress((i + 1) / framesData.length);
 				}
 
-				// Finalization buffer
 				await new Promise((r) => setTimeout(r, 500));
 				recorder.stop();
 				stream.getTracks().forEach((t: any) => t.stop());
@@ -312,7 +316,6 @@ export class ExportEngine {
 
 	/**
 	 * Generates a GIF.
-	 * Phase 2 of The Chronos Protocol: Accumulated Error Correction.
 	 */
 	static async toGIF(
 		width: number,
@@ -335,7 +338,7 @@ export class ExportEngine {
 		ctx.imageSmoothingEnabled = false;
 
 		const buffer = new Uint8Array(framesData.length * finalWidth * finalHeight * 2);
-		const writer = new GifWriter(buffer, finalWidth, finalHeight, { loop: 0 });
+		const writer = new (GifWriter as any)(buffer, finalWidth, finalHeight, { loop: 0 });
 
 		let timeDebt = 0;
 
@@ -369,9 +372,8 @@ export class ExportEngine {
 			}
 
 			const imageData = ctx.getImageData(0, 0, finalWidth, finalHeight).data;
-			const { indexedPixels, palette } = this.quantizeFrame(imageData);
+			const { indexedPixels, palette } = await this.runWorkerTask('QUANTIZE_FRAME', { imageData });
 
-			// Calculate delay with time debt correction
 			const totalTargetMs = frameDurations[i] + timeDebt;
 			const delayCentiSec = Math.max(1, Math.round(totalTargetMs / 10));
 			timeDebt = totalTargetMs - delayCentiSec * 10;

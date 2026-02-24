@@ -43,9 +43,9 @@ export class ColorService {
 	}
 
 	/**
-	 * Adjust the entire palette (Lighten/Darken).
+	 * Adjust the entire palette brightness.
 	 */
-	weatherPalette(amount: number) {
+	adjustPaletteBrightness(amount: number) {
 		editor.paletteState.swatches = editor.paletteState.swatches.map((color) =>
 			ColorLogic.adjustBrightness(color, amount)
 		);
@@ -85,7 +85,8 @@ export class ColorService {
 		);
 
 		const resultPixels = new Uint32Array(filledPixels as any);
-		const changes: { index: number; oldColor: string | null; newColor: string | null }[] = [];
+		let hasChanges = false;
+		history.beginBatch();
 
 		// Selection check
 		const hasSelection = editor.selection.isActive;
@@ -99,20 +100,16 @@ export class ColorService {
 					continue;
 				}
 
-				changes.push({
-					index: i,
-					oldColor: ColorLogic.uint32ToHex(pixels[i]),
-					newColor: replacementColor
-				});
+				history.pushPixel(i, pixels[i], replacementVal);
+				hasChanges = true;
 			}
 		}
 
-		if (changes.length > 0) {
+		history.endBatch();
+
+		if (hasChanges) {
 			editor.canvas.pixels = resultPixels;
-			editor.canvas.triggerPulse();
-			history.beginBatch();
-			changes.forEach((c) => history.push(c));
-			history.endBatch();
+			editor.canvas.incrementVersion();
 			sfx.playDraw();
 		}
 	}

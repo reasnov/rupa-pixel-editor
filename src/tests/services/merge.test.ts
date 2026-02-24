@@ -33,7 +33,7 @@ vi.mock('../../lib/state/editor.svelte.js', () => ({
 			})
 		},
 		canvas: {
-			triggerPulse: vi.fn()
+			incrementVersion: vi.fn()
 		}
 	}
 }));
@@ -106,14 +106,27 @@ describe('ProjectService - Merging', () => {
 	});
 
 	it('mergeFrames should combine composites into new frame layers', () => {
-		editor.project.frames.push({
-			name: 'Frame 2',
-			width: 2,
-			height: 2,
-			compositePixels: new Uint32Array([9, 9, 9, 9]),
-			isVisible: true
-		} as any);
-		editor.project.frames[0].compositePixels = new Uint32Array([1, 2, 1, 2]);
+		editor.project.frames = [
+			{
+				name: 'Frame 1',
+				width: 2,
+				height: 2,
+				get compositePixels() {
+					return new Uint32Array([1, 2, 1, 2]);
+				},
+				layers: []
+			} as any,
+			{
+				name: 'Frame 2',
+				width: 2,
+				height: 2,
+				get compositePixels() {
+					return new Uint32Array([9, 9, 9, 9]);
+				},
+				layers: [],
+				isVisible: true
+			} as any
+		];
 		editor.project.selectedFrameIndices = new Set([0, 1]);
 
 		service.mergeFrames();

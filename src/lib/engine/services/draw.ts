@@ -17,8 +17,9 @@ export class DrawService {
 		const x = tx !== undefined ? Math.floor(tx) : editor.cursor.pos.x;
 		const y = ty !== undefined ? Math.floor(ty) : editor.cursor.pos.y;
 
-		const batch: Array<{ index: number; oldColor: string | null; newColor: string | null }> = [];
 		const currentPixels = new Uint32Array(editor.canvas.pixels);
+		let hasChanges = false;
+		history.beginBatch();
 
 		// --- Pattern Brush Logic ---
 		if (editor.studio.isPatternBrushActive && editor.studio.patternBrushData) {
@@ -40,8 +41,7 @@ export class DrawService {
 						const index = editor.canvas.getIndex(targetX, targetY);
 
 						// Filters
-						if (editor.selection.isActive && !editor.selection.isSelected(index))
-							continue;
+						if (editor.selection.isActive && !editor.selection.isSelected(index)) continue;
 						if (
 							editor.studio.isAlphaLocked &&
 							!editor.project.activeFrame.activeLayer.hasPixel(index)
@@ -53,12 +53,9 @@ export class DrawService {
 
 						const oldVal = currentPixels[index];
 						if (oldVal !== finalColorVal) {
-							batch.push({
-								index,
-								oldColor: ColorLogic.uint32ToHex(oldVal),
-								newColor: ColorLogic.uint32ToHex(finalColorVal)
-							});
+							history.pushPixel(index, oldVal, finalColorVal);
 							currentPixels[index] = finalColorVal;
+							hasChanges = true;
 						}
 					}
 				}
@@ -136,23 +133,23 @@ export class DrawService {
 					const oldVal = currentPixels[index];
 
 					if (oldVal !== activeColorVal) {
-						batch.push({
-							index,
-							oldColor: ColorLogic.uint32ToHex(oldVal),
-							newColor: ColorLogic.uint32ToHex(activeColorVal)
-						});
+						history.pushPixel(index, oldVal, activeColorVal);
 						currentPixels[index] = activeColorVal;
+						hasChanges = true;
 					}
 				});
 			});
 		}
 
-		if (batch.length > 0) {
+		if (hasChanges) {
 			editor.canvas.pixels = currentPixels;
-			editor.canvas.triggerPulse();
-			history.push(batch);
+			editor.canvas.incrementVersion();
+			history.endBatch();
 			if (mode.current.type === 'ERASE') sfx.playErase();
 			else sfx.playDraw();
+		} else {
+			history.clear(); // We can ignore empty batches, but calling begin/end is safe. Wait, history.endBatch handles empty.
+			history.endBatch();
 		}
 	}
 
@@ -179,8 +176,9 @@ export class DrawService {
 			? rawPoints.map((p) => PixelLogic.wrap(p.x, p.y, editor.canvas.width, editor.canvas.height))
 			: rawPoints.filter((p) => editor.canvas.isValidCoord(p.x, p.y));
 
-		const batch: Array<{ index: number; oldColor: string | null; newColor: string | null }> = [];
+		let hasChanges = false;
 		const currentPixels = new Uint32Array(editor.canvas.pixels);
+		history.beginBatch();
 
 		pointsToDraw.forEach((p) => {
 			const index = editor.canvas.getIndex(p.x, p.y);
@@ -192,15 +190,17 @@ export class DrawService {
 
 			const oldVal = currentPixels[index];
 			if (oldVal !== 0) {
-				batch.push({ index, oldColor: ColorLogic.uint32ToHex(oldVal), newColor: null });
+				history.pushPixel(index, oldVal, 0);
 				currentPixels[index] = 0;
+				hasChanges = true;
 			}
 		});
 
-		if (batch.length > 0) {
+		history.endBatch();
+
+		if (hasChanges) {
 			editor.canvas.pixels = currentPixels;
-			editor.canvas.triggerPulse();
-			history.push(batch);
+			editor.canvas.incrementVersion();
 			sfx.playErase();
 		}
 	}
@@ -336,8 +336,9 @@ export class DrawService {
 			return;
 		}
 
-		const batch: Array<{ index: number; oldColor: string | null; newColor: string | null }> = [];
 		const currentPixels = new Uint32Array(editor.canvas.pixels);
+		let hasChanges = false;
+		history.beginBatch();
 
 		if (editor.studio.isPatternBrushActive && editor.studio.patternBrushData) {
 			const pb = editor.studio.patternBrushData;
@@ -360,8 +361,7 @@ export class DrawService {
 
 							const index = editor.canvas.getIndex(targetX, targetY);
 
-							if (editor.selection.isActive && !editor.selection.isSelected(index))
-								continue;
+							if (editor.selection.isActive && !editor.selection.isSelected(index)) continue;
 							if (
 								editor.studio.isAlphaLocked &&
 								!editor.project.activeFrame.activeLayer.hasPixel(index)
@@ -373,12 +373,9 @@ export class DrawService {
 
 							const oldVal = currentPixels[index];
 							if (oldVal !== finalColorVal) {
-								batch.push({
-									index,
-									oldColor: ColorLogic.uint32ToHex(oldVal),
-									newColor: ColorLogic.uint32ToHex(finalColorVal)
-								});
+								history.pushPixel(index, oldVal, finalColorVal);
 								currentPixels[index] = finalColorVal;
+								hasChanges = true;
 							}
 						}
 					}
@@ -444,22 +441,20 @@ export class DrawService {
 						);
 						const oldVal = currentPixels[index];
 						if (oldVal !== activeColorVal) {
-							batch.push({
-								index,
-								oldColor: ColorLogic.uint32ToHex(oldVal),
-								newColor: ColorLogic.uint32ToHex(activeColorVal)
-							});
+							history.pushPixel(index, oldVal, activeColorVal);
 							currentPixels[index] = activeColorVal;
+							hasChanges = true;
 						}
 					});
 				});
 			});
 		}
 
-		if (batch.length > 0) {
+		history.endBatch();
+
+		if (hasChanges) {
 			editor.canvas.pixels = currentPixels;
-			editor.canvas.triggerPulse();
-			history.push(batch);
+			editor.canvas.incrementVersion();
 			if (mode.current.type === 'ERASE') sfx.playErase();
 			else sfx.playDraw();
 		}
@@ -492,28 +487,27 @@ export class DrawService {
 		if (points.length > 0) {
 			const activeColor = editor.paletteState.activeColor;
 			const activeVal = ColorLogic.hexToUint32(activeColor);
-			const batch: Array<{ index: number; oldColor: string | null; newColor: string | null }> = [];
 			const currentPixels = new Uint32Array(editor.canvas.pixels);
+			let hasChanges = false;
+			history.beginBatch();
 
 			points.forEach((p) => {
 				if (editor.canvas.isValidCoord(p.x, p.y)) {
 					const index = editor.canvas.getIndex(p.x, p.y);
 					const oldVal = currentPixels[index];
 					if (oldVal !== activeVal) {
-						batch.push({
-							index,
-							oldColor: ColorLogic.uint32ToHex(oldVal),
-							newColor: activeColor
-						});
+						history.pushPixel(index, oldVal, activeVal);
 						currentPixels[index] = activeVal;
+						hasChanges = true;
 					}
 				}
 			});
 
-			if (batch.length > 0) {
+			history.endBatch();
+
+			if (hasChanges) {
 				editor.canvas.pixels = currentPixels;
-				editor.canvas.triggerPulse();
-				history.push(batch);
+				editor.canvas.incrementVersion();
 				sfx.playDraw();
 			}
 		}

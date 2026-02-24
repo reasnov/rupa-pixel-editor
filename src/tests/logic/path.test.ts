@@ -2,55 +2,81 @@ import { describe, it, expect } from 'vitest';
 import { Path } from '../../lib/logic/path.js';
 
 describe('Path', () => {
-	it('simplify should reduce number of points', () => {
-		const points = [
-			{ x: 0, y: 0 },
-			{ x: 1, y: 0.1 },
-			{ x: 2, y: 0 }
-		];
-		// Epsilon 0.2 should remove the middle point
-		const simplified = Path.simplify(points, 0.2);
-		expect(simplified).toEqual([
-			{ x: 0, y: 0 },
-			{ x: 2, y: 0 }
-		]);
+	describe('simplify (RDP)', () => {
+		it('should simplify a collinear line', () => {
+			const points = [
+				{ x: 0, y: 0 },
+				{ x: 5, y: 0 },
+				{ x: 10, y: 0 }
+			];
+			expect(Path.simplify(points, 1)).toEqual([
+				{ x: 0, y: 0 },
+				{ x: 10, y: 0 }
+			]);
+		});
+
+		it('should preserve points outside epsilon', () => {
+			const points = [
+				{ x: 0, y: 0 },
+				{ x: 5, y: 10 },
+				{ x: 10, y: 0 }
+			];
+			// Epsilon 1 < 10, so peak should be preserved
+			expect(Path.simplify(points, 1).length).toBe(3);
+		});
 	});
 
-	it('smooth should average points', () => {
-		const points = [
-			{ x: 0, y: 0 },
-			{ x: 10, y: 10 },
-			{ x: 20, y: 0 }
-		];
-		const smoothed = Path.smooth(points, 10);
-		expect(smoothed[0]).toEqual(points[0]);
-		expect(smoothed[2]).toEqual(points[2]);
-		expect(smoothed[1].x).toBeCloseTo(10);
-		expect(smoothed[1].y).toBeLessThan(10); // Smoothed y should be lower than 10
+	describe('smooth (Moving Average)', () => {
+		it('should smooth jagged paths', () => {
+			const points = [
+				{ x: 0, y: 0 },
+				{ x: 10, y: 10 },
+				{ x: 20, y: 0 }
+			];
+			const smoothed = Path.smooth(points, 10);
+			expect(smoothed[1].y).toBeLessThan(10);
+			expect(smoothed[0]).toEqual(points[0]);
+			expect(smoothed[2]).toEqual(points[2]);
+		});
+
+		it('should handle small paths', () => {
+			const points = [
+				{ x: 0, y: 0 },
+				{ x: 1, y: 1 }
+			];
+			expect(Path.smooth(points, 10)).toEqual(points);
+		});
 	});
 
-	it('traceCluster should generate SVG path for a 1x1 pixel', () => {
-		const indices = new Set([0]);
-		const width = 10;
-		const path = Path.traceCluster(indices, width);
-		// A 1x1 pixel at (0,0) should be a square from (0,0) to (1,1)
-		expect(path).toContain('M 0 0');
-		expect(path).toContain('L 1 0');
-		expect(path).toContain('L 1 1');
-		expect(path).toContain('L 0 1');
-		expect(path).toContain('Z');
-	});
+	describe('traceCluster (SVG)', () => {
+		it('should generate a simple square path for a 1x1 cluster', () => {
+			const indices = new Set([0]); // Top-left pixel
+			const path = Path.traceCluster(indices, 10);
+			expect(path).toContain('M 0 0');
+			expect(path).toContain('L 1 0');
+			expect(path).toContain('L 1 1');
+			expect(path).toContain('L 0 1');
+			expect(path).toContain('Z');
+		});
 
-	it('traceCluster should generate SVG path for a 2x1 rectangle', () => {
-		const indices = new Set([0, 1]);
-		const width = 10;
-		const path = Path.traceCluster(indices, width);
-		expect(path).toContain('M 0 0');
-		expect(path).toContain('L 1 0');
-		expect(path).toContain('L 2 0');
-		expect(path).toContain('L 2 1');
-		expect(path).toContain('L 1 1');
-		expect(path).toContain('L 0 1');
-		expect(path).toContain('Z');
+		it('should handle L-shaped clusters', () => {
+			// (0,0), (1,0), (0,1)
+			const indices = new Set([0, 1, 10]);
+			const path = Path.traceCluster(indices, 10);
+			expect(path).toContain('Z');
+			// The algorithm might produce redundant colinear vertices depending on chaining
+			expect(path.split(' ').length).toBeGreaterThan(6);
+		});
+
+		it('should handle holes in clusters', () => {
+			// 3x3 square with middle missing
+			// 0 1 2
+			// 10 _ 12
+			// 20 21 22
+			const indices = new Set([0, 1, 2, 10, 12, 20, 21, 22]);
+			const path = Path.traceCluster(indices, 10);
+			// Should contain two closed loops (outer and inner)
+			expect(path.match(/Z/g)?.length).toBe(2);
+		});
 	});
 });

@@ -22,17 +22,20 @@ The application must adhere to a modular architecture to separate the rendering 
 
 ```text
 rupa-pixel-editor/
-├── docs/               # Technical specifications and architectural blueprints
+├── docs/               # Technical specifications and blueprints
 ├── src/
 │   ├── lib/            # Encapsulated application logic
-│   │   ├── components/ # Atomic Svelte UI elements
-│   │   ├── engine/     # Pure TypeScript logic (Pixel, Keyboard, Export)
-│   │   ├── state/      # Reactive stores via Svelte 5 Runes
-│   │   └── types/      # Domain-specific TypeScript interfaces
-│   └── routes/         # Application shell and view-routing
+│   │   ├── components/ # Pure UI components (HUD)
+│   │   ├── engine/     # Orchestrators and hardware bridges
+│   │   ├── logic/      # Pure stateless algorithms (Pure Math)
+│   │   ├── state/      # Reactive data structures (Runes)
+│   │   ├── data/       # Static assets (Palettes, Templates)
+│   │   ├── config/     # Orchestration settings (JSON)
+│   │   └── types/      # TypeScript interfaces
+│   └── routes/         # Application shell and routing
 ├── static/             # Immutable assets and metadata
-├── electron/           # Main process entry points and native integrations
-└── config/             # Environment-specific configurations
+├── electron/           # Main process and native OS integrations
+└── tests/              # Comprehensive test suites
 ```
 
 ---
@@ -46,25 +49,35 @@ All implementations must utilize the following core technologies to ensure moder
 - **Styling Engine:** Tailwind CSS 4.0
 - **Language:** TypeScript (Strict mode enabled)
 - **Build Tool:** Vite + SvelteKit (Configured with `adapter-static`)
+- **Persistence:** IndexedDB (Web Storage) and FileSystem (Native)
 
 ---
 
 ## 5. Architectural Protocols
 
-### 5.1 State Management (The Rune Protocol)
+### 5.1 Layered Architecture (SOC)
 
-Application state must be centralized within `src/lib/state/` using Svelte 5 Runes (`$state`, `$derived`). The code must use technical terms (e.g., `pixels`, `frames`, `layers`). The Barista metaphors (e.g., `etches`, `cups`, `infusions`) are reserved for UI labels provided by the i18n system.
+The system enforces a strict 5-layer modular monolith:
 
-### 5.2 Styling Aesthetic
+1. **UI Layer**: Purely presentational components.
+2. **State Layer**: Reactive Source of Truth using Runes.
+3. **Service Layer**: Business logic and rule enforcement.
+4. **Engine Layer**: Orchestration and hardware normalization.
+5. **Logic Layer**: Pure, stateless mathematical algorithms.
+6. **Persistence Layer**: 3-tier data management (Config, Static Data, Dynamic Storage).
 
-The visual identity must be established in `src/routes/layout.css`, focusing on a professional "Barista Cream" aesthetic for the user interface. Pixel rendering on the Canvas (Foam) must be configured to disable anti-aliasing (`image-rendering: pixelated`).
+### 5.2 Technical Naming Standards (Mandatory)
 
-### 5.3 Build & Distribution
+All technical identifiers (variables, functions, classes, files) MUST use industry-standard terminology. Metaphors (e.g., "Washi", "Cups", "Infusions") are strictly limited to user-facing UI labels and i18n strings.
 
-The application must be configured to output a static site via `adapter-static` to be served locally by Electron. This ensures the application remains 100% offline-first.
+- **Standard Terms**: `Project`, `Canvas`, `Frame`, `Layer`, `Brush`, `Palette`.
+
+### 5.3 Performance & Parallelism
+
+Computationally intensive tasks (Exporting, Tracing, Binary Manipulation) should be offloaded to **Web Workers** to maintain UI responsiveness.
 
 ---
 
 ## 6. Project Sovereignty
 
-As an Open Source project, **Rupa Pixel Editor** encourages external contributions while maintaining the core philosophy of "Digital Brewing" in its user experience. All code, including variable names and comments, must be in English and use industry-standard terminology.
+As an Open Source project, **Rupa Pixel Editor** encourages external contributions while maintaining the core philosophy of a keyboard-first, professional pixel environment. All code, including variable names and comments, must be authoritatively in English and use technical terminology.

@@ -1,3 +1,4 @@
+import { __ } from '$lib/state/i18n.svelte.js';
 import { editor as state } from '../state/editor.svelte.js';
 import { keyboard, type ActionIntent } from './keyboard.svelte.js';
 import { input } from './input.svelte.js';
@@ -12,6 +13,7 @@ import { history } from './history.js';
 import { ColorLogic } from '../logic/color.js';
 import { Geometry } from '../logic/geometry.js';
 import { PixelLogic } from '../logic/pixel.js';
+import { StorageLogic } from '../logic/storage.js';
 
 /**
  * EditorEngine: The primary orchestrator of action execution.
@@ -28,9 +30,15 @@ export class EditorEngine {
 		state.canvas.mount();
 		ambient.start();
 
-		// Attempt to restore last session
-		services.persistence.restoreLastSession();
-		services.persistence.loadGlobalPalettes();
+		// Check for recoverable session (v0.9.3)
+		import('./services/persistence.js').then(async ({ PersistenceService }) => {
+			const persistence = new PersistenceService();
+			const hasBackup = await StorageLogic.loadProject('autosave_session');
+			if (hasBackup) {
+				state.studio.showRecoveryPrompt = true;
+			}
+			persistence.loadGlobalPalettes();
+		});
 
 		this.unsubscribeInput = input.subscribe((signal) => {
 			this.handleIntent(signal.intent as ActionIntent);
@@ -64,294 +72,317 @@ export class EditorEngine {
 			return;
 		}
 
+		if (this.handleNavigationIntent(intent)) return;
+		if (this.handleDrawIntent(intent)) return;
+		if (this.handleSelectionIntent(intent)) return;
+		if (this.handleProjectIntent(intent)) return;
+		if (this.handleViewportIntent(intent)) return;
+		if (this.handleToolSettingsIntent(intent)) return;
+		if (this.handleSystemIntent(intent)) return;
+	}
+
+	private handleNavigationIntent(intent: ActionIntent): boolean {
 		switch (intent) {
 			case 'MOVE_UP':
-				return this.executeMove(0, -1);
+				this.executeMove(0, -1);
+				return true;
 			case 'MOVE_DOWN':
-				return this.executeMove(0, 1);
+				this.executeMove(0, 1);
+				return true;
 			case 'MOVE_LEFT':
-				return this.executeMove(-1, 0);
+				this.executeMove(-1, 0);
+				return true;
 			case 'MOVE_RIGHT':
-				return this.executeMove(1, 0);
+				this.executeMove(1, 0);
+				return true;
 			case 'JUMP_HOME':
-				return services.jumpHome();
+				services.jumpHome();
+				return true;
 			case 'GOTO':
-				return (state.showGoTo = true);
+				state.showGoTo = true;
+				return true;
 			case 'RESET_PAN':
 				state.studio.resetPan();
-				return feedback.emit('READY');
+				feedback.emit('READY');
+				return true;
+		}
+		return false;
+	}
 
+	private handleDrawIntent(intent: ActionIntent): boolean {
+		switch (intent) {
 			case 'PAINT':
 				if (state.selection.isActive) {
 					services.selection.fillSelection();
-					return;
-				}
-				if (state.studio.activeTool !== 'BRUSH') {
+				} else if (state.studio.activeTool !== 'BRUSH') {
 					services.draw.commitShape();
-					return;
+				} else {
+					services.draw.draw();
 				}
-				return services.draw.draw();
-
+				return true;
 			case 'ERASE':
 				if (state.selection.isActive) {
 					services.selection.eraseSelection();
-					return;
+				} else {
+					services.draw.erase();
 				}
-				return services.draw.erase();
+				return true;
 			case 'FLOOD_FILL':
-				return services.color.floodFill();
+				services.color.floodFill();
+				return true;
+			case 'PICK_COLOR':
+				services.color.pickFromCanvas();
+				return true;
+			case 'RECOLOR':
+				services.manipulation.recolorAll();
+				return true;
+		}
+		return false;
+	}
+
+	private handleSelectionIntent(intent: ActionIntent): boolean {
+		switch (intent) {
 			case 'BIND_VERTEX':
-				return services.selection.addVertex(state.cursor.pos.x, state.cursor.pos.y);
+				services.selection.addVertex(state.cursor.pos.x, state.cursor.pos.y);
+				return true;
 			case 'SEAL_BINDING':
 				if (state.selection.vertices.length >= 3) {
-					return services.selection.sealBinding();
-				}
-				if (state.selection.isActive) return services.commitSelection();
-				if (state.studio.activeTool !== 'BRUSH') {
+					services.selection.commitPolygon();
+				} else if (state.selection.isActive) {
+					services.selection.commit();
+				} else if (state.studio.activeTool !== 'BRUSH') {
 					services.draw.commitShape();
-					return;
+				} else {
+					services.draw.draw();
 				}
-				return services.draw.draw();
-			case 'PICK_COLOR':
-				return services.color.pickFromCanvas();
-
+				return true;
 			case 'COPY':
-				return services.clipboard.copy();
+				services.clipboard.copy();
+				return true;
 			case 'CUT':
-				return services.clipboard.cut();
+				services.clipboard.cut();
+				return true;
 			case 'PASTE':
-				return services.clipboard.paste();
+				services.clipboard.paste();
+				return true;
 			case 'SELECT_ALL':
-				return services.selection.selectAll();
-			case 'RECOLOR':
-				return services.manipulation.bleach();
-
-			case 'UNDO':
-				return state.undo();
-			case 'REDO':
-				return state.redo();
-			case 'SAVE':
-				return (state.showPersistenceMenu = true);
-			case 'OPEN':
-				return services.persistence.load();
-
-			case 'OPEN_MENU':
-				return (state.showCommandPalette = !state.showCommandPalette);
-			case 'OPEN_SETTINGS':
-				return (state.showCanvasSettings = !state.showCanvasSettings);
-
-			case 'ESCAPE':
-				return state.handleEscape();
-
-			case 'OPEN_PALETTE':
-				return (state.showColorPicker = !state.showColorPicker);
-			case 'OPEN_AUDIO':
-				return (state.showAudioSettings = !state.showAudioSettings);
-			case 'OPEN_EXPORT':
-				return (state.showExportMenu = true);
-			case 'OPEN_HELP':
-				return (state.showShortcuts = true);
-			case 'OPEN_MANUAL':
-				return (state.showManual = true);
-			case 'PLAY_PAUSE':
-				return animation.togglePlayback();
-			case 'TOGGLE_GHOST_LAYERS':
-				return (state.showGhostLayers = !state.showGhostLayers);
-
-			case 'ZOOM_IN':
-				return state.studio.setZoom(0.1);
-			case 'ZOOM_OUT':
-				return state.studio.setZoom(-0.1);
-			case 'RESET_ZOOM':
-				return state.studio.resetZoom();
-			case 'RESET_VIEWPORT':
-				state.studio.resetZoom();
-				state.studio.resetPan();
-				return feedback.emit('READY');
-
-			case 'CLEAR_CANVAS':
-				return services.manipulation.clearAll();
-			case 'TOGGLE_MUTE':
-				return state.studio.toggleMute();
-			case 'TOGGLE_MINIMAP':
-				state.studio.showMinimap = !state.studio.showMinimap;
-				return feedback.emit('READY');
+				services.selection.selectAll();
+				return true;
 			case 'SELECT_SAME':
-				return services.selection.spiritPick();
+				services.selection.magicWand();
+				return true;
+		}
+		return false;
+	}
 
-			case 'FLIP_H':
-				return services.manipulation.flip('horizontal');
-			case 'FLIP_V':
-				return services.manipulation.flip('vertical');
-			case 'ROTATE':
-				return services.manipulation.rotate();
-
-			case 'TAB_TIMELINE':
-				state.studio.projectActiveTab = 'frames';
-				return feedback.emit('READY');
-			case 'TAB_LAYERS':
-				state.studio.projectActiveTab = 'layers';
-				return feedback.emit('READY');
-
+	private handleProjectIntent(intent: ActionIntent): boolean {
+		switch (intent) {
+			case 'UNDO':
+				state.undo();
+				return true;
+			case 'REDO':
+				state.redo();
+				return true;
+			case 'SAVE':
+				state.showPersistenceMenu = true;
+				return true;
+			case 'OPEN':
+				services.persistence.load();
+				return true;
 			case 'NEW_ITEM':
-				if (state.studio.projectActiveTab === 'frames') return services.project.addFrame();
-				return services.project.addLayer();
+				if (state.studio.projectActiveTab === 'frames') services.project.addFrame();
+				else services.project.addLayer();
+				return true;
 			case 'NEW_LAYER_GROUP':
-				return services.project.addGroup();
+				services.project.addGroup();
+				return true;
 			case 'DUPLICATE_ITEM':
 				if (state.studio.projectActiveTab === 'frames')
-					return services.project.duplicateFrame(state.project.activeFrameIndex);
-				return services.project.duplicateLayer(state.project.activeFrame.activeLayerIndex);
+					services.project.duplicateFrame(state.project.activeFrameIndex);
+				else services.project.duplicateLayer(state.project.activeFrame.activeLayerIndex);
+				return true;
 			case 'DELETE_ITEM':
 				if (state.studio.projectActiveTab === 'frames')
-					return services.project.removeFrame(state.project.activeFrameIndex);
-				return services.project.removeLayer(state.project.activeFrame.activeLayerIndex);
+					services.project.removeFrame(state.project.activeFrameIndex);
+				else services.project.removeLayer(state.project.activeFrame.activeLayerIndex);
+				return true;
 			case 'TOGGLE_LAYER_LOCK':
-				return services.project.toggleLock();
+				services.project.toggleLock();
+				return true;
 			case 'TOGGLE_LAYER_VISIBILITY':
-				return services.project.toggleVisibility();
+				services.project.toggleVisibility();
+				return true;
 			case 'MOVE_ITEM_UP':
 				if (state.studio.projectActiveTab === 'frames') {
 					const cur = state.project.activeFrameIndex;
 					if (cur < state.project.frames.length - 1) services.project.reorderFrame(cur, cur + 1);
-				} else {
-					services.project.moveLayerUp();
-				}
-				return;
+				} else services.project.moveLayerUp();
+				return true;
 			case 'MOVE_ITEM_DOWN':
 				if (state.studio.projectActiveTab === 'frames') {
 					const cur = state.project.activeFrameIndex;
 					if (cur > 0) services.project.reorderFrame(cur, cur - 1);
-				} else {
-					services.project.moveLayerDown();
-				}
-				return;
+				} else services.project.moveLayerDown();
+				return true;
 			case 'MOVE_ITEM_TOP':
-				if (state.studio.projectActiveTab === 'frames') {
+				if (state.studio.projectActiveTab === 'frames')
 					services.project.reorderFrame(
 						state.project.activeFrameIndex,
 						state.project.frames.length - 1
 					);
-				} else {
-					services.project.moveLayerToTop();
-				}
-				return;
+				else services.project.moveLayerToTop();
+				return true;
 			case 'MOVE_ITEM_BOTTOM':
-				if (state.studio.projectActiveTab === 'frames') {
+				if (state.studio.projectActiveTab === 'frames')
 					services.project.reorderFrame(state.project.activeFrameIndex, 0);
-				} else {
-					services.project.moveLayerToBottom();
-				}
-				return;
+				else services.project.moveLayerToBottom();
+				return true;
 			case 'MERGE_LAYERS':
-				return services.project.mergeLayerDown();
+				services.project.mergeLayerDown();
+				return true;
 			case 'MERGE_SELECTED_LAYERS':
-				return services.project.mergeSelectedLayers();
+				services.project.mergeSelectedLayers();
+				return true;
 			case 'MERGE_FRAMES':
-				return services.project.mergeFrames();
+				services.project.mergeFrames();
+				return true;
+			case 'PLAY_PAUSE':
+				animation.togglePlayback();
+				return true;
+			case 'TOGGLE_GHOST_LAYERS':
+				state.showGhostLayers = !state.showGhostLayers;
+				return true;
+		}
+		return false;
+	}
 
+	private handleViewportIntent(intent: ActionIntent): boolean {
+		switch (intent) {
+			case 'ZOOM_IN':
+				state.studio.setZoom(0.1);
+				return true;
+			case 'ZOOM_OUT':
+				state.studio.setZoom(-0.1);
+				return true;
+			case 'RESET_ZOOM':
+				state.studio.resetZoom();
+				return true;
+			case 'RESET_VIEWPORT':
+				state.studio.resetZoom();
+				state.studio.resetPan();
+				feedback.emit('READY');
+				return true;
+			case 'FLIP_H':
+				services.manipulation.flip('horizontal');
+				return true;
+			case 'FLIP_V':
+				services.manipulation.flip('vertical');
+				return true;
+			case 'ROTATE':
+				services.manipulation.rotate();
+				return true;
+			case 'TAB_TIMELINE':
+				state.studio.projectActiveTab = 'frames';
+				feedback.emit('READY');
+				return true;
+			case 'TAB_LAYERS':
+				state.studio.projectActiveTab = 'layers';
+				feedback.emit('READY');
+				return true;
+		}
+		return false;
+	}
+
+	private handleToolSettingsIntent(intent: ActionIntent): boolean {
+		switch (intent) {
 			case 'BRUSH_SIZE_INC':
 				state.studio.brushSize = Math.min(100, state.studio.brushSize + 1);
-				return feedback.emit('READY');
+				feedback.emit('READY');
+				return true;
 			case 'BRUSH_SIZE_DEC':
 				state.studio.brushSize = Math.max(1, state.studio.brushSize - 1);
-				return feedback.emit('READY');
+				feedback.emit('READY');
+				return true;
 			case 'TOGGLE_PATTERN_BRUSH':
 				if (state.studio.isPatternBrushActive) {
 					state.studio.isPatternBrushActive = false;
 				} else if (state.project.clipboard) {
 					const cb = state.project.clipboard;
-					const u32 = new Uint32Array(cb.data.length);
-					for (let i = 0; i < cb.data.length; i++) {
-						u32[i] = cb.data[i];
-					}
 					state.studio.patternBrushData = {
 						width: cb.width,
 						height: cb.height,
-						data: u32
+						data: new Uint32Array(cb.data)
 					};
 					state.studio.isPatternBrushActive = true;
 				}
-				return feedback.emit('READY');
+				feedback.emit('READY');
+				return true;
 			case 'TOGGLE_BRUSH_SHAPE':
 				state.studio.brushShape = state.studio.brushShape === 'SQUARE' ? 'CIRCLE' : 'SQUARE';
-				return feedback.emit('READY');
-			case 'TOGGLE_HAND_TOOL':
-				state.studio.isHandToolActive = !state.studio.isHandToolActive;
-				return feedback.emit('READY');
-			case 'CYCLE_SYMMETRY':
-				const modes: Array<'OFF' | 'HORIZONTAL' | 'VERTICAL' | 'QUADRANT'> = [
-					'OFF',
-					'HORIZONTAL',
-					'VERTICAL',
-					'QUADRANT'
-				];
-				const currentIdx = modes.indexOf(state.studio.symmetryMode);
-				state.studio.symmetryMode = modes[(currentIdx + 1) % modes.length];
-				return feedback.emit('READY');
-			case 'TOGGLE_TILING':
-				state.studio.isTilingEnabled = !state.studio.isTilingEnabled;
-				return feedback.emit('READY');
+				feedback.emit('READY');
+				return true;
 			case 'TOGGLE_AIRBRUSH':
 				state.studio.isAirbrushActive = !state.studio.isAirbrushActive;
-				state.studio.show(state.studio.isAirbrushActive ? 'Mist Active' : 'Mist Off');
-				return feedback.emit('READY');
-			case 'TOGGLE_ALPHA_LOCK':
-				state.studio.isAlphaLocked = !state.studio.isAlphaLocked;
-				return feedback.emit('READY');
+				state.studio.show(
+					__(state.studio.isAirbrushActive ? 'ui:studio.mist_active' : 'ui:studio.mist_off')
+				);
+				feedback.emit('READY');
+				return true;
 			case 'TOGGLE_PIXEL_PERFECT':
 				state.studio.isPixelPerfect = !state.studio.isPixelPerfect;
-				return feedback.emit('READY');
+				feedback.emit('READY');
+				return true;
+			case 'TOGGLE_DITHER_BLEND':
+				state.studio.isDitherBlendActive = !state.studio.isDitherBlendActive;
+				state.studio.show(
+					__(state.studio.isDitherBlendActive ? 'ui:studio.blend_on' : 'ui:studio.blend_off')
+				);
+				feedback.emit('READY');
+				return true;
 			case 'TOGGLE_SHADE_LIGHTEN':
-				state.studio.isShadingLighten = !state.studio.isShadingLighten;
-				if (state.studio.isShadingLighten) {
-					state.studio.isShadingDarken = false;
-					state.studio.isShadingDither = false;
-				}
-				state.studio.show(state.studio.isShadingLighten ? 'Light Roast Active' : 'Light Roast Off');
-				return feedback.emit('READY');
-			case 'TOGGLE_SHADE_DARKEN':
-				state.studio.isShadingDarken = !state.studio.isShadingDarken;
-				if (state.studio.isShadingDarken) {
-					state.studio.isShadingLighten = false;
-					state.studio.isShadingDither = false;
-				}
-				state.studio.show(state.studio.isShadingDarken ? 'Dark Roast Active' : 'Dark Roast Off');
-				return feedback.emit('READY');
-			case 'TOGGLE_SHADE_DITHER':
-				state.studio.isShadingDither = !state.studio.isShadingDither;
-				if (state.studio.isShadingDither) {
-					state.studio.isShadingLighten = false;
-					state.studio.isShadingDarken = false;
-				}
-				state.studio.show(state.studio.isShadingDither ? 'Texture Active' : 'Texture Off');
-				return feedback.emit('READY');
-
 			case 'SHADE_LIGHTEN':
 				state.studio.isShadingLighten = !state.studio.isShadingLighten;
 				if (state.studio.isShadingLighten) {
 					state.studio.isShadingDarken = false;
 					state.studio.isShadingDither = false;
 				}
-				state.studio.show(state.studio.isShadingLighten ? 'Light Roast Active' : 'Light Roast Off');
-				return feedback.emit('READY');
+				state.studio.show(
+					__(
+						state.studio.isShadingLighten
+							? 'ui:studio.light_roast_active'
+							: 'ui:studio.light_roast_off'
+					)
+				);
+				feedback.emit('READY');
+				return true;
+			case 'TOGGLE_SHADE_DARKEN':
 			case 'SHADE_DARKEN':
 				state.studio.isShadingDarken = !state.studio.isShadingDarken;
 				if (state.studio.isShadingDarken) {
 					state.studio.isShadingLighten = false;
 					state.studio.isShadingDither = false;
 				}
-				state.studio.show(state.studio.isShadingDarken ? 'Dark Roast Active' : 'Dark Roast Off');
-				return feedback.emit('READY');
+				state.studio.show(
+					__(
+						state.studio.isShadingDarken
+							? 'ui:studio.dark_roast_active'
+							: 'ui:studio.dark_roast_off'
+					)
+				);
+				feedback.emit('READY');
+				return true;
+			case 'TOGGLE_SHADE_DITHER':
 			case 'SHADE_DITHER':
 				state.studio.isShadingDither = !state.studio.isShadingDither;
 				if (state.studio.isShadingDither) {
 					state.studio.isShadingLighten = false;
 					state.studio.isShadingDarken = false;
 				}
-				state.studio.show(state.studio.isShadingDither ? 'Texture Active' : 'Texture Off');
-				return feedback.emit('READY');
-
+				state.studio.show(
+					__(state.studio.isShadingDither ? 'ui:studio.texture_active' : 'ui:studio.texture_off')
+				);
+				feedback.emit('READY');
+				return true;
 			case 'TOGGLE_COLOR_LOCK':
 				if (state.studio.isColorLocked) {
 					state.studio.isColorLocked = false;
@@ -361,86 +392,164 @@ export class EditorEngine {
 					const val = state.canvas.getColor(state.cursor.pos.x, state.cursor.pos.y);
 					state.studio.colorLockSource = ColorLogic.uint32ToHex(val);
 				}
-				return feedback.emit('READY');
+				feedback.emit('READY');
+				return true;
+			case 'POLY_SIDES_INC':
+				state.studio.polygonSides = Math.min(12, state.studio.polygonSides + 1);
+				state.studio.show(
+					__('ui:studio.facets', { replace: { count: state.studio.polygonSides } })
+				);
+				feedback.emit('READY');
+				return true;
+			case 'POLY_SIDES_DEC':
+				state.studio.polygonSides = Math.max(3, state.studio.polygonSides - 1);
+				state.studio.show(
+					__('ui:studio.facets', { replace: { count: state.studio.polygonSides } })
+				);
+				feedback.emit('READY');
+				return true;
+			case 'POLY_INDENT_INC':
+				state.studio.polygonIndentation = Math.min(100, state.studio.polygonIndentation + 10);
+				state.studio.show(
+					__('ui:studio.steeping', { replace: { count: state.studio.polygonIndentation } })
+				);
+				feedback.emit('READY');
+				return true;
+			case 'POLY_INDENT_DEC':
+				state.studio.polygonIndentation = Math.max(0, state.studio.polygonIndentation - 10);
+				state.studio.show(
+					__('ui:studio.steeping', { replace: { count: state.studio.polygonIndentation } })
+				);
+				feedback.emit('READY');
+				return true;
+		}
+		return false;
+	}
 
+	private handleSystemIntent(intent: ActionIntent): boolean {
+		switch (intent) {
+			case 'OPEN_MENU':
+				state.showCommandPalette = !state.showCommandPalette;
+				return true;
+			case 'OPEN_SETTINGS':
+				state.showCanvasSettings = !state.showCanvasSettings;
+				return true;
+			case 'OPEN_PALETTE':
+				state.showColorPicker = !state.showColorPicker;
+				return true;
+			case 'OPEN_AUDIO':
+				state.showAudioSettings = !state.showAudioSettings;
+				return true;
+			case 'OPEN_EXPORT':
+				state.showExportMenu = true;
+				return true;
+			case 'OPEN_HELP':
+				state.showShortcuts = true;
+				return true;
+			case 'OPEN_MANUAL':
+				state.showManual = true;
+				return true;
+			case 'ESCAPE':
+				state.handleEscape();
+				return true;
+			case 'CLEAR_CANVAS':
+				services.manipulation.clearAll();
+				return true;
+			case 'TOGGLE_MUTE':
+				state.studio.toggleMute();
+				return true;
+			case 'TOGGLE_MINIMAP':
+				state.studio.showMinimap = !state.studio.showMinimap;
+				feedback.emit('READY');
+				return true;
+			case 'TOGGLE_HAND_TOOL':
+				state.studio.isHandToolActive = !state.studio.isHandToolActive;
+				feedback.emit('READY');
+				return true;
+			case 'CYCLE_SYMMETRY':
+				const modes: Array<'OFF' | 'HORIZONTAL' | 'VERTICAL' | 'QUADRANT'> = [
+					'OFF',
+					'HORIZONTAL',
+					'VERTICAL',
+					'QUADRANT'
+				];
+				const currentIdx = modes.indexOf(state.studio.symmetryMode);
+				state.studio.symmetryMode = modes[(currentIdx + 1) % modes.length];
+				feedback.emit('READY');
+				return true;
+			case 'TOGGLE_TILING':
+				state.studio.isTilingEnabled = !state.studio.isTilingEnabled;
+				feedback.emit('READY');
+				return true;
+			case 'TOGGLE_ALPHA_LOCK':
+				state.studio.isAlphaLocked = !state.studio.isAlphaLocked;
+				feedback.emit('READY');
+				return true;
 			case 'TOGGLE_UNDERLAY':
 				state.studio.isUnderlayVisible = !state.studio.isUnderlayVisible;
-				return feedback.emit('READY');
+				feedback.emit('READY');
+				return true;
 			case 'OPEN_UNDERLAY_MENU':
 				state.studio.showUnderlayMenu = !state.studio.showUnderlayMenu;
-				return feedback.emit('READY');
-
+				feedback.emit('READY');
+				return true;
 			case 'TOOL_RECTANGLE':
 				state.studio.activeTool = 'RECTANGLE';
 				state.studio.shapeAnchor = { ...state.cursor.pos };
-				return feedback.emit('READY');
+				feedback.emit('READY');
+				return true;
 			case 'TOOL_ELLIPSE':
 				state.studio.activeTool = 'ELLIPSE';
 				state.studio.shapeAnchor = { ...state.cursor.pos };
-				return feedback.emit('READY');
-			case 'TOOL_RECT_SELECT':
-				state.studio.activeTool = 'RECT_SELECT';
-				return feedback.emit('READY');
-			case 'TOOL_LASSO_SELECT':
-				state.studio.activeTool = 'LASSO_SELECT';
-				return feedback.emit('READY');
-			case 'TOOL_POLY_SELECT':
-				state.studio.activeTool = 'POLY_SELECT';
-				return feedback.emit('READY');
-			case 'TOOL_BRUSH':
-				state.studio.activeTool = 'BRUSH';
-				return feedback.emit('READY');
-			case 'TOOL_ERASER':
-				state.studio.activeTool = 'ERASER';
-				return feedback.emit('READY');
-			case 'TOOL_SELECT':
-				state.studio.activeTool = 'SELECT';
-				return feedback.emit('READY');
+				feedback.emit('READY');
+				return true;
 			case 'TOOL_POLYGON':
 				state.studio.activeTool = 'POLYGON';
 				state.studio.shapeAnchor = { ...state.cursor.pos };
-				return feedback.emit('READY');
-			case 'POLY_SIDES_INC':
-				state.studio.polygonSides = Math.min(12, state.studio.polygonSides + 1);
-				state.studio.show(`${state.studio.polygonSides} Facets`);
-				return feedback.emit('READY');
-			case 'POLY_SIDES_DEC':
-				state.studio.polygonSides = Math.max(3, state.studio.polygonSides - 1);
-				state.studio.show(`${state.studio.polygonSides} Facets`);
-				return feedback.emit('READY');
-			case 'POLY_INDENT_INC':
-				state.studio.polygonIndentation = Math.min(100, state.studio.polygonIndentation + 10);
-				state.studio.show(`${state.studio.polygonIndentation}% Steeping`);
-				return feedback.emit('READY');
-			case 'POLY_INDENT_DEC':
-				state.studio.polygonIndentation = Math.max(0, state.studio.polygonIndentation - 10);
-				state.studio.show(`${state.studio.polygonIndentation}% Steeping`);
-				return feedback.emit('READY');
-			case 'TOGGLE_DITHER_BLEND':
-				state.studio.isDitherBlendActive = !state.studio.isDitherBlendActive;
-				state.studio.show(
-					state.studio.isDitherBlendActive ? 'Classic Blend ON' : 'Classic Blend OFF'
-				);
-				return feedback.emit('READY');
+				feedback.emit('READY');
+				return true;
+			case 'TOOL_RECT_SELECT':
+				state.studio.activeTool = 'RECT_SELECT';
+				feedback.emit('READY');
+				return true;
+			case 'TOOL_LASSO_SELECT':
+				state.studio.activeTool = 'LASSO_SELECT';
+				feedback.emit('READY');
+				return true;
+			case 'TOOL_POLY_SELECT':
+				state.studio.activeTool = 'POLY_SELECT';
+				feedback.emit('READY');
+				return true;
+			case 'TOOL_BRUSH':
+				state.studio.activeTool = 'BRUSH';
+				feedback.emit('READY');
+				return true;
+			case 'TOOL_ERASER':
+				state.studio.activeTool = 'ERASER';
+				feedback.emit('READY');
+				return true;
 			case 'TOOL_TRANSFORM':
 				if (state.selection.isActive) {
 					state.studio.isTransforming = !state.studio.isTransforming;
-					return feedback.emit('READY');
+					feedback.emit('READY');
 				}
-				return;
-
-			default:
-				if (intent.startsWith('SET_SIDES_')) {
-					const num = parseInt(intent.split('_')[2]);
-					state.studio.polygonSides = num;
-					state.studio.show(`${num} Facets`);
-					return feedback.emit('READY');
-				}
-				if (intent.startsWith('SELECT_COLOR_')) {
-					const num = parseInt(intent.split('_')[2]);
-					return services.color.select(num === 0 ? 9 : num - 1);
-				}
+				return true;
 		}
+
+		if (intent.startsWith('SET_SIDES_')) {
+			const num = parseInt(intent.split('_')[2]);
+			state.studio.polygonSides = num;
+			state.studio.show(__('ui:studio.facets', { replace: { count: num } }));
+			feedback.emit('READY');
+			return true;
+		}
+		if (intent.startsWith('SELECT_COLOR_')) {
+			const num = parseInt(intent.split('_')[2]);
+			services.color.select(num === 0 ? 9 : num - 1);
+			return true;
+		}
+
+		return false;
 	}
 
 	private executeMove(dx: number, dy: number) {
@@ -458,12 +567,12 @@ export class EditorEngine {
 
 		if (isSelecting && !state.selection.start) {
 			state.studio.activeTool = 'RECT_SELECT';
-			services.startSelection();
+			services.selection.begin(state.cursor.pos.x, state.cursor.pos.y);
 		}
 
 		if (services.movement.move(dx, dy)) {
 			if (isSelecting) {
-				services.updateSelection();
+				services.selection.update(state.cursor.pos.x, state.cursor.pos.y);
 			} else if (isEraseFlow) {
 				services.draw.erase();
 			} else if (isPaintFlow) {

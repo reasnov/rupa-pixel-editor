@@ -84,7 +84,7 @@ export class PointerEngine {
 				return;
 			}
 			if (tool === 'MAGIC_WAND') {
-				services.selection.spiritPick();
+				services.selection.magicWand();
 				this.isPointerDown = false; // Wand is a single-click tool
 				this.isPointerDownActive = false;
 				return;

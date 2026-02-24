@@ -240,7 +240,7 @@ export class ColorLogic {
 	 */
 	static parsePaletteText(content: string): ColorHex[] {
 		const colors: ColorHex[] = [];
-		const hexRegex = /#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3}|[A-Fa-f0-9]{8})/g;
+		const hexRegex = /#([A-Fa-f0-9]{8}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})/g;
 
 		// 1. Try to find HEX codes directly
 		let match;

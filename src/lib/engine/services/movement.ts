@@ -46,7 +46,7 @@ export class MovementService {
 	}
 
 	/**
-	 * Jump the needle to a specific Cartesian coordinate.
+	 * Jump the cursor to a specific Cartesian coordinate.
 	 */
 	jumpTo(tx: number, ty: number) {
 		const { x, y } = Geometry.cartesianToInternal(

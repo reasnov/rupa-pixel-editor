@@ -1,7 +1,7 @@
 <script lang="ts">
 	import './layout.css';
 	import '$lib/state/i18n.svelte.js';
-	import AtmosphereOverlay from '$lib/components/ui/AtmosphereOverlay.svelte';
+	import AtmosphereOverlay from '$lib/components/elements/AtmosphereOverlay.svelte';
 
 	let { children } = $props();
 </script>

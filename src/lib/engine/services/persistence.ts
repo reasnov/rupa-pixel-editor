@@ -3,63 +3,98 @@ import { sfx } from '../../engine/audio.js';
 import { history } from '../../engine/history.js';
 import { FrameState } from '../../state/frame.svelte.js';
 import { LayerState } from '../../state/layer.svelte.js';
-import { ColorLogic } from '../../logic/color.js';
+import { StorageLogic } from '../../logic/storage.js';
+import JSZip from 'jszip';
 
+/**
+ * PersistenceService: Handles project serialization using an industrial-grade
+ * binary format (ZIP-based) for efficiency and compatibility with GitHub Pages.
+ */
 export class PersistenceService {
-	private serialize() {
-		// Professional Structure
-		return JSON.stringify({
+	/**
+	 * Serializes the project into a binary Blob.
+	 */
+	private async serialize(): Promise<Blob> {
+		const zip = new JSZip();
+
+		const metadata = {
 			version: editor.version,
-			metadata: {
-				name: 'Untitled Project',
-				lastModified: new Date().toISOString()
-			},
+			name: 'Untitled Project',
+			lastModified: new Date().toISOString(),
 			palette: editor.paletteState.swatches,
 			presets: editor.paletteState.presets,
-			project: {
-				frames: editor.project.frames.map((f) => ({
-					name: f.name,
-					width: f.width,
-					height: f.height,
-					layers: f.layers.map((v) => ({
-						name: v.name,
-						isVisible: v.isVisible,
-						isLocked: v.isLocked,
-						type: v.type,
-						parentId: v.parentId,
-						isCollapsed: v.isCollapsed,
-						// Convert TypedArray to normal array for JSON
-						pixels: Array.from(v.pixels)
-					}))
+			dimensions: { width: editor.canvas.width, height: editor.canvas.height },
+			fps: editor.project.fps,
+			structure: editor.project.frames.map((f, fIdx) => ({
+				name: f.name,
+				layers: f.layers.map((l, lIdx) => ({
+					name: l.name,
+					isVisible: l.isVisible,
+					isLocked: l.isLocked,
+					isLinked: l.isLinked || false,
+					type: l.type,
+					parentId: l.parentId,
+					isCollapsed: l.isCollapsed,
+					dataPath: l.type === 'LAYER' ? `f${fIdx}_l${lIdx}.bin` : null
 				}))
-			}
+			}))
+		};
+
+		zip.file('project.json', JSON.stringify(metadata));
+
+		editor.project.frames.forEach((f, fIdx) => {
+			f.layers.forEach((l, lIdx) => {
+				if (l.type === 'LAYER') {
+					// Cast pixels.buffer to ArrayBuffer to satisfy JSZip types
+					zip.file(`f${fIdx}_l${lIdx}.bin`, l.pixels.buffer as ArrayBuffer);
+				}
+			});
+		});
+
+		return await zip.generateAsync({
+			type: 'blob',
+			compression: 'DEFLATE'
 		});
 	}
 
 	async save() {
-		const data = this.serialize();
-		if (typeof window.electronAPI === 'undefined') {
-			this.webDownload(data);
-			return;
-		}
+		try {
+			const blob = await this.serialize();
 
-		const res = await window.electronAPI.saveFile(
-			data,
-			editor.project.currentFilePath || undefined
-		);
-		if (res) {
-			editor.project.setMetadata(res);
-			sfx.playDraw();
+			if (typeof window.electronAPI === 'undefined') {
+				this.webDownload(blob);
+				return;
+			}
+
+			// Electron: Convert Blob to base64 string for safe IPC transfer
+			const reader = new FileReader();
+			reader.onload = async () => {
+				const result = reader.result as string;
+				const base64 = result.split(',')[1];
+				if (window.electronAPI) {
+					const res = await window.electronAPI.saveFile(
+						base64,
+						editor.project.currentFilePath || undefined
+					);
+					if (res) {
+						editor.project.setMetadata(res);
+						sfx.playDraw();
+					}
+				}
+			};
+			reader.readAsDataURL(blob);
+		} catch (e) {
+			editor.studio.reportError('Save Failed', 'Could not serialize binary data.', String(e));
 		}
 	}
 
-	private webDownload(data: string) {
-		const blob = new Blob([data], { type: 'application/json' });
+	private webDownload(blob: Blob) {
 		const url = URL.createObjectURL(blob);
 		const a = document.createElement('a');
 		a.href = url;
 		a.download = `rupa-project.rupa`;
 		a.click();
+		URL.revokeObjectURL(url);
 	}
 
 	async load() {
@@ -70,7 +105,7 @@ export class PersistenceService {
 
 		const res = await window.electronAPI.openFile();
 		if (res) {
-			this.deserialize(res.content);
+			await this.deserialize(res.content);
 			editor.project.setMetadata(res.filePath);
 			sfx.playDraw();
 		}
@@ -80,74 +115,77 @@ export class PersistenceService {
 		const input = document.createElement('input');
 		input.type = 'file';
 		input.accept = '.rupa';
-		input.onchange = (e) => {
+		input.onchange = async (e) => {
 			const file = (e.target as HTMLInputElement).files?.[0];
 			if (file) {
-				const reader = new FileReader();
-				reader.onload = (re) => this.deserialize(re.target?.result as string);
-				reader.readAsText(file);
+				await this.deserialize(file);
+				sfx.playDraw();
 			}
 		};
 		input.click();
 	}
 
 	async backup() {
-		const data = this.serialize();
-		if (window.electronAPI) {
-			await window.electronAPI.autoSave(data);
-			editor.project.lastSaved = new Date();
-		} else {
-			localStorage.setItem('rupa_auto_backup', data);
-		}
-	}
-
-	/**
-	 * Autosave to browser storage (LocalStorage).
-	 */
-	autoSaveSession() {
 		try {
-			const data = this.serialize();
-			localStorage.setItem('rupa_autosave_session', data);
+			const blob = await this.serialize();
+			if (window.electronAPI) {
+				const reader = new FileReader();
+				reader.onload = async () => {
+					const result = reader.result as string;
+					const base64 = result.split(',')[1];
+					await window.electronAPI!.autoSave(base64);
+				};
+				reader.readAsDataURL(blob);
+			} else {
+				const reader = new FileReader();
+				reader.onload = async () => {
+					await StorageLogic.saveProject('auto_backup', reader.result as string);
+				};
+				reader.readAsDataURL(blob);
+			}
 			editor.project.lastSaved = new Date();
-			console.log('Session autosaved.');
 		} catch (e) {
-			console.warn('Autosave failed (likely quota exceeded):', e);
+			console.warn('Backup failed:', e);
 		}
 	}
 
-	/**
-	 * Check and restore the last autosaved session if it exists.
-	 */
-	restoreLastSession() {
-		const data = localStorage.getItem('rupa_autosave_session');
+	async autoSaveSession() {
+		try {
+			const blob = await this.serialize();
+			const reader = new FileReader();
+			reader.onload = async () => {
+				await StorageLogic.saveProject('autosave_session', reader.result as string);
+				editor.project.lastSaved = new Date();
+			};
+			reader.readAsDataURL(blob);
+		} catch (e) {
+			console.warn('Autosave failed:', e);
+		}
+	}
+
+	async restoreLastSession() {
+		const data = await StorageLogic.loadProject('autosave_session');
 		if (data) {
-			this.deserialize(data);
+			const res = await fetch(data);
+			const blob = await res.blob();
+			await this.deserialize(blob);
 			return true;
 		}
 		return false;
 	}
 
-	/**
-	 * Save the current preset library to a global LocalStorage key.
-	 */
-	saveGlobalPalettes() {
+	async saveGlobalPalettes() {
 		try {
-			const data = JSON.stringify(editor.paletteState.presets);
-			localStorage.setItem('rupa_palette_library', data);
+			await StorageLogic.savePresets(editor.paletteState.presets);
 		} catch (e) {
 			console.warn('Failed to save global palettes:', e);
 		}
 	}
 
-	/**
-	 * Load presets from the global LocalStorage key.
-	 */
-	loadGlobalPalettes() {
+	async loadGlobalPalettes() {
 		try {
-			const data = localStorage.getItem('rupa_palette_library');
-			if (data) {
-				const presets = JSON.parse(data);
-				// Merge logic: Add non-duplicates or just replace non-defaults
+			const presets = await StorageLogic.loadPresets();
+			if (presets) {
 				const defaults = editor.paletteState.presets.filter((p) => p.isDefault);
 				const customs = presets.filter((p: any) => !p.isDefault);
 				editor.paletteState.presets = [...defaults, ...customs];
@@ -157,61 +195,83 @@ export class PersistenceService {
 		}
 	}
 
-	private deserialize(json: string) {
+	private async deserialize(input: string | Blob | File) {
+		try {
+			const zip = new JSZip();
+			let contents;
+
+			if (typeof input === 'string') {
+				// Base64 string from Electron or Legacy JSON
+				if (input.startsWith('{')) {
+					return this.deserializeLegacy(input);
+				}
+				const res = await fetch(`data:application/zip;base64,${input}`);
+				contents = await zip.loadAsync(await res.blob());
+			} else {
+				contents = await zip.loadAsync(input);
+			}
+
+			const projectJson = await contents.file('project.json')?.async('string');
+			if (!projectJson) throw new Error('Invalid .rupa file');
+
+			const d = JSON.parse(projectJson);
+			editor.project.fps = d.fps || 10;
+			editor.paletteState.swatches = d.palette || editor.paletteState.swatches;
+
+			editor.project.frames = await Promise.all(
+				d.structure.map(async (fd: any) => {
+					const frame = new FrameState(fd.name, d.dimensions.width, d.dimensions.height);
+					frame.layers = await Promise.all(
+						fd.layers.map(async (ld: any) => {
+							const layer = new LayerState(
+								ld.name,
+								d.dimensions.width,
+								d.dimensions.height,
+								ld.type || 'LAYER'
+							);
+							layer.isVisible = ld.isVisible;
+							layer.isLocked = ld.isLocked;
+							layer.isLinked = ld.isLinked || false;
+							layer.parentId = ld.parentId || null;
+							layer.isCollapsed = ld.isCollapsed || false;
+
+							if (layer.type === 'LAYER' && ld.dataPath) {
+								const binary = await contents.file(ld.dataPath)?.async('arraybuffer');
+								if (binary) layer.pixels = new Uint32Array(binary);
+							}
+							return layer;
+						})
+					);
+					return frame;
+				})
+			);
+
+			editor.project.activeFrameIndex = 0;
+			editor.canvas.incrementVersion();
+			history.clear();
+		} catch (e) {
+			editor.studio.reportError('Load Failed', 'Could not parse project file.', String(e));
+		}
+	}
+
+	private deserializeLegacy(json: string) {
 		try {
 			const d = JSON.parse(json);
-
-			// 1. Restore Palette
 			if (d.palette) editor.paletteState.swatches = d.palette;
-			if (d.presets) editor.paletteState.presets = d.presets;
-
-			// 2. Restore Project Structure (with Backward Compatibility)
 			const projectData = d.project || d.folio;
 			if (projectData) {
-				// Professional format
 				editor.project.frames = projectData.frames.map((fd: any) => {
 					const frame = new FrameState(fd.name, fd.width, fd.height);
-					const layersData = fd.layers || fd.veils || [];
-					frame.layers = layersData.map((vd: any) => {
+					frame.layers = (fd.layers || []).map((vd: any) => {
 						const layer = new LayerState(vd.name, fd.width, fd.height, vd.type || 'LAYER');
-						layer.isVisible = vd.isVisible;
-						layer.isLocked = vd.isLocked;
-						layer.parentId = vd.parentId || null;
-						layer.isCollapsed = vd.isCollapsed || false;
-
-						const pixelData = vd.pixels || vd.stitches || [];
-						if (layer.type === 'LAYER') {
-							// Handle legacy string array or new numeric array
-							if (pixelData.length > 0 && typeof pixelData[0] === 'string') {
-								const u32 = new Uint32Array(pixelData.length);
-								for (let i = 0; i < pixelData.length; i++) {
-									u32[i] = ColorLogic.hexToUint32(pixelData[i]);
-								}
-								layer.pixels = u32;
-							} else {
-								layer.pixels = new Uint32Array(pixelData);
-							}
-						}
+						layer.pixels = new Uint32Array(vd.pixels || []);
 						return layer;
 					});
 					return frame;
 				});
-			} else if (d.pixelData) {
-				// Legacy v0.3.0 format
-				const frame = new FrameState('Restored Project', d.dimensions.width, d.dimensions.height);
-				const u32 = new Uint32Array(d.pixelData.length);
-				for (let i = 0; i < d.pixelData.length; i++) {
-					u32[i] = ColorLogic.hexToUint32(d.pixelData[i]);
-				}
-				frame.layers[0].pixels = u32;
-				editor.project.frames = [frame];
 			}
-
-			editor.project.activeFrameIndex = 0;
-			editor.canvas.triggerPulse();
+			editor.canvas.incrementVersion();
 			history.clear();
-		} catch (e) {
-			console.error('Failed to restore project:', e);
-		}
+		} catch (e) {}
 	}
 }

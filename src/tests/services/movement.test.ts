@@ -1,33 +1,20 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { MovementService } from '../../lib/engine/services/movement.js';
 
-// Mock editor and sfx
+// Mock Dependencies
 vi.mock('../../lib/state/editor.svelte.js', () => ({
 	editor: {
-		canvas: {
-			width: 32,
-			height: 32
-		},
-		studio: {
-			isTilingEnabled: false
-		},
 		cursor: {
-			pos: { x: 0, y: 0 },
-			setPos: vi.fn((x, y) => {
-				// @ts-ignore
-				import('../../lib/state/editor.svelte.js').then((m) => {
-					m.editor.cursor.pos.x = x;
-					m.editor.cursor.pos.y = y;
-				});
-			})
-		}
+			pos: { x: 5, y: 5 },
+			setPos: vi.fn()
+		},
+		canvas: { width: 10, height: 10 },
+		studio: { isTilingEnabled: false }
 	}
 }));
 
 vi.mock('../../lib/engine/audio.js', () => ({
-	sfx: {
-		playMove: vi.fn()
-	}
+	sfx: { playMove: vi.fn() }
 }));
 
 import { editor } from '../../lib/state/editor.svelte.js';
@@ -37,48 +24,37 @@ describe('MovementService', () => {
 	let service: MovementService;
 
 	beforeEach(() => {
-		service = new MovementService();
-		editor.cursor.pos.x = 0;
-		editor.cursor.pos.y = 0;
 		vi.clearAllMocks();
+		service = new MovementService();
+		editor.cursor.pos = { x: 5, y: 5 };
+		editor.studio.isTilingEnabled = false;
 	});
 
-	it('move should update cursor position within bounds', () => {
-		const moved = service.move(1, 1);
+	it('move should update cursor position by delta', () => {
+		const moved = service.move(1, -1);
 		expect(moved).toBe(true);
-		expect(editor.cursor.setPos).toHaveBeenCalledWith(1, 1);
+		expect(editor.cursor.setPos).toHaveBeenCalledWith(6, 4);
 		expect(sfx.playMove).toHaveBeenCalled();
 	});
 
-	it('move should respect boundaries', () => {
-		// Try to move out of bounds (left/top)
-		const moved = service.move(-1, -1);
-		expect(moved).toBe(false);
-		expect(editor.cursor.setPos).not.toHaveBeenCalled();
-
-		// Move to bottom-right corner
-		editor.cursor.pos.x = 31;
-		editor.cursor.pos.y = 31;
-		const movedOut = service.move(1, 1);
-		expect(movedOut).toBe(false);
+	it('move should respect canvas boundaries when tiling is off', () => {
+		service.move(10, 10);
+		expect(editor.cursor.setPos).toHaveBeenCalledWith(9, 9);
 	});
 
-	it('internalToCartesian should convert coordinates correctly', () => {
-		// For 32x32: mid is 16.
-		const center = service.internalToCartesian(16, 16, 32, 32);
-		expect(center).toEqual({ x: 1, y: -1 });
-
-		const topLeft = service.internalToCartesian(0, 0, 32, 32);
-		expect(topLeft).toEqual({ x: -16, y: 16 });
+	it('jumpTo should move cursor to internal equivalent of cartesian coords', () => {
+		// In 10x10, mid is 5.
+		// Cartesian X: 0 -> internal 4 (since 10 is even, 0-4 are negative, 5-9 are positive)
+		// Logic: if even, mid=5. ix = tx < 0 ? tx + 5 : tx + 5 - 1.
+		// tx=0 -> 0 + 5 - 1 = 4.
+		service.jumpTo(0, 0);
+		expect(editor.cursor.setPos).toHaveBeenCalledWith(4, 4);
 	});
 
-	it('cartesianToInternal should convert back correctly', () => {
-		const internal = service.cartesianToInternal(1, 1, 32, 32);
-		expect(internal).toEqual({ x: 16, y: 15 });
-	});
-
-	it('jumpTo should update cursor position', () => {
-		service.jumpTo(1, 1);
-		expect(editor.cursor.setPos).toHaveBeenCalledWith(16, 15);
+	it('jumpHome should reset cursor to (1,1) cartesian', () => {
+		service.jumpHome();
+		// tx=1 -> 1 + 5 - 1 = 5.
+		// ty=1 -> dispY = -1. iy = -1 + 5 = 4.
+		expect(editor.cursor.setPos).toHaveBeenCalledWith(5, 4);
 	});
 });

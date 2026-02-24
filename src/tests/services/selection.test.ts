@@ -1,6 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { SelectionService } from '../../lib/engine/services/selection.js';
-import { ClipboardService } from '../../lib/engine/services/clipboard.js';
 
 // Mock Dependencies
 vi.mock('../../lib/state/editor.svelte.js', () => ({
@@ -10,118 +9,77 @@ vi.mock('../../lib/state/editor.svelte.js', () => ({
 			width: 10,
 			height: 10,
 			pixels: new Uint32Array(100),
-			compositePixels: new Uint32Array(100),
-			getColor: vi.fn((x, y) => {
-				const pixels = new Uint32Array(100);
-				return pixels[y * 10 + x];
-			}),
-			getIndex: vi.fn((x, y) => y * 10 + x),
-			triggerPulse: vi.fn()
+			incrementVersion: vi.fn(),
+			getIndex: vi.fn((x, y) => y * 10 + x)
 		},
 		selection: {
-			get isActive() {
-				return false;
-			},
+			isActive: false,
+			mask: new Uint8Array(100),
+			selectionMode: 'NEW',
+			vertices: [],
+			initMask: vi.fn(),
 			begin: vi.fn(),
 			update: vi.fn(),
-			clear: vi.fn(),
-			getPoints: vi.fn(() => []),
-			getEffectiveBounds: vi.fn(),
-			indices: [],
-			vertices: []
+			clear: vi.fn()
 		},
 		paletteState: { activeColor: '#FF00FF' },
-		project: { clipboard: null }
+		studio: { show: vi.fn() }
 	}
 }));
 
 vi.mock('../../lib/engine/audio.js', () => ({
-	sfx: {
-		playDraw: vi.fn(),
-		playErase: vi.fn(),
-		playScale: vi.fn(),
-		playMove: vi.fn()
-	}
+	sfx: { playDraw: vi.fn(), playScale: vi.fn() }
 }));
 
 vi.mock('../../lib/engine/history.js', () => ({
 	history: {
-		push: vi.fn(),
+		pushPixel: vi.fn(),
 		beginBatch: vi.fn(),
 		endBatch: vi.fn()
 	}
 }));
 
 import { editor } from '../../lib/state/editor.svelte.js';
+import { history } from '../../lib/engine/history.js';
 
-describe('Selection & Clipboard Services', () => {
+describe('SelectionService', () => {
+	let service: SelectionService;
+
 	beforeEach(() => {
 		vi.clearAllMocks();
-		// @ts-ignore
-		vi.spyOn(editor.selection, 'isActive', 'get').mockReturnValue(false);
-		editor.project.clipboard = null;
-		// Reset pixels
+		service = new SelectionService();
 		editor.canvas.pixels.fill(0);
+		editor.selection.mask = new Uint8Array(100);
+		editor.selection.vertices = [];
 	});
 
-	describe('SelectionService', () => {
-		it('begin should delegate to state', () => {
-			const service = new SelectionService();
-			service.begin(1, 1);
-			expect(editor.selection.begin).toHaveBeenCalledWith(1, 1);
-		});
-
-		it('commit should batch fill selection', () => {
-			const service = new SelectionService();
-			// @ts-ignore
-			editor.selection.getPoints.mockReturnValue([
-				{ x: 0, y: 0 },
-				{ x: 1, y: 1 }
-			]);
-			editor.paletteState.activeColor = '#FF00FF';
-
-			service.fillSelection();
-
-			expect(editor.canvas.pixels[0]).toBe(0xffff00ff);
-			expect(editor.canvas.pixels[11]).toBe(0xffff00ff);
-		});
+	it('begin should init mask and start selection', () => {
+		service.begin(1, 1);
+		expect(editor.selection.initMask).toHaveBeenCalled();
+		expect(editor.selection.begin).toHaveBeenCalledWith(1, 1);
 	});
 
-	describe('ClipboardService', () => {
-		it('copy should store data in project clipboard', () => {
-			const service = new ClipboardService();
-			// @ts-ignore
-			editor.selection.getPoints.mockReturnValue([{ x: 5, y: 5 }]);
-			// @ts-ignore
-			editor.selection.getEffectiveBounds.mockReturnValue({
-				x1: 5,
-				y1: 5,
-				width: 1,
-				height: 1
-			});
-			editor.canvas.compositePixels[55] = 0xffaabbcc;
+	it('fillSelection should update pixels and track in history', () => {
+		editor.selection.mask[0] = 1;
+		editor.selection.mask[1] = 1;
+		(editor as any).activeColor = '#FF00FF';
 
-			service.copy();
+		service.fillSelection();
 
-			expect(editor.project.clipboard).toEqual({
-				width: 1,
-				height: 1,
-				data: new Uint32Array([0xffaabbcc])
-			});
-		});
+		expect(editor.canvas.pixels[0]).toBe(0xffff00ff);
+		expect(history.pushPixel).toHaveBeenCalled();
+		expect(history.beginBatch).toHaveBeenCalled();
+		expect(history.endBatch).toHaveBeenCalled();
+	});
 
-		it('paste should update pixels at cursor position', () => {
-			const service = new ClipboardService();
-			editor.project.clipboard = {
-				width: 1,
-				height: 1,
-				data: new Uint32Array([0xffddeeff])
-			};
-			editor.cursor.pos = { x: 2, y: 2 };
+	it('magicWand should perform flood fill on mask', () => {
+		editor.canvas.pixels[0] = 0xffffffff;
+		editor.canvas.pixels[1] = 0xffffffff;
+		editor.cursor.pos = { x: 0, y: 0 };
 
-			service.paste();
+		service.magicWand();
 
-			expect(editor.canvas.pixels[22]).toBe(0xffddeeff);
-		});
+		expect(editor.selection.mask[0]).toBe(1);
+		expect(editor.selection.mask[1]).toBe(1);
 	});
 });

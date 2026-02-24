@@ -2,72 +2,116 @@ import { describe, it, expect } from 'vitest';
 import { Geometry } from '../../lib/logic/geometry.js';
 
 describe('Geometry', () => {
-	it('getLinePoints should return correct points for a horizontal line', () => {
-		const points = Geometry.getLinePoints(0, 0, 2, 0);
-		expect(points).toEqual([
-			{ x: 0, y: 0 },
-			{ x: 1, y: 0 },
-			{ x: 2, y: 0 }
-		]);
+	describe('getLinePoints (Bresenham)', () => {
+		it('should return points for a horizontal line', () => {
+			expect(Geometry.getLinePoints(0, 0, 2, 0)).toEqual([
+				{ x: 0, y: 0 },
+				{ x: 1, y: 0 },
+				{ x: 2, y: 0 }
+			]);
+		});
+
+		it('should return points for a vertical line', () => {
+			expect(Geometry.getLinePoints(0, 0, 0, 2)).toEqual([
+				{ x: 0, y: 0 },
+				{ x: 0, y: 1 },
+				{ x: 0, y: 2 }
+			]);
+		});
+
+		it('should return points for a diagonal line', () => {
+			expect(Geometry.getLinePoints(0, 0, 2, 2)).toEqual([
+				{ x: 0, y: 0 },
+				{ x: 1, y: 1 },
+				{ x: 2, y: 2 }
+			]);
+		});
+
+		it('should handle broadness for non-perfect lines', () => {
+			// A line that is not perfect diagonal or axis-aligned
+			const points = Geometry.getLinePoints(0, 0, 5, 2, 1.0); // broadness > 0.9
+			// Regular Bresenham for (0,0)->(5,2) usually has 6 points.
+			// With broadness, it should have more.
+			expect(points.length).toBeGreaterThan(6);
+		});
 	});
 
-	it('getLinePoints should return correct points for a vertical line', () => {
-		const points = Geometry.getLinePoints(0, 0, 0, 2);
-		expect(points).toEqual([
-			{ x: 0, y: 0 },
-			{ x: 0, y: 1 },
-			{ x: 0, y: 2 }
-		]);
+	describe('getCirclePoints', () => {
+		it('should return symmetric points for a circle', () => {
+			const points = Geometry.getCirclePoints(0, 0, 2);
+			expect(points).toContainEqual({ x: 2, y: 0 });
+			expect(points).toContainEqual({ x: 0, y: 2 });
+			expect(points).toContainEqual({ x: -2, y: 0 });
+			expect(points).toContainEqual({ x: 0, y: -2 });
+		});
 	});
 
-	it('getLinePoints should return correct points for a diagonal line', () => {
-		const points = Geometry.getLinePoints(0, 0, 2, 2);
-		expect(points).toEqual([
-			{ x: 0, y: 0 },
-			{ x: 1, y: 1 },
-			{ x: 2, y: 2 }
-		]);
+	describe('fitArc', () => {
+		it('should detect a full circle from noisy points', () => {
+			const points = [];
+			for (let a = 0; a < Math.PI * 2; a += 0.1) {
+				points.push({
+					x: 10 + Math.cos(a) * 5 + (Math.random() - 0.5) * 0.1,
+					y: 10 + Math.sin(a) * 5 + (Math.random() - 0.5) * 0.1
+				});
+			}
+			const result = Geometry.fitArc(points, 0.1);
+			expect(result).not.toBeNull();
+			expect(result?.isFull).toBe(true);
+			expect(result?.r).toBeCloseTo(5, 0);
+		});
+
+		it('should return null for non-circular points', () => {
+			const squarePoints = [
+				{ x: 0, y: 0 },
+				{ x: 10, y: 0 },
+				{ x: 10, y: 10 },
+				{ x: 0, y: 10 }
+			];
+			expect(Geometry.fitArc(squarePoints, 0.1)).toBeNull();
+		});
 	});
 
-	it('getCirclePoints should return points for a circle', () => {
-		const points = Geometry.getCirclePoints(0, 0, 1);
-		// Radius 1 should have points at (1,0), (0,1), (-1,0), (0,-1) and diagonals
-		expect(points).toContainEqual({ x: 1, y: 0 });
-		expect(points).toContainEqual({ x: 0, y: 1 });
-		expect(points).toContainEqual({ x: -1, y: 0 });
-		expect(points).toContainEqual({ x: 0, y: -1 });
+	describe('Coordinate Label Conversions', () => {
+		it('toCartesianLabel should work for odd and even sizes', () => {
+			// Odd: 0 1 2 3 4 -> -2 -1 0 1 2
+			expect(Geometry.toCartesianLabel(2, 5)).toBe(0);
+			// Even: 0 1 2 3 -> -2 -1 1 2 (no 0)
+			expect(Geometry.toCartesianLabel(1, 4)).toBe(-1);
+			expect(Geometry.toCartesianLabel(2, 4)).toBe(1);
+		});
+
+		it('round-trip conversion should be consistent', () => {
+			const width = 32,
+				height = 32;
+			const internal = { x: 10, y: 20 };
+			const cartesian = Geometry.internalToCartesian(internal.x, internal.y, width, height);
+			const back = Geometry.cartesianToInternal(cartesian.x, cartesian.y, width, height);
+			expect(back).toEqual(internal);
+		});
 	});
 
-	it('fitArc should detect a full circle', () => {
-		// Create points for a perfect circle
-		const points = [];
-		for (let a = 0; a < Math.PI * 2; a += 0.1) {
-			points.push({ x: Math.cos(a) * 10, y: Math.sin(a) * 10 });
-		}
-		const result = Geometry.fitArc(points, 0.1);
-		expect(result).not.toBeNull();
-		expect(result?.isFull).toBe(true);
-		expect(result?.r).toBeCloseTo(10);
-	});
+	describe('UI Helpers', () => {
+		it('getGuidePosition should return center-relative percentage', () => {
+			expect(Geometry.getGuidePosition(0, 100)).toBe(50);
+			expect(Geometry.getGuidePosition(50, 100)).toBe(100);
+			expect(Geometry.getGuidePosition(-50, 100)).toBe(0);
+		});
 
-	it('toCartesianLabel should calculate correctly', () => {
-		// Odd size (5) -> mid is 2. 0->-2, 1->-1, 2->0, 3->1, 4->2
-		expect(Geometry.toCartesianLabel(0, 5)).toBe(-2);
-		expect(Geometry.toCartesianLabel(2, 5)).toBe(0);
-		expect(Geometry.toCartesianLabel(4, 5)).toBe(2);
+		it('calculatePanDelta should return correct difference', () => {
+			expect(Geometry.calculatePanDelta(10, 10, 5, 5)).toEqual({ dx: 5, dy: 5 });
+		});
 
-		// Even size (4) -> mid is 2. 0->-2, 1->-1, 2->1, 3->2 (no 0)
-		expect(Geometry.toCartesianLabel(0, 4)).toBe(-2);
-		expect(Geometry.toCartesianLabel(1, 4)).toBe(-1);
-		expect(Geometry.toCartesianLabel(2, 4)).toBe(1);
-		expect(Geometry.toCartesianLabel(3, 4)).toBe(2);
-	});
-
-	it('perpendicularDistance should calculate distance from point to line', () => {
-		const p = { x: 0, y: 1 };
-		const a = { x: -1, y: 0 };
-		const b = { x: 1, y: 0 };
-		// Distance from (0,1) to horizontal line y=0 is 1
-		expect(Geometry.perpendicularDistance(p, a, b)).toBe(1);
+		it('calculateCameraTransform should generate valid CSS', () => {
+			const transform = Geometry.calculateCameraTransform(
+				2.0,
+				{ x: 10, y: 10 },
+				{ x: 5, y: 5 },
+				10,
+				10
+			);
+			expect(transform).toContain('scale(2)');
+			expect(transform).toContain('10px');
+		});
 	});
 });

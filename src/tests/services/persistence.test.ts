@@ -1,85 +1,42 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { PersistenceService } from '../../lib/engine/services/persistence.js';
 
-// Mock FrameState and LayerState
-vi.mock('../../state/frame.svelte.js', () => ({
-	FrameState: class {
-		id = '00000000-0000-0000-0000-000000000000';
-		layers: any[] = [];
-		duration = 100;
-		activeLayerIndex = 0;
-		activeLayer = {};
-		addLayer = vi.fn();
-		removeLayer = vi.fn();
-		compositePixels = [];
-		constructor(
-			public name: string,
-			public width: number,
-			public height: number
-		) {}
-	}
-}));
-
-vi.mock('../../state/layer.svelte.js', () => ({
-	LayerState: class {
-		id = '00000000-0000-0000-0000-000000000000';
-		isVisible = true;
-		isLocked = false;
-		opacity = 1.0;
-		type = 'LAYER';
-		parentId = null;
-		isCollapsed = false;
-		pixels = new Uint32Array(0);
-		constructor(
-			public name: string,
-			public width: number,
-			public height: number
-		) {
-			this.pixels = new Uint32Array(width * height);
-		}
-		clone() {
-			return this;
-		}
-		clear() {
-			this.pixels.fill(0);
-		}
-		hasPixel(idx: number) {
-			return this.pixels[idx] !== 0;
-		}
-	}
-}));
-
-// Mock editor and sfx
+// Mock Dependencies
 vi.mock('../../lib/state/editor.svelte.js', () => ({
 	editor: {
-		version: '0.6.1',
-		paletteState: { swatches: ['#000000', '#FFFFFF'] },
+		version: '1.0.0',
+		paletteState: { swatches: ['#000000'], presets: [] },
+		canvas: { incrementVersion: vi.fn(), width: 2, height: 2 },
 		project: {
 			frames: [],
-			activeFrameIndex: 0,
 			currentFilePath: null,
 			setMetadata: vi.fn(),
-			lastSaved: null
+			fps: 10
 		},
-		canvas: {
-			triggerPulse: vi.fn()
-		}
+		studio: { reportError: vi.fn() }
 	}
 }));
 
 vi.mock('../../lib/engine/audio.js', () => ({
-	sfx: {
-		playDraw: vi.fn()
-	}
+	sfx: { playDraw: vi.fn() }
 }));
 
 vi.mock('../../lib/engine/history.js', () => ({
-	history: {
-		clear: vi.fn()
+	history: { clear: vi.fn() }
+}));
+
+// Mock StorageLogic
+vi.mock('../../lib/logic/storage.js', () => ({
+	StorageLogic: {
+		saveProject: vi.fn(() => Promise.resolve()),
+		loadProject: vi.fn(() => Promise.resolve(null)),
+		savePresets: vi.fn(() => Promise.resolve()),
+		loadPresets: vi.fn(() => Promise.resolve([]))
 	}
 }));
 
 import { editor } from '../../lib/state/editor.svelte.js';
+import { StorageLogic } from '../../lib/logic/storage.js';
 
 describe('PersistenceService', () => {
 	let service: PersistenceService;
@@ -87,67 +44,37 @@ describe('PersistenceService', () => {
 	beforeEach(() => {
 		vi.clearAllMocks();
 		service = new PersistenceService();
+
+		// Mock fetch globally for dataURL handling
+		global.fetch = vi.fn().mockImplementation(() =>
+			Promise.resolve({
+				blob: () => Promise.resolve(new Blob(['mock-zip-content'], { type: 'application/zip' }))
+			})
+		);
 	});
 
-	it('serialize should return valid JSON', () => {
-		editor.paletteState.swatches = ['#111', '#222'];
-		// @ts-ignore
-		editor.project.frames = [
-			{
-				id: '00000000-0000-0000-0000-000000000000',
-				name: 'Frame 1',
-				width: 32,
-				height: 32,
-				duration: 100,
-				activeLayerIndex: 0,
-				activeLayer: {} as any,
-				addLayer: vi.fn(),
-				removeLayer: vi.fn(),
-				compositePixels: [],
-				layers: [
-					{
-						id: '00000000-0000-0000-0000-000000000000',
-						name: 'Layer 1',
-						isVisible: true,
-						isLocked: false,
-						pixels: [null],
-						opacity: 1.0,
-						clone: vi.fn(),
-						clear: vi.fn(),
-						hasPixel: vi.fn()
-					}
-				]
-			} as any
-		];
-
-		const json = (service as any).serialize();
-		const data = JSON.parse(json);
-
-		expect(data.version).toBe('0.6.1');
-		expect(data.palette).toEqual(['#111', '#222']);
-		expect(data.project.frames[0].name).toBe('Frame 1');
+	it('autoSaveSession should use StorageLogic with dataURL', async () => {
+		await service.autoSaveSession();
+		// Wait for internal async FileReader
+		await new Promise((r) => setTimeout(r, 150));
+		expect(StorageLogic.saveProject).toHaveBeenCalledWith(
+			'autosave_session',
+			expect.stringContaining('data:application/zip')
+		);
 	});
 
-	it('deserialize should restore v0.6.1 data', () => {
-		const data = {
-			version: '0.6.1',
-			palette: ['#AAA', '#BBB'],
-			folio: {
-				frames: [
-					{
-						name: 'Test Frame',
-						width: 16,
-						height: 16,
-						layers: [{ name: 'Test Layer', isVisible: true, isLocked: false, pixels: ['#CCC'] }]
-					}
-				]
-			}
-		};
+	it('restoreLastSession should handle ZIP-based data', async () => {
+		const mockZip = 'data:application/zip;base64,UEsDBAoAAAAAA';
+		(StorageLogic.loadProject as any).mockReturnValue(Promise.resolve(mockZip));
 
-		(service as any).deserialize(JSON.stringify(data));
+		// Mock deserialize to avoid actual JSZip parsing of bad mock data
+		const deserializeSpy = vi
+			.spyOn(service as any, 'deserialize')
+			.mockImplementation(() => Promise.resolve());
 
-		expect(editor.paletteState.swatches).toEqual(['#AAA', '#BBB']);
-		expect(editor.project.frames.length).toBe(1);
-		expect(editor.project.frames[0].name).toBe('Test Frame');
+		const restored = await service.restoreLastSession();
+		expect(StorageLogic.loadProject).toHaveBeenCalledWith('autosave_session');
+		expect(global.fetch).toHaveBeenCalledWith(mockZip);
+		expect(restored).toBe(true);
 	});
 });

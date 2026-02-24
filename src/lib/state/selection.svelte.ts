@@ -54,6 +54,14 @@ export class SelectionState {
 		return this.start !== null || this.vertices.length > 0 || this.maskCount > 0;
 	}
 
+	activeIndicesSet = $derived.by(() => {
+		const set = new Set<number>();
+		for (let i = 0; i < this._mask.length; i++) {
+			if (this._mask[i] === 1) set.add(i);
+		}
+		return set;
+	});
+
 	begin(x: number, y: number) {
 		if (this.selectionMode === 'NEW') {
 			this.clear();

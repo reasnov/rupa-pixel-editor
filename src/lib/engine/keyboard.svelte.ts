@@ -150,8 +150,8 @@ export class KeyboardEngine {
 			Object.entries(category).forEach(([intent, data]) => {
 				const { keys, group } = data as { label: string; keys: string[]; group: string };
 
-				// PROFESSIONAL KEYS: Use updated common.json keys
-				const label = __(`common:labels.${intent}`);
+				// PROFESSIONAL KEYS: Use updated namespace
+				const label = __(`actions:${intent}`);
 				const groupKey = group.toLowerCase().replace(/ & /g, '_').replace(/ /g, '_');
 				const translatedGroup = __(`shortcuts:groups.${groupKey}`);
 

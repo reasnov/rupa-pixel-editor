@@ -69,9 +69,9 @@ export function __(
 	let locale = options.locale || i18nState.locale;
 
 	if (typeof keyOrOptions === 'string') {
-		key = keyOrOptions;
+		key = keyOrOptions.toLowerCase();
 	} else {
-		key = keyOrOptions.key;
+		key = keyOrOptions.key.toLowerCase();
 		replace = keyOrOptions.replace || replace;
 		locale = keyOrOptions.locale || locale;
 	}

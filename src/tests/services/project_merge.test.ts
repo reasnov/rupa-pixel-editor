@@ -14,7 +14,7 @@ vi.mock('../../lib/state/editor.svelte.js', () => ({
 			}
 		},
 		canvas: {
-			triggerPulse: vi.fn()
+			incrementVersion: vi.fn()
 		}
 	}
 }));

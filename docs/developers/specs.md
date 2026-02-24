@@ -113,18 +113,18 @@ To maintain cross-platform integrity, the following chord patterns are reserved 
 
 To ensure high standards of quality and resilience, all technical implementations must pass the **3S Gate**:
 
--   **Secure (S1)**:
-    -   All imported project data (.rupa, .gpl, PNG, SVG) must be validated against a schema before processing.
-    -   External file access is strictly managed via Electron's **Main-Renderer IPC bridge**, enforcing isolation.
-    -   Sanitize all UI-rendered user input to prevent XSS.
--   **Sustain (S2)**:
-    -   **English-Only** documentation and code for global maintainability.
-    -   Strict adherence to the **Japanese Roadside Cafe** aesthetic to maintain cognitive and visual harmony.
-    -   Mandatory unit test coverage for the **Logic Layer** to prevent regression.
--   **Scalable (S3)**:
-    -   Selection system uses a **Bitmask Buffer** (`Uint8Array`) to maintain $O(1)$ performance even on large canvases.
-    -   SVG exports must use **path-merging algorithms** to keep file sizes small for complex pixel patterns.
-    -   Support for up to 500 undo/redo actions without excessive memory overhead.
+- **Secure (S1)**:
+  - All imported project data (.rupa, .gpl, PNG, SVG) must be validated against a schema before processing.
+  - External file access is strictly managed via Electron's **Main-Renderer IPC bridge**, enforcing isolation.
+  - Sanitize all UI-rendered user input to prevent XSS.
+- **Sustain (S2)**:
+  - **English-Only** documentation and code for global maintainability.
+  - Strict adherence to the **Japanese Roadside Cafe** aesthetic to maintain cognitive and visual harmony.
+  - Mandatory unit test coverage for the **Logic Layer** to prevent regression.
+- **Scalable (S3)**:
+  - Selection system uses a **Bitmask Buffer** (`Uint8Array`) to maintain $O(1)$ performance even on large canvases.
+  - SVG exports must use **path-merging algorithms** to keep file sizes small for complex pixel patterns.
+  - Support for up to 500 undo/redo actions without excessive memory overhead.
 
 ---
 

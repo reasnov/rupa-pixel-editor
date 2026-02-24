@@ -1,5 +1,5 @@
 import { type ColorHex } from '../types/index.js';
-import palettes from '../config/palettes.json' with { type: 'json' };
+import palettes from '../data/palettes.json' with { type: 'json' };
 import { ColorLogic } from '../logic/color.js';
 
 export interface PalettePreset {
@@ -10,7 +10,7 @@ export interface PalettePreset {
 }
 
 /**
- * PaletteState: Manages the colors and ingredients selection.
+ * PaletteState: Manages the colors and palette presets.
  */
 export class PaletteState {
 	activeColor = $state<ColorHex>(palettes.sanctuary_nature[0] as ColorHex);

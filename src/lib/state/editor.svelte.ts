@@ -1,11 +1,10 @@
+import { __ } from './i18n.svelte.js';
 import { CanvasState } from './canvas.svelte.js';
 import { CursorState } from './cursor.svelte.js';
 import { PaletteState } from './palette.svelte.js';
 import { StudioState } from './studio.svelte.js';
 import { ProjectState } from './project.svelte.js';
 import { SelectionState } from './selection.svelte.js';
-import { history } from '../engine/history.js';
-import { sfx } from '../engine/audio.js';
 import { services } from '../engine/services.js';
 import { ColorLogic } from '../logic/color.js';
 import { Geometry } from '../logic/geometry.js';
@@ -285,7 +284,7 @@ export class EditorState {
 			this.studio.isShadingLighten = false;
 			this.studio.isShadingDarken = false;
 			this.studio.isShadingDither = false;
-			this.studio.show('Shading Reset');
+			this.studio.show(__('ui:studio.texture_off')); // Technical replacement for generic msg
 			return true;
 		}
 
@@ -293,54 +292,11 @@ export class EditorState {
 	}
 
 	undo() {
-		const entry = history.undo();
-		if (entry) {
-			if ('isStructural' in entry) {
-				entry.undo();
-				sfx.playErase();
-			} else if (Array.isArray(entry)) {
-				const currentPixels = new Uint32Array(this.canvas.pixels);
-				for (let i = entry.length - 1; i >= 0; i--) {
-					const action = entry[i];
-					currentPixels[action.index] = ColorLogic.hexToUint32(action.oldColor);
-				}
-				this.canvas.pixels = currentPixels;
-				this.canvas.triggerPulse();
-				sfx.playErase();
-			} else {
-				const currentPixels = new Uint32Array(this.canvas.pixels);
-				currentPixels[entry.index] = ColorLogic.hexToUint32(entry.oldColor);
-				this.canvas.pixels = currentPixels;
-				this.canvas.triggerPulse();
-				sfx.playErase();
-			}
-		}
-		this.cursor.resetInactivityTimer();
+		services.undo();
 	}
 
 	redo() {
-		const entry = history.redo();
-		if (entry) {
-			if ('isStructural' in entry) {
-				entry.redo();
-				sfx.playDraw();
-			} else if (Array.isArray(entry)) {
-				const currentPixels = new Uint32Array(this.canvas.pixels);
-				for (const action of entry) {
-					currentPixels[action.index] = ColorLogic.hexToUint32(action.newColor);
-				}
-				this.canvas.pixels = currentPixels;
-				this.canvas.triggerPulse();
-				sfx.playDraw();
-			} else {
-				const currentPixels = new Uint32Array(this.canvas.pixels);
-				currentPixels[entry.index] = ColorLogic.hexToUint32(entry.newColor);
-				this.canvas.pixels = currentPixels;
-				this.canvas.triggerPulse();
-				sfx.playDraw();
-			}
-		}
-		this.cursor.resetInactivityTimer();
+		services.redo();
 	}
 
 	clearCanvas() {

@@ -10,9 +10,9 @@
 
 To ensure the longevity and excellence of the Rupa technical ecosystem, the architecture adheres to the **3S (S3)** principle:
 
--   **Secure**: All code is engineered for resilience. We apply zero-trust principles, sanitize all data boundaries (especially file I/O and user input), and enforce robust authorization for project operations.
--   **Sustain**: Code must be maintainable, clear, and thoroughly documented. We adhere to the **Aesthetic-Natural** principle, ensuring structural calmness and minimalism to reduce cognitive load for developers.
--   **Scalable**: Designed for growth. The modular layered monolith allows for feature expansion, performance optimization for industrial-scale projects, and architectural modularity without systemic degradation.
+- **Secure**: All code is engineered for resilience. We apply zero-trust principles, sanitize all data boundaries (especially file I/O and user input), and enforce robust authorization for project operations.
+- **Sustain**: Code must be maintainable, clear, and thoroughly documented. We adhere to the **Aesthetic-Natural** principle, ensuring structural calmness and minimalism to reduce cognitive load for developers.
+- **Scalable**: Designed for growth. The modular layered monolith allows for feature expansion, performance optimization for industrial-scale projects, and architectural modularity without systemic degradation.
 
 ---
 
@@ -23,6 +23,7 @@ To ensure the longevity and excellence of the Rupa technical ecosystem, the arch
 3.  **Service Layer (`src/lib/engine/services/`)**: The **Business Logic & Rules** container. Services manage state transitions, project-specific rules, and orchestrate complex workflows (e.g., Chronicle preservation, Ingredient management, Boolean Selection logic).
 4.  **Engine Layer (`src/lib/engine/`)**: The **Orchestrator & Entry-point**. Handles hardware bridges (Input, 8-bit Audio, Nature Ambience), input normalization, and high-level system coordination.
 5.  **Logic Layer (`src/lib/logic/`)**: **Pure, stateless algorithms**. Contains mathematical calculations and complex processing logic (Geometry, Color, Path, Rendering, Sorting, Filtering, Binary Manipulation).
+6.  **Persistence Layer**: **Data management & Storage**. Handles the lifecycle of static "ingredients", studio configuration, and dynamic user creations (FileSystem, LocalStorage, IndexedDB).
 
 ---
 
@@ -41,7 +42,7 @@ To ensure the longevity and excellence of the Rupa technical ecosystem, the arch
 
 ---
 
-## 3. High-Level System Design
+## 4. High-Level System Design
 
 Rupa Pixel Editor follows the standard Electron **Main-Renderer** architecture:
 
@@ -56,9 +57,9 @@ Rupa Pixel Editor follows the standard Electron **Main-Renderer** architecture:
 
 ---
 
-## 4. Core Systems
+## 5. Core Systems
 
-### 4.1 The Editor State (`src/lib/state/editor.svelte.ts`)
+### 5.1 The Editor State (`src/lib/state/editor.svelte.ts`)
 
 The central heart of the application. It manages the environment through specialized sub-state classes:
 
@@ -66,25 +67,25 @@ The central heart of the application. It manages the environment through special
 - **Service-Oriented Logic**: Business logic is strictly kept in `src/lib/engine/services/`. State classes only hold data and derived projections.
 - **Session Tracking**: Tracks `usageMinutes` and `usageSeconds` for the Ambiance status and working timer.
 
-### 4.2 The Keyboard Engine (`src/lib/engine/keyboard.svelte.ts`)
+### 5.2 The Keyboard Engine (`src/lib/engine/keyboard.svelte.ts`)
 
 Translates raw keyboard events into semantic **ActionIntents**.
 
 - **Rhythms & Flows**: Handles complex modifier combinations (e.g., Ctrl+Shift).
 - **Reserved Shortcuts**: Maintains a list of OS-level shortcuts to avoid intent collisions.
 
-### 4.3 The Mode Engine (`src/lib/engine/mode.svelte.ts`)
+### 5.3 The Mode Engine (`src/lib/engine/mode.svelte.ts`)
 
 Governs the behavioral mode of the application (Paint, Erase, Select).
 
-### 4.4 The Ambient Engine (`src/lib/engine/ambient.ts`)
+### 5.4 The Ambient Engine (`src/lib/engine/ambient.ts`)
 
 A generative music system producing real-time piano soundscapes.
 
 - **Procedural Composition**: Uses Eb Major Pentatonic scale and progressive chord cycles.
 - **Ambiance Protocol**: Implements a 30-minute silence delay followed by a 30-minute volume fade-in.
 
-### 4.5 The Pointer Engine (`src/lib/engine/pointer.svelte.ts`)
+### 5.5 The Pointer Engine (`src/lib/engine/pointer.svelte.ts`)
 
 The specialized engine for mouse and pointer interactions.
 
@@ -92,15 +93,15 @@ The specialized engine for mouse and pointer interactions.
 - **Continuous Flow**: Enables organic freehand drawing while respecting the current Mode (Painting, Erasing).
 - **Gesture Orchestration**: Translates clicks and drags into ActionIntents to maintain consistency with the Keyboard engine.
 
-### 4.6 The i18n System (`src/lib/state/i18n.svelte.ts`)
+### 5.6 The i18n System (`src/lib/state/i18n.svelte.ts`)
 
 The internationalization layer for the application.
 
 - **Reactive Translation**: Uses `i18next` integrated with Svelte Runes for real-time language switching.
-- **Explicit Imports**: Provides the `__()` function for component-level translations. To ensure better error tracking and type safety, this function must be imported manually in every component where it is used.
+- **Explicit Imports**: Provides the `__()` function for component-level translations. To ensure better error tracking and type safety, this function must be imported manually in every component where it is used from `$lib/state/i18n.svelte.ts`.
 - **Barista Lexicon**: Manages localized strings for tools, metadata, and ambiance descriptions.
 
-### 4.7 The Logic Layer (`src/lib/logic/`)
+### 5.7 The Logic Layer (`src/lib/logic/`)
 
 The "Brain" of the application. This layer contains pure, side-effect-free algorithms.
 
@@ -110,9 +111,9 @@ The "Brain" of the application. This layer contains pure, side-effect-free algor
 
 ---
 
-## 5. UI & Layout Strategy
+## 6. UI & Layout Strategy
 
-### 5.1 Modular AppShell Architecture
+### 6.1 Modular AppShell Architecture
 
 The editor follows an industry-standard layout system to ensure ergonomics and maintainability:
 
@@ -123,7 +124,7 @@ The editor follows an industry-standard layout system to ensure ergonomics and m
 - **AppFooter (Bottom)**: Houses the **TechLedger** and the **Timeline Panel**.
 - **AppOverlay (Z-Layer)**: A dedicated layer for floating elements (Modals, Toasts, Command Palette) using `pointer-events` isolation.
 
-### 5.2 Selection System: Bitmask Buffer
+### 6.2 Selection System: Bitmask Buffer
 
 To support industrial-scale projects, the selection system is built on a buffer-based approach:
 
@@ -132,13 +133,13 @@ To support industrial-scale projects, the selection system is built on a buffer-
 - **Smart Logic**: Implements **Hole-Filling (Solid Selection)** using an Inverse External Flood Fill algorithm.
 - **Efficiency**: Constant time $O(1)$ lookup for drawing operations.
 
-### 5.3 The Camera Protocol
+### 6.3 The Camera Protocol
 
 Viewport movement is achieved by applying CSS transforms to the **Canvas**. The system ensures that zooming focal points are always centered on the current `cursorPos`, maintaining the artist's focus.
 
 ---
 
-## 6. Interaction Protocol: The Unified Intent Gateway
+## 7. Interaction Protocol: The Unified Intent Gateway
 
 To maintain architectural integrity and ensure consistent side-effects (Audio, History), **Rupa** follows a strict gateway protocol:
 
@@ -149,20 +150,20 @@ To maintain architectural integrity and ensure consistent side-effects (Audio, H
 
 ---
 
-## 7. Data Flow
+## 8. Data Flow
 
 `Keyboard/Pointer Event` -> `Engine (Normalization)` -> `ActionIntent` -> `Service (Business Rules)` -> `State Mutation (Runes)` -> `UI Reactivity`.
 
 ---
 
-## 8. Performance & Integrity
+## 9. Performance & Integrity
 
 - **Input Latency**: Aiming for < 16ms (60fps) for smooth navigation.
 - **SVG Optimization**: Intelligent path-merging (rect-merging) to keep vector artifacts small.
 
 ---
 
-## 8. CSS Architecture: SMACSS Pattern
+## 10. CSS Architecture: SMACSS Pattern
 
 To maintain visual harmony and code maintainability, Rupa Pixel Editor follows the **SMACSS** approach, adapted for Svelte 5 and Tailwind CSS:
 
@@ -172,7 +173,7 @@ To maintain visual harmony and code maintainability, Rupa Pixel Editor follows t
 4.  **State**: Describes how modules look in different conditions (e.g., `is-active`, `is-locked`, `is-hidden`). We use Svelte's class toggling for this.
 5.  **Theme**: Visual skinning (e.g., Solarized Cream, Barista Magenta). Managed via CSS variables and Tailwind configuration.
 
-### 8.1 Implementation Rules
+### 10.1 Implementation Rules
 
 1. Use `@apply` in Svelte `<style>` blocks to compose complex **Module** or **Layout** classes from Tailwind utilities.
 2. Prefix shared application classes with `editor-` (e.g., `.editor-panel`) to avoid naming collisions.
@@ -180,28 +181,28 @@ To maintain visual harmony and code maintainability, Rupa Pixel Editor follows t
 
 ---
 
-## 9. Data & Persistence Layer
+## 11. Persistence Layer: The 3-Tier Storage Model
 
-To ensure the application is easily maintainable, scalable, and resilient, Rupa categorizes data into three distinct tiers:
+To ensure the application is easily maintainable, scalable, and resilient, Rupa categorizes data into three distinct tiers within this layer:
 
-### 9.1 Static Configuration (`src/lib/config/`)
+### 11.1 Static Configuration (`src/lib/config/`)
 
 Contains orchestration settings, keyboard shortcuts, UI themes, and onboarding text stored as JSON.
 
 - **Role**: Defines the "lore" and behavior of the studio.
-- **Access**: Only Engines/Services. UI consumes processed data from State.
+- **Access**: Only Engines and Services may import these. UI consumes processed data from State.
 
-### 9.2 Pure Data Assets (`src/lib/data/`)
+### 11.2 Pure Data Assets (`src/lib/data/`)
 
 Contains heavy, read-only datasets such as default color palettes, lookup tables, and project templates.
 
 - **Role**: Provides the raw "ingredients" for the editor.
 - **Access**: Accessible by Logic, Services, and Engines for processing.
 
-### 9.3 Dynamic Persistence (User Data)
+### 11.3 Dynamic Persistence (User Data)
 
-Handles the "Source of Truth" for user creations across different environments.
+Handles the "Source of Truth" for user creations and session state across different environments.
 
 - **Electron (Native)**: Direct File System (FS) access for `.rupa` project files.
-- **Web/Preview (IndexedDB)**: Browser-based storage for autosaves and temporary session state.
+- **Web/Preview (IndexedDB/LocalStorage)**: Browser-based storage for autosaves, global preferences, and temporary session state.
 - **Metadata**: Tracks `lastSaved`, `usageMinutes`, and versioning.

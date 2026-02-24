@@ -21,6 +21,14 @@
 		"save_desc": "Save your active pigments as a new chronicle",
 		"name_placeholder": "Give this set a name...",
 		"list_title": "Stored Pigments",
+		"new_set": "New Pigment Set",
+		"new_set_desc": "Start from a blank washi",
+		"import": "Import Ingredients",
+		"import_desc": "Load .GPL or HEX list",
+		"applied_toast": "Flavor Swatch Applied",
+		"new_toast": "Empty Cup Ready for New Flavors",
+		"import_success_toast": "Imported {{name}}",
+		"import_error_toast": "Invalid Ingredients (File Format Error)",
 		"button": {
 			"save": "Store Record",
 			"apply": "Sample",
@@ -35,5 +43,17 @@
 		"dither_label": "Moss Blend",
 		"dither_desc": "Textured dithering",
 		"hardness_label": "Diffusion"
+	},
+	"status": {
+		"mist": "MIST",
+		"pure": "PURE",
+		"moving": "MOVING",
+		"stencil": "STENCIL",
+		"box": "BOX",
+		"round": "ROUND",
+		"poly": "POLY",
+		"light": "LIGHT",
+		"dark": "DARK",
+		"dither": "DITHER"
 	}
 }

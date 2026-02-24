@@ -1,0 +1,27 @@
+{
+	"audio_status": {
+		"title": "Atmosphere Flow",
+		"silent": "Quiet",
+		"brewing": "Humming",
+		"resonant": "Resonant"
+	},
+	"mode": "Mode",
+	"mode_labels": {
+		"brewing": "Crafting...",
+		"tasting": "Sampling...",
+		"clearing": "Sweeping",
+		"selecting": "Gathering",
+		"pouring": "Painting",
+		"ready": "Sanctuary Ready"
+	},
+	"rhythm": "Rhythm",
+	"waiting": "Waiting",
+	"duration": "Sanctuary Time",
+	"ghosts_label": "Ghosts",
+	"title": "The Flow",
+	"track": "Animated Stream",
+	"frame_count": "{{count}} Servings",
+	"frame_count_plural": "{{count}} Servings",
+	"pixel_count": "{{count}} leaf",
+	"pixel_count_plural": "{{count}} leaves"
+}

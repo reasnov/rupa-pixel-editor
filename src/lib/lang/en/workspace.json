@@ -1,0 +1,99 @@
+{
+	"hud": {
+		"active_pigment": "Active Pigment",
+		"recent_weaves": "Recent Weaves",
+		"sync_label": "Synchronized",
+		"sync_desc": "Sync across all servings",
+		"master_pace_label": "Master Pace",
+		"master_pace_desc": "This serving follows the project's global rhythm (FPS).",
+		"menu": {
+			"color_title": "Pigment Station",
+			"catalog_title": "Sanctuary Records",
+			"catalog_search": "Search chronicles or artisan skills...",
+			"catalog_no_results": "No records found for \"{{query}}\"",
+			"catalog_footer": "Use Arrows to Navigate • Enter to Craft",
+			"catalog_count": "{{count}} Skills Available"
+		},
+		"audio": {
+			"title": "Atmosphere Bar",
+			"master_mute": "Master Mute",
+			"mute_desc": "Silence all sanctuary resonance",
+			"flow_title": "Atmosphere Flow",
+			"duration_label": "Session Duration:",
+			"sfx_label": "Nature & Craft SFX",
+			"bgm_label": "Village Melodies (BGM)",
+			"status_awaiting": "The sanctuary awaits in silence. Village melodies will begin to play after 30 minutes of focus.",
+			"status_playing": "The village has begun its song. Melodies will reach full resonance at 60 minutes."
+		},
+		"project_panel": {
+			"frames": "Servings",
+			"layers": "Ingredients",
+			"opacity": "Density (Opacity)",
+			"properties": "Properties",
+			"visibility": "Show/Hide Ingredient",
+			"lock": "Seal/Unseal Ingredient",
+			"active": "In Service"
+		},
+		"stats": {
+			"pixel_count": "{{count}} leaves placed",
+			"pixel_count_plural": "{{count}} leaves placed"
+		},
+		"context_menu": {
+			"duplicate_frames": "Duplicate {{count}} Cups",
+			"duplicate_layers": "Duplicate {{count}} Infusions",
+			"delete_frames": "Spill {{count}} Cups",
+			"delete_layers": "Spill {{count}} Infusions",
+			"add_flavor_tag": "Add Flavor Tag",
+			"show_infusion": "Show Infusion",
+			"hide_infusion": "Hide Infusion",
+			"lock_infusion": "Lock Infusion",
+			"unlock_infusion": "Unlock Infusion",
+			"group_selected": "Group Selected",
+			"group": "Group",
+			"delete_pigment": "Spill Pigment"
+		}
+	},
+	"underlay": {
+		"upload_label": "Upload Reference Image",
+		"visibility": "Visibility",
+		"positioning": "Manual Positioning"
+	},
+	"cursor": {
+		"position": "Brush at {{x}}, {{y}}"
+	},
+	"stats": {
+		"pos_label": "POS",
+		"size_label": "SIZE",
+		"zoom_label": "ZOOM",
+		"cursor_focus": "Brush Focus",
+		"canvas_size": "Washi Dimensions",
+		"zoom_level": "Focus Level",
+		"active_pattern": "Art: {{count}} Leaves",
+		"technical_details": "Technical Ledger"
+	},
+	"project": {
+		"saved": "Chronicle Preserved {{time}}"
+	},
+	"navigation": {
+		"title": "Jump to Table",
+		"subtitle": "Direct Brush Placement",
+		"label_x": "Column (X)",
+		"label_y": "Row (Y)",
+		"current": "Currently at: {{x}}, {{y}}",
+		"action": "Move Brush"
+	},
+	"settings": {
+		"title": "Sanctuary Settings",
+		"subtitle": "Configure the Craft Table",
+		"width": "Washi Width",
+		"height": "Washi Height",
+		"fps_label": "Village Pace (FPS)",
+		"fps_desc": "Default servings per second",
+		"background_label": "Table Color",
+		"background_desc": "Visual background for the table",
+		"stabilization": "Brush Stability",
+		"stabilization_desc": "Corrects shaky hand movements",
+		"apply": "Reset Craft Table",
+		"note": "Note: Resizing will center your current art on the new washi. Large servings may slow down the flow."
+	}
+}

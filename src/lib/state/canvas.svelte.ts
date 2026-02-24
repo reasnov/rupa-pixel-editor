@@ -4,16 +4,17 @@ import type { ProjectState } from './project.svelte.js';
 /**
  * CanvasState (Adapter):
  * Acts as a proxy to the active Frame and manages the temporary pixel buffer.
+ * Part of the reactive State Layer.
  */
 export class CanvasState {
 	private project: ProjectState;
 
-	// --- The Pulse (v0.8.0) ---
+	// --- Versioning Signal ---
 	// Incremented to signal the UI to refresh without deep-diffing pixels.
-	renderPulse = $state(0);
+	version = $state(0);
 
-	triggerPulse() {
-		this.renderPulse++;
+	incrementVersion() {
+		this.version++;
 	}
 
 	// --- Batch Pixel Buffer (Reactive) ---
@@ -26,14 +27,12 @@ export class CanvasState {
 	}
 
 	mount() {
-		// Automatically trigger pulse when the visual source changes
-		// Only runs on the client
+		// Automatically trigger version bump when visual source changes
 		$effect(() => {
-			// Accessing these values makes the effect reactive to them
 			const _p = this.compositePixels;
 			const _f = this.project.activeFrameIndex;
 			const _l = this.project.activeFrame.activeLayerIndex;
-			this.triggerPulse();
+			this.incrementVersion();
 		});
 	}
 
@@ -70,7 +69,7 @@ export class CanvasState {
 
 		layer.pixels = v;
 
-		// Steeped Layers (Linked Cells) Logic
+		// Linked Layers Logic: Sync pixels across frames if layer is linked
 		if (layer.isLinked) {
 			this.project.frames.forEach((f, idx) => {
 				if (idx !== this.project.activeFrameIndex) {
@@ -107,7 +106,6 @@ export class CanvasState {
 			}
 		});
 
-		// Trigger re-assignment only ONCE per batch
 		this.strokePoints = newStrokePoints;
 		this.pixelBuffer = Array.from(this.internalBuffer);
 	}
@@ -122,12 +120,12 @@ export class CanvasState {
 		this.width = width;
 		this.height = height;
 		this.pixels = pixels;
-		this.triggerPulse();
+		this.incrementVersion();
 	}
 
 	clear() {
 		this.project.activeFrame.activeLayer.clear();
-		this.triggerPulse();
+		this.incrementVersion();
 	}
 
 	getIndex(x: number, y: number): number {
@@ -135,7 +133,6 @@ export class CanvasState {
 	}
 
 	getColor(x: number, y: number): number {
-		// Layer agnostic picking: use composite pixels
 		return this.compositePixels[this.getIndex(x, y)];
 	}
 
@@ -152,10 +149,6 @@ export class CanvasState {
 	fitWidth = $derived(`calc((100cqi - 20px) * ${this.width} / (${this.width} + 2))`);
 	fitHeight = $derived(`calc((100cqb - 20px) * ${this.height} / (${this.height} + 2))`);
 
-	/**
-	 * Calculates the effective dimension of the canvas within the viewport
-	 * for a specific orientation, matching the aspect-ratio fitting.
-	 */
 	getFitDimension(orientation: 'horizontal' | 'vertical'): string {
 		const w = this.width;
 		const h = this.height;

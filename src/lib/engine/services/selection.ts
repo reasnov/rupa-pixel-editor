@@ -2,7 +2,6 @@ import { editor } from '../../state/editor.svelte.js';
 import { history } from '../history.js';
 import { sfx } from '../audio.js';
 import { ColorLogic } from '../../logic/color.js';
-import { PixelLogic } from '../../logic/pixel.js';
 
 /**
  * SelectionService: Handles the logic for defining selection regions
@@ -32,7 +31,7 @@ export class SelectionService {
 	}
 
 	lassoEnd() {
-		this.sealBinding(); // Reuse polygon filling logic to close and fill the lasso path
+		this.commitPolygon(); // Reuse polygon filling logic to close and fill the lasso path
 	}
 
 	update(x: number, y: number) {
@@ -56,10 +55,9 @@ export class SelectionService {
 			this.commit();
 		}
 		if (selection.vertices.length > 0) {
-			this.sealBinding();
+			this.commitPolygon();
 		}
 
-		const width = editor.canvas.width;
 		const mask = selection.mask;
 		const activeColor = editor.paletteState.activeColor;
 		const activeVal = ColorLogic.hexToUint32(activeColor);
@@ -72,23 +70,20 @@ export class SelectionService {
 			if (mask[i] === 1) {
 				const oldVal = currentPixels[i];
 				if (oldVal !== activeVal) {
-					history.push({
-						index: i,
-						oldColor: ColorLogic.uint32ToHex(oldVal),
-						newColor: activeColor
-					});
+					history.pushPixel(i, oldVal, activeVal);
 					currentPixels[i] = activeVal;
 					changed = true;
 				}
 			}
 		}
 
+		history.endBatch();
+
 		if (changed) {
 			editor.canvas.pixels = currentPixels;
-			editor.canvas.triggerPulse();
+			editor.canvas.incrementVersion();
 			sfx.playDraw();
 		}
-		history.endBatch();
 	}
 
 	/**
@@ -117,14 +112,14 @@ export class SelectionService {
 			selection.end = null;
 		}
 
-		editor.canvas.triggerPulse();
+		editor.canvas.incrementVersion();
 	}
 
 	/**
 	 * Magic Wand: Selects all connected pixels of the same color.
 	 * Smart Wand: If clicked on an already selected pixel, it fills all internal holes.
 	 */
-	spiritPick() {
+	magicWand() {
 		const { x, y } = editor.cursor.pos;
 		const { width, height, pixels } = editor.canvas;
 		const selection = editor.selection;
@@ -188,7 +183,7 @@ export class SelectionService {
 		}
 
 		selection.mask = newMask;
-		editor.canvas.triggerPulse();
+		editor.canvas.incrementVersion();
 		sfx.playScale(4);
 	}
 
@@ -252,7 +247,7 @@ export class SelectionService {
 		}
 
 		selection.mask = solidMask;
-		editor.canvas.triggerPulse();
+		editor.canvas.incrementVersion();
 		sfx.playScale(8); // Higher pitch for "solidify"
 		editor.studio.show('Solidified Selection');
 	}
@@ -266,10 +261,10 @@ export class SelectionService {
 	}
 
 	/**
-	 * Seal the Polygon: Convert the polygon vertices into the Bitmask Buffer.
+	 * Commit the Polygon: Convert the polygon vertices into the Bitmask Buffer.
 	 * Uses an efficient Scanline Fill on the mask.
 	 */
-	sealBinding() {
+	commitPolygon() {
 		const vertices = editor.selection.vertices;
 		if (vertices.length < 3) return;
 
@@ -295,7 +290,7 @@ export class SelectionService {
 
 		selection.mask = newMask;
 		selection.vertices = [];
-		editor.canvas.triggerPulse();
+		editor.canvas.incrementVersion();
 		sfx.playScale(6);
 	}
 
@@ -359,7 +354,7 @@ export class SelectionService {
 		}
 
 		selection.mask = newMask;
-		editor.canvas.triggerPulse();
+		editor.canvas.incrementVersion();
 		sfx.playScale(5);
 	}
 
@@ -371,7 +366,7 @@ export class SelectionService {
 
 		// Auto-commit pending constructions
 		if (selection.start && selection.end) this.commit();
-		if (selection.vertices.length > 0) this.sealBinding();
+		if (selection.vertices.length > 0) this.commitPolygon();
 
 		const width = editor.canvas.width;
 		const mask = selection.mask;
@@ -384,23 +379,20 @@ export class SelectionService {
 			if (mask[i] === 1) {
 				const oldVal = currentPixels[i];
 				if (oldVal !== 0) {
-					history.push({
-						index: i,
-						oldColor: ColorLogic.uint32ToHex(oldVal),
-						newColor: null
-					});
+					history.pushPixel(i, oldVal, 0);
 					currentPixels[i] = 0;
 					changed = true;
 				}
 			}
 		}
 
+		history.endBatch();
+
 		if (changed) {
 			editor.canvas.pixels = currentPixels;
-			editor.canvas.triggerPulse();
+			editor.canvas.incrementVersion();
 			sfx.playErase();
 		}
-		history.endBatch();
 	}
 
 	/**
@@ -441,7 +433,7 @@ export class SelectionService {
 
 		// 3. Update state
 		editor.canvas.pixels = currentPixels;
-		editor.canvas.triggerPulse();
+		editor.canvas.incrementVersion();
 		selection.mask = newMask;
 		sfx.playMove();
 	}
@@ -507,7 +499,7 @@ export class SelectionService {
 				const layer = project.frames[frameIdx].layers[activeLayerIdx];
 				if (layer) layer.pixels = pixels;
 			});
-			editor.canvas.triggerPulse();
+			editor.canvas.incrementVersion();
 		};
 
 		// Apply forward
@@ -515,12 +507,12 @@ export class SelectionService {
 
 		history.push({
 			isStructural: true,
-			label: 'Syrup Flow',
+			label: 'Selection Propagation',
 			undo: () => applyStates(oldPixelStates),
 			redo: () => applyStates(newPixelStates)
 		});
 
 		sfx.playDraw();
-		editor.studio.show(`Poured across ${newPixelStates.size} cups`);
+		editor.studio.show(`Propagated across ${newPixelStates.size} frames`);
 	}
 }

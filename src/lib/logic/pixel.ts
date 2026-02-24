@@ -124,7 +124,7 @@ export class PixelLogic {
 	/**
 	 * Analyzes unique color usage in a pixel array.
 	 */
-	static getPaletteUsage(data: (ColorHex | null)[]): Set<ColorHex> {
+	static getColorUsage(data: (ColorHex | null)[]): Set<ColorHex> {
 		const usage = new Set<ColorHex>();
 		data.forEach((c) => {
 			if (c) usage.add(c);
@@ -419,7 +419,7 @@ export class PixelLogic {
 
 	/**
 	 * Returns points and their interpolation ratios (0-1) for a linear gradient.
-	 * It fills the entire bounding box or selection based on the axis p1-p2.
+	 * Projects points onto the axis defined by p1-p2.
 	 */
 	static getLinearGradientMap(
 		x1: number,

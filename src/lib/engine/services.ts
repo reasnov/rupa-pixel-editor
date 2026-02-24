@@ -6,6 +6,7 @@ import { PersistenceService } from './services/persistence.js';
 import { ProjectService } from './services/project.js';
 import { SelectionService } from './services/selection.js';
 import { ColorService } from './services/color.js';
+import { HistoryService } from './services/history.js';
 import { editor } from '../state/editor.svelte.js';
 import { history } from './history.js';
 import { sfx } from './audio.js';
@@ -23,6 +24,7 @@ export class ServiceCoordinator {
 	private _project: ProjectService | null = null;
 	private _selection: SelectionService | null = null;
 	private _color: ColorService | null = null;
+	private _history: HistoryService | null = null;
 
 	get movement() {
 		if (!this._movement) this._movement = new MovementService();
@@ -55,6 +57,10 @@ export class ServiceCoordinator {
 	get color() {
 		if (!this._color) this._color = new ColorService();
 		return this._color;
+	}
+	get history() {
+		if (!this._history) this._history = new HistoryService();
+		return this._history;
 	}
 
 	// --- Navigation Aliases ---
@@ -132,6 +138,13 @@ export class ServiceCoordinator {
 	}
 
 	// --- Persistence & Backup ---
+
+	undo() {
+		this.history.undo();
+	}
+	redo() {
+		this.history.redo();
+	}
 
 	save() {
 		this.persistence.save();

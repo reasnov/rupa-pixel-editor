@@ -138,7 +138,7 @@ export class FrameState {
 
 	/**
 	 * Composite ONLY the selected layers.
-	 * Used for specialized export tasks (v0.9.3)
+	 * Used for specialized export tasks.
 	 */
 	getSelectedLayerComposite() {
 		const result = new Uint32Array(this.width * this.height);

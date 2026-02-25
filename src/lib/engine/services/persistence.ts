@@ -240,6 +240,18 @@ export class PersistenceService {
 			editor.project.fps = d.fps || 10;
 			editor.paletteState.swatches = d.palette || editor.paletteState.swatches;
 
+			// Restore Project Presets
+			if (d.presets && Array.isArray(d.presets)) {
+				const currentDefaults = editor.paletteState.presets.filter((p) => p.isDefault);
+				const projectCustoms = d.presets.filter((p: any) => !p.isDefault);
+
+				// Merge: Keep current defaults + unique project customs
+				const existingIds = new Set(currentDefaults.map((p) => p.id));
+				const uniqueCustoms = projectCustoms.filter((p: any) => !existingIds.has(p.id));
+
+				editor.paletteState.presets = [...currentDefaults, ...uniqueCustoms];
+			}
+
 			editor.project.frames = await Promise.all(
 				d.structure.map(async (fd: any) => {
 					const frame = new FrameState(fd.name, d.dimensions.width, d.dimensions.height);

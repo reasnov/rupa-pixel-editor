@@ -177,12 +177,16 @@ export class PersistenceService {
 
 	/**
 	 * Checks if the current project has enough data to be worth recovering.
-	 * Significant = > 10 pixels painted OR > 1 layer OR > 1 frame.
+	 * Significant = > 10 pixels painted OR > 1 layer OR > 1 frame OR has custom palettes.
 	 */
 	hasSignificantWork(): boolean {
 		const project = editor.project;
 		if (project.frames.length > 1) return true;
 		if (project.frames[0].layers.length > 1) return true;
+
+		// Check for custom palettes
+		const hasCustomPalettes = editor.paletteState.presets.some((p) => !p.isDefault);
+		if (hasCustomPalettes) return true;
 
 		const pixels = project.frames[0].layers[0].pixels;
 		let coloredCount = 0;

@@ -100,13 +100,6 @@
 				<CommandPalette onClose={() => (editor.showCommandPalette = false)} />
 			{/if}
 
-			{#if editor.showColorPicker}
-				<ColorPicker
-					bind:value={editor.paletteState.activeColor}
-					onClose={() => (editor.showColorPicker = false)}
-				/>
-			{/if}
-
 			{#if editor.showExportMenu}
 				<ExportMenu
 					onExport={(format, scale, bgColor) => services.createArtifact(format, scale, bgColor)}
@@ -160,6 +153,13 @@
 					y={editor.studio.contextMenu.y}
 					items={editor.studio.contextMenu.items}
 					onClose={() => (editor.studio.contextMenu = null)}
+				/>
+			{/if}
+
+			{#if editor.showColorPicker}
+				<ColorPicker
+					bind:value={editor.paletteState.activeColor}
+					onClose={() => (editor.showColorPicker = false)}
 				/>
 			{/if}
 

@@ -1,10 +1,10 @@
 import { type ColorHex } from '../types/index.js';
 
 export interface ColorHSLA {
-	h: number; // 0-360
-	s: number; // 0-100
-	l: number; // 0-100
-	a: number; // 0-1
+	h: number; // 0-360 (degrees)
+	s: number; // 0-100 (percentage)
+	l: number; // 0-100 (percentage)
+	a: number; // 0-1 (alpha)
 }
 
 /**
@@ -16,9 +16,9 @@ export class ColorLogic {
 	 */
 	static toHex(hsla: ColorHSLA): ColorHex {
 		const { h, s, l, a } = hsla;
-		const h_norm = h / 360;
-		const s_norm = s / 100;
-		const l_norm = l / 100;
+		const h_norm = ((h % 360) + 360) % 360 / 360;
+		const s_norm = Math.max(0, Math.min(100, s)) / 100;
+		const l_norm = Math.max(0, Math.min(100, l)) / 100;
 
 		let r, g, b;
 
@@ -41,11 +41,11 @@ export class ColorLogic {
 		}
 
 		const hexComponent = (x: number) =>
-			Math.round(x * 255)
+			Math.max(0, Math.min(255, Math.round(x * 255)))
 				.toString(16)
 				.padStart(2, '0');
 
-		const alphaHex = Math.round(a * 255)
+		const alphaHex = Math.max(0, Math.min(255, Math.round(a * 255)))
 			.toString(16)
 			.padStart(2, '0');
 
@@ -103,10 +103,10 @@ export class ColorLogic {
 		}
 
 		return {
-			h: Math.round(h * 360),
-			s: Math.round(s * 100),
-			l: Math.round(l * 100),
-			a: parseFloat(a.toFixed(2))
+			h: h * 360,
+			s: s * 100,
+			l: l * 100,
+			a: parseFloat(a.toFixed(4))
 		};
 	}
 

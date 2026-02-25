@@ -22,10 +22,6 @@
 	}
 </script>
 
-{#if showPicker}
-	<ColorPicker bind:value={editor.backgroundColor} onClose={() => (showPicker = false)} />
-{/if}
-
 <Dialog
 	title="workspace:settings.title"
 	subtitle="workspace:settings.subtitle"
@@ -119,3 +115,7 @@
 		</Button>
 	</div>
 </Dialog>
+
+{#if showPicker}
+	<ColorPicker bind:value={editor.backgroundColor} onClose={() => (showPicker = false)} />
+{/if}

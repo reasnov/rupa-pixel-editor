@@ -38,7 +38,7 @@ export class PaletteState {
 
 	/**
 	 * Ensures the first color in the palette is always the darkest one
-	 * without changing the other colors' values, just their order.
+	 * by moving it to the start of the array.
 	 */
 	private sortPaletteForAccessibility(colors: ColorHex[]): ColorHex[] {
 		if (colors.length <= 1) return colors;
@@ -46,9 +46,8 @@ export class PaletteState {
 		const darkestIdx = this.findDarkestIndex(result);
 
 		if (darkestIdx !== 0) {
-			const darkest = result[darkestIdx];
-			result[darkestIdx] = result[0];
-			result[0] = darkest;
+			const [darkest] = result.splice(darkestIdx, 1);
+			result.unshift(darkest);
 		}
 
 		return result;
@@ -101,8 +100,8 @@ export class PaletteState {
 	importPalette(content: string) {
 		const colors = ColorLogic.parsePaletteText(content);
 		if (colors.length > 0) {
-			this.swatches = colors;
-			this.activeColor = colors[0];
+			this.swatches = this.sortPaletteForAccessibility(colors);
+			this.activeColor = this.swatches[0];
 			return true;
 		}
 		return false;
@@ -128,7 +127,7 @@ export class PaletteState {
 	applyPreset(id: string) {
 		const preset = this.presets.find((p) => p.id === id);
 		if (preset) {
-			this.swatches = [...preset.colors];
+			this.swatches = this.sortPaletteForAccessibility([...preset.colors]);
 			this.activeColor = this.swatches[0];
 		}
 	}
@@ -146,7 +145,7 @@ export class PaletteState {
 	}
 
 	loadPalette(name: keyof typeof palettes) {
-		this.swatches = palettes[name] as ColorHex[];
+		this.swatches = this.sortPaletteForAccessibility(palettes[name] as ColorHex[]);
 		this.activeColor = this.swatches[0];
 	}
 }

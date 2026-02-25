@@ -63,6 +63,12 @@
 		editor.pushEscapeAction(onClose);
 		return () => editor.popEscapeAction(onClose);
 	});
+
+	function handleKeydown(e: KeyboardEvent) {
+		if (e.key === 'Enter') {
+			onClose();
+		}
+	}
 </script>
 
 <Dialog
@@ -71,8 +77,9 @@
 	isOpen={true}
 	{onClose}
 	width="450px"
+	zIndex={2000}
 >
-	<div class="flex flex-col gap-8">
+	<div class="flex flex-col gap-8" onkeydown={handleKeydown} role="presentation">
 		<div class="flex items-center justify-between px-2">
 			<span class="text-3xl" aria-hidden="true"> 🏺 </span>
 			<div

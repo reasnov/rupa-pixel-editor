@@ -49,10 +49,10 @@
 		<button
 			class="flex h-8 w-8 items-center justify-center rounded border border-dashed border-text-main/20 bg-text-main/5 transition-all hover:scale-110 hover:border-ui-accent/40 hover:bg-ui-highlight/20"
 			onclick={() => (editor.showColorPicker = true)}
-			title={__('tools:color_picker.title') + ' (B)'}
+			title={__('tools:color_picker.title')}
 			aria-label={__('tools:color_picker.title')}
 		>
-			<span class="text-xs opacity-40" aria-hidden="true">＋</span>
+			<span class="text-xs opacity-40" aria-hidden="true">🏺</span>
 		</button>
 
 		<button

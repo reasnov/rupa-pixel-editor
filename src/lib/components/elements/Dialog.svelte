@@ -16,6 +16,7 @@
 		footer?: Snippet;
 		width?: string;
 		maxWidth?: string;
+		zIndex?: number;
 		class?: string;
 	}
 
@@ -28,6 +29,7 @@
 		footer,
 		width = 'auto',
 		maxWidth = '95vw',
+		zIndex = 1500,
 		class: className = ''
 	}: Props = $props();
 
@@ -53,7 +55,8 @@
 	<!-- svelte-ignore a11y_click_events_have_key_events -->
 	<div
 		transition:fade={{ duration: 150 }}
-		class="fixed inset-0 z-[1500] flex items-center justify-center bg-ui-structural/40 p-4 backdrop-blur-[2px] md:p-8"
+		class="fixed inset-0 flex items-center justify-center bg-ui-structural/40 p-4 backdrop-blur-[2px] md:p-8"
+		style="z-index: {zIndex};"
 		onmousedown={(e) => {
 			e.stopPropagation();
 			if (e.target === e.currentTarget) onClose();

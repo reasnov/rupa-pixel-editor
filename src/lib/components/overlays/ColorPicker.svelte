@@ -17,6 +17,9 @@
 	let l = $state(0);
 	let a = $state(1); // 0.0 to 1.0
 
+	// Local input state for the HEX field to prevent cursor jumping/interruptions
+	let inputValue = $state(value);
+
 	$effect(() => {
 		const color = ColorLogic.toHSLA(value);
 		untrack(() => {
@@ -24,6 +27,10 @@
 			s = color.s;
 			l = color.l;
 			a = color.a;
+			// Keep input sync when value changes from outside (e.g. eye dropper)
+			if (inputValue !== value) {
+				inputValue = value;
+			}
 		});
 	});
 
@@ -31,8 +38,26 @@
 		const newColor = ColorLogic.toHex({ h, s, l, a });
 		untrack(() => {
 			value = newColor;
+			inputValue = newColor;
 		});
 	});
+
+	function handleHexInput(e: Event) {
+		const target = e.target as HTMLInputElement;
+		const val = target.value.toUpperCase();
+		inputValue = val;
+		const cleanHex = val.replace('#', '');
+
+		// Only apply if it's at least 6 characters (RGB) or 8 characters (RGBA)
+		if (cleanHex.length === 6 || cleanHex.length === 8) {
+			const color = ColorLogic.toHSLA(val);
+			h = color.h;
+			s = color.s;
+			l = color.l;
+			a = color.a;
+			// Don't update value here, let the HSLA $effect handle it to keep sliders in sync
+		}
+	}
 
 	$effect(() => {
 		editor.pushEscapeAction(onClose);
@@ -94,7 +119,8 @@
 		<div class="flex flex-col gap-4">
 			<Input
 				label="tools:color_picker.label.hex"
-				bind:value
+				value={inputValue}
+				oninput={handleHexInput}
 				ariaLabel="tools:color_picker.label.hex"
 				class="font-mono text-lg uppercase"
 			/>

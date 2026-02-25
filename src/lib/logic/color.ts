@@ -49,8 +49,7 @@ export class ColorLogic {
 			.toString(16)
 			.padStart(2, '0');
 
-		const hex = `#${hexComponent(r)}${hexComponent(g)}${hexComponent(b)}`;
-		return alphaHex === 'ff' ? hex : hex + alphaHex;
+		return `#${hexComponent(r)}${hexComponent(g)}${hexComponent(b)}${alphaHex}`.toUpperCase();
 	}
 
 	/**
@@ -219,8 +218,7 @@ export class ColorLogic {
 		const alphaHex = Math.round(a * 255)
 			.toString(16)
 			.padStart(2, '0');
-		const hex = `#${toHex(r)}${toHex(g)}${toHex(b)}`;
-		return alphaHex === 'ff' ? hex : hex + alphaHex;
+		return `#${toHex(r)}${toHex(g)}${toHex(b)}${alphaHex}`.toUpperCase();
 	}
 
 	/**

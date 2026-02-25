@@ -4,31 +4,31 @@ import { ColorLogic } from '../../lib/logic/color.js';
 describe('ColorLogic', () => {
 	describe('HEX & HSLA Conversions', () => {
 		it('should convert HSLA to HEX correctly', () => {
-			expect(ColorLogic.toHex({ h: 0, s: 0, l: 100, a: 1 })).toBe('#ffffff');
-			expect(ColorLogic.toHex({ h: 0, s: 0, l: 0, a: 1 })).toBe('#000000');
-			expect(ColorLogic.toHex({ h: 0, s: 100, l: 50, a: 1 })).toBe('#ff0000');
-			expect(ColorLogic.toHex({ h: 120, s: 100, l: 50, a: 1 })).toBe('#00ff00');
-			expect(ColorLogic.toHex({ h: 240, s: 100, l: 50, a: 1 })).toBe('#0000ff');
+			expect(ColorLogic.toHex({ h: 0, s: 0, l: 100, a: 1 })).toBe('#FFFFFFFF');
+			expect(ColorLogic.toHex({ h: 0, s: 0, l: 0, a: 1 })).toBe('#000000FF');
+			expect(ColorLogic.toHex({ h: 0, s: 100, l: 50, a: 1 })).toBe('#FF0000FF');
+			expect(ColorLogic.toHex({ h: 120, s: 100, l: 50, a: 1 })).toBe('#00FF00FF');
+			expect(ColorLogic.toHex({ h: 240, s: 100, l: 50, a: 1 })).toBe('#0000FFFF');
 		});
 
 		it('should handle alpha channel in HEX', () => {
-			expect(ColorLogic.toHex({ h: 0, s: 100, l: 50, a: 0.5 })).toBe('#ff000080');
-			expect(ColorLogic.toHex({ h: 0, s: 100, l: 50, a: 0 })).toBe('#ff000000');
+			expect(ColorLogic.toHex({ h: 0, s: 100, l: 50, a: 0.5 })).toBe('#FF000080');
+			expect(ColorLogic.toHex({ h: 0, s: 100, l: 50, a: 0 })).toBe('#FF000000');
 		});
 
 		it('should convert HEX to HSLA correctly', () => {
-			expect(ColorLogic.toHSLA('#ff0000')).toEqual({ h: 0, s: 100, l: 50, a: 1 });
-			expect(ColorLogic.toHSLA('#00ff00')).toEqual({ h: 120, s: 100, l: 50, a: 1 });
-			expect(ColorLogic.toHSLA('#0000ff')).toEqual({ h: 240, s: 100, l: 50, a: 1 });
+			expect(ColorLogic.toHSLA('#FF0000')).toEqual({ h: 0, s: 100, l: 50, a: 1 });
+			expect(ColorLogic.toHSLA('#00FF00')).toEqual({ h: 120, s: 100, l: 50, a: 1 });
+			expect(ColorLogic.toHSLA('#0000FF')).toEqual({ h: 240, s: 100, l: 50, a: 1 });
 		});
 
 		it('should handle shorthand HEX', () => {
-			expect(ColorLogic.toHSLA('#f00')).toEqual({ h: 0, s: 100, l: 50, a: 1 });
-			expect(ColorLogic.toHSLA('#fff')).toEqual({ h: 0, s: 0, l: 100, a: 1 });
+			expect(ColorLogic.toHSLA('#F00')).toEqual({ h: 0, s: 100, l: 50, a: 1 });
+			expect(ColorLogic.toHSLA('#FFF')).toEqual({ h: 0, s: 0, l: 100, a: 1 });
 		});
 
 		it('should handle HEX with alpha', () => {
-			expect(ColorLogic.toHSLA('#ff000080').a).toBeCloseTo(0.5);
+			expect(ColorLogic.toHSLA('#FF000080').a).toBeCloseTo(0.5);
 		});
 	});
 
@@ -46,57 +46,57 @@ describe('ColorLogic', () => {
 		});
 
 		it('adjustOpacity should work correctly', () => {
-			expect(ColorLogic.adjustOpacity('#ff0000', 0.5)).toBe('#ff000080');
+			expect(ColorLogic.adjustOpacity('#FF0000', 0.5)).toBe('#FF000080');
 		});
 	});
 
 	describe('Mixing', () => {
 		it('should mix two colors with specified ratio', () => {
-			expect(ColorLogic.mix('#ff0000', '#0000ff', 0.5)).toBe('#800080');
-			expect(ColorLogic.mix('#ffffff', '#000000', 0)).toBe('#ffffff');
-			expect(ColorLogic.mix('#ffffff', '#000000', 1)).toBe('#000000');
+			expect(ColorLogic.mix('#FF0000', '#0000FF', 0.5)).toBe('#800080FF');
+			expect(ColorLogic.mix('#FFFFFF', '#000000', 0)).toBe('#FFFFFFFF');
+			expect(ColorLogic.mix('#FFFFFF', '#000000', 1)).toBe('#000000FF');
 		});
 	});
 
 	describe('Fast Conversions & Caching', () => {
 		it('toRGBA should return ClampedArray and use cache', () => {
-			const rgba1 = ColorLogic.toRGBA('#ff0000');
+			const rgba1 = ColorLogic.toRGBA('#FF0000');
 			expect(rgba1).toEqual(new Uint8ClampedArray([255, 0, 0, 255]));
 
-			const rgba2 = ColorLogic.toRGBA('#ff0000');
+			const rgba2 = ColorLogic.toRGBA('#FF0000');
 			expect(rgba1).toBe(rgba2); // Same reference implies cache hit
 		});
 
 		it('hexToUint32 should convert to ABGR correctly', () => {
-			// #ff8800 -> R=ff, G=88, B=00, A=ff
-			// ABGR: 0xff0088ff
-			expect(ColorLogic.hexToUint32('#ff8800')).toBe(0xff0088ff);
+			// #FF8800 -> R=FF, G=88, B=00, A=FF
+			// ABGR: 0xFF0088FF
+			expect(ColorLogic.hexToUint32('#FF8800')).toBe(0xFF0088FF);
 			expect(ColorLogic.hexToUint32(null)).toBe(0);
 		});
 
 		it('uint32ToHex should convert from ABGR correctly', () => {
-			expect(ColorLogic.uint32ToHex(0xff0088ff)).toBe('#ff8800');
+			expect(ColorLogic.uint32ToHex(0xFF0088FF)).toBe('#FF8800FF');
 			expect(ColorLogic.uint32ToHex(0)).toBeNull();
 		});
 	});
 
 	describe('GPL & Palette Parsing', () => {
 		it('toGPL should generate valid format', () => {
-			const gpl = ColorLogic.toGPL('Test', ['#ff0000']);
+			const gpl = ColorLogic.toGPL('Test', ['#FF0000FF']);
 			expect(gpl).toContain('GIMP Palette');
 			expect(gpl).toContain('Name: Test');
 			expect(gpl).toContain('255   0   0 Untitled');
 		});
 
 		it('parsePaletteText should extract from various formats', () => {
-			const content = 'Some text #ff0000 and #00ff00ff more';
-			expect(ColorLogic.parsePaletteText(content)).toEqual(['#ff0000', '#00ff00ff']);
+			const content = 'Some text #FF0000FF and #00FF00FF more';
+			expect(ColorLogic.parsePaletteText(content)).toEqual(['#FF0000FF', '#00FF00FF']);
 
 			const gplContent = `GIMP Palette
 Name: MyPalette
 255 128 64
 0 0 0`;
-			expect(ColorLogic.parsePaletteText(gplContent)).toEqual(['#ff8040', '#000000']);
+			expect(ColorLogic.parsePaletteText(gplContent)).toEqual(['#FF8040FF', '#000000FF']);
 		});
 
 		it('parsePaletteText should return empty array for invalid input', () => {

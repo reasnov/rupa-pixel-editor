@@ -431,7 +431,7 @@
 		},
 		"OPEN_PALETTE": {
 			"label": "Color Picker",
-			"keys": ["F3"],
+			"keys": ["c", "F3"],
 			"group": "System"
 		},
 		"OPEN_HELP": {

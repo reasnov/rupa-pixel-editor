@@ -241,6 +241,7 @@ export class KeyboardEngine {
 			intent: ActionIntent;
 			label: string;
 			group: string;
+			shortcut: string;
 			customKey?: string;
 		}> = [];
 		const seenGroupedIntents = new Set<string>();
@@ -327,6 +328,7 @@ export class KeyboardEngine {
 
 	getIntent(e: KeyboardEvent): ActionIntent | null {
 		const key = e.key.toLowerCase();
+		const code = e.code.toLowerCase();
 
 		if (!this.isCtrlActive && !this.isAltActive && !this.isShiftActive) {
 			const sequenceIntent = sequence.process(key);
@@ -343,7 +345,8 @@ export class KeyboardEngine {
 		}
 
 		for (const pattern of this.patterns) {
-			const keyMatch = key === pattern.key;
+			// Check against both .key (localized) and .code (physical position for letters)
+			const keyMatch = key === pattern.key || (code === `key${pattern.key}` && pattern.key.length === 1);
 
 			if (
 				keyMatch &&
@@ -357,16 +360,11 @@ export class KeyboardEngine {
 		return null;
 	}
 
-	getLabel(intent: ActionIntent): string {
-		const p = this.patterns.find((p) => p.intent === intent);
-		if (!p) return 'Unassigned';
-
+	static formatKeyCombo(key: string, ctrl: boolean, shift: boolean, alt: boolean): string {
 		const modifiers: string[] = [];
-		if (p.ctrl) modifiers.push('Ctrl');
-		if (p.shift) modifiers.push('Shift');
-		if (p.alt) modifiers.push('Alt');
-
-		let keyLabel = p.key;
+		if (ctrl) modifiers.push('Ctrl');
+		if (alt) modifiers.push('Alt');
+		if (shift) modifiers.push('Shift');
 
 		const keyMap: Record<string, string> = {
 			' ': 'Space',
@@ -385,17 +383,32 @@ export class KeyboardEngine {
 			tab: 'Tab'
 		};
 
-		const lowerKey = keyLabel.toLowerCase();
-		if (keyMap[lowerKey]) {
-			keyLabel = keyMap[lowerKey];
+		let keyLabel = key.toLowerCase();
+		if (keyMap[keyLabel]) {
+			keyLabel = keyMap[keyLabel];
+		} else if (keyLabel.length === 1) {
+			keyLabel = keyLabel.toUpperCase();
 		} else {
 			keyLabel = keyLabel.charAt(0).toUpperCase() + keyLabel.slice(1).toLowerCase();
 		}
 
+		// Prevent 'Ctrl+Ctrl' or similar redundancies
 		const filteredModifiers = modifiers.filter((m) => m.toLowerCase() !== keyLabel.toLowerCase());
 
 		if (filteredModifiers.length === 0) return keyLabel;
 		return filteredModifiers.join('+') + '+' + keyLabel;
+	}
+
+	getLabelFromEvent(e: KeyboardEvent): string {
+		// Ignore lonely modifiers for combo building
+		if (['Control', 'Shift', 'Alt', 'Meta'].includes(e.key)) return '';
+		return KeyboardEngine.formatKeyCombo(e.key, e.ctrlKey || e.metaKey, e.shiftKey, e.altKey);
+	}
+
+	getLabel(intent: ActionIntent): string {
+		const p = this.patterns.find((p) => p.intent === intent);
+		if (!p) return 'Unassigned';
+		return KeyboardEngine.formatKeyCombo(p.key, p.ctrl, p.shift, p.alt);
 	}
 }
 

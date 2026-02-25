@@ -167,11 +167,11 @@ export class EditorState {
 		this.studio.showExportMenu = v;
 	}
 
-	get showCanvasSettings() {
-		return this.studio.showCanvasSettings;
+	get showSettings() {
+		return this.studio.showSettings;
 	}
-	set showCanvasSettings(v) {
-		this.studio.showCanvasSettings = v;
+	set showSettings(v) {
+		this.studio.showSettings = v;
 	}
 
 	get showPersistenceMenu() {

@@ -162,12 +162,12 @@
 	"animation": {
 		"NEXT_FRAME": {
 			"label": "Next Frame",
-			"keys": ["Alt+PageDown", "Tab"],
+			"keys": ["Alt+PageDown", "."],
 			"group": "Timeline"
 		},
 		"PREV_FRAME": {
 			"label": "Previous Frame",
-			"keys": ["Alt+PageUp", "Shift+Tab"],
+			"keys": ["Alt+PageUp", ","],
 			"group": "Timeline"
 		},
 		"PLAY_PAUSE": {
@@ -244,7 +244,7 @@
 		},
 		"TOGGLE_LAYER_LOCK": {
 			"label": "Lock/Unlock Layer",
-			"keys": ["Alt+l"],
+			"keys": ["Alt+Shift+l"],
 			"group": "Layers"
 		}
 	},
@@ -271,7 +271,7 @@
 		},
 		"CYCLE_SYMMETRY": {
 			"label": "Cycle Symmetry Mode",
-			"keys": ["v"],
+			"keys": ["y"],
 			"group": "Etching"
 		},
 		"TOGGLE_TILING": {
@@ -296,17 +296,17 @@
 		},
 		"SHADE_LIGHTEN": {
 			"label": "Shade: Lighten",
-			"keys": ["u"],
+			"keys": ["Shift+u"],
 			"group": "Etching"
 		},
 		"SHADE_DARKEN": {
 			"label": "Shade: Darken",
-			"keys": ["d"],
+			"keys": ["Shift+d"],
 			"group": "Etching"
 		},
 		"SHADE_DITHER": {
 			"label": "Shade: Dither",
-			"keys": ["x"],
+			"keys": ["Shift+x"],
 			"group": "Etching"
 		},
 		"TOGGLE_PIXEL_PERFECT": {
@@ -316,7 +316,7 @@
 		},
 		"TOOL_BRUSH": {
 			"label": "Brush Tool",
-			"keys": ["b", "Shift+b"],
+			"keys": ["b"],
 			"group": "Etching"
 		},
 		"TOOL_ERASER": {
@@ -336,7 +336,7 @@
 		},
 		"TOOL_POLY_SELECT": {
 			"label": "Polygon Selection",
-			"keys": ["Alt+l"],
+			"keys": ["Shift+l"],
 			"group": "Etching"
 		},
 		"TOGGLE_HAND_TOOL": {

@@ -104,7 +104,7 @@ export class StudioState {
 	showManual = $state(false);
 	showExportMenu = $state(false);
 	showPaletteLibrary = $state(false);
-	showCanvasSettings = $state(false);
+	showSettings = $state(false);
 	showPersistenceMenu = $state(false);
 	showUnderlayMenu = $state(false);
 	showGoTo = $state(false);

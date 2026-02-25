@@ -90,7 +90,7 @@ describe('ClipboardService', () => {
 		expect(sfx.playErase).toHaveBeenCalled();
 	});
 
-	it('paste should merge clipboard into canvas, track history, and auto-select', () => {
+	it('paste should merge clipboard into canvas and track history', () => {
 		editor.project.clipboard = {
 			width: 1,
 			height: 1,
@@ -104,8 +104,5 @@ describe('ClipboardService', () => {
 		expect(editor.canvas.pixels[55]).toBe(0xff0000ff);
 		expect(history.pushPixel).toHaveBeenCalled();
 		expect(sfx.playDraw).toHaveBeenCalled();
-		// Verify auto-select
-		expect(editor.selection.mask).toBeDefined();
-		expect(editor.selection.mask[55]).toBe(1);
 	});
 });

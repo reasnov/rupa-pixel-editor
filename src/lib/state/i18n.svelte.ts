@@ -97,7 +97,9 @@ export function __(
 		if (artisan && technical) {
 			return `${artisan} (${technical})`;
 		}
+		// Fallback: If it's an object but missing parts, try to return any available string property
+		return artisan || technical || Object.values(val)[0] || String(val);
 	}
 
-	return val as unknown as string;
+	return String(val || '');
 }

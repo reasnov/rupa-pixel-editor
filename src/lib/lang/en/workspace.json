@@ -95,7 +95,7 @@
 		"action": "Move Cursor"
 	},
 	"settings": {
-		"title": "Canvas Settings",
+		"title": "Sanctuary Settings",
 		"subtitle": "Configure the Workspace",
 		"width": "Canvas Width",
 		"height": "Canvas Height",

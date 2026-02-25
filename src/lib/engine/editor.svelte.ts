@@ -460,7 +460,7 @@ export class EditorEngine {
 				state.showCommandPalette = !state.showCommandPalette;
 				return true;
 			case 'OPEN_SETTINGS':
-				state.showCanvasSettings = !state.showCanvasSettings;
+				state.showSettings = !state.showSettings;
 				return true;
 			case 'OPEN_PALETTE':
 				state.showColorPicker = !state.showColorPicker;

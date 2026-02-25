@@ -10,7 +10,10 @@ export class ClipboardService {
 		const points = editor.selection.getPoints(width);
 		const bounds = editor.selection.getEffectiveBounds(width);
 
-		if (!bounds || points.length === 0) return;
+		if (!bounds || points.length === 0) {
+			editor.studio.show(__('ui:studio.no_selection'));
+			return;
+		}
 
 		// Layer-Aware: Copy only from the active layer
 		const source = editor.canvas.pixels;
@@ -30,11 +33,12 @@ export class ClipboardService {
 		const width = editor.canvas.width;
 		const points = editor.selection.getPoints(width);
 
-		if (points.length === 0) return;
+		if (!points || points.length === 0) return;
 
-		history.beginBatch();
 		const currentPixels = new Uint32Array(editor.canvas.pixels);
 		let hasChanges = false;
+
+		history.beginBatch();
 
 		points.forEach((p) => {
 			const index = p.y * width + p.x;
@@ -48,14 +52,15 @@ export class ClipboardService {
 			}
 		});
 
-		history.endBatch();
-
 		if (hasChanges) {
 			editor.canvas.pixels = currentPixels;
 			editor.canvas.incrementVersion();
+			history.endBatch(); // Only end if we have changes
+			sfx.playErase();
+		} else {
+			history.clearBatch(); // Utility method to reset current batch buffers
 		}
 
-		sfx.playErase();
 		editor.selection.clear();
 	}
 
@@ -67,7 +72,6 @@ export class ClipboardService {
 		const { x: nx, y: ny } = editor.cursor.pos;
 		const { width: lw, height: lh } = editor.canvas;
 
-		history.beginBatch();
 		const { data: newData, changes } = PixelLogic.mergeSubGrid(
 			editor.canvas.pixels,
 			lw,
@@ -80,6 +84,7 @@ export class ClipboardService {
 		);
 
 		if (changes.length > 0) {
+			history.beginBatch();
 			changes.forEach((c) => {
 				const oldVal = editor.canvas.pixels[c.index];
 				history.pushPixel(c.index, oldVal, c.color);
@@ -87,16 +92,8 @@ export class ClipboardService {
 
 			editor.canvas.pixels = newData;
 			editor.canvas.incrementVersion();
-
-			// Auto-Select the pasted area
-			const newMask = new Uint8Array(lw * lh);
-			changes.forEach((c) => {
-				newMask[c.index] = 1;
-			});
-			editor.selection.mask = newMask;
-
+			history.endBatch();
 			sfx.playDraw();
 		}
-		history.endBatch();
 	}
 }

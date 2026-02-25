@@ -50,6 +50,11 @@ export class HistoryManager {
 				new Uint32Array(this.currentBatchNewColors)
 			);
 		}
+		this.clearBatch();
+	}
+
+	clearBatch() {
+		this.inBatch = false;
 		this.currentBatchIndices = [];
 		this.currentBatchOldColors = [];
 		this.currentBatchNewColors = [];

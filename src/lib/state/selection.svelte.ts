@@ -177,6 +177,7 @@ export class SelectionState {
 
 	/**
 	 * Unified bounds for operations like Copy/Paste.
+	 * Includes both the committed bitmask and active construction bounds.
 	 */
 	getEffectiveBounds(width: number) {
 		let x1 = Infinity,
@@ -185,6 +186,7 @@ export class SelectionState {
 			y2 = -Infinity;
 		let found = false;
 
+		// 1. Check Bitmask
 		for (let i = 0; i < this._mask.length; i++) {
 			if (this._mask[i] === 1) {
 				const x = i % width;
@@ -195,6 +197,16 @@ export class SelectionState {
 				if (y > y2) y2 = y;
 				found = true;
 			}
+		}
+
+		// 2. Check Construction Bounds
+		const b = this.rectangularBounds;
+		if (b) {
+			if (b.x1 < x1) x1 = b.x1;
+			if (b.x2 > x2) x2 = b.x2;
+			if (b.y1 < y1) y1 = b.y1;
+			if (b.y2 > y2) y2 = b.y2;
+			found = true;
 		}
 
 		if (!found) return null;

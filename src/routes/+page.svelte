@@ -19,7 +19,7 @@
 	import ExportMenu from '$lib/components/overlays/ExportMenu.svelte';
 	import GuideMenu from '$lib/components/overlays/Shortcuts.svelte';
 	import PersistenceMenu from '$lib/components/overlays/PersistenceMenu.svelte';
-	import CanvasSettings from '$lib/components/overlays/CanvasSettings.svelte';
+	import Settings from '$lib/components/overlays/Settings.svelte';
 	import PaletteLibrary from '$lib/components/overlays/PaletteLibrary.svelte';
 	import GoToModal from '$lib/components/overlays/GoToModal.svelte';
 	import AudioSettings from '$lib/components/overlays/AudioSettings.svelte';
@@ -115,8 +115,8 @@
 				<PaletteLibrary onClose={() => (editor.studio.showPaletteLibrary = false)} />
 			{/if}
 
-			{#if editor.showCanvasSettings}
-				<CanvasSettings onClose={() => (editor.showCanvasSettings = false)} />
+			{#if editor.showSettings}
+				<Settings onClose={() => (editor.showSettings = false)} />
 			{/if}
 
 			{#if editor.showGoTo}

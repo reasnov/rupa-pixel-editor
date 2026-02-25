@@ -242,6 +242,8 @@ export class PersistenceService {
 			if (!projectJson) throw new Error('Invalid .rupa file');
 
 			const d = JSON.parse(projectJson);
+			editor.project.width = d.dimensions?.width || 32;
+			editor.project.height = d.dimensions?.height || 32;
 			editor.project.fps = d.fps || 10;
 			editor.paletteState.swatches = d.palette || editor.paletteState.swatches;
 
@@ -299,6 +301,13 @@ export class PersistenceService {
 			if (d.palette) editor.paletteState.swatches = d.palette;
 			const projectData = d.project || d.folio;
 			if (projectData) {
+				// Legacy projects stored dimensions per frame, use the first one as global
+				const firstFrame = projectData.frames[0];
+				if (firstFrame) {
+					editor.project.width = firstFrame.width || 32;
+					editor.project.height = firstFrame.height || 32;
+				}
+
 				editor.project.frames = projectData.frames.map((fd: any) => {
 					const frame = new FrameState(fd.name, fd.width, fd.height);
 					frame.layers = (fd.layers || []).map((vd: any) => {

@@ -13,6 +13,10 @@
 		["Paint", "Paint"],
 		["Delete", "Delete"]
 	],
+	"search_placeholder": "Search shortcuts by name or keys...",
+	"listen_button": "Listen for Keys",
+	"listening_active": "Listening... Press a shortcut.",
+	"no_results": "No shortcuts found matching \"{{query}}\". Enjoy your tea while you think of another.",
 	"groups": {
 		"rhythms": "Core Rhythms (Basics)",
 		"navigation": "Navigation",

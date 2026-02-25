@@ -33,6 +33,8 @@
 		"facets": "{{count}} Sides",
 		"steeping": "{{count}}% Indentation",
 		"canvas_cleared": "Canvas Cleared",
+		"canvas_resized": "Canvas Dimensions Adjusted",
+		"no_selection": "No Area Selected",
 		"preparing_export": "Preparing Export...",
 		"flipped_h": "Flipped Horizontally",
 		"flipped_v": "Flipped Vertically",

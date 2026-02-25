@@ -11,7 +11,7 @@
 	"paint": { "artisan": "Paint Pixel", "technical": "Brush Tool" },
 	"erase": { "artisan": "Erase Pixel", "technical": "Eraser Tool" },
 	"pick_color": { "artisan": "Sample Color", "technical": "Eyedropper" },
-	"flood_fill": { "artisan": "Fill Area", "flood_fill": "Flood Fill" },
+	"flood_fill": { "artisan": "Fill Area", "technical": "Flood Fill" },
 	"bind_vertex": { "artisan": "Add Vertex", "technical": "Add Polygon Point" },
 	"seal_binding": { "artisan": "Close Shape", "technical": "Close Polygon" },
 	"toggle_dither_blend": { "artisan": "Dither Blend", "technical": "Dither Blend" },

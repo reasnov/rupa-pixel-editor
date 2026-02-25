@@ -7,9 +7,8 @@ import { animation } from '../engine/animation.svelte.js';
  */
 export class FrameState {
 	id = crypto.randomUUID();
+	project: ProjectState;
 	name = $state('Untitled Frame');
-	width = $state(32);
-	height = $state(32);
 	opacity = $state(1.0);
 	isVisible = $state(true);
 
@@ -23,11 +22,18 @@ export class FrameState {
 	private _lastRenderVersion = -1;
 	private _lastTimeKey = -1;
 
-	constructor(name: string, width = 32, height = 32) {
+	constructor(name: string, project: ProjectState) {
 		this.name = name;
-		this.width = width;
-		this.height = height;
-		this.layers = [new LayerState('Base Layer', width, height)];
+		this.project = project;
+		this.layers = [new LayerState('Base Layer', this.width, this.height)];
+	}
+
+	get width() {
+		return this.project.width;
+	}
+
+	get height() {
+		return this.project.height;
 	}
 
 	get activeLayer() {

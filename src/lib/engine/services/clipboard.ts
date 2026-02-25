@@ -12,7 +12,8 @@ export class ClipboardService {
 
 		if (!bounds || points.length === 0) return;
 
-		const source = editor.canvas.compositePixels; // Layer-Agnostic: Use merged image
+		// Layer-Aware: Copy only from the active layer
+		const source = editor.canvas.pixels;
 		const swatchData = PixelLogic.extractSubGrid(source, width, points, bounds);
 
 		editor.project.clipboard = {
@@ -37,11 +38,13 @@ export class ClipboardService {
 
 		points.forEach((p) => {
 			const index = p.y * width + p.x;
-			const oldVal = currentPixels[index];
-			if (oldVal !== 0) {
-				history.pushPixel(index, oldVal, 0);
-				currentPixels[index] = 0;
-				hasChanges = true;
+			if (index >= 0 && index < currentPixels.length) {
+				const oldVal = currentPixels[index];
+				if (oldVal !== 0) {
+					history.pushPixel(index, oldVal, 0);
+					currentPixels[index] = 0;
+					hasChanges = true;
+				}
 			}
 		});
 
@@ -60,6 +63,7 @@ export class ClipboardService {
 		const cb = editor.project.clipboard;
 		if (!cb) return;
 
+		// Standard behavior: Top-left corner at cursor position
 		const { x: nx, y: ny } = editor.cursor.pos;
 		const { width: lw, height: lh } = editor.canvas;
 
@@ -83,6 +87,14 @@ export class ClipboardService {
 
 			editor.canvas.pixels = newData;
 			editor.canvas.incrementVersion();
+
+			// Auto-Select the pasted area
+			const newMask = new Uint8Array(lw * lh);
+			changes.forEach((c) => {
+				newMask[c.index] = 1;
+			});
+			editor.selection.mask = newMask;
+
 			sfx.playDraw();
 		}
 		history.endBatch();

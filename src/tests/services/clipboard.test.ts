@@ -51,7 +51,7 @@ describe('ClipboardService', () => {
 		editor.canvas.compositePixels.fill(0);
 	});
 
-	it('copy should store sub-grid in project clipboard', () => {
+	it('copy should store sub-grid from active layer (not composite) in project clipboard', () => {
 		(editor.selection.getPoints as any).mockReturnValue([{ x: 0, y: 0 }]);
 		(editor.selection.getEffectiveBounds as any).mockReturnValue({
 			x1: 0,
@@ -59,7 +59,8 @@ describe('ClipboardService', () => {
 			width: 1,
 			height: 1
 		});
-		editor.canvas.compositePixels[0] = 0xff00ff00;
+		editor.canvas.pixels[0] = 0xff00ff00;
+		editor.canvas.compositePixels[0] = 0xdeadbeef; // Different from active
 
 		service.copy();
 
@@ -71,7 +72,7 @@ describe('ClipboardService', () => {
 		expect(sfx.playDraw).toHaveBeenCalled();
 	});
 
-	it('cut should copy and then clear pixels from canvas using history', () => {
+	it('cut should copy and then clear pixels from active layer using history', () => {
 		(editor.selection.getPoints as any).mockReturnValue([{ x: 0, y: 0 }]);
 		(editor.selection.getEffectiveBounds as any).mockReturnValue({
 			x1: 0,
@@ -80,7 +81,6 @@ describe('ClipboardService', () => {
 			height: 1
 		});
 		editor.canvas.pixels[0] = 0xff00ff00;
-		editor.canvas.compositePixels[0] = 0xff00ff00;
 
 		service.cut();
 
@@ -90,18 +90,22 @@ describe('ClipboardService', () => {
 		expect(sfx.playErase).toHaveBeenCalled();
 	});
 
-	it('paste should merge clipboard into canvas and track history', () => {
+	it('paste should merge clipboard into canvas, track history, and auto-select', () => {
 		editor.project.clipboard = {
 			width: 1,
 			height: 1,
 			data: new Uint32Array([0xff0000ff])
 		};
 		editor.cursor.pos = { x: 5, y: 5 };
+		editor.canvas.pixels.fill(0);
 
 		service.paste();
 
 		expect(editor.canvas.pixels[55]).toBe(0xff0000ff);
 		expect(history.pushPixel).toHaveBeenCalled();
 		expect(sfx.playDraw).toHaveBeenCalled();
+		// Verify auto-select
+		expect(editor.selection.mask).toBeDefined();
+		expect(editor.selection.mask[55]).toBe(1);
 	});
 });

@@ -6,21 +6,42 @@ import { __ } from '../../state/i18n.svelte.js';
 
 export class ManipulationService {
 	resize(newWidth: number, newHeight: number) {
-		const newPixels = new Uint32Array(newWidth * newHeight);
-		// Fill with default background color
-		const bgVal = ColorLogic.hexToUint32(editor.backgroundColor);
-		newPixels.fill(bgVal);
+		const oldWidth = editor.project.width;
+		const oldHeight = editor.project.height;
 
-		for (let y = 0; y < Math.min(editor.canvas.height, newHeight); y++) {
-			for (let x = 0; x < Math.min(editor.canvas.width, newWidth); x++) {
-				const oldIdx = y * editor.canvas.width + x;
-				const newIdx = y * newWidth + x;
-				newPixels[newIdx] = editor.canvas.pixels[oldIdx];
-			}
-		}
-		editor.canvas.reset(newWidth, newHeight, newPixels);
+		// 1. Update Project Metadata First
+		editor.project.width = newWidth;
+		editor.project.height = newHeight;
+
+		// 2. Iterate through ALL Frames and ALL Layers
+		editor.project.frames.forEach((frame) => {
+			frame.layers.forEach((layer) => {
+				if (layer.type !== 'LAYER') return;
+
+				const oldPixels = layer.pixels;
+				const newPixels = new Uint32Array(newWidth * newHeight);
+
+				// Re-map old pixels to the new grid (Top-Left anchoring)
+				for (let y = 0; y < Math.min(oldHeight, newHeight); y++) {
+					for (let x = 0; x < Math.min(oldWidth, newWidth); x++) {
+						const oldIdx = y * oldWidth + x;
+						const newIdx = y * newWidth + x;
+						newPixels[newIdx] = oldPixels[oldIdx];
+					}
+				}
+
+				layer.pixels = newPixels;
+			});
+		});
+
+		// 3. Re-initialize Global Buffers
 		editor.selection.initMask(newWidth, newHeight);
+
+		// Clear history since the structural change (canvas size) invalidates pixel-pushing indices
 		history.clear();
+
+		editor.canvas.incrementVersion();
+		editor.studio.show(__('ui:studio.canvas_resized'));
 		sfx.playDraw();
 	}
 

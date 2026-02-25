@@ -36,20 +36,20 @@ export class CanvasState {
 		});
 	}
 
-	// --- Proxies to Active Frame ---
+	// --- Proxies to Active Frame & Project Dimensions ---
 
 	get width() {
-		return this.project.activeFrame.width;
+		return this.project.width;
 	}
 	set width(v: number) {
-		this.project.activeFrame.width = v;
+		this.project.width = v;
 	}
 
 	get height() {
-		return this.project.activeFrame.height;
+		return this.project.height;
 	}
 	set height(v: number) {
-		this.project.activeFrame.height = v;
+		this.project.height = v;
 	}
 
 	// --- Proxies to Active Layer ---

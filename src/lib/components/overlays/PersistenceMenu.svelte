@@ -22,8 +22,10 @@
 			<h3 class="mb-2 font-serif text-sm font-bold tracking-tight text-text-main/60 uppercase">
 				Project File (.rupa)
 			</h3>
-			<p class="font-serif text-sm leading-relaxed text-text-main/50">
-				{__('generic:loading')}
+			<p class="truncate font-serif text-sm leading-relaxed text-text-main/50">
+				{editor.project.currentFilePath
+					? editor.project.currentFilePath.split(/[\\/]/).pop()
+					: __('workspace:project.unsaved')}
 			</p>
 		</div>
 

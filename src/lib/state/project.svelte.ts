@@ -16,7 +16,9 @@ export class ProjectState {
 	currentFilePath = $state<string | null>(null);
 	lastSaved = $state<Date | null>(null);
 
-	// Project Structure
+	// Project Structure (Global Dimensions)
+	width = $state(32);
+	height = $state(32);
 	frames = $state<FrameState[]>([]);
 	tags = $state<FrameTag[]>([]);
 	activeFrameIndex = $state(0);
@@ -28,7 +30,7 @@ export class ProjectState {
 
 	constructor() {
 		// Initialize with one default frame
-		this.frames = [new FrameState('Main Art')];
+		this.frames = [new FrameState('Main Art', this)];
 	}
 
 	get activeFrame() {
@@ -37,7 +39,7 @@ export class ProjectState {
 
 	addFrame(name?: string) {
 		const newName = name || `Frame ${this.frames.length + 1}`;
-		const frame = new FrameState(newName);
+		const frame = new FrameState(newName, this);
 		this.frames.push(frame);
 		this.activeFrameIndex = this.frames.length - 1;
 		return frame;

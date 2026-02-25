@@ -83,7 +83,8 @@
 		"technical_details": "Technical Ledger"
 	},
 	"project": {
-		"saved": "Project Saved {{time}}"
+		"saved": "Project Saved {{time}}",
+		"unsaved": "New Sanctuary (Unsaved)"
 	},
 	"navigation": {
 		"title": "Go To",

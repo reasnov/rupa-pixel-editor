@@ -116,11 +116,6 @@ export class PaletteState {
 		};
 		this.presets.push(preset);
 
-		// Global Persistence
-		import('../engine/services.js').then(({ services }) => {
-			services.persistence.saveGlobalPalettes();
-		});
-
 		return preset;
 	}
 
@@ -136,11 +131,6 @@ export class PaletteState {
 		const preset = this.presets.find((p) => p.id === id);
 		if (preset && !preset.isDefault) {
 			this.presets = this.presets.filter((p) => p.id !== id);
-
-			// Global Persistence
-			import('../engine/services.js').then(({ services }) => {
-				services.persistence.saveGlobalPalettes();
-			});
 		}
 	}
 

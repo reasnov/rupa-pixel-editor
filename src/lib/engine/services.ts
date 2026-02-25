@@ -10,6 +10,7 @@ import { HistoryService } from './services/history.js';
 import { editor } from '../state/editor.svelte.js';
 import { history } from './history.js';
 import { sfx } from './audio.js';
+import JSZip from 'jszip';
 
 /**
  * ServiceCoordinator: Unified access point for application services.
@@ -289,7 +290,6 @@ export class ServiceCoordinator {
 			// Static Raster formats (PNG, JPG, WEBP)
 			if (framesToProcess.length > 1) {
 				// ZIP Strategy
-				const JSZip = (await import('jszip')).default;
 				const zip = new JSZip();
 
 				for (let i = 0; i < framesToProcess.length; i++) {

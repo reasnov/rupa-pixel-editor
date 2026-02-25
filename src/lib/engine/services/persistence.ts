@@ -261,7 +261,7 @@ export class PersistenceService {
 
 			editor.project.frames = await Promise.all(
 				d.structure.map(async (fd: any) => {
-					const frame = new FrameState(fd.name, d.dimensions.width, d.dimensions.height);
+					const frame = new FrameState(fd.name, editor.project);
 					frame.layers = await Promise.all(
 						fd.layers.map(async (ld: any) => {
 							const layer = new LayerState(
@@ -309,7 +309,7 @@ export class PersistenceService {
 				}
 
 				editor.project.frames = projectData.frames.map((fd: any) => {
-					const frame = new FrameState(fd.name, fd.width, fd.height);
+					const frame = new FrameState(fd.name, editor.project);
 					frame.layers = (fd.layers || []).map((vd: any) => {
 						const layer = new LayerState(vd.name, fd.width, fd.height, vd.type || 'LAYER');
 						layer.pixels = new Uint32Array(vd.pixels || []);

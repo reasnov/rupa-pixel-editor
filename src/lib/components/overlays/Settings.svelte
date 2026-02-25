@@ -151,7 +151,9 @@
 					</span>
 				</div>
 				<div class="flex items-center gap-3">
-					<div class="flex items-center gap-1.5 rounded-lg border border-text-main/5 bg-text-main/[0.03] p-1">
+					<div
+						class="flex items-center gap-1.5 rounded-lg border border-text-main/5 bg-text-main/[0.03] p-1"
+					>
 						<button
 							class="h-6 w-6 rounded-md border border-text-main/10 shadow-sm transition-transform hover:scale-110 active:scale-95"
 							style="background-color: #fdf6e3;"

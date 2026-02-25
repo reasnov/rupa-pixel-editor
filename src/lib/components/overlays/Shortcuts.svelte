@@ -74,17 +74,19 @@
 					type="text"
 					bind:value={searchQuery}
 					placeholder={__('shortcuts:search_placeholder')}
-					class="w-full rounded-xl border border-text-main/10 bg-canvas-bg px-6 py-4 font-serif text-sm text-text-main outline-none transition-all focus:border-ui-accent focus:ring-4 focus:ring-ui-accent/10"
+					class="w-full rounded-xl border border-text-main/10 bg-canvas-bg px-6 py-4 font-serif text-sm text-text-main transition-all outline-none focus:border-ui-accent focus:ring-4 focus:ring-ui-accent/10"
 				/>
 				{#if searchQuery}
 					<button
-						class="absolute right-5 top-1/2 -translate-y-1/2 text-text-main/30 hover:text-text-main/60"
+						class="absolute top-1/2 right-5 -translate-y-1/2 text-text-main/30 hover:text-text-main/60"
 						onclick={() => (searchQuery = '')}
 					>
 						✕
 					</button>
 				{:else}
-					<div class="pointer-events-none absolute right-6 top-1/2 -translate-y-1/2 text-text-main/20">
+					<div
+						class="pointer-events-none absolute top-1/2 right-6 -translate-y-1/2 text-text-main/20"
+					>
 						🔍
 					</div>
 				{/if}

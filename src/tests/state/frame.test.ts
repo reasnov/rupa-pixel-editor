@@ -11,7 +11,7 @@ describe('FrameState', () => {
 
 	beforeEach(() => {
 		vi.clearAllMocks();
-		frame = new FrameState('Test Frame', 2, 2);
+		frame = new FrameState('Test Frame', { width: 2, height: 2 } as any);
 	});
 
 	it('compositePixels should flatten layers correctly', () => {

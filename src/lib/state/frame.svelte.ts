@@ -1,5 +1,6 @@
 import { LayerState } from './layer.svelte.js';
 import { animation } from '../engine/animation.svelte.js';
+import type { ProjectState } from './project.svelte.js';
 
 /**
  * FrameState: Represents a single frame in the Project.

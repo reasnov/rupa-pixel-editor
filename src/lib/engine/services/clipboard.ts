@@ -3,6 +3,7 @@ import { history } from '../history.js';
 import { sfx } from '../audio.js';
 import { ColorLogic } from '../../logic/color.js';
 import { PixelLogic } from '../../logic/pixel.js';
+import { __ } from '../../state/i18n.svelte.js';
 
 export class ClipboardService {
 	copy() {

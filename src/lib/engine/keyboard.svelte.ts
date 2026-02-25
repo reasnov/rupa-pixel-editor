@@ -346,7 +346,8 @@ export class KeyboardEngine {
 
 		for (const pattern of this.patterns) {
 			// Check against both .key (localized) and .code (physical position for letters)
-			const keyMatch = key === pattern.key || (code === `key${pattern.key}` && pattern.key.length === 1);
+			const keyMatch =
+				key === pattern.key || (code === `key${pattern.key}` && pattern.key.length === 1);
 
 			if (
 				keyMatch &&

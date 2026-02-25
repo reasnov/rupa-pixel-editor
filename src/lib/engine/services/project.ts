@@ -67,9 +67,6 @@ export class ProjectService {
 		const newFrame = project.addFrame(`${source.name} (Copy)`);
 		const newIndex = project.activeFrameIndex;
 
-		newFrame.width = source.width;
-		newFrame.height = source.height;
-
 		newFrame.layers = source.layers.map((v) => {
 			return v.clone(source.width, source.height);
 		});

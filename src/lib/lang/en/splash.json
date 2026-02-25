@@ -8,5 +8,10 @@
 		"Listening to the distant wind chimes...",
 		"Waking the artisan's spirit...",
 		"The sanctuary is silent. Begin your story."
-	]
+	],
+	"entrance": {
+		"title": "Enter the Sanctuary",
+		"subtitle": "Awaken the wind chimes and ambient soundscapes",
+		"action": "Open the Door"
+	}
 }

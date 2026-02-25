@@ -67,7 +67,7 @@ Every interaction is mapped to a `ActionIntent` to ensure semantic consistency. 
 ### 2.5 UI & Environment Intents
 
 - `OPEN_MENU`: Show Command Palette (**`Ctrl + K`**).
-- `OPEN_PALETTE`: Show Color Picker (**`F3`**).
+- `OPEN_PALETTE`: Show Color Picker (**`C`**).
 - `OPEN_AUDIO`: Show Audio Settings (**`Ctrl + Shift + A`**).
 - `OPEN_EXPORT`: Show Export Menu (**`Ctrl + E`**).
 - `OPEN_MANUAL`: Show Barista Manual (**`F1`**).

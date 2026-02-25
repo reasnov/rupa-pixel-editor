@@ -5,10 +5,18 @@ import { PersistenceService } from '../../lib/engine/services/persistence.js';
 vi.mock('../../lib/state/editor.svelte.js', () => ({
 	editor: {
 		version: '1.0.0',
-		paletteState: { swatches: ['#000000'], presets: [] },
+		paletteState: {
+			swatches: ['#000000FF'],
+			presets: [{ id: 'custom', name: 'Custom', colors: ['#000000FF'], isDefault: false }]
+		},
 		canvas: { incrementVersion: vi.fn(), width: 2, height: 2 },
 		project: {
-			frames: [],
+			frames: [
+				{
+					name: 'Frame 1',
+					layers: [{ name: 'Layer 1', pixels: new Uint32Array(4).fill(0), type: 'LAYER' }]
+				}
+			],
 			currentFilePath: null,
 			setMetadata: vi.fn(),
 			fps: 10

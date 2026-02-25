@@ -16,7 +16,7 @@ export class ColorLogic {
 	 */
 	static toHex(hsla: ColorHSLA): ColorHex {
 		const { h, s, l, a } = hsla;
-		const h_norm = ((h % 360) + 360) % 360 / 360;
+		const h_norm = (((h % 360) + 360) % 360) / 360;
 		const s_norm = Math.max(0, Math.min(100, s)) / 100;
 		const l_norm = Math.max(0, Math.min(100, l)) / 100;
 
@@ -196,6 +196,23 @@ export class ColorLogic {
 		const b = (val >> 16) & 0xff;
 		const a = (val >> 24) & 0xff;
 		return this.rgbToHex(r, g, b, a / 255);
+	}
+
+	/**
+	 * Adjusts color temperature (Cool to Warm).
+	 * Amount: -1.0 (Cool/Blue) to 1.0 (Warm/Yellow)
+	 */
+	static applyTemperature(hex: ColorHex, amount: number): ColorHex {
+		const { r, g, b, a } = this.hexToRgb(hex);
+		// Warm: Increase Red/Green, Decrease Blue
+		// Cool: Increase Blue, Decrease Red/Green
+		const strength = amount * 50;
+		return this.rgbToHex(
+			Math.max(0, Math.min(255, r + strength)),
+			Math.max(0, Math.min(255, g + strength * 0.5)),
+			Math.max(0, Math.min(255, b - strength)),
+			a
+		);
 	}
 
 	private static hexToRgb(hexStr: string) {

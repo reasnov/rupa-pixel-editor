@@ -28,7 +28,21 @@ export class EditorEngine {
 
 		state.studio.mount();
 		state.canvas.mount();
-		ambient.start();
+
+		// Adaptive Audio Activation
+		// Instead of a dedicated button, we wait for the first real interaction
+		const unlockAudio = async () => {
+			if (state.studio.isAudioReady) return;
+			await studioAudio.resume();
+			ambient.start();
+			state.studio.isAudioReady = true;
+			// Clean up listeners
+			window.removeEventListener('pointerdown', unlockAudio);
+			window.removeEventListener('keydown', unlockAudio);
+		};
+
+		window.addEventListener('pointerdown', unlockAudio, { passive: true });
+		window.addEventListener('keydown', unlockAudio, { passive: true });
 
 		// Link Pointer activity to Editor logic (No circular import)
 		pointer.onActivity = () => {

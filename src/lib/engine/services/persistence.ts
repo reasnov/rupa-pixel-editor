@@ -181,6 +181,7 @@ export class PersistenceService {
 	 */
 	hasSignificantWork(): boolean {
 		const project = editor.project;
+		if (!project.frames || project.frames.length === 0) return false;
 		if (project.frames.length > 1) return true;
 		if (project.frames[0].layers.length > 1) return true;
 

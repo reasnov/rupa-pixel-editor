@@ -16,6 +16,7 @@
 	let s = $state(0);
 	let l = $state(0);
 	let a = $state(1); // 0.0 to 1.0
+	let temp = $state(0); // -100 to 100 (visual only, resets on color change)
 
 	// Local input state for the HEX field to prevent cursor jumping/interruptions
 	let inputValue = $state(value);
@@ -27,6 +28,8 @@
 			s = color.s;
 			l = color.l;
 			a = color.a;
+			// Reset temp slider when base color changes significantly from outside
+			temp = 0;
 			// Keep input sync when value changes from outside (e.g. eye dropper)
 			if (inputValue !== value) {
 				inputValue = value;
@@ -55,8 +58,20 @@
 			s = color.s;
 			l = color.l;
 			a = color.a;
-			// Don't update value here, let the HSLA $effect handle it to keep sliders in sync
+			temp = 0;
 		}
+	}
+
+	function handleTempInput(newTemp: number) {
+		const diff = newTemp - temp;
+		const currentHex = ColorLogic.toHex({ h, s, l, a });
+		const updatedHex = ColorLogic.applyTemperature(currentHex, diff / 100);
+		const hsla = ColorLogic.toHSLA(updatedHex);
+
+		h = hsla.h;
+		s = hsla.s;
+		l = hsla.l;
+		temp = newTemp;
 	}
 
 	$effect(() => {
@@ -111,6 +126,15 @@
 				bind:value={l}
 				max={100}
 				unit="%"
+			/>
+			<ColorSlider
+				label={__('tools:color_picker.label.temperature')}
+				icon="🌡️"
+				value={temp}
+				onchange={handleTempInput}
+				min={-100}
+				max={100}
+				unit=""
 			/>
 			<ColorSlider
 				label={__('tools:color_picker.label.alpha')}

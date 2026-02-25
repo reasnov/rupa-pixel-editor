@@ -1,4 +1,4 @@
-[![Version](https://img.shields.io/badge/version-0.9.2-magenta.svg)](./docs/pubs/releases/v0.9.2.md)
+[![Version](https://img.shields.io/badge/version-0.10.0-magenta.svg)](./docs/pubs/releases/v0.10.0.md)
 [![Architecture](https://img.shields.io/badge/architecture-Modular%20Layered%20Monolith-teal.svg)](./docs/developers/architecture.md)
 [![Framework](https://img.shields.io/badge/framework-Svelte%205-orange.svg)](https://svelte.dev)
 
@@ -10,15 +10,15 @@
 
 ---
 
-## ✨ Features (v0.9.2: Palette & Video Precision)
+## ✨ Features (v0.10.0: Artisan's Workflow & Precision)
 
+- **The Selective Harvest**: Direct export support for **Selected Layers** and **Groups**, streamlining professional asset generation.
+- **Pigment Station v2**: High-precision color engine with 8-character HEX support and decimal-accurate HSLA math.
 - **Aroma Blend**: Professional dithered blending integrated into the brush engine for classic pixel transitions.
-- **Flavor Library**: Persistent palette management with support for custom presets, GPL imports, and universal export.
+- **Flavor Library**: Persistent palette management with automatic **Dark-First (A11y)** sorting and GIMP Palette (.gpl) support.
 - **Chronos Export**: High-fidelity export engine with WebM Header Patching for perfect seekable videos.
-- **The Drop Matrix**: Professional grid-based timeline for high-density animation management.
-- **Precision Timeline**: Adaptive time ruler with sub-second accuracy and unified sticky-scrolling.
-- **Master Etcher's Kit**: Professional tools including Mirror Symmetry, Dynamic Brush Sizes, and Shading.
-- **Barista Ecosystem**: A sun-drenched sanctuary with generative piano soundscapes and tactile feedback.
+- **Seamless Atmosphere**: Automatic audio activation on first interaction, preserving the sanctuary's generative piano soundscapes.
+- **Barista Ecosystem**: A sun-drenched sanctuary with tactile feedback and industrial-scale performance.
 
 ## 🖼️ Gallery
 
@@ -81,7 +81,7 @@ sudo sysctl -w kernel.unprivileged_userns_clone=1
 
 - [User Guide](./docs/USER_GUIDE.md)
 - [Developer Specs](./docs/developers/specs.md)
-- [Latest Release Notes](./docs/pubs/releases/v0.9.2.md)
+- [Latest Release Notes](./docs/pubs/releases/v0.10.0.md)
 
 ---
 

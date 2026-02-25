@@ -120,7 +120,9 @@
 >
 	<div class="flex h-[75vh] flex-col items-start gap-12 overflow-hidden lg:flex-row">
 		<!-- Left: Live Preview (Sticky/Scrollable Area) -->
-		<div class="custom-scrollbar flex w-full shrink-0 flex-col gap-4 overflow-y-auto lg:h-full lg:w-[420px]">
+		<div
+			class="custom-scrollbar flex w-full shrink-0 flex-col gap-4 overflow-y-auto lg:h-full lg:w-[420px]"
+		>
 			<div
 				class="flex aspect-square w-full items-center justify-center rounded-2xl bg-text-main/5 p-6 ring-1 ring-text-main/5"
 				role="img"
@@ -134,7 +136,7 @@
 			</div>
 
 			<div class="hidden flex-1 flex-col justify-end gap-2 lg:flex">
-				<span class="font-serif text-[10px] font-bold text-text-main/40 uppercase tracking-widest">
+				<span class="font-serif text-[10px] font-bold tracking-widest text-text-main/40 uppercase">
 					{__('export:preview_label')}
 				</span>
 				<p class="font-serif text-[9px] leading-relaxed text-text-main/30 italic">

@@ -34,19 +34,33 @@ describe('ColorLogic', () => {
 
 	describe('Adjustments', () => {
 		it('adjustBrightness should work correctly', () => {
-			const dark = ColorLogic.adjustBrightness('#808080', -0.1); // -10%
-			expect(ColorLogic.toHSLA(dark).l).toBe(40);
-			const light = ColorLogic.adjustBrightness('#808080', 0.1); // +10%
-			expect(ColorLogic.toHSLA(light).l).toBe(60);
+			const dark = ColorLogic.adjustBrightness('#808080FF', -0.1); // -10%
+			expect(ColorLogic.toHSLA(dark).l).toBeCloseTo(40, 0);
+			const light = ColorLogic.adjustBrightness('#808080FF', 0.1); // +10%
+			expect(ColorLogic.toHSLA(light).l).toBeCloseTo(60, 0);
 		});
 
 		it('adjustSaturation should work correctly', () => {
-			const vivid = ColorLogic.adjustSaturation('#804040', 0.2);
-			expect(ColorLogic.toHSLA(vivid).s).toBe(53); // Original is 33.3...%
+			const vivid = ColorLogic.adjustSaturation('#804040FF', 0.2);
+			expect(ColorLogic.toHSLA(vivid).s).toBeCloseTo(53, 0);
 		});
 
 		it('adjustOpacity should work correctly', () => {
-			expect(ColorLogic.adjustOpacity('#FF0000', 0.5)).toBe('#FF000080');
+			expect(ColorLogic.adjustOpacity('#FF0000FF', 0.5)).toBe('#FF000080');
+		});
+
+		it('applyTemperature should shift color correctly', () => {
+			const neutral = '#808080FF';
+			const warm = ColorLogic.applyTemperature(neutral, 0.5); // More Red/Green, Less Blue
+			const cool = ColorLogic.applyTemperature(neutral, -0.5); // Less Red/Green, More Blue
+
+			const hslaWarm = ColorLogic.toHSLA(warm);
+			const hslaCool = ColorLogic.toHSLA(cool);
+
+			// Warm should shift towards yellow/red (Hue ~30-60)
+			// Cool should shift towards blue (Hue ~200-240)
+			expect(hslaWarm.h).toBeGreaterThan(0);
+			expect(hslaCool.h).toBeGreaterThan(hslaWarm.h);
 		});
 	});
 
@@ -70,12 +84,12 @@ describe('ColorLogic', () => {
 		it('hexToUint32 should convert to ABGR correctly', () => {
 			// #FF8800 -> R=FF, G=88, B=00, A=FF
 			// ABGR: 0xFF0088FF
-			expect(ColorLogic.hexToUint32('#FF8800')).toBe(0xFF0088FF);
+			expect(ColorLogic.hexToUint32('#FF8800')).toBe(0xff0088ff);
 			expect(ColorLogic.hexToUint32(null)).toBe(0);
 		});
 
 		it('uint32ToHex should convert from ABGR correctly', () => {
-			expect(ColorLogic.uint32ToHex(0xFF0088FF)).toBe('#FF8800FF');
+			expect(ColorLogic.uint32ToHex(0xff0088ff)).toBe('#FF8800FF');
 			expect(ColorLogic.uint32ToHex(0)).toBeNull();
 		});
 	});

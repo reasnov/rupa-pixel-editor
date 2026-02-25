@@ -15,6 +15,7 @@ export class StudioState {
 	isMuted = $state(false);
 	isAmbientPlaying = $state(true);
 	isAppReady = $state(false);
+	isAudioReady = $state(false);
 	isPicking = $state(false);
 	isTransforming = $state(false);
 

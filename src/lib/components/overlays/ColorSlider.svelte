@@ -7,7 +7,8 @@
 		max,
 		step = 1,
 		unit = '',
-		isHue = false
+		isHue = false,
+		onchange
 	} = $props<{
 		label: string;
 		icon: string;
@@ -17,7 +18,14 @@
 		step?: number;
 		unit?: string;
 		isHue?: boolean;
+		onchange?: (val: number) => void;
 	}>();
+
+	function handleChange(e: Event) {
+		const val = parseFloat((e.target as HTMLInputElement).value);
+		value = val;
+		if (onchange) onchange(val);
+	}
 </script>
 
 <div class="flex flex-col gap-2">
@@ -35,7 +43,8 @@
 		{min}
 		{max}
 		{step}
-		bind:value
+		{value}
+		oninput={handleChange}
 		class="custom-slider"
 		class:hue-slider={isHue}
 	/>

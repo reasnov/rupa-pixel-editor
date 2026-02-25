@@ -1,4 +1,4 @@
-[![Version](https://img.shields.io/badge/version-0.10.0-magenta.svg)](./docs/pubs/releases/v0.10.0.md)
+[![Version](https://img.shields.io/badge/version-0.10.1-magenta.svg)](./docs/pubs/releases/v0.10.1.md)
 [![Architecture](https://img.shields.io/badge/architecture-Modular%20Layered%20Monolith-teal.svg)](./docs/developers/architecture.md)
 [![Framework](https://img.shields.io/badge/framework-Svelte%205-orange.svg)](https://svelte.dev)
 
@@ -10,7 +10,7 @@
 
 ---
 
-## ✨ Features (v0.10.0: Artisan's Workflow & Precision)
+## ✨ Features (v0.10.1: The Ergonomic Sanctuary)
 
 - **The Selective Harvest**: Direct export support for **Selected Layers** and **Groups**, streamlining professional asset generation.
 - **Pigment Station v2**: High-precision color engine with 8-character HEX support and decimal-accurate HSLA math.
@@ -81,7 +81,7 @@ sudo sysctl -w kernel.unprivileged_userns_clone=1
 
 - [User Guide](./docs/USER_GUIDE.md)
 - [Developer Specs](./docs/developers/specs.md)
-- [Latest Release Notes](./docs/pubs/releases/v0.10.0.md)
+- [Latest Release Notes](./docs/pubs/releases/v0.10.1.md)
 
 ---
 

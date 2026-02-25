@@ -6,6 +6,7 @@
 		id: string;
 		label: string;
 		icon?: Snippet;
+		disabled?: boolean;
 	}
 
 	interface Props {
@@ -26,9 +27,10 @@
 		variant = 'horizontal'
 	}: Props = $props();
 
-	function select(id: string) {
-		activeTab = id;
-		if (onchange) onchange(id);
+	function select(tab: Tab) {
+		if (tab.disabled) return;
+		activeTab = tab.id;
+		if (onchange) onchange(tab.id);
 	}
 </script>
 
@@ -45,16 +47,21 @@
 			type="button"
 			role="tab"
 			aria-selected={activeTab === tab.id}
-			onclick={() => select(tab.id)}
+			aria-disabled={tab.disabled}
+			disabled={tab.disabled}
+			onclick={() => select(tab)}
 			class="
                 relative flex flex-1 items-center justify-center gap-3 px-6 py-3
                 text-[10px] font-bold tracking-widest uppercase transition-all
                 				{activeTab === tab.id
 				? 'border-ui-structural bg-canvas-bg text-text-main'
-				: 'text-text-main/40 hover:bg-text-main/5 hover:text-text-main/70'}                {variant ===
+				: tab.disabled
+					? 'text-text-main/20'
+					: 'text-text-main/40 hover:bg-text-main/5 hover:text-text-main/70'}                {variant ===
 			'horizontal'
 				? '-mb-0.5 border-x-2 border-t-2 first:border-l-0 last:border-r-0'
 				: '-mr-0.5 border-y-2 border-l-2 first:border-t-0 last:border-b-0'}
+				{tab.disabled ? 'cursor-not-allowed opacity-30 grayscale' : ''}
             "
 		>
 			{#if tab.icon}

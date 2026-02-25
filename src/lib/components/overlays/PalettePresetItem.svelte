@@ -17,6 +17,18 @@
 	}
 
 	let { preset, onApply, onExport, onDelete }: Props = $props();
+
+	/**
+	 * Formats a string to Title Case (handles spaces and underscores).
+	 */
+	function toTitleCase(str: string): string {
+		return str
+			.replace(/_/g, ' ')
+			.toLowerCase()
+			.split(' ')
+			.map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+			.join(' ');
+	}
 </script>
 
 <div
@@ -25,7 +37,7 @@
 >
 	<div class="flex flex-col gap-2 overflow-hidden">
 		<div class="flex items-center gap-3">
-			<span class="font-serif text-sm font-bold text-text-main">{preset.name}</span>
+			<span class="font-serif text-sm font-bold text-text-main">{toTitleCase(preset.name)}</span>
 			{#if preset.isDefault}
 				<Badge variant="secondary" size="sm">{__('ui:labels.default')}</Badge>
 			{/if}

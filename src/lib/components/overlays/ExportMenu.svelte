@@ -87,10 +87,10 @@
 		}
 	});
 
-	const exportTabs = [
+	const exportTabs = $derived([
 		{ id: 'image', label: 'export:tabs.image' },
-		{ id: 'video', label: 'export:tabs.video' }
-	];
+		{ id: 'video', label: 'export:tabs.video', disabled: !canUseVideo }
+	]);
 
 	const staticFormats = [
 		{ id: 'png', label: 'export:format.png', icon: '🖼️' },
@@ -118,21 +118,32 @@
 	onClose={handleClose}
 	width="1000px"
 >
-	<div class="flex flex-col items-start gap-12 overflow-hidden lg:flex-row">
-		<!-- Left: Live Preview -->
-		<div
-			class="flex aspect-square w-full shrink-0 items-center justify-center rounded-2xl bg-text-main/5 p-6 ring-1 ring-text-main/5 lg:w-[420px]"
-			role="img"
-			aria-label={__('export:preview_label')}
-		>
-			<ExportPreview
-				{format}
-				scale={editor.studio.exportScale}
-				bgColor={editor.studio.exportBgColor}
-			/>
+	<div class="flex h-[75vh] flex-col items-start gap-12 overflow-hidden lg:flex-row">
+		<!-- Left: Live Preview (Sticky/Scrollable Area) -->
+		<div class="custom-scrollbar flex w-full shrink-0 flex-col gap-4 overflow-y-auto lg:h-full lg:w-[420px]">
+			<div
+				class="flex aspect-square w-full items-center justify-center rounded-2xl bg-text-main/5 p-6 ring-1 ring-text-main/5"
+				role="img"
+				aria-label={__('export:preview_label')}
+			>
+				<ExportPreview
+					{format}
+					scale={editor.studio.exportScale}
+					bgColor={editor.studio.exportBgColor}
+				/>
+			</div>
+
+			<div class="hidden flex-1 flex-col justify-end gap-2 lg:flex">
+				<span class="font-serif text-[10px] font-bold text-text-main/40 uppercase tracking-widest">
+					{__('export:preview_label')}
+				</span>
+				<p class="font-serif text-[9px] leading-relaxed text-text-main/30 italic">
+					{__('export:description.scale')} & {__('export:description.background')}
+				</p>
+			</div>
 		</div>
 
-		<!-- Right: Settings -->
+		<!-- Right: Settings (Independent Scrollable Area) -->
 		<div class="custom-scrollbar flex h-full flex-1 flex-col gap-6 overflow-y-auto pr-4">
 			<Tabs
 				tabs={exportTabs}
@@ -178,7 +189,7 @@
 							</span>
 						</div>
 						<div class="grid grid-cols-2 gap-2" role="radiogroup">
-							{#each ['ACTIVE', 'VISIBLE', 'SELECTED', 'ALL'] as opt}
+							{#each ['ACTIVE', 'VISIBLE', 'SELECTED', 'ALL', 'SELECTED_LAYERS'] as opt}
 								{@const count =
 									opt === 'ACTIVE'
 										? 1
@@ -186,7 +197,9 @@
 											? editor.project.frames.filter((f) => f.isVisible).length
 											: opt === 'SELECTED'
 												? editor.project.selectedFrameIndices.size
-												: editor.project.frames.length}
+												: opt === 'SELECTED_LAYERS'
+													? editor.project.activeFrame.selectedLayerIndices.size
+													: editor.project.frames.length}
 								<button
 									class="rounded-lg border px-2 py-2 text-center transition-all {editor.studio
 										.exportFrameSelection === opt

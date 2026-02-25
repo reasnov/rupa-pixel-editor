@@ -19,16 +19,54 @@ export class PaletteState {
 
 	constructor() {
 		this.restoreDefaultPresets();
+
+		// Initial Sync
+		const sorted = this.sortPaletteForAccessibility([...this.swatches]);
+		this.swatches = sorted;
+		this.activeColor = sorted[0];
 	}
 
 	restoreDefaultPresets() {
 		const defaults: PalettePreset[] = Object.entries(palettes).map(([name, colors]) => ({
 			id: `default-${name}`,
 			name: name.charAt(0).toUpperCase() + name.slice(1),
-			colors: colors as ColorHex[],
+			colors: this.sortPaletteForAccessibility(colors as ColorHex[]),
 			isDefault: true
 		}));
 		this.presets = defaults;
+	}
+
+	/**
+	 * Ensures the first color in the palette is always the darkest one
+	 * without changing the other colors' values, just their order.
+	 */
+	private sortPaletteForAccessibility(colors: ColorHex[]): ColorHex[] {
+		if (colors.length <= 1) return colors;
+		const result = [...colors];
+		const darkestIdx = this.findDarkestIndex(result);
+
+		if (darkestIdx !== 0) {
+			const darkest = result[darkestIdx];
+			result[darkestIdx] = result[0];
+			result[0] = darkest;
+		}
+
+		return result;
+	}
+
+	private findDarkestIndex(colors: ColorHex[]): number {
+		let minL = 101;
+		let darkestIdx = 0;
+
+		colors.forEach((color, idx) => {
+			const hsla = ColorLogic.toHSLA(color);
+			if (hsla.l < minL) {
+				minL = hsla.l;
+				darkestIdx = idx;
+			}
+		});
+
+		return darkestIdx;
 	}
 
 	select(index: number) {

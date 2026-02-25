@@ -143,7 +143,9 @@ export class StudioState {
 	// Export State
 	exportScale = $state(10);
 	exportBgColor = $state<string | 'transparent'>('transparent');
-	exportFrameSelection = $state<'ACTIVE' | 'VISIBLE' | 'SELECTED' | 'ALL'>('ACTIVE');
+	exportFrameSelection = $state<'ACTIVE' | 'VISIBLE' | 'SELECTED' | 'ALL' | 'SELECTED_LAYERS'>(
+		'ACTIVE'
+	);
 	exportProgress = $state(0);
 	includePixelBorders = $state(false);
 

@@ -23,7 +23,8 @@
 		"active": "Active Frame",
 		"visible": "Visible Frames",
 		"selected": "Selected Frames",
-		"all": "All Frames"
+		"all": "All Frames",
+		"selected_layers": "Selected Layers"
 	},
 	"background": {
 		"transparent": "Transparent",

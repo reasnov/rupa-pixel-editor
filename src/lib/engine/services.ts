@@ -179,8 +179,8 @@ export class ServiceCoordinator {
 			editor.studio.exportProgress = Math.round(p * 100);
 		};
 
-		// 1. Determine which frames to export
-		let framesToProcess = [];
+		// 1. Determine which frames/pixel data to export
+		let framesToProcess: Array<{ compositePixels: Uint32Array; name: string }> = [];
 
 		if (isAnimated) {
 			// Animations always use visible frames
@@ -201,6 +201,14 @@ export class ServiceCoordinator {
 					break;
 				case 'ALL':
 					framesToProcess = editor.project.frames;
+					break;
+				case 'SELECTED_LAYERS':
+					framesToProcess = [
+						{
+							name: 'Selected Layers',
+							compositePixels: editor.project.activeFrame.getSelectedLayerComposite()
+						}
+					];
 					break;
 				default:
 					framesToProcess = [editor.project.activeFrame];

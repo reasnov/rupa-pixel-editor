@@ -135,4 +135,42 @@ export class FrameState {
 			this.activeLayerIndex = this.layers.length - 1;
 		}
 	}
+
+	/**
+	 * Composite ONLY the selected layers.
+	 * Used for specialized export tasks (v0.9.3)
+	 */
+	getSelectedLayerComposite() {
+		const result = new Uint32Array(this.width * this.height);
+
+		// 1. Identify all selected layers and their IDs
+		const selectedIndices = Array.from(this.selectedLayerIndices);
+		const selectedGroupIds = new Set<string>();
+
+		this.layers.forEach((l, idx) => {
+			if (selectedIndices.includes(idx) && l.type === 'FOLDER') {
+				selectedGroupIds.add(l.id);
+			}
+		});
+
+		// 2. Composite: Include if directly selected OR if parent is a selected group
+		for (const layer of this.layers) {
+			if (layer.type === 'FOLDER') continue;
+
+			const isDirectlySelected = selectedIndices.includes(this.layers.indexOf(layer));
+			const isChildOfSelectedGroup = layer.parentId && selectedGroupIds.has(layer.parentId);
+
+			if (isDirectlySelected || isChildOfSelectedGroup) {
+				const pixels = layer.pixels;
+				for (let i = 0; i < result.length; i++) {
+					const pixel = pixels[i];
+					if (pixel !== 0) {
+						result[i] = pixel;
+					}
+				}
+			}
+		}
+
+		return result;
+	}
 }

@@ -1,0 +1,7 @@
+import{c as _,a as r,f as c}from"../chunks/B-fI4MTy.js";import{p as g,i as b,j as x,g as a,a0 as f,t as M,m as p,k as $,s as j}from"../chunks/6DFUXpfJ.js";import{e as w,a as O,s as S,i as k,b as z}from"../chunks/De4L1TKt.js";import{i as A}from"../chunks/BuzRps0s.js";const C=!0,P="always",H=Object.freeze(Object.defineProperty({__proto__:null,prerender:C,trailingSlash:P},Symbol.toStringTag,{value:"Module"}));var R=c('<div class="rain-particle"></div>'),T=c('<div class="pointer-events-none fixed inset-0 z-[5]"></div>');function q(o,s){g(s,!0);let e=f(()=>w.usageMinutes>=45),t=f(()=>a(e)?40:0);const n=Array.from({length:60}).map(()=>({left:Math.random()*100,delay:Math.random()*2,duration:.5+Math.random()*.5,opacity:.1+Math.random()*.2}));var v=_(),u=b(v);{var h=l=>{var d=T();O(d,21,()=>n.slice(0,a(t)),k,(y,i)=>{var m=R();M(()=>S(m,`
+							left: ${a(i).left??""}%; 
+							animation: rain-fall ${a(i).duration??""}s linear infinite; 
+							animation-delay: ${a(i).delay??""}s;
+							opacity: ${a(i).opacity??""};
+							box-shadow: 0 0 2px var(--color-text-main);
+						`)),r(y,m)}),p(d),r(l,d)};A(u,l=>{a(e)&&l(h)})}r(o,v),x()}var B=c('<div class="stitching-bg flex min-h-screen w-screen flex-col bg-canvas-bg selection:bg-none"><!> <div class="crt-overlay"></div> <div class="vignette"></div> <!></div>');function I(o,s){var e=B(),t=$(e);q(t,{});var n=j(t,6);z(n,()=>s.children),p(e),r(o,e)}export{I as component,H as universal};
